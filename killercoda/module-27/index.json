@@ -1,0 +1,41 @@
+{
+  "title": "Module 27 — Machine Learning",
+  "description": "Train a real classifier on a built-in dataset with an honest train/test split, read a confusion matrix, then cause overfitting on purpose and cure it — the whole ML discipline, CPU-only with scikit-learn.",
+  "difficulty": "advanced",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Set up the bench",
+        "text": "step1.md"
+      },
+      {
+        "title": "Load data and split honestly",
+        "text": "step2.md"
+      },
+      {
+        "title": "Train and evaluate",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Meet the dragon — overfit, then cure it",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Baseline and cross-validation",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Module 26 — AI Foundations",
+  "description": "Open the black box with plain numpy on a CPU: represent words as vectors and compute cosine similarity by hand, run a gradient descent that fits a line and watch the loss fall, and build a toy tokenizer. No GPU, no API key. Everything is scoped to a throwaway ~/ai-foundations project.",
+  "difficulty": "expert",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Set up the bench",
+        "text": "step1.md"
+      },
+      {
+        "title": "Words as vectors",
+        "text": "step2.md"
+      },
+      {
+        "title": "Similarity by hand — the nearest word",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Gradient descent — watch the loss fall",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "A toy tokenizer, and the API path",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

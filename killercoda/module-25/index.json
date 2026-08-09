@@ -1,0 +1,41 @@
+{
+  "title": "Module 25 — Observability",
+  "description": "Stand up a real Prometheus: run a target that exposes /metrics, write a scrape config, start Prometheus, and query it over the HTTP API. Then meet the absent-metric trap and reason about a lawful alert. All work is scoped to a throwaway ~/obs-lab.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Get a real Prometheus",
+        "text": "step1.md"
+      },
+      {
+        "title": "Run a target that exposes /metrics",
+        "text": "step2.md"
+      },
+      {
+        "title": "Write the scrape config",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Start Prometheus and query the API",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "A golden-signal query and the absent-metric trap",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

@@ -132,3 +132,12 @@ nav:
   - "Stage 7 — Optimization":
       - "Module 21 — CPU & Memory Performance": stage-07/module-21.md
       - "Module 22 — GPU & NPU Performance": stage-07/module-22.md
+  - "Stage 8 — Troubleshooting":
+      - "Module 23 — Debugging Methodology": stage-08/module-23.md
+  - "Stage 9 — Professional Workflows":
+      - "Module 24 — Security": stage-09/module-24.md
+      - "Module 25 — Observability": stage-09/module-25.md
+  - "Stage 10 — Expert Mastery":
+      - "Module 26 — AI Foundations": stage-10/module-26.md
+      - "Module 27 — Machine Learning": stage-10/module-27.md
+      - "Module 28 — AI Infrastructure": stage-10/module-28.md

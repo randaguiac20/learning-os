@@ -99,7 +99,14 @@ live · ✅ dark-mode mermaid fix · ✅ M01 Killercoda lab published + URL wire
     perf via stress-ng/mpstat + a C cache-locality timer; M22 GPU-optional with CPU roofline/batching
     experiments), `build --strict` EXIT=0, buttons validated, committed. (Stripped a stray-tag leak
     from M20; M20 builder also fixed a request>limit bug.)
-  - ☐ Batches 6–8 → Stages 8–13 (M23–M39).
+  - ✅ **Batch 6 — Stage 8 Troubleshooting (M23 Debugging) + Stage 9 Professional Workflows
+    (M24 Security, M25 Observability) + Stage 10 start (M26 AI Foundations, M27 Machine Learning,
+    M28 AI Infrastructure):** lessons + labs (strace/git-bisect planted bugs; ufw/sshd hardening;
+    real Prometheus + PromQL; numpy embeddings; sklearn digits; FastAPI batching gateway),
+    `build --strict` EXIT=0, buttons validated, committed.
+  - ◐ **Batch 7 — remaining M29–M39** (Claude Code Advanced; math/DS&A; data/SWE; cloud/NLP/CV).
+  - **Pre-push sweep TODO:** (1) site-wide button-render check; (2) first-use terminology-expansion
+    pass across all lessons (rule added to ADDING-A-MODULE.md).
 - **Current:** Site is **live and public**; **M01** fully done (lesson + published lab);
   **M02–M05** authored (lessons + labs); **M02+** Killercoda labs pending user **Sync Now**.
 - **Next up:** finish Batch 2 → wire + strict-build + commit → continue Batch 3 (Stage 4).

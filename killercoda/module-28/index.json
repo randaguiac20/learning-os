@@ -1,0 +1,41 @@
+{
+  "title": "Module 28 — AI Infrastructure",
+  "description": "Build a FastAPI inference gateway that serves a tiny CPU model, add /healthz and /predict, then add dynamic batching and measure throughput vs latency — the serving law with your own numbers. GPU-optional: everything runs on CPU; vLLM/Triton/real-GPU serving is the run-locally-with-a-GPU path.",
+  "difficulty": "expert",
+  "time": "30-40 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install the serving deps",
+        "text": "step1.md"
+      },
+      {
+        "title": "Build the gateway (model + /healthz + /predict)",
+        "text": "step2.md"
+      },
+      {
+        "title": "Hit it with curl",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Add dynamic batching, then measure",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "The real-GPU path (framing)",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

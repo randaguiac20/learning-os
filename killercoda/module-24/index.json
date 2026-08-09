@@ -1,0 +1,41 @@
+{
+  "title": "Module 24 — Security",
+  "description": "Harden a Linux box you own: enumerate the attack surface, add a least-privilege user, fix an over-permissioned secret and a SUID surprise, stand up a default-deny firewall the lockout-safe way, and harden sshd — verifying at every step.",
+  "difficulty": "advanced",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Map the attack surface",
+        "text": "step1.md"
+      },
+      {
+        "title": "Add a least-privilege user",
+        "text": "step2.md"
+      },
+      {
+        "title": "Fix the leak — permissions and a SUID surprise",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Lock the doors — firewall and sshd",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Re-audit — measure the delta",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

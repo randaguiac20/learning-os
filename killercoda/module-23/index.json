@@ -1,0 +1,41 @@
+{
+  "title": "Module 23 — Debugging Methodology",
+  "description": "Debug real planted failures by method: read the error and exit code, use strace to find the failing syscall, git bisect a regression, and fix each root cause — then verify. Everything lives in a throwaway ~/debug-lab/.",
+  "difficulty": "advanced",
+  "time": "30-45 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install the tools, meet the bench",
+        "text": "step1.md"
+      },
+      {
+        "title": "Read the error and the exit code",
+        "text": "step2.md"
+      },
+      {
+        "title": "strace the failing syscall, fix the root cause",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "git bisect a planted regression",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Root cause vs symptom — verify the fix",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}
