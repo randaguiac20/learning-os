@@ -49,6 +49,13 @@ Killercoda's free-tier session limits). The **exact** markup (attr_list class pl
 > `grep -oE '<a class="lo-btn' site_build/<stage>/<module>/index.html | wc -l` must equal the button count,
 > and `grep '{ \.lo-btn' site_build/**/index.html` must return **nothing**.
 
+### Terminology rules (non-negotiable)
+**First-use rule:** every acronym or technical term gets its expansion and a one-line meaning the
+first time it appears on a page — e.g. **MMU** (Memory Management Unit — CPU hardware that translates
+virtual addresses to real RAM and enforces permissions). Same for units: **µs** = microsecond, a
+millionth of a second. A reader must never meet a term whose meaning they can't find on the same page.
+Applies to lesson pages AND curriculum files. (Filed from M01 study feedback, 2026-08-09.)
+
 ### Diagram rules (so every diagram renders cleanly in dark mode — non-negotiable)
 1. **Native theming only.** Plain ```` ```mermaid ```` + `flowchart` — **never** add `classDef fill:`/`color:`.
    Custom fills go unreadable on dark backgrounds (M01 hit this twice; a scoped CSS override did *not*

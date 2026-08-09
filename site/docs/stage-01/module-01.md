@@ -95,9 +95,11 @@ anything privileged.
    can run as many processes.
 4. **Scheduling.** The kernel switches the CPU between processes thousands of times a second
    (context switches), creating the illusion everything runs at once.
-5. **Virtual memory.** Each process sees its own private address space; the kernel + CPU (MMU) map it
-   to real RAM pages. This is both the *protection* and the "more memory than RAM" trick — and later
-   the foundation of containers.
+5. **Virtual memory.** Each process sees its own private address space; the kernel builds the address
+   map (page tables) and the CPU's **MMU** (Memory Management Unit — the hardware that translates
+   every virtual address into a real RAM location and enforces read/write/execute permissions) applies
+   it on every memory access. This is both the *protection* and the "more memory than RAM" trick —
+   and later the foundation of containers.
 6. **Syscalls & privilege.** The CPU runs in **user mode** (restricted) or **kernel mode**
    (all-powerful). The split, enforced by hardware, is where all security begins.
 
@@ -110,6 +112,9 @@ anything privileged.
 | RAM | ~GB | ~100 ns | |
 | SSD | ~TB | ~100 µs | |
 | Network / cloud | ~∞ | ~ms | slowest / biggest |
+
+*Units: **ns** = nanosecond (a billionth of a second) · **µs** = microsecond (a millionth) ·
+**ms** = millisecond (a thousandth).*
 
 Each jump down is roughly **1000× slower**. "Slow" always means *waiting on something further down
 the hierarchy*.
