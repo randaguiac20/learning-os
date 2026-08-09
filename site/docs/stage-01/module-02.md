@@ -102,21 +102,29 @@ Options modify behaviour; arguments say what to act on; `man <command>` document
 - `.` = here · `..` = parent · `~` = your home · `-` (with `cd`) = the previous directory.
 - `pwd` + `ls` are your **eyes**: where am I, and what's here?
 
+```text
+/
+├── home/
+│   └── you/            ← ~  (your home)
+│       └── terminal-lab/
+├── etc/
+├── usr/bin/
+└── proc/
 ```
- /                    ← root
- ├── home/
- │    └── you/        ← ~ (your home)
- │         └── terminal-lab/   ← cd terminal-lab (relative)  |  /home/you/terminal-lab (absolute)
- ├── etc/   ├── usr/bin/   └── proc/
-```
+
+Same folder, named two ways: `terminal-lab` from your home (**relative**), or
+`/home/you/terminal-lab` from anywhere (**absolute**).
 
 ### Prompt anatomy — read it before you type
 
-```
- you @ machine : ~/notes $
- └ user        └ where you are (~ = your home)
-       └ which machine        └ "ready" — and a WARNING: # would mean root!
-```
+Read the prompt before you type. In `you@machine:~/notes$`:
+
+| Part | Meaning |
+|---|---|
+| `you` | your username |
+| `machine` | which host you're on |
+| `~/notes` | your current directory (`~` = home) |
+| `$` | ready for input — **warning:** a `#` here instead means you are **root** |
 
 A `$` prompt is a normal user (you own your home, mistakes are cheap). A `#` prompt is **root** — every
 keystroke has full-system power. This module never needs `#`, and never uses `sudo`.
