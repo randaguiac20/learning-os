@@ -1051,17 +1051,44 @@ under your fingers.</p>
 <li><code>.</code> = here · <code>..</code> = parent · <code>~</code> = your home · <code>-</code> (with <code>cd</code>) = the previous directory.</li>
 <li><code>pwd</code> + <code>ls</code> are your <strong>eyes</strong>: where am I, and what's here?</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a> /                    ← root
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a> ├── home/
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a> │    └── you/        ← ~ (your home)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a> │         └── terminal-lab/   ← cd terminal-lab (relative)  |  /home/you/terminal-lab (absolute)
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a> ├── etc/   ├── usr/bin/   └── proc/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── home/
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   └── you/            ← ~  (your home)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│       └── terminal-lab/
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>├── etc/
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├── usr/bin/
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>└── proc/
 </code></pre></div>
+<p>Same folder, named two ways: <code>terminal-lab</code> from your home (<strong>relative</strong>), or
+<code>/home/you/terminal-lab</code> from anywhere (<strong>absolute</strong>).</p>
 <h3 id="prompt-anatomy-read-it-before-you-type">Prompt anatomy — read it before you type<a class="headerlink" href="#prompt-anatomy-read-it-before-you-type" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a> you @ machine : ~/notes $
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a> └ user        └ where you are (~ = your home)
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>       └ which machine        └ &quot;ready&quot; — and a WARNING: # would mean root!
-</code></pre></div>
+<p>Read the prompt before you type. In <code>you@machine:~/notes$</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>you</code></td>
+<td>your username</td>
+</tr>
+<tr>
+<td><code>machine</code></td>
+<td>which host you're on</td>
+</tr>
+<tr>
+<td><code>~/notes</code></td>
+<td>your current directory (<code>~</code> = home)</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>ready for input — <strong>warning:</strong> a <code>#</code> here instead means you are <strong>root</strong></td>
+</tr>
+</tbody>
+</table>
 <p>A <code>$</code> prompt is a normal user (you own your home, mistakes are cheap). A <code>#</code> prompt is <strong>root</strong> — every
 keystroke has full-system power. This module never needs <code>#</code>, and never uses <code>sudo</code>.</p>
 <h3 id="six-mechanisms-that-explain-the-rest">Six mechanisms that explain the rest<a class="headerlink" href="#six-mechanisms-that-explain-the-rest" title="Permanent link">&para;</a></h3>
@@ -1123,50 +1150,50 @@ throwaway <code>~/terminal-lab/</code> sandbox you build first — nothing outsi
 <div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Read the prompt, get your bearings</label><label for="__tabbed_1_2">2 · Navigate</label><label for="__tabbed_1_3">3 · Build a sandbox and a tree</label><label for="__tabbed_1_4">4 · Copy, move, rename — verify each time</label><label for="__tabbed_1_5">5 · Delete, safely</label><label for="__tabbed_1_6">6 · Look inside files, then get help</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">pwd</span><span class="w">            </span><span class="c1"># where am I?</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls<span class="w">             </span><span class="c1"># what&#39;s here?</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>ls<span class="w"> </span>-l<span class="w">          </span><span class="c1"># long form: is each line a file or a directory?</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ls<span class="w"> </span>-la<span class="w"> </span>~<span class="w">       </span><span class="c1"># -a reveals hidden dotfiles like .bashrc</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">pwd</span><span class="w">            </span><span class="c1"># where am I?</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ls<span class="w">             </span><span class="c1"># what&#39;s here?</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ls<span class="w"> </span>-l<span class="w">          </span><span class="c1"># long form: is each line a file or a directory?</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>ls<span class="w"> </span>-la<span class="w"> </span>~<span class="w">       </span><span class="c1"># -a reveals hidden dotfiles like .bashrc</span>
 </code></pre></div>
 In <em>your</em> prompt, identify the four parts: user, host, current directory, the <code>$</code>. Journal: what did
 <code>-a</code> reveal, and what is the first character of each <code>ls -l</code> line?</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>/<span class="w">            </span><span class="c1"># to root — recognise M1&#39;s filesystem tour</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>ls
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">cd</span><span class="w"> </span>/usr/bin<span class="w">     </span><span class="c1"># where the programs live</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">      </span><span class="c1"># how many programs? (two programs composed!)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">cd</span><span class="w">              </span><span class="c1"># bare cd = home</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nb">cd</span><span class="w"> </span>-<span class="w">            </span><span class="c1"># back to where you just were</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>/<span class="w">            </span><span class="c1"># to root — recognise M1&#39;s filesystem tour</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">cd</span><span class="w"> </span>/usr/bin<span class="w">     </span><span class="c1"># where the programs live</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">      </span><span class="c1"># how many programs? (two programs composed!)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">cd</span><span class="w">              </span><span class="c1"># bare cd = home</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">cd</span><span class="w"> </span>-<span class="w">            </span><span class="c1"># back to where you just were</span>
 </code></pre></div>
 Practice until <code>cd</code>, <code>pwd</code>, <code>ls</code> need zero thought. Reach <code>/etc</code> two ways: absolute (<code>cd /etc</code>) and
 relative (<code>cd ../../etc</code> — adjust for where you are).</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mkdir<span class="w"> </span>~/terminal-lab<span class="w">            </span><span class="c1"># your sandbox — all destructive work lives here</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">cd</span><span class="w"> </span>~/terminal-lab
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">pwd</span><span class="w">                             </span><span class="c1"># confirm: /home/&lt;you&gt;/terminal-lab</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>projects/<span class="o">{</span>alpha,beta<span class="o">}</span>/notes<span class="w">   </span><span class="c1"># one command builds a tree (brace expansion)</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># see the whole structure</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>touch<span class="w"> </span>projects/alpha/notes/day1.md
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>~/terminal-lab<span class="w">            </span><span class="c1"># your sandbox — all destructive work lives here</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">cd</span><span class="w"> </span>~/terminal-lab
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">pwd</span><span class="w">                             </span><span class="c1"># confirm: /home/&lt;you&gt;/terminal-lab</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>projects/<span class="o">{</span>alpha,beta<span class="o">}</span>/notes<span class="w">   </span><span class="c1"># one command builds a tree (brace expansion)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># see the whole structure</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>touch<span class="w"> </span>projects/alpha/notes/day1.md
 </code></pre></div>
 Journal: what does <code>-p</code> do? (Check <code>man mkdir</code>.) Verify after every step — that rhythm <em>is</em> the lab.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cp<span class="w"> </span>projects/alpha/notes/day1.md<span class="w"> </span>day1-backup.md
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify the copy exists</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>mv<span class="w"> </span>day1-backup.md<span class="w"> </span>projects/beta/<span class="w">            </span><span class="c1"># move it</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>mv<span class="w"> </span>projects/beta/day1-backup.md<span class="w"> </span>projects/beta/day1-copy.md<span class="w">   </span><span class="c1"># mv also renames</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify after EVERY mutation</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cp<span class="w"> </span>projects/alpha/notes/day1.md<span class="w"> </span>day1-backup.md
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify the copy exists</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>mv<span class="w"> </span>day1-backup.md<span class="w"> </span>projects/beta/<span class="w">            </span><span class="c1"># move it</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>mv<span class="w"> </span>projects/beta/day1-backup.md<span class="w"> </span>projects/beta/day1-copy.md<span class="w">   </span><span class="c1"># mv also renames</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify after EVERY mutation</span>
 </code></pre></div>
 <code>mv</code> both moves and renames. The verification rhythm (<code>ls -R</code> between mutations) is the real content.</p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>touch<span class="w"> </span>trash1<span class="w"> </span>trash2<span class="w"> </span>trash3
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>ls<span class="w">                              </span><span class="c1"># look before you delete</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>rm<span class="w"> </span>-i<span class="w"> </span>trash1<span class="w">                    </span><span class="c1"># -i prompts before removing — answer it</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>rm<span class="w"> </span>trash2<span class="w"> </span>trash3
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>ls<span class="w">                              </span><span class="c1"># confirm they&#39;re gone</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>touch<span class="w"> </span>trash1<span class="w"> </span>trash2<span class="w"> </span>trash3
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>ls<span class="w">                              </span><span class="c1"># look before you delete</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>rm<span class="w"> </span>-i<span class="w"> </span>trash1<span class="w">                    </span><span class="c1"># -i prompts before removing — answer it</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>rm<span class="w"> </span>trash2<span class="w"> </span>trash3
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w">                              </span><span class="c1"># confirm they&#39;re gone</span>
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Only inside the sandbox</p>
@@ -1176,12 +1203,12 @@ first, always.</p>
 </div>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>/etc/hostname<span class="w">               </span><span class="c1"># whole (small) file</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>less<span class="w"> </span>/etc/profile<span class="w">               </span><span class="c1"># page it: space, b, /word to search, q to quit</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>head<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># first lines</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>tail<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># last lines</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>wc<span class="w"> </span>-l<span class="w"> </span>/etc/passwd<span class="w">               </span><span class="c1"># count lines</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>man<span class="w"> </span>ls<span class="w">                          </span><span class="c1"># the reference: find what -h, -t, -r do — q to quit</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cat<span class="w"> </span>/etc/hostname<span class="w">               </span><span class="c1"># whole (small) file</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>less<span class="w"> </span>/etc/profile<span class="w">               </span><span class="c1"># page it: space, b, /word to search, q to quit</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>head<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># first lines</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>tail<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># last lines</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>wc<span class="w"> </span>-l<span class="w"> </span>/etc/passwd<span class="w">               </span><span class="c1"># count lines</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>man<span class="w"> </span>ls<span class="w">                          </span><span class="c1"># the reference: find what -h, -t, -r do — q to quit</span>
 </code></pre></div>
 A pager is not "frozen" — it's <em>waiting</em>. <code>q</code> gets you out of <code>less</code> and <code>man</code>. In <code>man</code>, read the
 <strong>SYNOPSIS</strong> first and search with <code>/</code>.</p>
@@ -1206,8 +1233,8 @@ two names in one go.</p>
 </details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>journal/2026/aug/<span class="o">{</span>week1,week2<span class="o">}</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>ls<span class="w"> </span>-R<span class="w"> </span>journal
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>journal/2026/aug/<span class="o">{</span>week1,week2<span class="o">}</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ls<span class="w"> </span>-R<span class="w"> </span>journal
 </code></pre></div>
 <code>-p</code> makes the intermediate dirs (<code>2026</code>, <code>aug</code>); brace expansion <code>{week1,week2}</code> is the shell
 writing out both leaf names before <code>mkdir</code> runs.</p>
@@ -1220,7 +1247,7 @@ writing out both leaf names before <code>mkdir</code> runs.</p>
 </details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ls<span class="w"> </span>/etc/*.conf<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ls<span class="w"> </span>/etc/*.conf<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
 </code></pre></div>
 The shell expands <code>/etc/*.conf</code> to the matching paths; <code>wc -l</code> counts the lines <code>ls</code> prints. (This
 counts the top level of <code>/etc</code> only — a fair reading of the task.)</p>
@@ -1229,7 +1256,7 @@ counts the top level of <code>/etc</code> only — a fair reading of the task.)<
 <p>Show, with one command, exactly what <code>*.md</code> becomes <em>before</em> any program acts on it.</p>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">echo</span><span class="w"> </span>*.md
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nb">echo</span><span class="w"> </span>*.md
 </code></pre></div>
 <code>echo</code> just prints its arguments — so it prints the filenames the <strong>shell</strong> already substituted for
 <code>*.md</code>. The program never sees the <code>*</code>. In an <em>empty</em> directory <code>echo *.md</code> prints the literal
@@ -1240,7 +1267,7 @@ counts the top level of <code>/etc</code> only — a fair reading of the task.)<
 the SYNOPSIS notation you relied on.</p>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ls<span class="w"> </span>-lShr<span class="w">        </span><span class="c1"># -S sort by size, -r reverse (largest last), -h human units, -l long</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ls<span class="w"> </span>-lShr<span class="w">        </span><span class="c1"># -S sort by size, -r reverse (largest last), -h human units, -l long</span>
 </code></pre></div>
 Found by searching the OPTIONS section (<code>/size</code>, <code>/reverse</code>, <code>/human</code>). SYNOPSIS shows <code>ls [OPTION]…
 [FILE]…</code> — options are optional and combinable, which is why <code>-lShr</code> bundles four.</p>
