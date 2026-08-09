@@ -1,0 +1,1443 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The terminal and the shell — the interface you will operate every later topic from. Navigate, manipulate files, read man pages, and build the safety habits that prevent production accidents.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-01/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 02 — First Contact with the Terminal - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-02-first-contact-with-the-terminal" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 02 — First Contact with the Terminal
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-keystroke-to-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: keystroke to output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-line-anatomy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command line anatomy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paths-the-address-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paths — the address system
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt-anatomy-read-it-before-you-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt anatomy — read it before you type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#six-mechanisms-that-explain-the-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Six mechanisms that explain the rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-safety-model-because-rm-has-no-undo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The safety model — because rm has no undo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-your-first-working-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: your first working session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-one-command-whole-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — One command, whole tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-count-without-counting-by-eye" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Count without counting by eye
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Prove the shell expands the glob, not the program
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-learn-an-unseen-option-from-man-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Learn an unseen option from man only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-type-vs-which-disagree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — type vs which disagree
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-keystroke-to-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: keystroke to output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-line-anatomy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command line anatomy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paths-the-address-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paths — the address system
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt-anatomy-read-it-before-you-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt anatomy — read it before you type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#six-mechanisms-that-explain-the-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Six mechanisms that explain the rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-safety-model-because-rm-has-no-undo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The safety model — because rm has no undo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-your-first-working-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: your first working session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-one-command-whole-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — One command, whole tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-count-without-counting-by-eye" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Count without counting by eye
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Prove the shell expands the glob, not the program
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-learn-an-unseen-option-from-man-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Learn an unseen option from man only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-type-vs-which-disagree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — type vs which disagree
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-02-first-contact-with-the-terminal">Module 02 — First Contact with the Terminal<a class="headerlink" href="#module-02-first-contact-with-the-terminal" title="Permanent link">&para;</a></h1>
+<p><small>Stage 1 · Foundations · ~1 week at 4 h/day · Prerequisite — Module 01 (the machine model you now talk to).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p>A <strong>terminal</strong> (terminal emulator) is a program that displays text and forwards your keystrokes to a
+<strong>shell</strong>. The <strong>shell</strong> (Bash here) reads your command lines, runs programs for you, and prints their
+output. Terminal = the window; shell = the interpreter inside it.</p>
+<p>Module 01 gave you the model of the machine; this module gives you your <strong>hands</strong>. Every topic in this
+curriculum — Linux, Docker, Kubernetes, Git, Python, remote GPU boxes — is operated from a shell. This
+is the last module that "teaches the terminal": afterwards the terminal is simply the medium everything
+else lives in. By the end of the week the prompt is a place you <em>work</em>, not a hazard you avoid.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>M3–M4 administer Linux <em>through</em> this prompt · M5 turns today's command lines into scripts · M6 (Vim)
+and M7 (Tmux) live inside the terminal · M9 (SSH) is this exact interface over the network · a
+<code>docker exec -it … bash</code> (M16) drops you into a container's shell — <strong>this module, inside a box.</strong>
+Learn it as reflexes now and every later tool is just new vocabulary in the same conversation.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 02 — First Contact with the Terminal&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+terminal vs shell (the window vs the person answering the phone) → prompt anatomy →
+the keystroke→output loop (fork/exec back to M1) → globbing happens in the shell, not the program →
+the three safety habits that stand in for <code>rm</code>'s missing undo.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-your-first-working-session">Guided Lab</a> in a browser terminal and run each
+command yourself as it appears. Typing beats watching every time — and it is part of how the memory
+forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-keystroke-to-output">The picture: keystroke to output<a class="headerlink" href="#the-picture-keystroke-to-output" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart LR
+    K["You — keyboard"] --&gt; T["Terminal emulator&lt;br/&gt;draws text, sends keys"]
+    T --&gt; Sh["Shell (bash)&lt;br/&gt;parse · expand globs and vars"]
+    Sh --&gt; P["PATH search&lt;br/&gt;find the program"]
+    P --&gt; FE["fork + exec&lt;br/&gt;(M1's workflow)"]
+    FE --&gt; Pr["Program — ls, cat, cp"]
+    Pr --&gt; Sy["syscalls to the kernel"]
+    Sy --&gt; Out["Text output"]
+    Out --&gt; T</code></pre>
+<p>The shell is just a program (M1: a <strong>process</strong>) that starts <em>other</em> processes and wires their text
+input/output back to your terminal. When you type <code>ls</code>, the shell searches the directories in <code>$PATH</code>
+for a program named <code>ls</code>, then <code>fork</code>+<code>exec</code>s it — the exact workflow you traced in Module 01, now
+under your fingers.</p>
+<h3 id="command-line-anatomy">Command line anatomy<a class="headerlink" href="#command-line-anatomy" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ls -l /home
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>└─ command   └─ argument (WHAT it operates on)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>      └─ option/flag (HOW it behaves)
+</code></pre></div>
+<p><code>command -options arguments</code>. Options modify behaviour; arguments say what to act on; <code>man</code> documents
+every option there is.</p>
+<h3 id="paths-the-address-system">Paths — the address system<a class="headerlink" href="#paths-the-address-system" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Absolute</strong> starts at root <code>/</code> — <code>/home/you/notes.md</code> — same location from anywhere.</li>
+<li><strong>Relative</strong> starts at your <strong>working directory</strong> — <code>notes.md</code> — depends on where you are.</li>
+<li><code>.</code> = here · <code>..</code> = parent · <code>~</code> = your home · <code>-</code> (with <code>cd</code>) = the previous directory.</li>
+<li><code>pwd</code> + <code>ls</code> are your <strong>eyes</strong>: where am I, and what's here?</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a> /                    ← root
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a> ├── home/
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a> │    └── you/        ← ~ (your home)
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a> │         └── terminal-lab/   ← cd terminal-lab (relative)  |  /home/you/terminal-lab (absolute)
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a> ├── etc/   ├── usr/bin/   └── proc/
+</code></pre></div>
+<h3 id="prompt-anatomy-read-it-before-you-type">Prompt anatomy — read it before you type<a class="headerlink" href="#prompt-anatomy-read-it-before-you-type" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a> you @ machine : ~/notes $
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a> └ user        └ where you are (~ = your home)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>       └ which machine        └ &quot;ready&quot; — and a WARNING: # would mean root!
+</code></pre></div>
+<p>A <code>$</code> prompt is a normal user (you own your home, mistakes are cheap). A <code>#</code> prompt is <strong>root</strong> — every
+keystroke has full-system power. This module never needs <code>#</code>, and never uses <code>sudo</code>.</p>
+<h3 id="six-mechanisms-that-explain-the-rest">Six mechanisms that explain the rest<a class="headerlink" href="#six-mechanisms-that-explain-the-rest" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>The PATH search.</strong> Typing <code>ls</code> makes the shell scan <code>$PATH</code>'s directories for a program named
+   <code>ls</code>, then fork/exec it. <code>command not found</code> means: typo, not installed, or not in PATH.</li>
+<li><strong>Globbing is the shell's job.</strong> <code>*.md</code> is expanded by the <strong>shell</strong> into matching filenames
+   <em>before</em> the program runs. The program never sees the <code>*</code>. Prove it: <code>echo *.md</code>.</li>
+<li><strong>Built-in vs program.</strong> <code>cd</code> must be a shell <strong>built-in</strong> — a child process couldn't change its
+   parent's directory. <code>ls</code> is a real program in <code>/usr/bin</code>. <code>type &lt;cmd&gt;</code> tells you which.</li>
+<li><strong>Everything is a file.</strong> Directories, devices, even kernel state (<code>/proc</code>) — one namespace, one set
+   of tools.</li>
+<li><strong>Exit status.</strong> Commands succeed (status <code>0</code>) or fail (non-zero) and <em>say so</em>. <code>echo $?</code> shows the
+   last one — your first taste of programmatic error handling (M5 builds on it).</li>
+<li><strong>Tab &amp; history are accuracy tools, not conveniences.</strong> Tab completion can't typo a path; <code>↑</code> and
+   <code>Ctrl-R</code> recall exactly what you ran. At scale that's minutes saved and near-zero path errors.</li>
+</ol>
+<h3 id="the-safety-model-because-rm-has-no-undo">The safety model — because <code>rm</code> has no undo<a class="headerlink" href="#the-safety-model-because-rm-has-no-undo" title="Permanent link">&para;</a></h3>
+<p>There is <strong>no trash can</strong> in the terminal: <code>rm</code> deletes forever. The three habits that stand in for the
+missing undo:</p>
+<ul>
+<li><strong>Sandbox discipline</strong> — do destructive work only where mistakes are cheap (<code>~/terminal-lab/</code>).</li>
+<li><strong><code>ls</code> before <code>rm</code>/<code>mv</code></strong> — look at what exists before you change it.</li>
+<li><strong><code>echo</code> the glob</strong> — see what <code>*.md</code> expands to <em>before</em> a destructive command uses it.</li>
+</ul>
+<p>Plus: never paste an unread multi-line command (its newlines <strong>execute</strong> as they arrive), and never run
+what you can't explain — <em>especially</em> with <code>sudo</code>.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>Terminal = the window; shell (bash) = the interpreter inside it.</strong> Different things.</li>
+<li><strong>The shell expands</strong> <code>*</code>, <code>~</code>, <code>$VAR</code> <em>before</em> the program sees anything — <code>echo</code> shows you what.</li>
+<li><strong>Paths:</strong> absolute starts at <code>/</code>; relative starts at your working directory. <code>pwd</code> + <code>ls</code> are your eyes.</li>
+<li><strong><code>cd</code> is a built-in, <code>ls</code> is a program</strong> — <code>type &lt;cmd&gt;</code> tells you which; <code>$PATH</code> is where programs are found.</li>
+<li><strong><code>rm</code> is forever.</strong> Sandbox · <code>ls</code>-before-<code>rm</code> · <code>echo</code>-the-glob — the three habits that replace undo.</li>
+<li><strong>Learn commands from <code>man</code></strong> (start at SYNOPSIS, search with <code>/</code>, quit with <code>q</code>) — not from guessing.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-your-first-working-session">Guided Lab: your first working session<a class="headerlink" href="#guided-lab-your-first-working-session" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. Read-only commands inspect; the create/copy/delete steps happen ONLY inside a
+throwaway <code>~/terminal-lab/</code> sandbox you build first — nothing outside it is ever touched.</em></p>
+<div class="lo-lab-actions">
+<p><a href="https://killercoda.com/learning-os/course/killercoda/module-02" target="_blank">▶ Open interactive lab (browser terminal){ .lo-btn }</a>
+<a href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-02" target="_blank">View lab source{ .lo-btn .lo-btn--ghost }</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">No install needed</p>
+<p>The button opens a free Ubuntu terminal in your browser (Killercoda) — no signup, nothing to
+install. You can also run every command on any Linux machine.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Read the prompt, get your bearings</label><label for="__tabbed_1_2">2 · Navigate</label><label for="__tabbed_1_3">3 · Build a sandbox and a tree</label><label for="__tabbed_1_4">4 · Copy, move, rename — verify each time</label><label for="__tabbed_1_5">5 · Delete, safely</label><label for="__tabbed_1_6">6 · Look inside files, then get help</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">pwd</span><span class="w">            </span><span class="c1"># where am I?</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>ls<span class="w">             </span><span class="c1"># what&#39;s here?</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>ls<span class="w"> </span>-l<span class="w">          </span><span class="c1"># long form: is each line a file or a directory?</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>ls<span class="w"> </span>-la<span class="w"> </span>~<span class="w">       </span><span class="c1"># -a reveals hidden dotfiles like .bashrc</span>
+</code></pre></div>
+In <em>your</em> prompt, identify the four parts: user, host, current directory, the <code>$</code>. Journal: what did
+<code>-a</code> reveal, and what is the first character of each <code>ls -l</code> line?</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>/<span class="w">            </span><span class="c1"># to root — recognise M1&#39;s filesystem tour</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>ls
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">cd</span><span class="w"> </span>/usr/bin<span class="w">     </span><span class="c1"># where the programs live</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">      </span><span class="c1"># how many programs? (two programs composed!)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nb">cd</span><span class="w">              </span><span class="c1"># bare cd = home</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">cd</span><span class="w"> </span>-<span class="w">            </span><span class="c1"># back to where you just were</span>
+</code></pre></div>
+Practice until <code>cd</code>, <code>pwd</code>, <code>ls</code> need zero thought. Reach <code>/etc</code> two ways: absolute (<code>cd /etc</code>) and
+relative (<code>cd ../../etc</code> — adjust for where you are).</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>mkdir<span class="w"> </span>~/terminal-lab<span class="w">            </span><span class="c1"># your sandbox — all destructive work lives here</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">cd</span><span class="w"> </span>~/terminal-lab
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nb">pwd</span><span class="w">                             </span><span class="c1"># confirm: /home/&lt;you&gt;/terminal-lab</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>projects/<span class="o">{</span>alpha,beta<span class="o">}</span>/notes<span class="w">   </span><span class="c1"># one command builds a tree (brace expansion)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># see the whole structure</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>touch<span class="w"> </span>projects/alpha/notes/day1.md
+</code></pre></div>
+Journal: what does <code>-p</code> do? (Check <code>man mkdir</code>.) Verify after every step — that rhythm <em>is</em> the lab.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cp<span class="w"> </span>projects/alpha/notes/day1.md<span class="w"> </span>day1-backup.md
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify the copy exists</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>mv<span class="w"> </span>day1-backup.md<span class="w"> </span>projects/beta/<span class="w">            </span><span class="c1"># move it</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>mv<span class="w"> </span>projects/beta/day1-backup.md<span class="w"> </span>projects/beta/day1-copy.md<span class="w">   </span><span class="c1"># mv also renames</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify after EVERY mutation</span>
+</code></pre></div>
+<code>mv</code> both moves and renames. The verification rhythm (<code>ls -R</code> between mutations) is the real content.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>touch<span class="w"> </span>trash1<span class="w"> </span>trash2<span class="w"> </span>trash3
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ls<span class="w">                              </span><span class="c1"># look before you delete</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>rm<span class="w"> </span>-i<span class="w"> </span>trash1<span class="w">                    </span><span class="c1"># -i prompts before removing — answer it</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>rm<span class="w"> </span>trash2<span class="w"> </span>trash3
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>ls<span class="w">                              </span><span class="c1"># confirm they&#39;re gone</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Only inside the sandbox</p>
+<p>Every <code>rm</code> here targets scratch files you just created in <code>~/terminal-lab/</code>. Never run <code>rm</code> (and
+never <code>rm -rf</code> at all this month) outside a directory you built for throwaway practice. <code>ls</code>
+first, always.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cat<span class="w"> </span>/etc/hostname<span class="w">               </span><span class="c1"># whole (small) file</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>less<span class="w"> </span>/etc/profile<span class="w">               </span><span class="c1"># page it: space, b, /word to search, q to quit</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>head<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># first lines</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>tail<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># last lines</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>wc<span class="w"> </span>-l<span class="w"> </span>/etc/passwd<span class="w">               </span><span class="c1"># count lines</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>man<span class="w"> </span>ls<span class="w">                          </span><span class="c1"># the reference: find what -h, -t, -r do — q to quit</span>
+</code></pre></div>
+A pager is not "frozen" — it's <em>waiting</em>. <code>q</code> gets you out of <code>less</code> and <code>man</code>. In <code>man</code>, read the
+<strong>SYNOPSIS</strong> first and search with <code>/</code>.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can read your prompt, navigate anywhere, build and reorganise a tree, delete safely, and
+learn an option from <code>man</code> — the guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work in your <code>~/terminal-lab/</code> sandbox. Struggle here is
+the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-one-command-whole-tree">Challenge 1 — One command, whole tree<a class="headerlink" href="#challenge-1-one-command-whole-tree" title="Permanent link">&para;</a></h3>
+<p>Create, in a <strong>single</strong> command, the tree <code>journal/2026/aug/{week1,week2}</code> inside the sandbox.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>mkdir</code> has a flag that creates parent directories as needed, and the shell can expand <code>{a,b}</code> into
+two names in one go.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>journal/2026/aug/<span class="o">{</span>week1,week2<span class="o">}</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>ls<span class="w"> </span>-R<span class="w"> </span>journal
+</code></pre></div>
+<code>-p</code> makes the intermediate dirs (<code>2026</code>, <code>aug</code>); brace expansion <code>{week1,week2}</code> is the shell
+writing out both leaf names before <code>mkdir</code> runs.</p>
+</details>
+<h3 id="challenge-2-count-without-counting-by-eye">Challenge 2 — Count without counting by eye<a class="headerlink" href="#challenge-2-count-without-counting-by-eye" title="Permanent link">&para;</a></h3>
+<p>Find out how many files in <code>/etc</code> end in <code>.conf</code> — without counting them yourself.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>List them, then pipe into a line-counter. Beware: some names may hide in subdirectories.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ls<span class="w"> </span>/etc/*.conf<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+The shell expands <code>/etc/*.conf</code> to the matching paths; <code>wc -l</code> counts the lines <code>ls</code> prints. (This
+counts the top level of <code>/etc</code> only — a fair reading of the task.)</p>
+</details>
+<h3 id="challenge-3-prove-the-shell-expands-the-glob-not-the-program">Challenge 3 — Prove the shell expands the glob, not the program<a class="headerlink" href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" title="Permanent link">&para;</a></h3>
+<p>Show, with one command, exactly what <code>*.md</code> becomes <em>before</em> any program acts on it.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nb">echo</span><span class="w"> </span>*.md
+</code></pre></div>
+<code>echo</code> just prints its arguments — so it prints the filenames the <strong>shell</strong> already substituted for
+<code>*.md</code>. The program never sees the <code>*</code>. In an <em>empty</em> directory <code>echo *.md</code> prints the literal
+<code>*.md</code> (no match, so bash leaves the pattern alone) — a preview of M5's <code>nullglob</code>.</p>
+</details>
+<h3 id="challenge-4-learn-an-unseen-option-from-man-only">Challenge 4 — Learn an unseen option from <code>man</code> only<a class="headerlink" href="#challenge-4-learn-an-unseen-option-from-man-only" title="Permanent link">&para;</a></h3>
+<p>Using <strong>only</strong> <code>man ls</code> (no web), make <code>ls</code> sort by size, largest last, in human-readable units. State
+the SYNOPSIS notation you relied on.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ls<span class="w"> </span>-lShr<span class="w">        </span><span class="c1"># -S sort by size, -r reverse (largest last), -h human units, -l long</span>
+</code></pre></div>
+Found by searching the OPTIONS section (<code>/size</code>, <code>/reverse</code>, <code>/human</code>). SYNOPSIS shows <code>ls [OPTION]…
+[FILE]…</code> — options are optional and combinable, which is why <code>-lShr</code> bundles four.</p>
+</details>
+<h3 id="challenge-5-stretch-type-vs-which-disagree">Challenge 5 (stretch) — <code>type</code> vs <code>which</code> disagree<a class="headerlink" href="#challenge-5-stretch-type-vs-which-disagree" title="Permanent link">&para;</a></h3>
+<p><code>type cd</code> says "shell builtin"; <code>which cd</code> may print nothing. Explain the discrepancy precisely.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><code>type</code> reports how <strong>bash</strong> will interpret the word, and a built-in wins over any file — so it names
+<code>cd</code> a builtin. <code>which</code> only searches <code>$PATH</code> for executable <strong>files</strong>; it knows nothing about
+builtins, so for <code>cd</code> it finds nothing (or an unrelated file that would never actually run).</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Terminal vs shell — what is each, and which one is Bash?</summary>
+<p>The <strong>terminal</strong> is the window program that draws text and forwards your keystrokes; the <strong>shell</strong>
+is the command interpreter running inside it. <strong>Bash is the shell.</strong> (Phone line vs the person
+answering: the terminal carries the conversation; bash is who answers.)</p>
+</details>
+<details class="question">
+<summary>In <code>ls -l /home</code>, which part is the option and which the argument?</summary>
+<p><code>-l</code> is the <strong>option</strong> (modifies <em>how</em> <code>ls</code> behaves — long format); <code>/home</code> is the <strong>argument</strong>
+(<em>what</em> it operates on).</p>
+</details>
+<details class="question">
+<summary>Who expands <code>*.md</code> — the shell or <code>ls</code>? How would you prove it?</summary>
+<p>The <strong>shell</strong>, before the program runs. Prove it with <code>echo *.md</code>: <code>echo</code> only prints its
+arguments, so what you see is the filenames the shell already substituted — <code>ls</code> never sees the <code>*</code>.</p>
+</details>
+<details class="question">
+<summary>Why is <code>cd</code> a shell built-in while <code>ls</code> is a separate program?</summary>
+<p><code>cd</code> changes the shell's <em>own</em> working directory; a child process can't change its parent's
+directory, so it must run inside the shell. <code>ls</code> only reads and prints — fine as an external
+program in <code>/usr/bin</code>.</p>
+</details>
+<details class="question">
+<summary><code>rm</code> has no undo. Name the three habits that stand in for one.</summary>
+<p><strong>Sandbox discipline</strong> (act where mistakes are cheap), <strong><code>ls</code>-before-<code>rm</code>/<code>mv</code></strong> (look before you
+change), and <strong><code>echo</code>-the-glob</strong> (see the expansion before a destructive command uses it). Backups
+come later (M15).</p>
+</details>
+<details class="question">
+<summary><code>bash: lls: command not found</code> — the three likely causes, in order?</summary>
+<p>(1) <strong>Typo</strong> of a real command (most likely — retype or Tab-complete); (2) the program <strong>isn't
+installed</strong> (<code>type lls</code>, <code>man lls</code>); (3) it's installed but <strong>not in <code>$PATH</code></strong> (<code>echo $PATH</code>).</p>
+</details>
+<details class="question">
+<summary><code>less</code> shows <code>(END)</code> and won't let you out. What happened, and the key?</summary>
+<p>You're in the <strong>pager</strong> at the end of the file — not frozen, just waiting. Press <strong><code>q</code></strong> to quit.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>3 minutes, no notes</strong>: <em>"What is the terminal, what is the shell, and why do
+professionals still use them?"</em> You must distinguish terminal from shell and give <strong>≥2 engineering
+reasons</strong> (scriptable, remote/SSH, identical everywhere). Then, in <strong>90 seconds</strong>, teach <em>"what is a
+path?"</em> to a 10-year-old — postal-address analogy required, then show <code>pwd</code>/<code>cd</code> making it real. If
+you can't yet, that's your signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M2 also closes </em><em>Stage 1</em><em>. A
+module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> terminal vs shell vs prompt vs command precisely, with the process model underneath.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all three from memory: the keystroke→output loop, the path tree, and prompt anatomy.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Navigate</strong> to any of <code>/etc</code>, <code>/var/log</code>, <code>/usr/bin</code>, <code>~</code>, the sandbox, <code>/proc</code> and prove arrival with <code>pwd</code> — Tab-completing, no wrong turns.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> the Level-2 sequence (tree, files, copy, rename, safe delete) in under 3 minutes, zero errors, a verify between every mutation.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Develop</strong> a novel two-command pipe (e.g. count matching files) and explain each part.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> state <em>and</em> demonstrate the safety habits — sandbox, <code>ls</code>-before-<code>rm</code>, <code>echo</code>-the-glob, read-before-paste, no-sudo.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> one unseen planted failure (typo / wrong dir / stuck pager / empty glob) with a stated method: hypothesis → check → fix.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a misbehaving glob with <code>echo</code> and interpret both possible findings (no match vs wrong directory).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> show Tab / <code>Ctrl-R</code> / <code>Ctrl-A</code> / <code>Ctrl-E</code> / <code>Ctrl-C</code> fluency live, and say why keystrokes matter at scale.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure:</strong> show and explain 3 lines of your own <code>~/.bashrc</code> (read-only understanding).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Self-serve:</strong> solve ≥3 unseen tasks using only <code>man</code> (start at SYNOPSIS), and score ≥80% on the validation bank.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (terminal-vs-shell explanation mandatory).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. From this module on
+<strong>interleaving is active</strong> — every M2 review also pulls in one Module 01 item. Schedule these and
+<em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M1 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Command sprint cold (dir → file → copy → rename → verify → safe delete) · all flashcards</td>
+<td>One 1-minute "what is an OS" explanation</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Redraw the keystroke loop · glob-prediction sprint · debug an empty-glob scenario</td>
+<td><code>free -h</code> interpretation cold</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Rebuild the sandbox tree from nothing, unaided · the safety-habit questions</td>
+<td>Memory-hierarchy diagram from memory</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Learn one unseen command via <code>man</code>/SYNOPSIS only · "press Enter" walkthrough, timed</td>
+<td>Boot-sequence narration</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Recreate the Terminal Home structure in ≤10 min · the two stretch challenges</td>
+<td>M1 machine-inspection diagnosis</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> Bash scripting (M5 — today's command lines, written to a file) · Vim (M6) and
+Tmux (M7), which live inside the terminal · SSH (M9 — this interface over the network) · Git (M8) and
+Claude Code (M11), commands obeying today's anatomy · Docker (M16), where <code>docker exec -it … bash</code> is
+this module inside a container.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M1 taught what the machine is; M2 taught how to talk to it — every remaining module is just new
+vocabulary in this same conversation.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-01/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 01 — Computer &amp; OS Fundamentals">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 01 — Computer & OS Fundamentals
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>
