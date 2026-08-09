@@ -21,7 +21,7 @@ Status legend: ☐ not started · ◐ recorded, not published · ✅ live and em
 
 | Module | Scenario source | Live URL | Status |
 |---|---|---|---|
-| M01 | `labs/killercoda/module-01/` | `https://killercoda.com/<namespace>/scenario/module-01` _(placeholder until published)_ | ◐ authored |
+| M01 | `killercoda/module-01/` | https://killercoda.com/learning-os/course/killercoda/module-01 | ✅ published |
 
-> When a Killercoda scenario is published, replace `<namespace>` above **and** in the lesson page's
-> "Open interactive lab" button. See `labs/README.md` and `../platform/RUNBOOK.md`.
+> Killercoda profile = `learning-os`; the top-level `killercoda/` folder became a "course", so the
+> scenario URL is `…/course/killercoda/module-01`. See `labs/README.md` and `../platform/RUNBOOK.md`.
