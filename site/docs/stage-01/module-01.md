@@ -156,12 +156,12 @@ reclaims everything.
 
 <div class="lo-lab-actions" markdown="1">
 [▶ Open interactive lab (browser terminal){ .lo-btn }](https://killercoda.com/learning-os/scenario/module-01){ target=_blank }
-[View lab source{ .lo-btn .lo-btn--ghost }](https://github.com/){ target=_blank }
+[View lab source{ .lo-btn .lo-btn--ghost }](https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-01){ target=_blank }
 </div>
 
 !!! note "No install needed"
     The button opens a free Ubuntu terminal in your browser (Killercoda). It goes live when the
-    scenario in `labs/killercoda/module-01/` is published — see `../platform/RUNBOOK.md`. You can
+    scenario in `killercoda/module-01/` is published — see `../platform/RUNBOOK.md`. You can
     also run every command on any Linux machine, or in the terminal cast above.
 
 === "1 · Your machine"

@@ -4,8 +4,12 @@ Browser-based, zero-install environments so every lesson's labs actually run. Tw
 
 | Backend | For | Location |
 |---|---|---|
-| **Killercoda** | Linux / Docker / Kubernetes labs (a real VM in the browser) | `killercoda/module-YY/` |
-| **GitHub Codespaces / devcontainers** | coding & AI labs (a full dev container) | `devcontainers/module-YY/.devcontainer/` (added when the first coding module ships) |
+| **Killercoda** | Linux / Docker / Kubernetes labs (a real VM in the browser) | repo-root **`killercoda/module-YY/`** (see note) |
+| **GitHub Codespaces / devcontainers** | coding & AI labs (a full dev container) | `labs/devcontainers/module-YY/.devcontainer/` (added when the first coding module ships) |
+
+> **Why Killercoda scenarios live at the repo root, not under `labs/`:** Killercoda only discovers
+> scenarios **≤2 folders deep** from the repo root, so `killercoda/module-01/` is found but
+> `labs/killercoda/module-01/` (3 deep) is not. Keep scenarios shallow.
 
 ## Killercoda scenarios
 
@@ -27,7 +31,7 @@ Interactive command blocks use the ` ```bash … ```{{exec}} ` fence — clickin
 1. Push this repo to GitHub (the `labs/` folder can live in the course repo or its own).
 2. Sign in at **https://killercoda.com** with GitHub and add your repo as a **creator** source
    (Killercoda → Account → Creators). Scenarios are detected from folders containing `index.json`.
-3. Your scenario goes live at `https://killercoda.com/<your-namespace>/scenario/module-01`.
+3. Your scenario goes live at `https://killercoda.com/randaguiac20/scenario/module-01` (namespace = your GitHub username; confirm the exact slug in Killercoda's **My Scenarios**).
 4. Put that URL in the lesson page's **"Open interactive lab"** button
    (`site/docs/stage-01/module-01.md` — the `lo-btn` link) and in `media/youtube-manifest.md`'s lab table.
 
