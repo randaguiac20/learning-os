@@ -20,6 +20,9 @@ Status legend: ☐ not started · ◐ recorded, not published · ✅ live and em
 | M09 | SSH | _(pending)_ | ☐ |
 | M10 | Dotfiles & Toolchains | _(pending)_ | ☐ |
 | M11 | Claude Code | _(pending)_ | ☐ |
+| M12 | Programming Fundamentals | _(pending)_ | ☐ |
+| M13 | Python for Engineers | _(pending)_ | ☐ |
+| M14 | Networking | _(pending)_ | ☐ |
 
 ## Terminal casts (asciinema `.cast`, shipped with the site)
 
@@ -36,6 +39,9 @@ Status legend: ☐ not started · ◐ recorded, not published · ✅ live and em
 | M09 | _(pending — record per `media/README.md`)_ | Module 09 · Watch | ☐ |
 | M10 | _(pending — record per `media/README.md`)_ | Module 10 · Watch | ☐ |
 | M11 | _(pending — record per `media/README.md`)_ | Module 11 · Watch | ☐ |
+| M12 | _(pending — record per `media/README.md`)_ | Module 12 · Watch | ☐ |
+| M13 | _(pending — record per `media/README.md`)_ | Module 13 · Watch | ☐ |
+| M14 | _(pending — record per `media/README.md`)_ | Module 14 · Watch | ☐ |
 
 ## Interactive labs (Killercoda)
 
@@ -52,6 +58,9 @@ Status legend: ☐ not started · ◐ recorded, not published · ✅ live and em
 | M09 | `killercoda/module-09/` | https://killercoda.com/learning-os/course/killercoda/module-09 _(Sync Now to publish)_ | ◐ authored |
 | M10 | `killercoda/module-10/` | https://killercoda.com/learning-os/course/killercoda/module-10 _(Sync Now to publish)_ | ◐ authored |
 | M11 | `killercoda/module-11/` | https://killercoda.com/learning-os/course/killercoda/module-11 _(Sync Now to publish)_ | ◐ authored |
+| M12 | `killercoda/module-12/` | https://killercoda.com/learning-os/course/killercoda/module-12 _(Sync Now to publish)_ | ◐ authored |
+| M13 | `killercoda/module-13/` | https://killercoda.com/learning-os/course/killercoda/module-13 _(Sync Now to publish)_ | ◐ authored |
+| M14 | `killercoda/module-14/` | https://killercoda.com/learning-os/course/killercoda/module-14 _(Sync Now to publish)_ | ◐ authored |
 
 > Killercoda profile = `learning-os`; the top-level `killercoda/` folder became a "course", so the
 > scenario URL is `…/course/killercoda/module-01`. See `labs/README.md` and `../platform/RUNBOOK.md`.

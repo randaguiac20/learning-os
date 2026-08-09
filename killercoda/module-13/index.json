@@ -1,0 +1,41 @@
+{
+  "title": "Module 13 — Python for Engineers",
+  "description": "Build a real Python project in miniature: an isolated venv, a package installed into it, a typed module with a generator, and a passing pytest suite. Everything is scoped to a throwaway ~/recall project and never touches the system Python.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Build an isolated environment",
+        "text": "step1.md"
+      },
+      {
+        "title": "Install a package into the venv",
+        "text": "step2.md"
+      },
+      {
+        "title": "Write a small typed module",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Write a test and run the gate",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Make it a command (argparse)",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

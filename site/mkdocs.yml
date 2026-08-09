@@ -117,3 +117,7 @@ nav:
       - "Module 09 — SSH": stage-03/module-09.md
       - "Module 10 — Dotfiles & Toolchains": stage-03/module-10.md
       - "Module 11 — Claude Code": stage-03/module-11.md
+  - "Stage 4 — Advanced Topics":
+      - "Module 12 — Programming Fundamentals": stage-04/module-12.md
+      - "Module 13 — Python for Engineers": stage-04/module-13.md
+      - "Module 14 — Networking": stage-04/module-14.md

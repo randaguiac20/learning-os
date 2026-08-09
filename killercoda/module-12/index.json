@@ -1,0 +1,41 @@
+{
+  "title": "Module 12 — Programming Fundamentals",
+  "description": "Write your first real programs in Python: explore values and types, then build a conditional, a loop, a function, and a dict-backed word counter — running each program and reading a traceback. All work lives in a throwaway ~/learning/py workspace.",
+  "difficulty": "beginner",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Meet the interpreter — values, types, variables",
+        "text": "step1.md"
+      },
+      {
+        "title": "Selection — choose a branch",
+        "text": "step2.md"
+      },
+      {
+        "title": "Iteration — repeat with a loop",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Functions and a data structure",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Errors as information",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

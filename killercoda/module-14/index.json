@@ -1,0 +1,41 @@
+{
+  "title": "Module 14 — Networking",
+  "description": "Inspect a real Linux stack: interfaces and routes, DNS and an /etc/hosts override, sockets and a live listener, a curl request read end to end, and packets on the wire with tcpdump. Everything runs on your own machine and loopback.",
+  "difficulty": "advanced",
+  "time": "30-40 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Your machine's network identity",
+        "text": "step1.md"
+      },
+      {
+        "title": "Names — DNS and the /etc/hosts override",
+        "text": "step2.md"
+      },
+      {
+        "title": "Sockets — start a listener",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Make a request, end to end",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Watch the packets, then the ladder",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

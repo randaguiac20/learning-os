@@ -84,7 +84,14 @@ live · ✅ dark-mode mermaid fix · ✅ M01 Killercoda lab published + URL wire
     interrupted mid-run; orchestrator stripped leaked tags from 4 lessons and finished 10 partial
     lab files by hand), `build --strict` EXIT=0, committed locally. M11 lab is API-free (scaffolds
     CLAUDE.md/.claude config); M09 SSH uses localhost + own key; M08 Git uses a throwaway `~/git-lab`.
-  - ☐ Batches 3–8 → Stages 4–13 (M12–M39).
+  - ✅ **Batch 3 — Stage 4 Advanced (M12 Programming Fundamentals, M13 Python for Engineers,
+    M14 Networking):** lessons + Killercoda labs (Python venv/pytest, networking tools), verifiers
+    functionally tested, `build --strict` EXIT=0, committed locally.
+  - ✅ **Overall correction — lab-button rendering:** all 44 buttons across M01–M11 were rewriting the
+    `.lo-btn` class INSIDE the link label (rendered as literal text, no styling); moved to post-paren
+    attr_list; validated in built HTML (4 `<a class=lo-btn>`/page, 0 literal braces site-wide);
+    playbook hardened. M12+ authored correct from the start.
+  - ☐ Batches 4–8 → Stages 5–13 (M15–M39).
 - **Current:** Site is **live and public**; **M01** fully done (lesson + published lab);
   **M02–M05** authored (lessons + labs); **M02+** Killercoda labs pending user **Sync Now**.
 - **Next up:** finish Batch 2 → wire + strict-build + commit → continue Batch 3 (Stage 4).
