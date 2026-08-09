@@ -1,0 +1,41 @@
+{
+  "title": "Module 04 — Linux Administration",
+  "description": "Operate a real Linux box: author a systemd unit, read your output in the journal, put a service on a timer, build a persistent storage mount, and take a backup with a restore drill. Uses sudo/root — this is real admin.",
+  "difficulty": "intermediate",
+  "time": "30-45 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Survey services, timers, and the journal",
+        "text": "step1.md"
+      },
+      {
+        "title": "Author a unit — enable vs start",
+        "text": "step2.md"
+      },
+      {
+        "title": "A health service on a timer",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Build a persistent storage mount",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Backup with a restore drill",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

@@ -106,3 +106,7 @@ nav:
   - "Stage 1 — Foundations":
       - "Module 01 — Computer & OS Fundamentals": stage-01/module-01.md
       - "Module 02 — First Contact with the Terminal": stage-01/module-02.md
+  - "Stage 2 — Core Concepts":
+      - "Module 03 — Linux Essentials": stage-02/module-03.md
+      - "Module 04 — Linux Administration": stage-02/module-04.md
+      - "Module 05 — Bash Scripting": stage-02/module-05.md

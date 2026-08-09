@@ -1,0 +1,41 @@
+{
+  "title": "Module 05 — Bash Scripting",
+  "description": "Turn commands into programs: write scripts with a shebang and set -euo pipefail, quote expansions, branch on exit codes, loop safely, parse flags with getopts, and guarantee cleanup with a trap. All work stays in a throwaway workbench.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "First script and the shebang",
+        "text": "step1.md"
+      },
+      {
+        "title": "Quoting and the expansion gauntlet",
+        "text": "step2.md"
+      },
+      {
+        "title": "Exit codes, conditionals, and set -euo pipefail",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Functions, args, and getopts",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Traps, cleanup, and shellcheck",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

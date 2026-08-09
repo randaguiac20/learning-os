@@ -1,0 +1,41 @@
+{
+  "title": "Module 03 — Linux Essentials",
+  "description": "Live the four pillars of Linux: read the FHS layout, explore inodes and links, set and reason about permissions (including the directory-w surprise), manage software with apt, and control processes with signals. Mutating work is scoped to a throwaway sandbox.",
+  "difficulty": "beginner",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "FHS layout and file identity (inodes)",
+        "text": "step1.md"
+      },
+      {
+        "title": "Links — hard vs symbolic",
+        "text": "step2.md"
+      },
+      {
+        "title": "Permissions and the directory surprise",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Software lifecycle with apt",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Processes, jobs, and signals",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}
