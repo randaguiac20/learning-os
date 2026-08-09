@@ -72,14 +72,5 @@
 /* asciinema player sizing. */
 .asciinema-player-wrapper { margin: 1rem 0; }
 
-/* Mermaid: the "hardware, kernel, you" diagram uses fixed light node fills, so in
-   dark mode Material's light label colour makes the text unreadable. Force dark
-   label text on just those four semantic classes (scoped — the page's other,
-   natively-themed diagrams are untouched, and light mode is unaffected). */
-.mermaid g.user  .nodeLabel, .mermaid g.user  .nodeLabel p,
-.mermaid g.door  .nodeLabel, .mermaid g.door  .nodeLabel p,
-.mermaid g.kern  .nodeLabel, .mermaid g.kern  .nodeLabel p,
-.mermaid g.metal .nodeLabel, .mermaid g.metal .nodeLabel p {
-  color: #1a1f2e !important;
-  fill:  #1a1f2e !important;
-}
+/* Mermaid diagrams use Material's native theming (readable in light AND dark) — no
+   custom node fills, so no label-contrast override is needed. */

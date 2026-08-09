@@ -68,17 +68,17 @@ magic. Skip it and everything later is memorization.
 
 ```mermaid
 flowchart TB
-    A["Applications — browser, python, docker"]:::user
-    L["Libraries and shells — bash, libc"]:::user
-    S{{"system calls — the ONLY door downward"}}:::door
-    K["KERNEL — processes · memory · files · network"]:::kern
-    D["Drivers"]:::kern
-    H["HARDWARE — CPU · RAM · disk · GPU · NIC"]:::metal
+    subgraph U["user space"]
+        A["Applications — browser, python, docker"]
+        L["Libraries and shells — bash, libc"]
+    end
+    S{{"system calls — the ONLY door downward"}}
+    subgraph KS["kernel space"]
+        K["KERNEL — processes · memory · files · network"]
+        D["Drivers"]
+    end
+    H["HARDWARE — CPU · RAM · disk · GPU · NIC"]
     A --> L --> S --> K --> D --> H
-    classDef user fill:#eaf0f9,stroke:#2b4c7e,color:#1a1f2e;
-    classDef door fill:#fff3e0,stroke:#a9722c,color:#1a1f2e;
-    classDef kern fill:#e6f3ef,stroke:#1f7a68,color:#1a1f2e;
-    classDef metal fill:#f4f6f9,stroke:#6b7280,color:#1a1f2e;
 ```
 
 The **user/kernel boundary** is the security line of the entire stack: user code is restricted and
@@ -155,13 +155,19 @@ reclaims everything.
 *Basic, step-by-step. Every command here is **read-only** — it inspects, never changes anything.*
 
 <div class="lo-lab-actions" markdown="1">
-[▶ Open interactive lab (browser terminal){ .lo-btn }](https://killercoda.com/learning-os/course/killercoda/module-01){ target=_blank }
+[▶ Open interactive lab{ .lo-btn }](https://killercoda.com/learning-os/course/killercoda/module-01){ target=_blank }
+[⧉ Open in Codespaces{ .lo-btn }](https://codespaces.new/randaguiac20/learning-os){ target=_blank }
+[⌨ Run locally{ .lo-btn .lo-btn--ghost }](#run-locally)
 [View lab source{ .lo-btn .lo-btn--ghost }](https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-01){ target=_blank }
 </div>
 
-!!! note "No install needed"
-    The button opens a free Ubuntu terminal in your browser (Killercoda) — no signup, nothing to
-    install. You can also run every command on any Linux machine, or in the terminal cast above.
+<span id="run-locally"></span>
+!!! tip "Three ways to run this lab — pick any (all free)"
+    - **Instant, no account** — click **Open interactive lab** (Killercoda): a Linux terminal in your browser.
+    - **Your own cloud** — click **Open in Codespaces**: runs in your GitHub account's free tier (120 core-hrs/mo).
+    - **Local, unlimited, $0** — any Linux / macOS / WSL terminal, or a throwaway container: `docker run -it ubuntu bash`, then follow the steps below (or watch the terminal cast above).
+
+    Killercoda is the zero-setup on-ramp; Codespaces and local use *your own* free resources, so they scale to any class size.
 
 === "1 · Your machine"
     ```bash

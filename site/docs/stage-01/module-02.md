@@ -67,7 +67,7 @@ else lives in. By the end of the week the prompt is a place you *work*, not a ha
 ### The picture: keystroke to output
 
 ```mermaid
-flowchart LR
+flowchart TB
     K["You — keyboard"] --> T["Terminal emulator<br/>draws text, sends keys"]
     T --> Sh["Shell (bash)<br/>parse · expand globs and vars"]
     Sh --> P["PATH search<br/>find the program"]
@@ -85,14 +85,15 @@ under your fingers.
 
 ### Command line anatomy
 
-```
-ls -l /home
-└─ command   └─ argument (WHAT it operates on)
-      └─ option/flag (HOW it behaves)
-```
+Read a command left to right — `command -options arguments`:
 
-`command -options arguments`. Options modify behaviour; arguments say what to act on; `man` documents
-every option there is.
+| Piece of `ls -l /home` | Kind | Role |
+|---|---|---|
+| `ls` | command | the program to run |
+| `-l` | option / flag | **HOW** it behaves (here: long listing) |
+| `/home` | argument | **WHAT** it operates on |
+
+Options modify behaviour; arguments say what to act on; `man <command>` documents every option there is.
 
 ### Paths — the address system
 
@@ -166,13 +167,19 @@ what you can't explain — *especially* with `sudo`.
 throwaway `~/terminal-lab/` sandbox you build first — nothing outside it is ever touched.*
 
 <div class="lo-lab-actions" markdown="1">
-[▶ Open interactive lab (browser terminal){ .lo-btn }](https://killercoda.com/learning-os/course/killercoda/module-02){ target=_blank }
+[▶ Open interactive lab{ .lo-btn }](https://killercoda.com/learning-os/course/killercoda/module-02){ target=_blank }
+[⧉ Open in Codespaces{ .lo-btn }](https://codespaces.new/randaguiac20/learning-os){ target=_blank }
+[⌨ Run locally{ .lo-btn .lo-btn--ghost }](#run-locally)
 [View lab source{ .lo-btn .lo-btn--ghost }](https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-02){ target=_blank }
 </div>
 
-!!! note "No install needed"
-    The button opens a free Ubuntu terminal in your browser (Killercoda) — no signup, nothing to
-    install. You can also run every command on any Linux machine.
+<span id="run-locally"></span>
+!!! tip "Three ways to run this lab — pick any (all free)"
+    - **Instant, no account** — click **Open interactive lab** (Killercoda): a Linux terminal in your browser.
+    - **Your own cloud** — click **Open in Codespaces**: runs in your GitHub account's free tier (120 core-hrs/mo).
+    - **Local, unlimited, $0** — any Linux / macOS / WSL terminal, or a throwaway container: `docker run -it ubuntu bash`, then follow the steps below.
+
+    Killercoda is the zero-setup on-ramp; Codespaces and local use *your own* free resources, so they scale to any class size.
 
 === "1 · Read the prompt, get your bearings"
     ```bash
