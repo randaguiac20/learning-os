@@ -1,0 +1,41 @@
+{
+  "title": "Module 34 — Big Data & Data Architecture",
+  "description": "Build a warehouse on your laptop with DuckDB: generate a dataset, run an OLAP aggregate, write columnar Parquet and compare it to CSV, do a partitioned read, and build an idempotent, quality-checked batch ETL script.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install the bench (DuckDB)",
+        "text": "step1.md"
+      },
+      {
+        "title": "Generate a dataset",
+        "text": "step2.md"
+      },
+      {
+        "title": "Load into DuckDB and run an OLAP aggregate",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Write Parquet — compare size and speed vs CSV",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Partition, then a tiny batch ETL script",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Module 29 — Claude Code Advanced",
+  "description": "Author and validate the four advanced config files that EXTEND Claude Code: a deterministic hook (.claude/settings.json), an MCP server entry (.mcp.json), a subagent definition (.claude/agents/), and a headless claude -p automation skeleton. No API key needed — you author and validate the shapes; the live agentic drills happen in your own terminal.",
+  "difficulty": "expert",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "The agent loop and the six control surfaces",
+        "text": "step1.md"
+      },
+      {
+        "title": "Hooks — deterministic guardrails",
+        "text": "step2.md"
+      },
+      {
+        "title": "An MCP server and a subagent",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "A headless automation skeleton",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Permission modes, injection posture, responsible agency",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

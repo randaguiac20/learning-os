@@ -1,0 +1,41 @@
+{
+  "title": "Module 33 — Databases & SQL",
+  "description": "Model a normalized schema with a foreign key in sqlite3, insert data, run a JOIN with a GROUP BY aggregate, prove a transaction is all-or-nothing, add an index, and fix a redundant column. All work lives in a throwaway ~/db-lab directory.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "A normalized schema (users + orders, with a foreign key)",
+        "text": "step1.md"
+      },
+      {
+        "title": "Insert data — and watch the foreign key reject a bad row",
+        "text": "step2.md"
+      },
+      {
+        "title": "A JOIN with a GROUP BY aggregate",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "A transaction (COMMIT and ROLLBACK), then an index",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "A normalization fix — split the redundant column out",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

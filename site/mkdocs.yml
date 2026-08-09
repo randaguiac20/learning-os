@@ -141,3 +141,11 @@ nav:
       - "Module 26 — AI Foundations": stage-10/module-26.md
       - "Module 27 — Machine Learning": stage-10/module-27.md
       - "Module 28 — AI Infrastructure": stage-10/module-28.md
+      - "Module 29 — Claude Code Advanced": stage-10/module-29.md
+  - "Stage 11 — Math & CS Foundations":
+      - "Module 30 — Discrete Math & Linear Algebra": stage-11/module-30.md
+      - "Module 31 — Calculus, Probability & Statistics": stage-11/module-31.md
+      - "Module 32 — Data Structures & Algorithms": stage-11/module-32.md
+  - "Stage 12 — Data & Software Engineering":
+      - "Module 33 — Databases & SQL": stage-12/module-33.md
+      - "Module 34 — Big Data & Data Architecture": stage-12/module-34.md

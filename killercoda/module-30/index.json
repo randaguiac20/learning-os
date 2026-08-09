@@ -1,0 +1,41 @@
+{
+  "title": "Module 30 — Discrete Math & Linear Algebra",
+  "description": "Linear algebra and discrete math on a plain CPU with numpy: dot products as similarity, a matrix as a transformation, eigenvalues confirming A·v = λ·v, a graph's adjacency matrix and reachability by matrix powers, and modular arithmetic with the pigeonhole principle.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Set up the numpy bench",
+        "text": "step1.md"
+      },
+      {
+        "title": "Vectors and matrices: dot product, transform, A·A⁻¹ = I",
+        "text": "step2.md"
+      },
+      {
+        "title": "Eigenvalues: confirm A·v = λ·v",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Graphs as matrices: reachability by matrix powers",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Modular arithmetic and the pigeonhole principle",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

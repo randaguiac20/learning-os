@@ -1,0 +1,41 @@
+{
+  "title": "Module 31 — Calculus, Probability & Statistics",
+  "description": "Compute a numerical derivative and match it to the analytic one, run gradient descent from scratch to a minimum, watch a sample mean converge to theory (law of large numbers), work the Bayes mammogram, and put a confidence interval and a p-value on a model comparison — all in Python with numpy.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "The derivative, felt as a limit",
+        "text": "step1.md"
+      },
+      {
+        "title": "Gradient descent, from scratch",
+        "text": "step2.md"
+      },
+      {
+        "title": "The law of large numbers",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Bayes: the mammogram shock",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "A confidence interval and a p-value",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

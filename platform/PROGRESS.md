@@ -104,7 +104,13 @@ live · ✅ dark-mode mermaid fix · ✅ M01 Killercoda lab published + URL wire
     M28 AI Infrastructure):** lessons + labs (strace/git-bisect planted bugs; ufw/sshd hardening;
     real Prometheus + PromQL; numpy embeddings; sklearn digits; FastAPI batching gateway),
     `build --strict` EXIT=0, buttons validated, committed.
-  - ◐ **Batch 7 — remaining M29–M39** (Claude Code Advanced; math/DS&A; data/SWE; cloud/NLP/CV).
+  - ✅ **Batch 7 — M29 Claude Code Advanced + Stage 11 Math/CS (M30 Discrete Math & LinAlg,
+    M31 Calc/Prob/Stats, M32 Data Structures & Algorithms) + Stage 12 (M33 Databases & SQL,
+    M34 Big Data):** lessons + labs (API-free .claude config; numpy math; stdlib DS&A; sqlite3;
+    DuckDB/Parquet), first-use terminology rule applied, `build --strict` EXIT=0, buttons validated,
+    committed. (M33 sqlite3 lab logic proven via Python sqlite3 since the CLI wasn't local.)
+  - ◐ **Batch 8 — final: Stage 13 (M35 SWE Practice, M36 Backend/API, M37 Cloud, M38 NLP, M39 CV).**
+    NOTE: M35 & M36 are in stage-12 (Data & Software Engineering); M37–M39 in stage-13.
   - **Pre-push sweep TODO:** (1) site-wide button-render check; (2) first-use terminology-expansion
     pass across all lessons (rule added to ADDING-A-MODULE.md).
 - **Current:** Site is **live and public**; **M01** fully done (lesson + published lab);

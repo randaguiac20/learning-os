@@ -1,0 +1,41 @@
+{
+  "title": "Module 32 — Data Structures & Algorithms",
+  "description": "Build the core containers by hand in Python (stdlib only), see O(n) beat O(n^2) on the clock, write a binary search and a sort checked against sorted(), derive dynamic programming from a slow recursion, and trace BFS/DFS reachability on a graph.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Stack, queue & a hash-map counter",
+        "text": "step1.md"
+      },
+      {
+        "title": "O(n) vs O(n^2) — see the curve",
+        "text": "step2.md"
+      },
+      {
+        "title": "Binary search + a sort, checked against sorted()",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Dynamic programming from a slow recursion",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Graphs — BFS/DFS reachability",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}
