@@ -1,0 +1,3599 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Turning model weights into a service — the serving equation, the two latencies (TTFT and tokens/s), batching economics, quantization, a FastAPI inference gateway, GPUs on Kubernetes, and the Full-Stack AI Service capstone. Where the whole curriculum reports for duty.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-27/">
+      
+      
+        <link rel="next" href="../module-29/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 28 — AI Infrastructure - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-28-ai-infrastructure" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 28 — AI Infrastructure
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-a-requests-journey-through-the-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: a request's journey through the stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-serving-equation-does-it-fit-is-three-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The serving equation — "does it fit?" is three questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-two-latencies-name-them-separately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two latencies — name them separately
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batching-the-economics-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batching — the economics engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quantization-the-access-technology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quantization — the access technology
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pagedattention-the-os-lesson-returns-m1s-homecoming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PagedAttention — the OS lesson returns (M1's homecoming)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-serving-tiers-and-the-wire-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The serving tiers and the wire protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpus-on-kubernetes-and-operating-the-tenant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPUs on Kubernetes, and operating the tenant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-supply-chain-a-model-file-is-a-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The supply chain — a model file is a program
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-a-cpu-inference-gateway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: a CPU inference gateway
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-sweep-the-batch-and-find-the-knee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Sweep the batch and find the knee
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-prove-the-kvcontext-cost-with-the-equation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Prove the KV/context cost with the equation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-induce-and-defend-the-death-spiral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Induce and defend the death spiral
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-make-it-openai-shaped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Make it OpenAI-shaped
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-compute-cost-per-million-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Compute cost per million tokens
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-a-requests-journey-through-the-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: a request's journey through the stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-serving-equation-does-it-fit-is-three-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The serving equation — "does it fit?" is three questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-two-latencies-name-them-separately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two latencies — name them separately
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batching-the-economics-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batching — the economics engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quantization-the-access-technology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quantization — the access technology
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pagedattention-the-os-lesson-returns-m1s-homecoming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PagedAttention — the OS lesson returns (M1's homecoming)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-serving-tiers-and-the-wire-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The serving tiers and the wire protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpus-on-kubernetes-and-operating-the-tenant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPUs on Kubernetes, and operating the tenant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-supply-chain-a-model-file-is-a-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The supply chain — a model file is a program
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-a-cpu-inference-gateway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: a CPU inference gateway
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-sweep-the-batch-and-find-the-knee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Sweep the batch and find the knee
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-prove-the-kvcontext-cost-with-the-equation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Prove the KV/context cost with the equation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-induce-and-defend-the-death-spiral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Induce and defend the death spiral
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-make-it-openai-shaped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Make it OpenAI-shaped
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-compute-cost-per-million-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Compute cost per million tokens
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-28-ai-infrastructure">Module 28 — AI Infrastructure<a class="headerlink" href="#module-28-ai-infrastructure" title="Permanent link">&para;</a></h1>
+<p><small>Stage 10 · Expert Mastery · ~3 weeks at 4 h/day · Prerequisites — M22 (the napkin law and the atlas — this module is its career), M26 (the inference loop), M27 (evals guard every shortcut), M16/M19/M20 (containers, cluster, Helm — the stage), M24/M25 (a hardened, watched tenant). Opens Stage 10.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>AI infrastructure</strong> is the systems engineering that turns model weights into a <strong>service</strong>: acquiring
+and verifying models (the supply chain), shrinking them to fit real hardware (<strong>quantization</strong>),
+executing inference efficiently (<strong>batching</strong> and <strong>KV-cache</strong> management), exposing them behind APIs
+(<strong>model servers</strong>), scheduling them onto accelerators (<strong>GPU scheduling</strong> on Kubernetes), and operating
+the result (latency SLOs, throughput economics, incident response). Its two ruling numbers are latencies
+users feel — <strong>TTFT</strong> (time to first token) and <strong>tokens/s</strong> (the decode stream, M22's napkin law now a
+product metric) — and its central trade is one sentence: <strong>throughput is bought with batching; latency
+is what pays.</strong></p>
+<p>You can train and evaluate a model (M27). This module answers the question every AI product lives or
+dies on: can you <strong>serve</strong> it — at a latency users accept, a throughput that pays for the silicon, on
+infrastructure you control? Nothing here is new territory: it is <strong>your</strong> stack with a new tenant. The
+container discipline (M16), the cluster (M19–20), the Fortress (M24), the Watchtower (M25) — the model
+lands on all of it. What <strong>is</strong> new is the workload's shape: a memory-bandwidth-bound, stateful (the KV
+cache), bursty, expensive-per-request service unlike anything you have operated — the final boss of the
+curriculum's operations arc.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>This is the module where the whole curriculum <strong>reports for duty</strong>. <strong>M1</strong>'s virtual memory returns as
+<strong>PagedAttention</strong> (the KV cache paged in blocks). <strong>M14</strong>'s retry discipline is the only thing standing
+between you and the queue <strong>death spiral</strong>. <strong>M16</strong>'s digests guard the model's provenance; <strong>M19–20</strong>
+schedule the silicon and roll it out; <strong>M22</strong>'s napkin law turns out to have been the business plan all
+along. <strong>M29</strong> then gives this service hands (agentic access, MCP) and a voice (the recorded teach-back),
+and the <strong>final gate</strong> closes there. Build the stage now; M29 seals it.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 28 — AI Infrastructure&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Analogy / Misconceptions):
+the restaurant with one extraordinary chef (the GPU) → a lone diner leaves the chef idle (batch-of-one
+wastes the silicon) → seat many tables, interleave courses (continuous batching — throughput up, each
+table waits a little longer) → the order ticket every table holds is the KV cache (success eats memory) →
+TTFT is the appetizer clock, tokens/s is the course rhythm → quantization is the prix-fixe menu (fewer
+bits, nearly the same taste — <strong>if</strong> the food critic/your eval agrees) → the supply chain: no ingredients
+from an unmarked truck (pickle files) → close on the law: <strong>throughput is bought with batching; latency
+pays</strong> — and the spiral's one-sentence warning.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-a-cpu-inference-gateway">Guided Lab</a> in a browser terminal and <strong>build the gateway
+yourself</strong> — write the endpoints, run the server, curl it, then watch dynamic batching change the
+throughput number in front of you. Every idea here is a number you can measure on a plain CPU; a real GPU
+just lives on the same curves, larger. Typing beats watching, and it is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-a-requests-journey-through-the-stack">The picture: a request's journey through the stack<a class="headerlink" href="#the-picture-a-requests-journey-through-the-stack" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph client["Client"]
+        U["User / app"]
+    end
+    subgraph gw["Gateway — FastAPI, OpenAI-compatible"]
+        API["Endpoints&lt;br/&gt;auth · timeouts · rate limit"]
+        Q["Batch queue&lt;br/&gt;groups requests per step"]
+    end
+    subgraph srv["Model server — vLLM / llama.cpp / Triton"]
+        B["Continuous batching&lt;br/&gt;+ PagedAttention KV cache"]
+        M["Model weights&lt;br/&gt;quantized: GGUF / INT8 / 4-bit"]
+    end
+    subgraph acc["Accelerator — GPU or CPU"]
+        G["Streams weights per token&lt;br/&gt;bandwidth-bound decode"]
+    end
+    U --&gt; API --&gt; Q --&gt; B --&gt; M --&gt; G
+    G --&gt;|"tokens — SSE stream"| U</code></pre>
+<p>A request enters a <strong>gateway</strong> (the thing you build in the lab), waits briefly in a <strong>queue</strong> so it can
+be <strong>batched</strong> with its neighbours, is executed by a <strong>model server</strong> that manages the KV cache, and is
+computed on an <strong>accelerator</strong> that streams the weights. The tokens stream back the way they came (SSE —
+M14 recognises the wire). The whole module is about making that path fast <strong>and</strong> cheap <strong>and</strong>
+survivable under load.</p>
+<h3 id="the-serving-equation-does-it-fit-is-three-questions">The serving equation — "does it fit?" is three questions<a class="headerlink" href="#the-serving-equation-does-it-fit-is-three-questions" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>VRAM = weights (params × bytes) + KV cache (batch × context × layers × heads × dims × 2) + overhead.</strong></p>
+</blockquote>
+<ul>
+<li><strong>Weights</strong> are fixed at load (parameters × bytes-per-parameter, set by precision).</li>
+<li><strong>The KV cache is the surprise ledger</strong> — per token of context, per sequence in the batch, layers ×
+  heads × dims accumulate (the ×2 is <strong>K and V</strong> — forget it and your arithmetic is half right). It
+  scales with <strong>usage</strong>: more users and longer contexts eat VRAM faster than weights do. <strong>Success is the
+  tax.</strong></li>
+<li><strong>Overhead</strong> is activations, buffers, and fragmentation.</li>
+</ul>
+<p>The equation decides batch size, context limits, and which model fits at all. "It fits" computed at rest
+(weights + overhead) is not "it fits" under load — the second term grows with your users.</p>
+<h3 id="the-two-latencies-name-them-separately">The two latencies — name them separately<a class="headerlink" href="#the-two-latencies-name-them-separately" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Latency</th>
+<th>Phase</th>
+<th>Bound by</th>
+<th>User feels</th>
+<th>A lever</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TTFT</strong> (time to first token)</td>
+<td><strong>Prefill</strong> — whole prompt processed in parallel</td>
+<td><strong>Compute</strong> (scales with prompt length)</td>
+<td>"Is it thinking?" (responsiveness)</td>
+<td>Shorten the prompt · offload more layers · prefix caching</td>
+</tr>
+<tr>
+<td><strong>Tokens/s</strong> (inter-token)</td>
+<td><strong>Decode</strong> — autoregressive, one token per weight-stream</td>
+<td><strong>Memory bandwidth</strong> (the napkin law)</td>
+<td>Reading speed</td>
+<td>Quantize · faster memory · bigger batch (aggregate)</td>
+</tr>
+</tbody>
+</table>
+<p>Users feel both differently, so <strong>SLOs name them separately</strong>. "It thinks forever, then types fine" is a
+TTFT/prefill problem, not a decode one.</p>
+<h3 id="batching-the-economics-engine">Batching — the economics engine<a class="headerlink" href="#batching-the-economics-engine" title="Permanent link">&para;</a></h3>
+<p>One sequence decoding leaves the GPU starving: the entire weight stream is paid to produce <strong>one</strong>
+token's worth of math (bandwidth-bound). <strong>Batching</strong> amortises that stream across sequences — N next
+tokens per stream instead of one. <strong>Continuous batching</strong> (vLLM's insight) lets sequences join and leave
+the running batch <strong>per decode step</strong> instead of waiting for the slowest member — utilisation without
+head-of-line blocking. The law, journaled with your own numbers: <strong>throughput is bought with batching;
+latency pays</strong> (each user's tokens/s dips as the batch grows). The <strong>knee</strong> is where aggregate gains
+flatten while per-user latency dives — you find it by <strong>measurement</strong>, then set the operating point from
+the SLO.</p>
+<h3 id="quantization-the-access-technology">Quantization — the access technology<a class="headerlink" href="#quantization-the-access-technology" title="Permanent link">&para;</a></h3>
+<p>Store weights in fewer bits and you stream fewer bytes per token — the napkin law says decode speeds up
+<strong>almost proportionally</strong> — at a <strong>quality cost that must be measured, not vibed</strong> (M27 guards M28: the
+honest sentence is "4-bit passed my 20-task eval; 2-bit broke extraction").</p>
+<table>
+<thead>
+<tr>
+<th>Precision</th>
+<th>Bytes/param</th>
+<th>VRAM vs FP16</th>
+<th>Decode (napkin)</th>
+<th>Quality — the rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FP16 / BF16</strong></td>
+<td>2</td>
+<td>1×</td>
+<td>1× (baseline)</td>
+<td>The reference the others are judged against</td>
+</tr>
+<tr>
+<td><strong>INT8</strong></td>
+<td>1</td>
+<td>~½</td>
+<td>~2×</td>
+<td>Usually near-lossless — <strong>still eval it</strong></td>
+</tr>
+<tr>
+<td><strong>4-bit</strong> (GGUF Q4, AWQ, GPTQ)</td>
+<td>~0.5</td>
+<td>~¼</td>
+<td>~4×</td>
+<td>The workhorse tier — measure the delta on <strong>your</strong> eval</td>
+</tr>
+<tr>
+<td><strong>2-bit-class</strong> (aggressive)</td>
+<td>~0.25</td>
+<td>~⅛</td>
+<td>~8×</td>
+<td>Fast and small; breaks reasoning/extraction first — <strong>prove it passes</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The ladder: try the <strong>smallest quant that passes your eval</strong>. GGUF is the local-inference format;
+perplexity is the field's metric, but a small fixed task-eval is the honest home-scale version.</p>
+<h3 id="pagedattention-the-os-lesson-returns-m1s-homecoming">PagedAttention — the OS lesson returns (M1's homecoming)<a class="headerlink" href="#pagedattention-the-os-lesson-returns-m1s-homecoming" title="Permanent link">&para;</a></h3>
+<p>Naïve KV allocation reserves a contiguous block per sequence at <strong>max</strong> length → internal fragmentation
+wastes most of it. Paging the cache in <strong>fixed blocks</strong> mapped through a block table — <strong>M1's virtual
+memory, verbatim</strong> — recovers the waste, enabling bigger effective batches and the <strong>2–4×</strong> throughput.
+The curriculum's full-circle moment: Module 1's concept saves Module 28's GPU dollars. (Say it out loud
+during the lab: <em>this is virtual memory.</em>)</p>
+<h3 id="the-serving-tiers-and-the-wire-protocol">The serving tiers and the wire protocol<a class="headerlink" href="#the-serving-tiers-and-the-wire-protocol" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Tier</th>
+<th>Batching</th>
+<th>Best when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>llama.cpp</strong></td>
+<td>Local / edge</td>
+<td>Modest (parallel slots)</td>
+<td>Home benches, laptops, single-user tools, CPU-only truth (GGUF)</td>
+</tr>
+<tr>
+<td><strong>vLLM</strong></td>
+<td>Throughput</td>
+<td>Continuous + PagedAttention</td>
+<td>A real GPU serving many users; utilisation is money</td>
+</tr>
+<tr>
+<td><strong>NVIDIA Triton / TGI</strong></td>
+<td>Dedicated server</td>
+<td>Dynamic batching</td>
+<td>Multi-model, versioned production fleets</td>
+</tr>
+<tr>
+<td><strong>Ray Serve</strong></td>
+<td>Orchestration</td>
+<td>Framework-agnostic</td>
+<td>Composing models/pipelines across a cluster; Python-native scaling</td>
+</tr>
+<tr>
+<td><strong>KServe</strong></td>
+<td>Kubernetes-native</td>
+<td>Via the backend</td>
+<td>Model serving as a K8s CRD — autoscaling, canaries, standardised</td>
+</tr>
+<tr>
+<td><strong>Managed API</strong></td>
+<td>Someone else's fleet</td>
+<td>Theirs</td>
+<td>The make-vs-buy boundary — priced with the napkin, not fashion</td>
+</tr>
+</tbody>
+</table>
+<p>They (mostly) speak the <strong>OpenAI-compatible API</strong> — the wire-protocol lingua franca. Your clients don't
+care which tier answers, so tiers are <strong>swappable</strong>: the same client scripts run unchanged across
+engines. That is the whole point of the protocol.</p>
+<h3 id="gpus-on-kubernetes-and-operating-the-tenant">GPUs on Kubernetes, and operating the tenant<a class="headerlink" href="#gpus-on-kubernetes-and-operating-the-tenant" title="Permanent link">&para;</a></h3>
+<p>The <strong>device plugin</strong> advertises <code>nvidia.com/gpu</code> as a schedulable resource; pods <strong>request</strong> whole GPUs
+(limits), the scheduler places them, the container toolkit maps the devices in. <strong>A GPU pod is a pod</strong> —
+every M19–20 habit transfers (a Pending GPU pod is read the same way: <code>describe pod</code> reads the
+scheduler's own explanation). Then the Watchtower (M25) takes the tenant: TTFT and tokens/s as
+histograms (the two SLOs separately), GPU saturation and VRAM as first-class series, queue depth, KV-cache
+utilisation — alerts by the M25 law (symptom: <em>TTFT SLO burn</em>, not "GPU is hot"), each runbooked at
+birth. And <strong>cost per million tokens</strong> computed for your bench (watts × time ÷ tokens vs an API's price)
+— the economics made personal.</p>
+<h3 id="the-supply-chain-a-model-file-is-a-program">The supply chain — a model file is a program<a class="headerlink" href="#the-supply-chain-a-model-file-is-a-program" title="Permanent link">&para;</a></h3>
+<p>Weights are artifacts: provenance (who trained it, on what — the card, M27), licenses (real
+constraints), integrity (hashes, pinned revisions — M16's digest law), and <strong>format security</strong>.
+Pickle-based files <strong>execute code on load</strong> (downloading weights was running strangers' code — RCE by
+<code>.bin</code>); <strong>safetensors</strong> exists because of it — data only, hash-friendly, mmap-friendly. The gate:
+<strong>hash + safetensors-or-quarantine + license + card</strong>, before any loader touches it. M24's supply-chain
+posture applies verbatim to weights.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>The serving equation has three terms</strong> — weights + <strong>KV cache</strong> + overhead — and the middle one
+   <strong>scales with usage</strong> (batch × context). "It fits" at rest is not "it fits" under load.</li>
+<li><strong>Two latencies, named separately:</strong> <strong>TTFT</strong> (prefill, compute-bound, "is it thinking?") and
+   <strong>tokens/s</strong> (decode, bandwidth-bound, reading speed).</li>
+<li><strong>Throughput is bought with batching; latency pays.</strong> Find the <strong>knee</strong> by measurement; set the
+   operating point from the SLO.</li>
+<li><strong>Quantization is measured access</strong> — fewer bytes → ~proportionally faster decode — adopted only when
+   it <strong>passes your eval</strong> (M27 guards M28).</li>
+<li><strong>PagedAttention is M1's virtual memory</strong>; the <strong>death spiral</strong> is M14's retry amplification. Old
+   ideas, new workload.</li>
+<li><strong>A model file is a program until proven otherwise</strong> — hash, format-check (safetensors), read the
+   license, quarantine pickle.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-a-cpu-inference-gateway">Guided Lab: a CPU inference gateway<a class="headerlink" href="#guided-lab-a-cpu-inference-gateway" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You build a </em><em>FastAPI inference gateway</em><em> that serves a tiny CPU "model", add
+<code>/healthz</code> and <code>/predict</code>, run it with uvicorn, then add </em><em>dynamic batching</em><em> and measure throughput vs
+latency — the batching law with your own numbers. Everything runs on a plain CPU; no GPU required.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-28" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-28" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">No GPU here — and that is the point</p>
+<p>Killercoda has no GPU, so this lab serves a <strong>tiny deterministic CPU "model"</strong> (<code>y = 2x + 1</code>). Every
+mechanism you need — an OpenAI-style gateway, a health check, a batch <strong>queue</strong>, the throughput-vs-latency
+trade — is real and measurable on CPU. The forward pass carries a small <strong>fixed cost paid once per batch</strong>
+(standing in for the weight stream a GPU pays), so batching amortises it exactly as it does on real
+silicon. When you have a GPU, swap the toy model for <strong>llama.cpp</strong> (CPU/GPU, GGUF) or <strong>vLLM</strong> (CUDA,
+continuous batching) behind the <em>same</em> endpoints — the client scripts don't change. Real GPU / cloud spot
+GPU serving is the "run locally with a GPU" path (and M37's cloud-GPU economics).</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Install the serving deps</label><label for="__tabbed_1_2">2 · Build the gateway (model + <code>/healthz</code> + <code>/predict</code>)</label><label for="__tabbed_1_3">3 · Hit it with curl</label><label for="__tabbed_1_4">4 · Add dynamic batching, then measure</label><label for="__tabbed_1_5">5 · The real-GPU path (framing)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>fastapi<span class="w"> </span>uvicorn<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--break-system-packages<span class="w"> </span>fastapi<span class="w"> </span>uvicorn
+</code></pre></div>
+FastAPI is your <strong>gateway</strong> framework; uvicorn is the ASGI server that runs it. No GPU libraries — the
+model is a plain Python function, so the whole stack is a few hundred KB. Make a project directory:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/ai-serve<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/ai-serve
+</code></pre></div></p>
+</div>
+<div class="tabbed-block">
+<p>Write the tiny model and a two-endpoint gateway:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/ai-serve/app.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="s">from fastapi import FastAPI</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s">from pydantic import BaseModel</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s">app = FastAPI()</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s"># The tiny deterministic &quot;model&quot;: y = 2x + 1 (weights are fixed at load).</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s">def forward_one(x: float) -&gt; float:</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s">    return 2.0 * x + 1.0</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s">class PredictIn(BaseModel):</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s">    x: float</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s">@app.get(&quot;/healthz&quot;)          # liveness — the M25 dead-man&#39;s check</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s">def healthz():</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s">    return {&quot;status&quot;: &quot;ok&quot;}</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="s">@app.post(&quot;/predict&quot;)         # the inference endpoint</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="s">def predict(req: PredictIn):</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="s">    return {&quot;y&quot;: forward_one(req.x)}</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="s">PY</span>
+</code></pre></div>
+Start it in the background and give it a moment:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>~/ai-serve<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>nohup<span class="w"> </span>uvicorn<span class="w"> </span>app:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span>&gt;/tmp/uvicorn.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">3</span>
+</code></pre></div>
+<code>/healthz</code> is your liveness probe; <code>/predict</code> is the service. The gateway is where auth, timeouts, and
+rate limits would live in production — the front door to every model server behind it.</p>
+</div>
+<div class="tabbed-block">
+<p>Ask if it's alive, then send a known input and check the answer:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8000/healthz
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/predict<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;content-type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;x&quot;: 10}&#39;</span>
+</code></pre></div>
+For <code>x = 10</code> the model must return <code>y = 21</code> (<code>2·10 + 1</code>). If <code>/healthz</code> says <code>{"status":"ok"}</code> and
+<code>/predict</code> returns <code>{"y":21.0}</code>, your gateway serves. (Check <code>/tmp/uvicorn.log</code> if curl can't connect —
+the server may still be starting.)</p>
+<p>Click <strong>Check</strong> to verify the server answers <code>/healthz</code> and returns the correct prediction.</p>
+</div>
+<div class="tabbed-block">
+<p>Now the module's whole point. Replace the app with one that also exposes <code>/predict_batched</code>, fed by a
+<strong>queue</strong> and a background <strong>batcher</strong> that groups requests and runs them as <strong>one</strong> forward pass —
+amortising the fixed cost. A single <code>accel_lock</code> models the one shared accelerator both paths compete for:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/ai-serve/app.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="s">import asyncio, time</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="s">from fastapi import FastAPI</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">from pydantic import BaseModel</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s">app = FastAPI()</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s">FIXED = 0.05      # seconds paid ONCE per forward (the weight stream)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="s">PER_ITEM = 0.002  # cheap per-item math</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="s">MAX_BATCH = 16</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="s">MAX_WAIT = 0.02   # batch window: 20 ms</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="s">accel_lock = asyncio.Lock()   # the single &quot;accelerator&quot; — one forward at a time</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s">async def forward(xs):</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="s">    async with accel_lock:                       # a batch of any size = ONE weight stream</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="s">        await asyncio.sleep(FIXED + PER_ITEM * len(xs))</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="s">    return [2.0 * x + 1.0 for x in xs]</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="s">class PredictIn(BaseModel):</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="s">    x: float</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="s">queue: asyncio.Queue = asyncio.Queue()</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="s">async def batcher():</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="s">    while True:</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="s">        x, fut = await queue.get()</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="s">        batch = [(x, fut)]</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="s">        deadline = time.monotonic() + MAX_WAIT</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="s">        while len(batch) &lt; MAX_BATCH:</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="s">            timeout = deadline - time.monotonic()</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="s">            if timeout &lt;= 0:</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="s">                break</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="s">            try:</span>
+<a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="s">                batch.append(await asyncio.wait_for(queue.get(), timeout))</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a><span class="s">            except asyncio.TimeoutError:</span>
+<a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a><span class="s">                break</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a><span class="s">        ys = await forward([b[0] for b in batch])   # one forward for the whole group</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a><span class="s">        for (_, fut), y in zip(batch, ys):</span>
+<a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a><span class="s">            fut.set_result(y)</span>
+<a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a>
+<a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a><span class="s">@app.on_event(&quot;startup&quot;)</span>
+<a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a><span class="s">async def _start():</span>
+<a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a><span class="s">    asyncio.create_task(batcher())</span>
+<a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a>
+<a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a><span class="s">@app.get(&quot;/healthz&quot;)</span>
+<a id="__codelineno-8-47" name="__codelineno-8-47" href="#__codelineno-8-47"></a><span class="s">def healthz():</span>
+<a id="__codelineno-8-48" name="__codelineno-8-48" href="#__codelineno-8-48"></a><span class="s">    return {&quot;status&quot;: &quot;ok&quot;}</span>
+<a id="__codelineno-8-49" name="__codelineno-8-49" href="#__codelineno-8-49"></a>
+<a id="__codelineno-8-50" name="__codelineno-8-50" href="#__codelineno-8-50"></a><span class="s">@app.post(&quot;/predict&quot;)                 # naive: one forward per request</span>
+<a id="__codelineno-8-51" name="__codelineno-8-51" href="#__codelineno-8-51"></a><span class="s">async def predict(req: PredictIn):</span>
+<a id="__codelineno-8-52" name="__codelineno-8-52" href="#__codelineno-8-52"></a><span class="s">    y = (await forward([req.x]))[0]</span>
+<a id="__codelineno-8-53" name="__codelineno-8-53" href="#__codelineno-8-53"></a><span class="s">    return {&quot;y&quot;: y}</span>
+<a id="__codelineno-8-54" name="__codelineno-8-54" href="#__codelineno-8-54"></a>
+<a id="__codelineno-8-55" name="__codelineno-8-55" href="#__codelineno-8-55"></a><span class="s">@app.post(&quot;/predict_batched&quot;)         # dynamic batching via the queue</span>
+<a id="__codelineno-8-56" name="__codelineno-8-56" href="#__codelineno-8-56"></a><span class="s">async def predict_batched(req: PredictIn):</span>
+<a id="__codelineno-8-57" name="__codelineno-8-57" href="#__codelineno-8-57"></a><span class="s">    fut = asyncio.get_event_loop().create_future()</span>
+<a id="__codelineno-8-58" name="__codelineno-8-58" href="#__codelineno-8-58"></a><span class="s">    await queue.put((req.x, fut))</span>
+<a id="__codelineno-8-59" name="__codelineno-8-59" href="#__codelineno-8-59"></a><span class="s">    return {&quot;y&quot;: await fut}</span>
+<a id="__codelineno-8-60" name="__codelineno-8-60" href="#__codelineno-8-60"></a><span class="s">PY</span>
+</code></pre></div>
+Restart the server on the new app:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>pkill<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;uvicorn app:app&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">cd</span><span class="w"> </span>~/ai-serve<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>nohup<span class="w"> </span>uvicorn<span class="w"> </span>app:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span>&gt;/tmp/uvicorn.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">3</span>
+</code></pre></div>
+Now a benchmark (stdlib only) fires <strong>64 concurrent</strong> requests at each endpoint, measuring throughput and
+average latency, and writes the result:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/ai-serve/bench.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="s">import json, time, urllib.request</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="s">from concurrent.futures import ThreadPoolExecutor</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="s">BASE, N, CONC = &quot;http://localhost:8000&quot;, 64, 64</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="s">def one(path, x):</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="s">    data = json.dumps({&quot;x&quot;: x}).encode()</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="s">    req = urllib.request.Request(BASE + path, data=data,</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="s">                                 headers={&quot;content-type&quot;: &quot;application/json&quot;})</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="s">    t0 = time.time()</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="s">    with urllib.request.urlopen(req) as r:</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="s">        r.read()</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="s">    return time.time() - t0</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="s">def run(path):</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="s">    t0 = time.time()</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="s">    with ThreadPoolExecutor(max_workers=CONC) as ex:</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="s">        lats = list(ex.map(lambda i: one(path, i), range(N)))</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="s">    wall = time.time() - t0</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="s">    return {&quot;throughput&quot;: N / wall, &quot;avg_latency&quot;: sum(lats) / len(lats)}</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="s">out = {&quot;requests&quot;: N, &quot;concurrency&quot;: CONC,</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="s">       &quot;naive&quot;: run(&quot;/predict&quot;), &quot;batched&quot;: run(&quot;/predict_batched&quot;)}</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="s">json.dump(out, open(&quot;results.json&quot;, &quot;w&quot;), indent=2)</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="s">print(f&quot;naive   : {out[&#39;naive&#39;][&#39;throughput&#39;]:6.1f} req/s | &quot;</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="s">      f&quot;avg latency {out[&#39;naive&#39;][&#39;avg_latency&#39;]*1000:6.1f} ms&quot;)</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="s">print(f&quot;batched : {out[&#39;batched&#39;][&#39;throughput&#39;]:6.1f} req/s | &quot;</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="s">      f&quot;avg latency {out[&#39;batched&#39;][&#39;avg_latency&#39;]*1000:6.1f} ms&quot;)</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="s">print(f&quot;speedup : {out[&#39;batched&#39;][&#39;throughput&#39;]/out[&#39;naive&#39;][&#39;throughput&#39;]:.1f}x throughput&quot;)</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="s">PY</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="nb">cd</span><span class="w"> </span>~/ai-serve<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python3<span class="w"> </span>bench.py
+</code></pre></div>
+Read the two lines. <strong>Naive</strong> serialises 64 forwards on the one accelerator (each pays the fixed cost);
+<strong>batched</strong> groups them into ~4 forwards of 16, paying the fixed cost a quarter as often — several times
+the throughput. That is the law on your screen: <strong>throughput bought with batching</strong>. (At <em>low</em> load the
+batch window <em>adds</em> latency — that is what "latency pays" means; the win shows when the accelerator is
+contended.)</p>
+<p>Click <strong>Check</strong> to verify the results file exists and batched beat naive on throughput.</p>
+</div>
+<div class="tabbed-block">
+<p>Your gateway, queue, and batcher are the exact shapes vLLM and Triton implement — in CUDA, at token
+granularity, with <strong>PagedAttention</strong> managing the KV cache:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Local GPU tier : llama.cpp -m model.gguf --server   (GGUF, CPU+GPU hybrid)&quot;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Throughput tier: vllm serve &lt;model&gt;                 (CUDA, continuous batching)&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Same wire      : both speak the OpenAI-compatible API — your client scripts DON&#39;T change&quot;</span>
+</code></pre></div>
+On a GPU box, swap <code>forward()</code> for a real model server behind the same <code>/predict</code> — the benchmark runs
+unchanged (the wire protocol's whole value). The batch window becomes <strong>continuous batching</strong> (sequences
+join per decode step); the fixed cost becomes the real weight stream; the knee moves right. Cloud spot
+GPUs make this cheap on demand — the "run locally with a GPU / M37 cloud-GPU" path.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you built a gateway, served a health check and a prediction, added a batch queue, and <strong>watched
+batching raise throughput with your own measurement</strong>, the guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Extend the <code>~/ai-serve</code> gateway. Struggle here is the point;
+reveal a hint only after you have tried.</em></p>
+<h3 id="challenge-1-sweep-the-batch-and-find-the-knee">Challenge 1 — Sweep the batch and find the knee<a class="headerlink" href="#challenge-1-sweep-the-batch-and-find-the-knee" title="Permanent link">&para;</a></h3>
+<p>Run the benchmark at several concurrency levels (e.g. 1, 2, 4, 8, 16, 32, 64) and record, for the batched
+endpoint, aggregate throughput <strong>and</strong> per-request latency. Where does aggregate stop climbing while
+latency starts diving? Name the <strong>knee</strong>.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Parametrise <code>CONC</code> (and matching <code>N</code>) in <code>bench.py</code>, loop over the values, and append one row per level to
+a file. Plot mentally: throughput flattens; latency rises. The knee is the elbow.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">for</span><span class="w"> </span>c<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">32</span><span class="w"> </span><span class="m">64</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span>python3<span class="w"> </span>-<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$c</span><span class="s2">&quot;</span><span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="s">import sys, json, time, urllib.request</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="s">from concurrent.futures import ThreadPoolExecutor</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="s">c = int(sys.argv[1]); N = c</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="s">def one(i):</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="s">    d = json.dumps({&quot;x&quot;: i}).encode()</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="s">    r = urllib.request.Request(&quot;http://localhost:8000/predict_batched&quot;, data=d,</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="s">                               headers={&quot;content-type&quot;: &quot;application/json&quot;})</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="s">    t0 = time.time()</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="s">    with urllib.request.urlopen(r) as resp: resp.read()</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="s">    return time.time() - t0</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="s">t0 = time.time()</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="s">with ThreadPoolExecutor(max_workers=c) as ex:</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="s">    lats = list(ex.map(one, range(N)))</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="s">wall = time.time() - t0</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="s">print(f&quot;conc={c:3d}  thru={N/wall:7.1f} req/s  avg_lat={sum(lats)/len(lats)*1000:7.1f} ms&quot;)</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="s">PY</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="k">done</span>
+</code></pre></div>
+The knee sits near <code>MAX_BATCH</code>: below it, more concurrency fills the batch and throughput climbs almost
+free; above it, batches are already full, so extra requests only <strong>wait</strong> — throughput flattens, latency
+dives. <strong>Throughput is bought with batching; latency pays</strong> — measured, not asserted.</p>
+</details>
+<h3 id="challenge-2-prove-the-kvcontext-cost-with-the-equation">Challenge 2 — Prove the KV/context cost with the equation<a class="headerlink" href="#challenge-2-prove-the-kvcontext-cost-with-the-equation" title="Permanent link">&para;</a></h3>
+<p>Without a GPU, compute the serving equation for a real model on paper. For an <strong>8B</strong> model at <strong>FP16</strong> on a
+<strong>24 GB</strong> GPU (assume ~1 GB overhead): does it fit, and how much is left for the KV cache? Then at <strong>4-bit</strong>.
+State what the leftover buys.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Weights = params × bytes/param. FP16 = 2 bytes; 4-bit ≈ 0.5 bytes. VRAM − weights − overhead = KV budget.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>FP16: <code>8B × 2 = 16 GB</code> weights; <code>24 − 16 − 1 ≈ 7 GB</code> for KV — a real but modest batch×context budget.
+4-bit: <code>8B × 0.5 = 4 GB</code>; <code>24 − 4 − 1 ≈ 19 GB</code> for KV — nearly <strong>3×</strong> the headroom. The lesson:
+<strong>quantization buys batch (throughput), not just fit.</strong> And never quote weights-only as "it fits" — the KV
+term is where success lives.</p>
+</details>
+<h3 id="challenge-3-induce-and-defend-the-death-spiral">Challenge 3 — Induce and defend the death spiral<a class="headerlink" href="#challenge-3-induce-and-defend-the-death-spiral" title="Permanent link">&para;</a></h3>
+<p>Make the model slow (raise <code>FIXED</code>) and hammer the naive endpoint past saturation with short client
+timeouts. Watch requests pile up. Then install one defence and re-test.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>A bounded queue that rejects fast (HTTP 503) beats an unbounded one that dies slow. Fail fast is mercy.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>Past saturation, queue wait inflates TTFT past the client timeout; clients <strong>retry</strong>, adding load to an
+already-drowning server (M14's retry amplification) — the collapse feeds itself. Defences: <strong>admission
+control</strong> (a bounded queue + load shedding — a quick <code>503</code> beats a 90-second timeout) and <strong>timeout/retry
+discipline</strong> (server timeouts &lt; client timeouts, backoff + jitter, retry budgets). Add a queue-size cap
+that returns <code>503</code> when full and the spiral flattens into honest refusals. <strong>Raising limits feeds the
+spiral; bounding it is the fix.</strong></p>
+</details>
+<h3 id="challenge-4-make-it-openai-shaped">Challenge 4 — Make it OpenAI-shaped<a class="headerlink" href="#challenge-4-make-it-openai-shaped" title="Permanent link">&para;</a></h3>
+<p>Add an endpoint that accepts the OpenAI-compatible shape (a <code>messages</code> list) and returns a compatible
+response, so an off-the-shelf client could call your gateway unchanged. Why does this matter?</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Map the last user message to your <code>forward()</code> and wrap the result in the <code>choices[0].message.content</code>
+shape. It matters because the <strong>wire protocol is the swap point</strong>: once your gateway speaks it, you can
+replace the toy model with llama.cpp or vLLM — or a managed API — and <strong>no client changes</strong>. The tier
+becomes an implementation detail; that is the whole reason the protocol won.</p>
+</details>
+<h3 id="challenge-5-stretch-compute-cost-per-million-tokens">Challenge 5 (stretch) — Compute cost per million tokens<a class="headerlink" href="#challenge-5-stretch-compute-cost-per-million-tokens" title="Permanent link">&para;</a></h3>
+<p>Assume your bench draws 300 W and produces a measured 20 tokens/s. Electricity is ~$0.30/kWh. Compute cost
+per million tokens, then compare to an API at $0.50/million. State the caveat that can flip it.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><code>300 W = 0.3 kW</code>; at 20 tok/s, one hour = 72,000 tokens for <code>0.3 kWh × $0.30 ≈ $0.09</code> → per million:
+<code>1,000,000 ÷ 72,000 × 0.09 ≈ $1.25/million</code> — the <strong>API wins</strong> on marginal cost here. The flip: <strong>batching</strong>
+pushes aggregate tok/s 5–10× (the knee), dropping your cost to ~$0.25/million — now cheaper — and owned
+hardware is sunk cost while API spend scales linearly forever. <strong>Compute both numbers for your load shape;
+fashion decides nothing.</strong></p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard — is
+what builds the memory.</em></p>
+<details class="question">
+<summary>State the serving equation's three terms, and what makes the second one dangerous.</summary>
+<p><code>VRAM = weights (params × bytes) + KV cache (batch × context × layers × heads × dims × 2) + overhead</code>.
+The <strong>KV cache</strong> is dangerous because it scales with <strong>usage</strong> — batch size and context length grow with
+success — so more users and longer contexts consume it; weights are fixed. Success is the tax.</p>
+</details>
+<details class="question">
+<summary>TTFT vs tokens/s — phase, bound resource, and what the user feels for each?</summary>
+<p><strong>TTFT</strong> = time to first token — the <strong>prefill</strong> phase (whole prompt in parallel), <strong>compute-bound</strong>,
+scales with prompt length; the user feels <strong>responsiveness</strong> ("is it thinking?"). <strong>Tokens/s</strong> = the
+<strong>decode</strong> stream — autoregressive, <strong>memory-bandwidth-bound</strong> (the napkin law); the user feels <strong>reading
+speed</strong>.</p>
+</details>
+<details class="question">
+<summary>Why does batching buy throughput, and what exactly pays?</summary>
+<p>In decode the entire weight stream is paid to produce one token's math — the arithmetic units starve
+(bandwidth-bound). Batching serves <strong>N</strong> sequences' next tokens per stream, so aggregate throughput
+multiplies. What pays: <strong>each user's inter-token latency grows</strong> as the batch grows; the <strong>knee</strong> is where
+aggregate gains flatten while per-user latency dives — a measured trade, never free.</p>
+</details>
+<details class="question">
+<summary>PagedAttention in one line — the borrowed idea, and the win.</summary>
+<p>The KV cache is paged in <strong>fixed blocks</strong> mapped through a block table — <strong>M1's virtual memory</strong> — instead
+of reserving a contiguous max-length block per sequence. Fragmentation is recovered → bigger effective
+batches → <strong>2–4×</strong> throughput.</p>
+</details>
+<details class="question">
+<summary>Why is a pickle-era model file a security problem, and what does safetensors change?</summary>
+<p>Pickle <strong>executes embedded code on load</strong> — a model file is a <strong>program</strong>, so downloading weights ran
+strangers' code (RCE by <code>.bin</code>). <strong>safetensors</strong> stores tensor data + metadata only (no code paths on
+load), making weights <strong>data</strong> again — plus hash- and mmap-friendly. The gate: format + provenance decide
+whether a file may touch a loader.</p>
+</details>
+<details class="question">
+<summary>The service passes at 5 req/s but collapses at 7 with timeouts cascading. Name the pattern and two defenses.</summary>
+<p>The <strong>queue death spiral</strong>: past saturation, queue wait inflates TTFT past client timeouts; clients retry,
+adding load to a saturated server (M14's retry amplification) — the collapse feeds itself. Defences:
+<strong>admission control</strong> (bounded queue + fast load shedding — a quick <code>503</code> beats a slow death) and
+<strong>timeout/retry discipline</strong> (server timeouts &lt; client, backoff + jitter, retry budgets).</p>
+</details>
+<details class="question">
+<summary>When is the honest answer 'don't self-host — use the API'?</summary>
+<p>(1) <strong>Capability gap</strong> — the task needs a frontier model that doesn't fit your silicon at acceptable
+quality (the eval says so). (2) <strong>Load shape</strong> — spiky/low-volume traffic where the per-million arithmetic
+plus your pager cost favours the API, and no privacy/control constraint outweighs it. Both are engineering
+verdicts from <strong>measurements</strong> (eval + cost), written in the dossier.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong>: <em>"One chef, many tables."</em> Build the restaurant piece by piece —
+the chef (weights/GPU), the tables (batch), the order tickets (KV cache), the knee, the polite bounce at
+capacity — show <strong>one real artifact</strong> (your knee plot or the bench output), and land the law: <strong>throughput
+is bought with batching; latency pays</strong>, plus the spiral's one-sentence warning. The listener must be able
+to predict what happens to per-user speed when the tables double, and why a full room must bounce new
+tables <strong>quickly</strong>. If you can't yet, that's your signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M28 stands the capstone's stage;
+M29 gives it hands and a voice, and the final gate closes there. A module is only "done" when every box is
+true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the serving equation and flag its usage-scaling (KV) term.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the two latencies (phase, bound, feel, levers) with your bench's numbers.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>List</strong> the supply-chain gate's checks (hash / safetensors / license / card) and the pickle mechanism they answer.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> continuous batching and PagedAttention — the M1 homecoming named out loud.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> the batching knee on a real sweep and derive SLOs from it.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> a gateway end to end: <code>/healthz</code>, <code>/predict</code>, a batch queue, measured throughput vs latency.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> the OpenAI-compatible protocol shape so a client runs unchanged across backends.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> the quant ladder with eval-adjudicated verdicts (M27 guards M28).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Apply</strong> GPU scheduling reasoning on K8s (device plugin, resource requests, the Pending diagnosis).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> cost per million tokens both directions (bench vs API) with the caveats that flip it.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> the death spiral live: induce, narrate (queue → TTFT → timeouts → retries), recover with defenses.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> the SLO + lawful alert set for a serving workload (TTFT burn pages; saturation tickets).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Assess</strong> the service with M24's four questions and name the prompt-injection posture for the RAG path.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Connect</strong> the convergence: M1's paging, M14's retries, M16's digests, M22's napkin — all reporting for duty here.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active — every
+M28 review also pulls one <strong>M22</strong> (the napkin) or <strong>M26/M27</strong> item, and the serving equation joins the
+napkin in permanent rotation. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved prior-module item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Equation sprint (3 terms + the danger) · latency sprint (TTFT vs tokens/s) · flashcards</td>
+<td><strong>M22:</strong> the napkin law recited (tokens/s ≈ bandwidth ÷ model bytes)</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td><code>bench.py</code> re-run — batched vs naive throughput vs today's numbers (drift?) · gate sprint</td>
+<td><strong>M27:</strong> one quant level re-scored blind on the fixed eval</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>The serving equation cold on a <strong>new</strong> model size · the model-update procedure with its rollback step</td>
+<td><strong>M26:</strong> the prefill/decode split narrated</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>The knee re-found live (sweep, plot, name it) · the spiral induced and recovered</td>
+<td><strong>M25:</strong> one alert defended as lawful (symptom, actionable, runbooked)</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Validation retake ≥90% · cost-per-million re-computed with current numbers</td>
+<td><strong>M22:</strong> the atlas's serving chapter re-read</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> <strong>M29 (Agentic automation)</strong> — this service becomes a <strong>tool</strong>: MCP exposes it,
+agents call it, the injection posture (retrieved text as untrusted input) completes, and the capstone is
+<strong>sealed</strong> with the recorded teach-back. Beyond: multi-GPU serving, speculative decoding, LoRA serving
+(many adapters, one base), inference platforms as a career.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>AI infrastructure is the curriculum's final convergence — the OS's paging saves the GPU's memory, the
+network's retry discipline prevents the queue's collapse, the container's digests guard the model's
+provenance, the cluster schedules the silicon — and the napkin law, scribbled in Module 22, turns out to
+have been the business plan all along.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-27/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 27 — Machine Learning">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 27 — Machine Learning
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-29/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 29 — Claude Code Advanced">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 29 — Claude Code Advanced
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

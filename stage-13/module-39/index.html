@@ -1,0 +1,3639 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How machines see — images as tensors, convolution and the CNN, pooling and the feature hierarchy, the three tasks (classification, detection, segmentation), transfer learning, task-appropriate evaluation (IoU/mAP), deployment, and the closing lesson that confident ≠ correct and fair-for-whom. The curriculum's final module.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-38/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 39 — Computer Vision - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-39-computer-vision" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 39 — Computer Vision
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-pixels-meaning-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: pixels → meaning → task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-image-is-a-tensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An image is a tensor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convolution-the-keystone-mechanic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convolution — the keystone mechanic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pooling-and-the-layer-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pooling and the layer types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-feature-hierarchy-learned-not-hand-crafted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The feature hierarchy — learned, not hand-crafted
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architectures-the-lineage-and-resnets-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architectures — the lineage, and ResNet's fix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-vision-transformer-and-multimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Vision Transformer and multimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transfer-learning-you-almost-never-train-from-scratch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transfer learning — you almost never train from scratch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-tasks-and-the-metric-that-matches-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three tasks — and the metric that matches each
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-and-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment and cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-closing-judgment-confident-correct-and-fair-for-whom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The closing judgment — confident ≠ correct, and fair for whom
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-how-a-machine-sees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: how a machine sees
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-prove-translation-invariance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Prove translation invariance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-average-pool-vs-max-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Average-pool vs max-pool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-identity-kernel-verify-your-convolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The identity kernel (verify your convolution)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-iou-by-hand-the-metric-that-catches-what-the-eye-forgives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — IoU by hand (the metric that catches what the eye forgives)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-99-accurate-ship-it-the-closing-judgment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — "99% accurate — ship it?" (the closing judgment)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-pixels-meaning-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: pixels → meaning → task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-image-is-a-tensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An image is a tensor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convolution-the-keystone-mechanic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convolution — the keystone mechanic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pooling-and-the-layer-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pooling and the layer types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-feature-hierarchy-learned-not-hand-crafted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The feature hierarchy — learned, not hand-crafted
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architectures-the-lineage-and-resnets-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architectures — the lineage, and ResNet's fix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-vision-transformer-and-multimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Vision Transformer and multimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transfer-learning-you-almost-never-train-from-scratch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transfer learning — you almost never train from scratch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-tasks-and-the-metric-that-matches-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three tasks — and the metric that matches each
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-and-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment and cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-closing-judgment-confident-correct-and-fair-for-whom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The closing judgment — confident ≠ correct, and fair for whom
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-how-a-machine-sees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: how a machine sees
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-prove-translation-invariance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Prove translation invariance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-average-pool-vs-max-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Average-pool vs max-pool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-identity-kernel-verify-your-convolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The identity kernel (verify your convolution)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-iou-by-hand-the-metric-that-catches-what-the-eye-forgives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — IoU by hand (the metric that catches what the eye forgives)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-99-accurate-ship-it-the-closing-judgment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — "99% accurate — ship it?" (the closing judgment)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-39-computer-vision">Module 39 — Computer Vision<a class="headerlink" href="#module-39-computer-vision" title="Permanent link">&para;</a></h1>
+<p><small>Stage 13 · Cloud &amp; AI Domains · ~3 weeks at 4 h/day · Prerequisite — Module 38 (NLP — the transfer-learning workflow and the transformer, both reused here). <strong>The curriculum's final module.</strong></small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Computer vision</strong> is the field of making a computer extract meaning from images and video. To a
+computer an <strong>image</strong> is not a picture — it is a grid of <strong>pixels</strong> (picture elements), a <strong>tensor</strong> (a
+multi-dimensional array of numbers, M30) of shape <strong>H × W × C</strong> — height × width × <strong>channels</strong>, where
+channels are usually <strong>RGB</strong> (Red, Green, Blue). Module 38 taught the AI domain of <em>language</em>; this
+final module teaches the other major AI domain — <em>sight</em> — and completes the pair.</p>
+<p>Because nearby pixels are correlated and an object can appear anywhere in the frame, the load-bearing
+architecture is the <strong>CNN</strong> (Convolutional Neural Network): a <strong>convolution</strong> slides a small learned
+<strong>filter</strong> (also called a <strong>kernel</strong> — a small matrix slid over the image to detect one feature) across
+the whole image, detecting a local pattern <em>regardless of position</em>, and stacking these composes simple
+features into complex ones (edges → textures → parts → objects). The job of a vision engineer is to
+represent image data, understand the CNN deeply enough to reason about <em>why it works and what it costs</em>,
+use <strong>transfer learning</strong> (M38's workflow, in vision) to build a real classifier with little data,
+choose the <strong>task-appropriate metric</strong> (not just accuracy — M27), deploy the model behind an API (M36)
+on the cloud (M37), and — the lesson the whole curriculum has been building toward — judge whether a
+confident, on-average-accurate model is <em>actually</em> correct and <em>fair</em> enough to ship.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks — and closes</p>
+<p>This module completes the two-domain AI picture (language + vision) and reuses everything the
+curriculum built: <strong>M30–31</strong> (tensors and probability — images <em>are</em> tensors, softmax outputs the
+class), <strong>M26–27</strong> (training and evaluation), <strong>M38</strong> (transfer learning and the transformer, now on
+pixels via the <strong>ViT</strong>), <strong>M36–37</strong> (serving and deploying), <strong>M25</strong> (ethics). It sets up the
+<strong>capstone</strong> — a deployed, evaluated, responsibly-assessed AI model — and points forward to applied
+CV (medical imaging, autonomous driving, robotics, manufacturing QA) and generative/multimodal vision
+(diffusion, CLIP). <strong>This is where deep learning historically began (AlexNet, 2012) and where the
+engineer's responsibility is most acute.</strong></p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 39 — Computer Vision&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Analogy / Visual Model / Misconceptions):
+recognize-a-face-in-a-crowd by building up from small clues → an image is an (H×W×C) tensor →
+convolution as one <em>shared</em> small filter slid everywhere (translation invariance + parameter sharing)
+→ pooling and the learned feature hierarchy (edges → parts → objects, the end of hand-crafted
+SIFT/HOG) → the architecture story (AlexNet 2012 → ResNet's skip connections → ViT) → transfer
+learning (fine-tune a pretrained model on little data) → the three tasks and their <em>different</em>
+metrics → the closing judgment: <strong>confident ≠ correct (adversarial/shift), and accurate-on-average
+hides who it fails (fairness).</strong></p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-how-a-machine-sees">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. You'll build a synthetic image, slide an edge-detecting kernel across it <em>by
+hand</em> and watch the edges light up, pool it smaller, and threshold it to a mask — feeling the
+concepts, not just reading them.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-pixels-meaning-task">The picture: pixels → meaning → task<a class="headerlink" href="#the-picture-pixels-meaning-task" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph Input["Input — pixels as numbers"]
+        I["Image&lt;br/&gt;H×W×C tensor (M30)"]
+        A["Augment&lt;br/&gt;flips · crops · rotations"]
+        I --&gt; A
+    end
+    subgraph Backbone["Backbone — the CNN (or ViT)"]
+        C1["Convolution&lt;br/&gt;one shared filter, slid everywhere"]
+        P1["Pooling&lt;br/&gt;downsample"]
+        H["Feature hierarchy&lt;br/&gt;edges → parts → objects (LEARNED)"]
+        C1 --&gt; P1 --&gt; H
+    end
+    subgraph Heads["Task head — same backbone, different head"]
+        CL["Classify&lt;br/&gt;one label"]
+        DE["Detect&lt;br/&gt;boxes: what + where"]
+        SE["Segment&lt;br/&gt;per-pixel mask"]
+    end
+    Out["Output + evaluate&lt;br/&gt;F1 · IoU · mAP (M27)"]
+    Input --&gt; Backbone --&gt; Heads --&gt; Out</code></pre>
+<p>Read it as a <strong>flow</strong>: raw pixels enter as a tensor, cheap <strong>augmentation</strong> multiplies the data, the
+<strong>backbone</strong> (a CNN, or a <strong>ViT</strong> — Vision Transformer) turns pixels into a learned feature hierarchy,
+a <strong>task head</strong> turns those features into the answer, and the answer is <strong>measured</strong> with the metric
+that matches the task. Every note below is one stop on this flow.</p>
+<h3 id="an-image-is-a-tensor">An image is a tensor<a class="headerlink" href="#an-image-is-a-tensor" title="Permanent link">&para;</a></h3>
+<p>A <strong>pixel</strong> (picture element) is a number. A <strong>grayscale</strong> image is a 2-D grid of one number per pixel
+(0 = black … 255 = white); a color image is a 3-D <strong>tensor</strong> of shape <strong>H × W × C</strong> (height × width ×
+channels), where the three <strong>RGB</strong> channels (Red, Green, Blue) give each pixel three numbers. This is
+<strong>M30's tensor, made visual</strong> — convolution below is just <strong>M30's linear algebra</strong> (weighted sums)
+applied to that grid.</p>
+<ul>
+<li><strong>Preprocessing / normalization</strong> — rescale pixel values (e.g. to 0–1 or zero-mean) so training
+  behaves; unnormalized pixels are a classic reason a net won't learn (M26).</li>
+<li><strong>Data augmentation</strong> — cheap, label-preserving transformations (flips, crops, rotations,
+  color-jitter) applied at training time. It's the vision analogue of "get more data": one image becomes
+  many, so the model generalizes and overfits less — the standard defense on a small dataset.</li>
+</ul>
+<h3 id="convolution-the-keystone-mechanic">Convolution — the keystone mechanic<a class="headerlink" href="#convolution-the-keystone-mechanic" title="Permanent link">&para;</a></h3>
+<p>A <strong>convolution</strong> slides a small learned <strong>filter/kernel</strong> (e.g. a 3×3 matrix) across the image, and at
+each position computes a <strong>weighted sum</strong> of the pixels under it. The grid of those sums is a <strong>feature
+map</strong> — high where the filter's pattern is present, low elsewhere. Slide an edge-detecting kernel and
+the edges <em>light up</em>. Two properties make this the right tool for images:</p>
+<ul>
+<li><strong>Translation invariance</strong> — the <em>same</em> filter is used at every position, so a pattern is detected
+  wherever it appears (a nose is a nose on the left or the right of the photo).</li>
+<li><strong>Parameter sharing</strong> — one small filter (9 numbers for 3×3), not a separate weight per pixel. A
+  <strong>fully-connected</strong> net would need a weight for every pixel-to-neuron pair — enormous, and it would
+  have to relearn a pattern separately for every location. The CNN uses <em>far fewer</em> weights and
+  generalizes better — this is <em>why CNNs beat fully-connected nets on images</em>.</li>
+</ul>
+<p>Two knobs shape the output: <strong>stride</strong> (how far the filter steps each move — a bigger stride shrinks the
+output) and <strong>padding</strong> (a border of zeros added so the output can keep the input's size).</p>
+<div class="admonition note">
+<p class="admonition-title">Convolution is not complicated math</p>
+<p>It is a small filter slid across the image, taking weighted sums (M30). The clever part isn't the
+arithmetic — it's <strong>parameter sharing</strong> (the same filter everywhere), which is the whole reason a CNN
+is efficient enough to learn on images.</p>
+</div>
+<h3 id="pooling-and-the-layer-types">Pooling and the layer types<a class="headerlink" href="#pooling-and-the-layer-types" title="Permanent link">&para;</a></h3>
+<p><strong>Pooling</strong> downsamples a feature map — e.g. <strong>max-pooling</strong> keeps the largest value in each 2×2 block,
+halving height and width. It cuts compute, adds a little position-invariance, and lets deeper layers see
+a wider area. A CNN is a stack of a few layer types:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it does</th>
+<th>Why it's there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Convolution</strong></td>
+<td>slides learned filters over the input → feature maps</td>
+<td>detect local patterns <em>anywhere</em> (translation invariance, parameter sharing)</td>
+</tr>
+<tr>
+<td><strong>Activation</strong> (ReLU — Rectified Linear Unit, zeroes negatives)</td>
+<td>adds nonlinearity</td>
+<td>lets the network compose <em>nonlinear</em> features, not just weighted sums</td>
+</tr>
+<tr>
+<td><strong>Pooling</strong></td>
+<td>downsamples (e.g. 2×2 max-pool)</td>
+<td>shrink size, add invariance, cut compute</td>
+</tr>
+<tr>
+<td><strong>Fully-connected</strong></td>
+<td>flattened features → class scores</td>
+<td>the final classifier head</td>
+</tr>
+<tr>
+<td><strong>Softmax</strong> (M31)</td>
+<td>scores → a probability per class</td>
+<td>the output distribution — "how confident, per class"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-feature-hierarchy-learned-not-hand-crafted">The feature hierarchy — learned, not hand-crafted<a class="headerlink" href="#the-feature-hierarchy-learned-not-hand-crafted" title="Permanent link">&para;</a></h3>
+<p>Stacking convolutions <strong>composes</strong> features: early layers detect <strong>edges</strong> and colors; middle layers
+compose those into <strong>textures and parts</strong> (corners, motifs); deep layers compose parts into whole
+<strong>objects</strong>. Crucially, the network <strong>learns</strong> these filters automatically from data via backprop (M26)
+— the end of the hand-engineered-feature era (<strong>SIFT</strong> — Scale-Invariant Feature Transform, <strong>HOG</strong> —
+Histogram of Oriented Gradients). That learned hierarchy — inspired by Hubel &amp; Wiesel's simple/complex
+cells in the visual cortex — is exactly what let <strong>AlexNet</strong> beat hand-crafted features in 2012.</p>
+<h3 id="architectures-the-lineage-and-resnets-fix">Architectures — the lineage, and ResNet's fix<a class="headerlink" href="#architectures-the-lineage-and-resnets-fix" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Year</th>
+<th>The idea it added</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LeNet</strong></td>
+<td>1998</td>
+<td>backprop-trained CNN read handwritten digits (ZIP codes)</td>
+</tr>
+<tr>
+<td><strong>AlexNet</strong></td>
+<td>2012</td>
+<td>deep CNN on <strong>GPUs</strong> (M22) crushed <strong>ImageNet</strong> — started the deep-learning era</td>
+</tr>
+<tr>
+<td><strong>VGG</strong></td>
+<td>2014</td>
+<td>very deep, uniform 3×3 stacks</td>
+</tr>
+<tr>
+<td><strong>ResNet</strong> (Residual Network)</td>
+<td>2015</td>
+<td><strong>residual/skip connections</strong> enabled 100+ layers</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ImageNet</strong> is the million-image benchmark AlexNet won. <strong>ResNet's</strong> keystone: naively stacking more
+layers made networks <em>worse</em>, because gradients <strong>vanish</strong> as they backpropagate through the depth
+(M26/M31). A <strong>residual (skip) connection</strong> adds a layer's <em>input</em> back to its output, giving gradients
+a direct path back — so they don't vanish and very deep nets become trainable. It's a direct fix to the
+gradient problem the curriculum met in M26 — <em>depth is powerful, but not free.</em></p>
+<h3 id="the-vision-transformer-and-multimodal">The Vision Transformer and multimodal<a class="headerlink" href="#the-vision-transformer-and-multimodal" title="Permanent link">&para;</a></h3>
+<p>The <strong>ViT</strong> (Vision Transformer, 2020) splits an image into <strong>patches</strong>, treats each patch as a <em>token</em>,
+and applies <strong>M38's self-attention</strong> — so vision and language now share a core architecture (the domains
+converge). CNNs <em>bake in</em> spatial locality; ViTs <em>learn</em> it (needing more data/compute). <strong>CLIP</strong>
+(Contrastive Language–Image Pre-training, 2021) joins vision and language into one <strong>multimodal</strong> model,
+and <strong>diffusion</strong>/<strong>GAN</strong> (Generative Adversarial Network) models generate images — named here, not
+built.</p>
+<h3 id="transfer-learning-you-almost-never-train-from-scratch">Transfer learning — you almost never train from scratch<a class="headerlink" href="#transfer-learning-you-almost-never-train-from-scratch" title="Permanent link">&para;</a></h3>
+<p><strong>Transfer learning</strong> takes a model <strong>pretrained</strong> on a huge dataset (ImageNet) and <strong>fine-tunes</strong> it on
+your small dataset. It is <em>identical in shape</em> to M38's NLP workflow. Two modes:</p>
+<ul>
+<li><strong>Feature extraction</strong> — freeze the pretrained <strong>backbone</strong>, train only a new <strong>head</strong>. Fast, needs
+  little data, good when your task resembles the pretraining data.</li>
+<li><strong>Full fine-tuning</strong> — unfreeze and train (some of) the backbone too. Better with more data or a
+  domain far from ImageNet, at more compute and overfitting risk.</li>
+</ul>
+<p>With only a few hundred images per class, training from scratch overfits badly; a pretrained model
+already knows general visual features and only needs to adapt — <em>far</em> better results from little data.</p>
+<h3 id="the-three-tasks-and-the-metric-that-matches-each">The three tasks — and the metric that matches each<a class="headerlink" href="#the-three-tasks-and-the-metric-that-matches-each" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Question</th>
+<th>Output</th>
+<th>Metric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Classification</strong></td>
+<td><em>what is it?</em></td>
+<td>one whole-image label</td>
+<td>accuracy / <strong>F1</strong> + confusion matrix</td>
+</tr>
+<tr>
+<td><strong>Object detection</strong></td>
+<td><em>what + WHERE?</em></td>
+<td><strong>bounding boxes</strong> (YOLO, Faster R-CNN)</td>
+<td><strong>IoU</strong> · <strong>mAP</strong></td>
+</tr>
+<tr>
+<td><strong>Segmentation</strong></td>
+<td><em>which pixels?</em></td>
+<td>per-pixel mask (U-Net, Mask R-CNN)</td>
+<td><strong>IoU</strong> · pixel accuracy</td>
+</tr>
+</tbody>
+</table>
+<p>The same backbone serves all three — you just swap the <strong>head</strong> (M38's backbone-plus-head idea, in
+vision). The metrics differ and <em>must</em> match the task:</p>
+<ul>
+<li><strong>F1</strong> — the harmonic mean of precision and recall; with a <strong>confusion matrix</strong> it shows <em>which
+  classes confuse</em> — overall accuracy can be 95% while one class fails badly (M27).</li>
+<li><strong>IoU</strong> (Intersection over Union) — the overlap of a predicted box/mask and the truth, divided by
+  their union: how well they <em>match</em>.</li>
+<li><strong>mAP</strong> (mean Average Precision) — the detection score averaging precision across recall levels and
+  classes at IoU thresholds.</li>
+</ul>
+<p>A detection that "looks right" to your eye can score low mAP (loose box, missed objects) — <strong>"looks
+right" is not measured right.</strong> The metric measures what the eye forgives (M27), and <strong>YOLO</strong> (You Only
+Look Once), <strong>R-CNN</strong> (Region-based CNN), and <strong>U-Net</strong>/<strong>Mask R-CNN</strong> are the standard detection and
+segmentation model families.</p>
+<h3 id="deployment-and-cost">Deployment and cost<a class="headerlink" href="#deployment-and-cost" title="Permanent link">&para;</a></h3>
+<p>The end-to-end service: image upload → validate/preprocess (M36) → CNN/ViT → task head → decode →
+return prediction + confidence + model version. CNNs are <strong>GPU-hungry</strong> (many convolutions × many
+filters × large images — M22/M28), but <strong>serving</strong> is a <em>right-sizing</em> decision (M37): single-image,
+low-traffic inference is often <strong>CPU-fine and cheaper</strong>; high-throughput or low-latency serving justifies
+a GPU. Measure the workload; a GPU idle between requests is waste.</p>
+<h3 id="the-closing-judgment-confident-correct-and-fair-for-whom">The closing judgment — confident ≠ correct, and fair for whom<a class="headerlink" href="#the-closing-judgment-confident-correct-and-fair-for-whom" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Adversarial examples</strong> — a few (nearly invisible) changed pixels flip a confident prediction. The
+  model relies on brittle statistical features, not human-like understanding — and it's a <em>security</em>
+  threat (M9/M25).</li>
+<li><strong>Distribution shift</strong> — a model trained on clean daytime images fails on real night photos; it's only
+  as good as the distribution it was trained on. Fix: representative data, and <em>test on the deployment
+  distribution</em>.</li>
+<li><strong>Bias / fairness</strong> — vision models inherit their data's biases. Commercial face recognition had far
+  higher error for darker-skinned and female faces (<em>Gender Shades</em>), with real harm (wrongful arrests).
+  "99% accurate on average" <em>hides who it fails</em>. The engineer's duty: evaluate <strong>per group</strong>, not just
+  overall; test robustness; and decide whether to deploy <strong>at all</strong> (M25). This is the curriculum's
+  hardest, final evaluation lesson.</li>
+</ul>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only eight things):</strong></p>
+<ol>
+<li><strong>An image is an (H × W × C) tensor</strong> of pixels (M30) — vision is the curriculum's math, on pixels.</li>
+<li><strong>Convolution = one small learned filter slid everywhere</strong>, taking weighted sums → a feature map.
+   <strong>Parameter sharing + translation invariance</strong> is <em>why CNNs beat fully-connected nets on images.</em></li>
+<li><strong>Pooling downsamples</strong>; stacking convolutions builds a <strong>learned feature hierarchy</strong> (edges → parts
+   → objects) — the end of hand-crafted SIFT/HOG (AlexNet, 2012).</li>
+<li><strong>ResNet's skip connections fixed vanishing gradients</strong> (M26/M31) — the reason nets could go 100+
+   layers deep. <strong>ViT</strong> puts M38's transformer on image patches.</li>
+<li><strong>Transfer learning</strong> (fine-tune an ImageNet-pretrained model on small data — M38's workflow) — you
+   almost never train from scratch.</li>
+<li><strong>Three tasks, three metrics:</strong> classification → F1 + confusion matrix · detection → IoU/mAP ·
+   segmentation → IoU. <strong>Match the metric to the task; "looks right" ≠ measured right.</strong></li>
+<li><strong>Serving is a right-sizing decision</strong> (M37): CPU is often fine; reach for a GPU only when the
+   measured workload demands it (M22/M28).</li>
+<li><strong>Confident ≠ correct</strong> (adversarial + distribution shift), and <strong>accurate-on-average hides who it
+   fails</strong> (fairness) — evaluate per group and decide whether to deploy at all (M25). <em>The curriculum's
+   closing lesson.</em></li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-how-a-machine-sees">Guided Lab: how a machine sees<a class="headerlink" href="#guided-lab-how-a-machine-sees" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. On a plain </em><em>CPU</em><em> with only <code>numpy</code> and <code>pillow</code>, you'll build a synthetic image,
+see it as a tensor, slide an edge-detecting kernel across it </em><em>by hand</em><em> and watch the edges appear, pool
+it smaller, and threshold it to a binary mask (toy segmentation). Everything lives in a throwaway
+<code>~/vision-lab/</code> directory — no downloads, no GPU.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-39" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-39" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Install the bench (numpy + pillow)</label><label for="__tabbed_1_2">2 · A synthetic image as a tensor</label><label for="__tabbed_1_3">3 · Convolution by hand — Sobel edges</label><label for="__tabbed_1_4">4 · Blur, sharpen, and pool (downsample)</label><label for="__tabbed_1_5">5 · Threshold to a binary mask (toy segmentation)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip<span class="w">     </span><span class="c1"># pip, if not present</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>pillow<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--break-system-packages<span class="w"> </span>numpy<span class="w"> </span>pillow
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/vision-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/vision-lab<span class="w">                 </span><span class="c1"># throwaway working dir</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import numpy, PIL; print(&#39;numpy&#39;, numpy.__version__, &#39;| pillow&#39;, PIL.__version__)&quot;</span>
+</code></pre></div>
+<strong>numpy</strong> holds the image as an array; <strong>pillow</strong> (PIL) saves it to a PNG you could open. No GPU and
+no downloads — everything here runs in milliseconds on a plain CPU.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">from PIL import Image</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s"># RGB image: black background, a white square — shape H × W × C</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">rgb = np.zeros((64, 64, 3), dtype=np.uint8)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">rgb[16:48, 16:48] = [255, 255, 255]         # white square (all three channels high)</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">print(&quot;RGB shape:&quot;, rgb.shape, &quot;| dtype:&quot;, rgb.dtype)   # (64, 64, 3)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">print(&quot;a background pixel:&quot;, rgb[0, 0].tolist())        # [0, 0, 0]</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">print(&quot;a square pixel   :&quot;, rgb[32, 32].tolist())       # [255, 255, 255] — three numbers</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">Image.fromarray(rgb).save(&quot;square_rgb.png&quot;)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s"># convert to grayscale (one number per pixel) for the convolution work</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">gray = np.array(Image.fromarray(rgb).convert(&quot;L&quot;), dtype=np.float64)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">print(&quot;grayscale shape:&quot;, gray.shape, &quot;| min&quot;, gray.min(), &quot;max&quot;, gray.max())</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s">np.save(&quot;gray.npy&quot;, gray)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s">print(&quot;saved square_rgb.png and gray.npy&quot;)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s">PY</span>
+</code></pre></div>
+The image is a <strong>tensor</strong>: shape <code>(64, 64, 3)</code> — height × width × <strong>channels</strong>. Each pixel is three
+numbers (RGB). Grayscale drops the channel axis to one number per pixel — the grid the kernel will
+slide over.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>convolve.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s">import json</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">gray = np.load(&quot;gray.npy&quot;)               # (64,64) grayscale from step 2</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s"># A kernel/filter is a small matrix slid over the image. Sobel detects edges:</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">Kx = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], dtype=np.float64)   # vertical edges</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">Ky = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]], dtype=np.float64)   # horizontal edges</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s">def convolve(im, k):</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s">    &quot;&quot;&quot;Slide k over im, weighted-sum at each position → a feature map (same size, zero-padded).&quot;&quot;&quot;</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s">    kh, kw = k.shape</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s">    pad = kh // 2</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s">    padded = np.pad(im, pad, mode=&quot;constant&quot;)</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s">    out = np.zeros_like(im)</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="s">    for r in range(im.shape[0]):</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="s">        for c in range(im.shape[1]):</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="s">            out[r, c] = np.sum(padded[r:r+kh, c:c+kw] * k)   # the convolution</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="s">    return out</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="s">gx, gy = convolve(gray, Kx), convolve(gray, Ky)</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="s">mag = np.sqrt(gx**2 + gy**2)             # edge magnitude — high on the square&#39;s border</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="s"># Save a viewable edge image</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="s">from PIL import Image</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="s">Image.fromarray((mag / mag.max() * 255).astype(&quot;uint8&quot;)).save(&quot;edges.png&quot;)</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="s">result = {</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="s">    &quot;shape&quot;: list(mag.shape),</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="s">    &quot;max_edge&quot;: float(mag.max()),</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="s">    &quot;interior_mean&quot;: float(mag[24:40, 24:40].mean()),   # flat inside the square → ~0</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="s">    &quot;background_mean&quot;: float(mag[0:12, 0:12].mean()),    # flat background → ~0</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a><span class="s">    &quot;edge_pixel_fraction&quot;: float((mag &gt; 100).mean()),    # edges are SPARSE (a border)</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="s">    &quot;edges_png_exists&quot;: True,</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a><span class="s">}</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a><span class="s">with open(&quot;edge_result.json&quot;, &quot;w&quot;) as f:</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a><span class="s">    json.dump(result, f, indent=2)</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a><span class="s">print(json.dumps(result, indent=2))</span>
+<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a><span class="s">PY</span>
+<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a>python3<span class="w"> </span>convolve.py
+</code></pre></div>
+The <strong>feature map</strong> is high on the square's <strong>border</strong> and near-zero in the flat interior and
+background — the edge kernel found the edges <em>everywhere they appear</em> (translation invariance), using
+one shared 9-number filter (parameter sharing). Edges are <strong>sparse</strong> — a border, not the whole image.</p>
+<p>Click <strong>Check</strong> to verify the edges landed on the border and not the flat regions.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>pool.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="s">import json</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s">from convolve import convolve          # reuse the hand convolution</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s">gray = np.load(&quot;gray.npy&quot;)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s">blur    = np.ones((3, 3)) / 9.0                                  # box blur — averages neighbors</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s">sharpen = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]], float)  # emphasizes the center</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s">_ = convolve(gray, blur); _ = convolve(gray, sharpen)            # apply both (opposite effects)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s">def max_pool(im, size=2):</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s">    &quot;&quot;&quot;Downsample: keep the max of each size×size block → half the height and width.&quot;&quot;&quot;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s">    h, w = im.shape</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s">    oh, ow = h // size, w // size</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s">    out = np.zeros((oh, ow))</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s">    for r in range(oh):</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="s">        for c in range(ow):</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="s">            out[r, c] = im[r*size:(r+1)*size, c*size:(c+1)*size].max()</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="s">    return out</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="s">pooled = max_pool(gray, 2)</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="s">result = {</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="s">    &quot;input_shape&quot;: list(gray.shape),      # [64, 64]</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="s">    &quot;pooled_shape&quot;: list(pooled.shape),   # [32, 32] — halved</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="s">    &quot;pool_size&quot;: 2,</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="s">    &quot;blur_applied&quot;: True,</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="s">    &quot;sharpen_applied&quot;: True,</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="s">}</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="s">with open(&quot;pool_result.json&quot;, &quot;w&quot;) as f:</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="s">    json.dump(result, f, indent=2)</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="s">print(json.dumps(result, indent=2))</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="s">PY</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>python3<span class="w"> </span>pool.py
+</code></pre></div>
+<strong>Blur</strong> (a box average) and <strong>sharpen</strong> (emphasize the center) are just two more kernels — same
+machinery, opposite effects. <strong>Max-pooling</strong> then <strong>downsamples</strong>: <code>(64, 64)</code> → <code>(32, 32)</code>, half the
+size — less compute, a wider view for deeper layers.</p>
+<p>Click <strong>Check</strong> to verify the pooled image is exactly half the input's height and width.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">from PIL import Image</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">gray = np.load(&quot;gray.npy&quot;)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">mask = (gray &gt; 127).astype(np.uint8)          # 1 where the object is, 0 for background</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">Image.fromarray(mask * 255).save(&quot;mask.png&quot;)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">print(&quot;mask shape:&quot;, mask.shape)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">print(&quot;foreground pixels:&quot;, int(mask.sum()), &quot;of&quot;, mask.size)   # 1024 of 4096 = the square</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">print(&quot;foreground fraction:&quot;, round(float(mask.mean()), 3))</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s">PY</span>
+</code></pre></div>
+A threshold splits pixels into <strong>object (1)</strong> and <strong>background (0)</strong> — a <strong>per-pixel</strong> label, which is
+the shape of a <strong>segmentation</strong> output. This toy mask is exact because the image is synthetic; a real
+segmenter (U-Net / Mask R-CNN) <em>learns</em> the mask, and you'd score it with <strong>IoU</strong>, not by eye.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you saw an image as an (H×W×C) tensor, slid an edge kernel across it by hand and watched the edges
+appear on the border, pooled it to half size, and thresholded a mask — the guided lab is done. You've
+touched convolution, translation invariance, pooling, and a segmentation output with your own hands.
+Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work in <code>~/vision-lab/</code>. Reuse your <code>convolve</code> and
+<code>max_pool</code> functions. The last challenge has no code — it's the judgment the curriculum ends on.</em></p>
+<h3 id="challenge-1-prove-translation-invariance">Challenge 1 — Prove translation invariance<a class="headerlink" href="#challenge-1-prove-translation-invariance" title="Permanent link">&para;</a></h3>
+<p>Move the white square to a <strong>different location</strong> and re-run your Sobel edge detection. Show the same
+kernel finds the edges in the new position — and explain, in one sentence, why that is the whole point of
+a <em>shared</em> filter.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Change the slice, e.g. <code>gray[4:24, 36:56] = 255</code>, then convolve with the same <code>Kx</code>/<code>Ky</code>. Same filter,
+new location — the edge magnitude is high wherever the border now is.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">convolve</span><span class="w"> </span><span class="kn">import</span> <span class="n">convolve</span><span class="p">,</span> <span class="n">Kx</span><span class="p">,</span> <span class="n">Ky</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">));</span> <span class="n">g</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">24</span><span class="p">,</span> <span class="mi">36</span><span class="p">:</span><span class="mi">56</span><span class="p">]</span> <span class="o">=</span> <span class="mf">255.0</span>        <span class="c1"># square moved to top-right</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">convolve</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">Kx</span><span class="p">),</span> <span class="n">convolve</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">Ky</span><span class="p">))</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;edges found at moved border, max:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">mag</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span> <span class="mi">1</span><span class="p">))</span>
+</code></pre></div>
+One filter, slid over <em>every</em> position, detects the pattern wherever it is — <strong>translation
+invariance</strong>. A fully-connected net would have to relearn the edge separately for each location; the
+CNN never does, which is why it needs far fewer weights and generalizes on images.</p>
+</details>
+<h3 id="challenge-2-average-pool-vs-max-pool">Challenge 2 — Average-pool vs max-pool<a class="headerlink" href="#challenge-2-average-pool-vs-max-pool" title="Permanent link">&para;</a></h3>
+<p>Implement <strong>average-pooling</strong> (mean of each block) alongside your max-pool, run both on the <em>edge
+magnitude</em> map, and say when each is the better choice.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">avg_pool</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="k">return</span> <span class="n">im</span><span class="p">[:</span><span class="n">h</span><span class="o">//</span><span class="n">size</span><span class="o">*</span><span class="n">size</span><span class="p">,</span> <span class="p">:</span><span class="n">w</span><span class="o">//</span><span class="n">size</span><span class="o">*</span><span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">h</span><span class="o">//</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">w</span><span class="o">//</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># max-pool keeps the strongest response (good for &quot;is the feature present?&quot;);</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># avg-pool smooths (good for a summary / less noisy downsample).</span>
+</code></pre></div>
+<strong>Max-pool</strong> keeps the strongest activation — it answers "does this feature appear in the block?" and
+dominates CNN backbones. <strong>Average-pool</strong> smooths and is common as a final <strong>global</strong> pool before the
+classifier head. Both halve the spatial size; they differ in what they preserve.</p>
+</details>
+<h3 id="challenge-3-the-identity-kernel-verify-your-convolution">Challenge 3 — The identity kernel (verify your convolution)<a class="headerlink" href="#challenge-3-the-identity-kernel-verify-your-convolution" title="Permanent link">&para;</a></h3>
+<p>Convolve the grayscale image with the <strong>identity kernel</strong> <code>[[0,0,0],[0,1,0],[0,0,0]]</code> and show the output
+equals the input. Explain why this is a good <em>self-check</em> on a hand-written convolution.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>An identity kernel weights only the center pixel by 1 and everything else by 0 — so each output pixel
+is its own input pixel. <code>np.allclose(convolve(gray, K), gray)</code> should be <code>True</code> (ignoring the padded
+border).</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">convolve</span><span class="w"> </span><span class="kn">import</span> <span class="n">convolve</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">gray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;gray.npy&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> <span class="nb">float</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">out</span> <span class="o">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;identity holds (interior):&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">gray</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+</code></pre></div>
+If a <em>known-answer</em> kernel doesn't reproduce its known output, your indexing/padding is wrong — the
+same "machine-check the hand calc" discipline as M26's gradient-check and M30's <code>A·A⁻¹ = I</code>. Never
+trust a convolution you didn't verify against a case whose answer you already know.</p>
+</details>
+<h3 id="challenge-4-iou-by-hand-the-metric-that-catches-what-the-eye-forgives">Challenge 4 — IoU by hand (the metric that catches what the eye forgives)<a class="headerlink" href="#challenge-4-iou-by-hand-the-metric-that-catches-what-the-eye-forgives" title="Permanent link">&para;</a></h3>
+<p>Two boxes as <code>[x1, y1, x2, y2]</code>: truth <code>[10, 10, 50, 50]</code>, prediction <code>[20, 20, 60, 60]</code>. Compute <strong>IoU</strong>
+(Intersection over Union) by hand in numpy, and explain how a detection can "look right" yet score low.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">iou</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">ix1</span><span class="p">,</span> <span class="n">iy1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">ix2</span><span class="p">,</span> <span class="n">iy2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">inter</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ix2</span><span class="o">-</span><span class="n">ix1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">iy2</span><span class="o">-</span><span class="n">iy1</span><span class="p">)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">area_a</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="n">area_b</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="k">return</span> <span class="n">inter</span> <span class="o">/</span> <span class="p">(</span><span class="n">area_a</span> <span class="o">+</span> <span class="n">area_b</span> <span class="o">-</span> <span class="n">inter</span><span class="p">)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">iou</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">60</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span>   <span class="c1"># ~0.39</span>
+</code></pre></div>
+The overlap is only <strong>~0.39</strong> — below the usual 0.5 "correct detection" bar — even though a
+right-object, roughly-placed box <em>looks</em> fine. <strong>IoU/mAP measure the overlap the eye glosses over</strong>;
+accuracy can't see it. Match the metric to the task (M27) — "looks right" is not measured right.</p>
+</details>
+<h3 id="challenge-5-stretch-99-accurate-ship-it-the-closing-judgment">Challenge 5 (stretch) — "99% accurate — ship it?" (the closing judgment)<a class="headerlink" href="#challenge-5-stretch-99-accurate-ship-it-the-closing-judgment" title="Permanent link">&para;</a></h3>
+<p>A vendor says their face-recognition model is <strong>"99% accurate."</strong> As the engineer, write the questions you
+must ask <em>before</em> believing or deploying it. No code — this is the curriculum's final lesson.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Ask: <strong>99% on WHAT data</strong> — representative of our deployment population? <strong>By which metric</strong> —
+accuracy hides per-group failure, so what is the <strong>per-subgroup</strong> performance (especially across skin
+tone and gender — <em>Gender Shades</em>)? <strong>At what threshold</strong>, and what are the false-positive/false-
+negative <strong>rates</strong> — a false match can mean a <em>wrongful arrest</em>, so the error costs are asymmetric and
+huge (M27/M31). <strong>Tested under our real conditions</strong> (distribution shift — lighting, angle) and how
+<strong>robust to adversarial</strong> inputs? Plus <strong>consent, privacy, legal basis</strong> — and whether it should be
+deployed <strong>at all</strong> (M25). "99% accurate" is nearly meaningless without the base rate, the subgroup
+breakdown, and the error costs. <strong>Confident-and-accurate-on-average hides who it fails</strong> — evaluating
+for fairness and robustness is a first-class engineering duty, not an afterthought. <em>That is the
+lesson the whole curriculum was built to earn.</em></p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>What is an image, to a computer — and what is a convolution?</summary>
+<p>An image is a grid of <strong>pixels</strong> — an <strong>(H × W × C)</strong> tensor of numbers (M30), with RGB channels for
+color. A <strong>convolution</strong> slides a small learned <strong>filter/kernel</strong> across that grid, taking a weighted
+sum at each position to produce a <strong>feature map</strong> — high where the filter's pattern is present.</p>
+</details>
+<details class="question">
+<summary>Why does a CNN beat a fully-connected net on images?</summary>
+<p><strong>Parameter sharing</strong> (one small filter reused everywhere, not a weight per pixel → far fewer
+weights) and <strong>translation invariance</strong> (the pattern is detected wherever it appears). A
+fully-connected net has no spatial structure and would relearn a pattern per location — enormous and
+worse-generalizing. The CNN matches how images actually work: local, position-independent features.</p>
+</details>
+<details class="question">
+<summary>What does each layer of the feature hierarchy detect, and who learns them?</summary>
+<p>Early layers detect <strong>edges/colors</strong>; middle layers compose them into <strong>textures and parts</strong>; deep
+layers compose parts into <strong>whole objects</strong>. The network <strong>learns</strong> the filters automatically from
+data via backprop (M26) — the end of hand-crafted SIFT/HOG (why AlexNet's learned features won).</p>
+</details>
+<details class="question">
+<summary>Why did ResNet's residual connections enable much deeper networks?</summary>
+<p>Stacking many layers naively makes gradients <strong>vanish</strong> on the way back (M26/M31), so deep plain nets
+train worse than shallow ones. A <strong>skip connection</strong> adds a layer's input to its output, giving
+gradients a direct path back — they stop vanishing and 100+ layer nets become trainable. A simple
+idea, a direct fix to M26's gradient problem.</p>
+</details>
+<details class="question">
+<summary>Why transfer-learn instead of training from scratch?</summary>
+<p>A few hundred images is far too little to train a deep net from scratch — it overfits. A model
+<strong>pretrained</strong> on ImageNet already knows general visual features; <strong>fine-tuning</strong> it adapts those to
+your task with little data (M38's workflow, in vision). You almost never train from scratch.</p>
+</details>
+<details class="question">
+<summary>Which metric for object detection, and why not accuracy?</summary>
+<p><strong>mAP</strong> (mean Average Precision), built on <strong>IoU</strong> (Intersection over Union). Detection is about
+<em>localizing</em> objects — a box can name the right class but overlap the truth poorly, or miss objects.
+Accuracy can't measure box overlap; IoU/mAP can. Match the metric to the task (M27).</p>
+</details>
+<details class="question">
+<summary>Why is a confident vision prediction not necessarily correct?</summary>
+<p>Its confidence reflects learned <strong>pixel-pattern</strong> strength, not understanding. <strong>Adversarial
+examples</strong> (a few imperceptible pixel changes) flip confident predictions, and <strong>distribution shift</strong>
+(lighting/style never trained on) causes confident failures. Confident ≠ correct — the same
+skepticism M38 taught for language, in pixels.</p>
+</details>
+<details class="question">
+<summary>'Our face-recognition model is 99% accurate — ship it.' Your response?</summary>
+<p>"99% on which dataset, by which metric, at which threshold?" Accuracy hides <strong>per-group</strong> failure, so
+demand the subgroup breakdown (skin tone/gender — <em>Gender Shades</em>), the false-positive/false-negative
+costs (a false match can mean a wrongful arrest), robustness to shift/adversarial inputs, and
+consent/privacy/legal basis — then whether to deploy at all (M25). <strong>Accurate-on-average hides who it
+fails.</strong></p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong>, to someone who finished M26–27 (AI/ML basics) and M38 (NLP)
+but never did vision: use the <strong>recognize-a-face-in-a-crowd</strong> analogy <em>first</em> (small clues → parts →
+a face; the same detector used anywhere), then (1) <strong>convolution</strong> and why <em>one shared filter</em>
+(translation invariance + parameter sharing) is the key idea, (2) <strong>transfer learning</strong> and the
+architecture story (AlexNet → ResNet's skip connections → ViT), and (3) <strong>task-appropriate
+evaluation</strong> and the limits/ethics — ending on <strong>confident ≠ correct, and fair for whom</strong>. Field "does
+the CNN see like us?" and "isn't 99% accurate good enough?". If you can't yet, that's your signal to
+reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M39 also closes </em><em>Stage 13</em><em> and
+the entire journey. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> image-as-tensor, convolution, pooling, and transfer learning — one line each, cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Represent</strong> an image as an (H×W×C) tensor and apply augmentation, explaining channels (M30).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> a convolution by hand and verify it (identity kernel / known answer).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> why CNNs beat fully-connected nets on images (translation invariance + parameter sharing).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the feature hierarchy — edges → parts → objects, <strong>learned</strong>, not hand-crafted.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> the architecture lineage (LeNet → AlexNet → VGG → ResNet) and what each added.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> ResNet's residual connections and the vanishing-gradient fix (M26/M31).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> transfer learning (fine-tune a pretrained model) and when feature-extraction vs full fine-tuning.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> ViT and how it connects to M38's transformer (patches as tokens).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Distinguish</strong> classification, detection, and segmentation by their output <em>and</em> their metric.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Choose</strong> the task-appropriate metric (F1 + confusion matrix vs IoU/mAP) and compute IoU by hand.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Reason</strong> about GPU vs CPU inference cost and right-size the serving (M22/M28/M37).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> an adversarial example and explain distribution shift (confident ≠ correct).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Evaluate</strong> a model for fairness across groups and confront the face-recognition stakes (M25/M27).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Recognize</strong> when a simpler/classical approach is the right call (don't over-engineer).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Connect</strong> vision to the curriculum (M30/M31 tensors/probability · M26/M27 training/eval · M38 transfer/transformer · M36–37 serving · M25 ethics).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach</strong> how machines see and why confident ≠ correct, fair for whom (teach-back above).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. <strong>Interleaving is active</strong> —
+every M39 review also pulls in one <strong>Module 38</strong> item (its sibling AI domain: ViT <em>is</em> M38's transformer
+on patches; transfer learning is the <em>same</em> workflow; "confident ≠ correct" is M38's skepticism, in
+pixels). Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M38 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards 1–20 · hand-compute one convolution feature map</td>
+<td>Say "what is self-attention?" in one sentence</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>The three cases (AlexNet · ResNet · face-recognition bias) · the metric map</td>
+<td>Explain the fine-tune-a-pretrained-model workflow cold</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Reproduce the full Visual Model blank · run detection and evaluate with IoU/mAP</td>
+<td>Trace tokenization → embeddings from memory</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Run an adversarial or fairness test · ResNet's gradient fix cold</td>
+<td>Explain "why fluent ≠ correct" (hallucination)</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Reproduce both artifacts (classifier + robustness/detection analysis)</td>
+<td>Redraw the transformer/attention diagram from memory</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> the <strong>capstone</strong> — a deployed, evaluated, responsibly-assessed AI model
+(language <em>or</em> vision, or multimodal), built with M35's process, served via M36 on M37's cloud, evaluated
+with M27's rigor, and honest about the limits and ethics M38–M39 taught. Beyond it: <strong>generative vision</strong>
+(GANs, diffusion — Stable Diffusion, DALL·E), <strong>multimodal</strong> (CLIP joining M38 + M39), and the applied CV
+domains (medical imaging, autonomous driving, robotics, manufacturing QA) where these skills are
+load-bearing and the stakes are real.</p>
+<div class="admonition success">
+<p class="admonition-title">The journey is complete</p>
+<p>Passing M39 closes <strong>Stage 13</strong> and the entire <strong>BSAIE-gap expansion (M30–M39)</strong> on top of the
+original 29 modules + capstone. You now hold the full toolkit of an AI engineer — the mathematical
+and CS foundations, the data and software discipline, the cloud, and <strong>both</strong> AI domains, language
+(M38) and vision (M39) — able to build, evaluate, serve, deploy, and <em>responsibly assess</em> AI systems.
+The forward path is <code>../../06-continuous-improvement.md</code> (certs, specializations, communities) and the
+roadmap's Recommended Study Sequence v2; the capstone is where it all comes together.</p>
+</div>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>Vision is the curriculum's math and machine learning specialized to pixels — convolution and the
+learned feature hierarchy let machines <em>see</em>, transfer learning builds a real model from little data,
+and the metric-and-fairness discipline (confident ≠ correct, and fair for whom) is the closing lesson
+the whole journey was built to earn.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-38/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 38 — Natural Language Processing">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 38 — Natural Language Processing
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

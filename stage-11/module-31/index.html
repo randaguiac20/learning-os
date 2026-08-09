@@ -1,0 +1,3495 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The two continuous languages under the curriculum's spine — calculus (how a model moves) and probability & statistics (how you know it moved). Derivatives, the chain rule, the gradient and gradient descent; distributions, Bayes, confidence intervals, and hypothesis tests — built bare-hands, applied to training and honest evaluation.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-30/">
+      
+      
+        <link rel="next" href="../module-32/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 31 — Calculus, Probability & Statistics - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-31-calculus-probability-statistics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 31 — Calculus, Probability & Statistics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-two-languages-two-bridges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: two languages, two bridges
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculus-the-derivative-the-chain-rule-the-gradient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calculus — the derivative, the chain rule, the gradient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gradient-descent-and-the-learning-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradient descent and the learning rate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integrals-accumulation-and-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integrals — accumulation and area
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributions-expectation-variance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distributions, expectation, variance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bayes-theorem-and-the-base-rate-fallacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bayes' theorem and the base-rate fallacy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-clt-the-standard-error-and-honest-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The CLT, the standard error, and honest metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hypothesis-testing-the-p-value-and-p-hacking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hypothesis testing, the p-value, and p-hacking
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-feel-the-two-instruments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: feel the two instruments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-own-the-chain-rule-on-a-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Own the chain rule on a composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-make-gradient-descent-diverge-then-explain-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Make gradient descent diverge, then explain it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-demonstrate-the-clt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Demonstrate the CLT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-halve-a-confidence-interval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Halve a confidence interval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-p-hack-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — p-hack yourself
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-two-languages-two-bridges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: two languages, two bridges
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculus-the-derivative-the-chain-rule-the-gradient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calculus — the derivative, the chain rule, the gradient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gradient-descent-and-the-learning-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradient descent and the learning rate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integrals-accumulation-and-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integrals — accumulation and area
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributions-expectation-variance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distributions, expectation, variance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bayes-theorem-and-the-base-rate-fallacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bayes' theorem and the base-rate fallacy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-clt-the-standard-error-and-honest-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The CLT, the standard error, and honest metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hypothesis-testing-the-p-value-and-p-hacking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hypothesis testing, the p-value, and p-hacking
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-feel-the-two-instruments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: feel the two instruments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-own-the-chain-rule-on-a-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Own the chain rule on a composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-make-gradient-descent-diverge-then-explain-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Make gradient descent diverge, then explain it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-demonstrate-the-clt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Demonstrate the CLT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-halve-a-confidence-interval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Halve a confidence interval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-p-hack-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — p-hack yourself
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-31-calculus-probability-statistics">Module 31 — Calculus, Probability &amp; Statistics<a class="headerlink" href="#module-31-calculus-probability-statistics" title="Permanent link">&para;</a></h1>
+<p><small>Stage 11 · Math &amp; CS Foundations · ~3 weeks at 4 h/day · Prerequisite — Module 30 (discrete math &amp; linear algebra — the gradient is a vector).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p>This module teaches two continuous mathematical languages, both load-bearing for machine learning.
+<strong>Calculus</strong> is the mathematics of <em>change and accumulation</em>: the <strong>derivative</strong> (the instantaneous
+rate of change of a function — the slope of its tangent line) and the <strong>integral</strong> (the accumulated
+total — the area under a curve). Its multivariable form gives the <strong>gradient</strong> (the vector of partial
+derivatives — a <strong>partial derivative</strong> is the slope in one input direction while the others are held
+fixed; the gradient points in the direction of steepest increase), and the gradient is how every neural
+network learns. <strong>Probability</strong> is the mathematics of <em>uncertainty</em>: distributions, expectation, and
+<strong>Bayes' theorem</strong> (updating a belief with evidence). <strong>Statistics</strong> is probability turned into a tool
+for reasoning from <em>data</em>: estimation, hypothesis testing, and confidence.</p>
+<p>Two earlier modules leaned on these tools with an accent. Module 26 (AI Foundations) "revived the chain
+rule gently" and called gradients "which way is less wrong"; Module 27 (ML Fundamentals) chose metrics
+and split data but never named a distribution, a confidence interval, or Bayes. Those ideas carried the
+load — but an AI <strong>engineer</strong> must <em>own</em> the calculus (to reason about optimization, learning rates,
+convergence, and why gradients vanish or explode) and the statistics (to know whether a 2% metric
+improvement is real or noise). This module supplies both, and it completes the Stage 11 pair: Module 30
+gave you the discrete structures and the linear algebra of <em>data</em>; Module 31 gives you the continuous
+mathematics of <em>training</em> (calculus) and the mathematics of <em>evidence</em> (statistics).</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p><strong>M26 (backprop/training)</strong> — the chain rule and gradient descent, now owned, explain learning
+rates, convergence, and vanishing/exploding gradients · <strong>M27 (evaluation)</strong> — metrics carry
+confidence intervals and model comparison becomes a hypothesis test · <strong>M38 (NLP)</strong> — naive Bayes
+and probabilistic language models · <strong>M39 (Computer Vision)</strong> — loss surfaces and interval-honest
+detection metrics · <strong>the capstone</strong>, whose model claims must carry intervals and a real/noise
+verdict, and whose training story must invoke gradient descent by name. Together with M30, this is
+the mathematics an AI engineer reads by.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 31 — Calculus, Probability &amp; Statistics&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Analogy / Misconceptions):
+the accelerator and the speedometer (calculus moves the model, statistics reads whether it arrived) →
+derivative as a limit → the chain rule IS backprop (M26) → the gradient and one gradient-descent step,
+with the three learning-rate regimes → the mammogram / base-rate shock (Bayes) → "94%" needs a ± after
+it (a metric is a sample) → "is +2% real or noise?" is a hypothesis test, and p-hacking is M27's
+leakage discipline in statistical dress.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-feel-the-two-instruments">Guided Lab</a> in a browser terminal and run each block
+yourself as it appears. Typing beats watching every time — and computing a derivative, watching
+gradient descent walk downhill, and being surprised by a Bayes answer is how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-two-languages-two-bridges">The picture: two languages, two bridges<a class="headerlink" href="#the-picture-two-languages-two-bridges" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph CALC["Calculus — the mathematics of change"]
+        D["Derivative&lt;br/&gt;slope = rate of change"] --&gt; CR["Chain rule&lt;br/&gt;differentiate a composition"]
+        CR --&gt; G["Gradient&lt;br/&gt;vector of partial derivatives&lt;br/&gt;steepest-ascent direction"]
+        G --&gt; GD["Gradient descent&lt;br/&gt;step downhill by the learning rate"]
+        I["Integral&lt;br/&gt;area = accumulation&lt;br/&gt;a density integrates to 1"]
+    end
+    subgraph STAT["Probability and Statistics — the mathematics of uncertainty"]
+        RV["Random variable&lt;br/&gt;to a distribution (Gaussian)"] --&gt; BAYES["Bayes theorem&lt;br/&gt;update belief with evidence"]
+        RV --&gt; CLT["Central Limit Theorem&lt;br/&gt;sums of many become normal"]
+        CLT --&gt; MS["A metric is a SAMPLE&lt;br/&gt;not a truth"]
+        MS --&gt; CI["Confidence interval&lt;br/&gt;94% plus or minus 2%"]
+        CI --&gt; HT["Hypothesis test&lt;br/&gt;real or noise?"]
+    end
+    GD --&gt; M26["M26 — TRAINING&lt;br/&gt;backprop walks downhill"]
+    HT --&gt; M27["M27 — EVALUATION&lt;br/&gt;measured, not asserted"]</code></pre>
+<p>The two halves meet the curriculum's spine at two bridges: <strong>calculus trains the model</strong> (M26), and
+<strong>statistics judges the result</strong> (M27). The analogy to hold onto: calculus is the <strong>accelerator</strong> (the
+derivative tells you which way and how hard to press to go downhill on the loss surface) and statistics
+is the <strong>speedometer with error bars</strong> (it tells you not just "94%" but "94% ± 2%, and that ± is why last
+week's 92% might not really be worse").</p>
+<h3 id="calculus-the-derivative-the-chain-rule-the-gradient">Calculus — the derivative, the chain rule, the gradient<a class="headerlink" href="#calculus-the-derivative-the-chain-rule-the-gradient" title="Permanent link">&para;</a></h3>
+<p>The <strong>derivative</strong> <code>f'(x)</code> is the instantaneous rate of change of <code>f</code> at <code>x</code> — the slope of the tangent
+line. It is defined as a <strong>limit</strong> (the value a quantity approaches as another shrinks to zero):</p>
+<blockquote>
+<p><strong>f'(x) = lim (h → 0) of (f(x+h) − f(x)) / h</strong></p>
+</blockquote>
+<p>You can <em>feel</em> that limit numerically: compute <code>(f(x+h) − f(x−h)) / (2h)</code> for a tiny <code>h</code> (the <strong>symmetric
+difference quotient</strong>, the numerical derivative) and watch it converge to the analytic answer. That check
+— hand derivative vs numerical derivative — is the <strong>gradient-check habit</strong> you first met in M26.</p>
+<p>The <strong>chain rule</strong> is the module's keystone. For a <strong>composition</strong> (one function fed into another),
+<code>f(g(x))</code>:</p>
+<blockquote>
+<p><strong>(f∘g)'(x) = f'(g(x)) · g'(x)</strong> — the outer derivative times the inner derivative.</p>
+</blockquote>
+<p>This is <em>literally</em> what <strong>backprop</strong> (backpropagation — the algorithm that computes a loss's gradient)
+does. A neural network is a deep composition of functions (its layers); the loss is a function of them
+all. Backprop applies the chain rule <em>backward</em> through the <strong>computation graph</strong> (a DAG — directed
+acyclic graph, M30's object): each node multiplies the upstream gradient by its local derivative and
+passes it back. "Backprop is the chain rule applied backward through the DAG" stops being a slogan and
+becomes something you can do with a pencil.</p>
+<p>The <strong>gradient</strong> <code>∇f</code> (read "grad f" or "del f") is the derivative's multivariable generalization: the
+vector of partial derivatives, one per input dimension. It points in the direction of <strong>steepest
+ascent</strong> — the fastest way uphill on the surface.</p>
+<h3 id="gradient-descent-and-the-learning-rate">Gradient descent and the learning rate<a class="headerlink" href="#gradient-descent-and-the-learning-rate" title="Permanent link">&para;</a></h3>
+<p>To <em>minimize</em> a loss <code>L</code>, step <em>opposite</em> the gradient — downhill:</p>
+<blockquote>
+<p><strong>θ ← θ − η ∇L(θ)</strong> — the gradient-descent update. <code>θ</code> (theta) is the parameters; <code>η</code> (eta) is the
+<strong>learning rate</strong> (the step size).</p>
+</blockquote>
+<p>This is THE training algorithm (M26), and it is old — Cauchy published it in 1847, and it powers every
+modern model from SGD to Adam. The learning rate <code>η</code> is the one knob the calculus fully explains:</p>
+<table>
+<thead>
+<tr>
+<th><code>η</code> (learning rate)</th>
+<th>What the calculus does</th>
+<th>What you see</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Too big</strong></td>
+<td>The step overshoots the minimum; the surface's curvature sends it <em>higher</em></td>
+<td>Loss oscillates or <strong>diverges</strong> — it bounces out</td>
+</tr>
+<tr>
+<td><strong>Too small</strong></td>
+<td>Each step barely moves</td>
+<td><strong>Crawls</strong> — converges, but takes forever</td>
+</tr>
+<tr>
+<td><strong>Just right</strong></td>
+<td>Steps shrink appropriately near the minimum</td>
+<td>Smooth <strong>convergence</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A gradient descent that diverges is almost never a code bug — it is <code>η</code> too large. The fix is the
+calculus, not trial-and-error: reduce <code>η</code> (say 10×), optionally decay it over steps, and confirm the loss
+now falls.</p>
+<h3 id="integrals-accumulation-and-area">Integrals — accumulation and area<a class="headerlink" href="#integrals-accumulation-and-area" title="Permanent link">&para;</a></h3>
+<p>The <strong>integral</strong> <code>∫f</code> is accumulation: the area under a curve, built as the limit of thin rectangles
+(a <strong>Riemann sum</strong>). The <strong>Fundamental Theorem of Calculus</strong> says differentiation and integration undo
+each other — they are inverses. Why it matters for ML: a <strong>probability density</strong> (the continuous
+analogue of a distribution's per-value probability) <strong>integrates to 1</strong>, and an <strong>expectation</strong> (the
+long-run average) <em>is</em> an integral. That is the seam where calculus meets probability.</p>
+<h3 id="distributions-expectation-variance">Distributions, expectation, variance<a class="headerlink" href="#distributions-expectation-variance" title="Permanent link">&para;</a></h3>
+<p>A <strong>random variable</strong> takes values with probabilities described by a <strong>distribution</strong>. Two you must know:</p>
+<ul>
+<li><strong>Discrete</strong> — <strong>Bernoulli</strong> (a single yes/no trial, e.g. one coin flip) and <strong>binomial</strong> (the count of
+  successes over many Bernoulli trials). The per-value probability is the <strong>pmf</strong> (probability mass
+  function).</li>
+<li><strong>Continuous</strong> — the <strong>normal / Gaussian</strong> distribution (the bell curve — the one that's everywhere).
+  Its per-value density is the <strong>pdf</strong> (probability density function).</li>
+</ul>
+<p>A distribution's first two <strong>moments</strong> summarize it: the <strong>expectation</strong> (mean <code>μ</code> — the long-run
+average, the center) and the <strong>variance</strong> (<code>σ²</code> — the spread; its square root <code>σ</code> is the <strong>standard
+deviation</strong>).</p>
+<h3 id="bayes-theorem-and-the-base-rate-fallacy">Bayes' theorem and the base-rate fallacy<a class="headerlink" href="#bayes-theorem-and-the-base-rate-fallacy" title="Permanent link">&para;</a></h3>
+<p><strong>Conditional probability</strong> <code>P(A|B)</code> is the probability of <code>A</code> <em>given</em> that <code>B</code> happened. <strong>Bayes'
+theorem</strong> updates a belief with evidence:</p>
+<blockquote>
+<p><strong>P(H|E) = P(E|H) · P(H) / P(E)</strong> — posterior = likelihood × prior / evidence.</p>
+</blockquote>
+<p>The famous shock is the <strong>mammogram / base-rate problem</strong>. A test that is 90% accurate for a disease
+affecting 1% of people: a positive result is <em>more likely a false alarm than real</em>. Walk the counts on
+100,000 people:</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Count</th>
+<th>Test says positive</th>
+<th>Positives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Have the disease (1%)</td>
+<td>1,000</td>
+<td>90% caught (sensitivity)</td>
+<td><strong>900 true positives</strong></td>
+</tr>
+<tr>
+<td>Healthy (99%)</td>
+<td>99,000</td>
+<td>10% false alarm (1 − specificity)</td>
+<td><strong>9,900 false positives</strong></td>
+</tr>
+<tr>
+<td><strong>Total positive</strong></td>
+<td></td>
+<td></td>
+<td>10,800</td>
+</tr>
+</tbody>
+</table>
+<p><code>P(disease | positive) = 900 / 10,800 ≈ 8.3%</code>. Despite "90% accuracy," a positive is ~92% likely a false
+alarm — because the disease is rare, the <strong>base rate</strong> (the prior prevalence) dominates. This IS M27's
+<strong>precision</strong> under class imbalance: <strong>precision = P(real | flagged) = Bayes</strong>, and "90% accurate" is
+meaningless without the base rate.</p>
+<h3 id="the-clt-the-standard-error-and-honest-metrics">The CLT, the standard error, and honest metrics<a class="headerlink" href="#the-clt-the-standard-error-and-honest-metrics" title="Permanent link">&para;</a></h3>
+<p>The <strong>Central Limit Theorem (CLT)</strong> says the sum (or mean) of many independent, finite-variance random
+variables tends toward a <em>normal</em> distribution regardless of the originals' shapes. That is <em>why</em> the
+normal shows up everywhere and why so much of statistics is built on it — it isn't arbitrary, it
+<strong>emerges</strong>.</p>
+<p>The CLT is also why a test-set metric needs error bars. A test set is a random <strong>sample</strong> of the data
+distribution; the metric on it <em>estimates</em> the true performance but varies from sample to sample — that
+variation is the <strong>sampling error</strong>. Its size is the <strong>standard error</strong> (the standard deviation of the
+sample mean), which scales as <strong>1/√n</strong>:</p>
+<blockquote>
+<p><strong>Halve a confidence interval → 4× the data.</strong> Precision improves only with the <em>square root</em> of the
+sample size — diminishing returns that set what evaluation costs.</p>
+</blockquote>
+<p>A <strong>confidence interval (CI)</strong> is a range that captures the true value with a stated long-run frequency
+(a 95% CI: 95% of such intervals, computed the same way, contain the truth). Built from scratch it is
+<strong>point estimate ± margin</strong>, where the margin is <code>z · standard error</code>. "94%" becomes "<strong>94% ± 2%</strong>," and
+that ± is the honesty M27's number was missing.</p>
+<h3 id="hypothesis-testing-the-p-value-and-p-hacking">Hypothesis testing, the p-value, and p-hacking<a class="headerlink" href="#hypothesis-testing-the-p-value-and-p-hacking" title="Permanent link">&para;</a></h3>
+<p>The keystone question — <strong>"is model B's +2% over model A real or noise?"</strong> — is a <strong>hypothesis test</strong>.
+The <strong>null hypothesis</strong> <code>H₀</code> says there's no real difference; you compute a <strong>p-value</strong> and decide.</p>
+<blockquote>
+<p>A <strong>p-value</strong> IS <code>P(observing data at least this extreme | the null is true)</code>. It is <strong>NOT</strong> the
+probability the null is true, <strong>NOT</strong> the effect size, and <strong>NOT</strong> proof that a result matters.</p>
+</blockquote>
+<p>Two traps this module drills:</p>
+<ul>
+<li><strong>Significance vs effect size.</strong> Significance asks <em>is it real</em> (small p = distinguishable from noise);
+  effect size asks <em>is it big</em> (the magnitude). With a huge sample a 0.1% improvement can be "highly
+  significant" yet worthless. Report both.</li>
+<li><strong>p-hacking / multiple comparisons.</strong> Test 20 hypotheses on pure noise at the 5% level and, by
+  construction, ~1 comes out "significant" (<code>20 × 0.05 = 1</code>). Optimizing against a metric until it
+  "wins" IS p-hacking — M27's touched-the-test-set-once and leakage discipline stated in statistical
+  terms. The cures: correct for multiplicity, pre-register the hypothesis, hold out a fresh test set.</li>
+</ul>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>The derivative is the slope; the gradient is the vector of partial derivatives</strong> pointing steepest
+   uphill. Use the derivative for one variable, the gradient for many (every model parameter).</li>
+<li><strong>Backprop IS the chain rule</strong> — <code>(f∘g)' = f'(g)·g'</code> — applied backward through the computation graph.</li>
+<li><strong>Gradient descent:</strong> <code>θ ← θ − η∇L</code>. <code>η</code> too big → overshoot/diverge; too small → crawl; right →
+   converge. A diverging run is <code>η</code>, not a bug.</li>
+<li><strong>Bayes with the base rate:</strong> <code>P(H|E) = P(E|H)P(H)/P(E)</code>. "90% accurate" on a 1% disease → a positive
+   is mostly a false alarm. Precision = P(real | flagged) = Bayes.</li>
+<li><strong>A metric is a SAMPLE, not a truth.</strong> It has a standard error (∝ 1/√n), so it has a confidence
+   interval. "94%" → "94% ± 2%."</li>
+<li><strong>"Is +2% real or noise?" is a hypothesis test.</strong> A p-value is <code>P(data this extreme | null true)</code> —
+   not the effect size, not the chance the null is true. Beware p-hacking.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-feel-the-two-instruments">Guided Lab: feel the two instruments<a class="headerlink" href="#guided-lab-feel-the-two-instruments" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You'll compute a numerical derivative and match it to the analytic one, run
+gradient descent from scratch and watch it reach the minimum, sample a distribution and see the mean
+converge to theory, work the Bayes mammogram, and put a confidence interval and a p-value on a model
+comparison. Everything runs in Python with numpy — no black-box optimizer, no statistics library.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-31" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-31" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then <code>apt-get update &amp;&amp; apt-get install -y python3-pip &amp;&amp; pip install numpy</code> and follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · The derivative, felt as a limit</label><label for="__tabbed_1_2">2 · Gradient descent, from scratch</label><label for="__tabbed_1_3">3 · The law of large numbers</label><label for="__tabbed_1_4">4 · Bayes: the mammogram shock</label><label for="__tabbed_1_5">5 · A confidence interval and a p-value</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Set up the bench, then compute a <strong>numerical derivative</strong> and compare it to the <strong>analytic</strong> one.
+For <code>f(x) = x²</code> the analytic derivative is <code>f'(x) = 2x</code>, so <code>f'(3) = 6</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/mathlab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/mathlab
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>apt-get<span class="w"> </span>update<span class="w"> </span>-y<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>numpy
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">f = lambda x: x**2                       # f(x) = x^2</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">h, x = 1e-5, 3.0</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">numeric  = (f(x+h) - f(x-h)) / (2*h)     # symmetric difference quotient</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">analytic = 2*x                           # f&#39;(x) = 2x  -&gt;  6</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">err = abs(numeric - analytic)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">print(f&quot;numerical f&#39;(3) = {numeric:.6f}&quot;)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">print(f&quot;analytic  f&#39;(3) = {analytic:.6f}&quot;)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">print(f&quot;abs error       = {err:.2e}&quot;)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">open(&quot;gradient_check.txt&quot;, &quot;w&quot;).write(f&quot;{err:.3e}\n&quot;)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">PY</span>
+</code></pre></div>
+The error is tiny (~1e-10). The derivative isn't a formula you memorize — it's a <em>limit you can watch
+converge</em>. This exact check (hand answer vs numerical) is the gradient-check habit from M26.</p>
+</div>
+<div class="tabbed-block">
+<p>Minimize <code>f(x) = (x−4)²</code> (minimum at <code>x = 4</code>) with the update <code>θ ← θ − η∇L</code>. The gradient is
+<code>f'(x) = 2(x−4)</code>. Run three learning rates and watch the three regimes:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">grad = lambda x: 2*(x-4)                 # d/dx (x-4)^2</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">def descend(eta, steps=100, x0=0.0):</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">    x = x0</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">    for _ in range(steps):</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">        x = x - eta*grad(x)              # theta &lt;- theta - eta * gradient</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">    return x</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">for eta in [0.01, 0.1, 1.01]:</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s">    print(f&quot;eta={eta:&lt;5} final x = {descend(eta):.4f}&quot;)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s">x_good = descend(0.1)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s">open(&quot;gd.txt&quot;, &quot;w&quot;).write(f&quot;{x_good:.4f}\n&quot;)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s">print(f&quot;converged x = {x_good:.4f}  (true minimum at x = 4)&quot;)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s">PY</span>
+</code></pre></div>
+Read the three lines: <code>η=0.1</code> lands on 4 (<strong>converged</strong>); <code>η=0.01</code> is still short of 4 (<strong>crawl</strong> —
+too small); <code>η=1.01</code> blows up to a huge number (<strong>diverge</strong> — overshoot). That divergence is the
+calculus, not a bug: the step is larger than the curvature can absorb.</p>
+</div>
+<div class="tabbed-block">
+<p>Sample a fair six-sided die many times and watch the <strong>empirical mean</strong> approach the theoretical
+<code>3.5</code> and the <strong>empirical variance</strong> approach <code>35/12 ≈ 2.9167</code>. This is the <strong>law of large numbers</strong>:
+an average of many samples converges to the expectation.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s">rng = np.random.default_rng(31)          # pinned seed -&gt; reproducible</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s">n = 200_000</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s">rolls = rng.integers(1, 7, size=n)       # fair six-sided die</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s">mean, var = rolls.mean(), rolls.var()</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s">print(f&quot;n = {n:,}  empirical mean = {mean:.4f}  (theory 3.5000)&quot;)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s">print(f&quot;            empirical var = {var:.4f}  (theory 2.9167)&quot;)</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s">open(&quot;lln.txt&quot;, &quot;w&quot;).write(f&quot;{mean:.4f} {var:.4f}\n&quot;)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s">PY</span>
+</code></pre></div>
+Click <strong>Check</strong> — the verifier confirms the gradient-check error is below tolerance <em>and</em> the sampled
+mean has converged to within a band of <code>3.5</code>.</p>
+</div>
+<div class="tabbed-block">
+<p>A test 90% accurate for a 1%-prevalence disease returns positive. Compute <code>P(disease | positive)</code>
+with Bayes, then simulate 100,000 patients to confirm the (surprising) answer:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">prev, tpr, fpr = 0.01, 0.90, 0.10        # prevalence, true-positive rate, false-positive rate</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">post = tpr*prev / (tpr*prev + fpr*(1-prev))</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">print(f&quot;P(disease | positive) = {post:.4f}  (~{post*100:.1f}%)&quot;)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">rng = np.random.default_rng(31)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">N = 100_000</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">sick = rng.random(N) &lt; prev</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">positive = np.where(sick, rng.random(N) &lt; tpr, rng.random(N) &lt; fpr)</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s">print(f&quot;simulated over {N:,} patients: {sick[positive].mean():.4f}&quot;)</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s">open(&quot;bayes.txt&quot;, &quot;w&quot;).write(f&quot;{post:.4f}\n&quot;)</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s">PY</span>
+</code></pre></div>
+~8.3%, not 90% — the base rate dominates. This IS M27's precision under class imbalance. Click
+<strong>Check</strong> to verify the posterior matches the expected value.</p>
+</div>
+<div class="tabbed-block">
+<p>Two models on one 500-example test set: A at 92% (460/500), B at 94% (470/500). Put a <strong>confidence
+interval</strong> on each, then run a <strong>two-proportion test</strong> on the difference to decide <em>real or noise</em>.
+We compute the normal-approximation p-value with <code>math.erf</code> — no statistics library needed:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="s">import math</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="s">def ci(correct, n, z=1.96):</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s">    p = correct/n</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s">    return p, z*math.sqrt(p*(1-p)/n)               # point estimate, margin</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="s">def two_prop_p(cA, nA, cB, nB):</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s">    pA, pB = cA/nA, cB/nB</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s">    pool = (cA+cB)/(nA+nB)</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s">    se = math.sqrt(pool*(1-pool)*(1/nA + 1/nB))</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="s">    z = (pB-pA)/se</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s">    return z, 2*(1 - 0.5*(1+math.erf(abs(z)/math.sqrt(2))))   # two-sided</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="s">nA = nB = 500</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="s">(pA,hA), (pB,hB) = ci(460,nA), ci(470,nB)</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="s">print(f&quot;Model A: {pA*100:.1f}% +/- {hA*100:.1f}%&quot;)</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="s">print(f&quot;Model B: {pB*100:.1f}% +/- {hB*100:.1f}%&quot;)</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="s">z, p = two_prop_p(460,nA,470,nB)</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="s">print(f&quot;difference test: z = {z:.2f}   p = {p:.3f}&quot;)</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="s">print(&quot;verdict:&quot;, &quot;significant&quot; if p &lt; 0.05 else &quot;NOT significant — the +2% is within noise&quot;)</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="s">PY</span>
+</code></pre></div>
+The intervals overlap and <code>p ≈ 0.22</code> — the 2% gap is <strong>not</strong> significant on 500 examples. "B is
+better" was a claim the point estimates couldn't support; the interval and the test say so honestly.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you watched a numerical derivative converge to the analytic one, ran gradient descent to a
+minimum and saw all three learning-rate regimes, watched a sample mean approach its expectation, were
+surprised by the mammogram, and put a ± and a p-value on a model comparison — the guided lab is done.
+Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Derive by hand first, then let the code verify. Struggle
+here is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-own-the-chain-rule-on-a-composition">Challenge 1 — Own the chain rule on a composition<a class="headerlink" href="#challenge-1-own-the-chain-rule-on-a-composition" title="Permanent link">&para;</a></h3>
+<p>Differentiate <code>f(x) = (3x² + 1)³</code> by hand with the chain rule, then verify your <code>f'(2)</code> against a
+numerical derivative in Python.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Outer function <code>u³</code> (derivative <code>3u²</code>), inner function <code>u = 3x² + 1</code> (derivative <code>6x</code>). The chain
+rule multiplies them: <code>f'(x) = 3(3x²+1)² · 6x</code>.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="s">f = lambda x: (3*x**2 + 1)**3</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s">hand = lambda x: 3*(3*x**2 + 1)**2 * (6*x)        # chain rule: outer&#39; * inner&#39;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">h = 1e-6; x = 2.0</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">num = (f(x+h) - f(x-h)) / (2*h)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">print(f&quot;hand f&#39;(2)      = {hand(x):.4f}&quot;)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s">print(f&quot;numerical f&#39;(2) = {num:.4f}&quot;)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="s">PY</span>
+</code></pre></div>
+Both give <code>6_084</code>. A deep network is a deep composition — this multiply-the-local-derivatives move,
+applied backward, is exactly backprop.</p>
+</details>
+<h3 id="challenge-2-make-gradient-descent-diverge-then-explain-it">Challenge 2 — Make gradient descent diverge, then explain it<a class="headerlink" href="#challenge-2-make-gradient-descent-diverge-then-explain-it" title="Permanent link">&para;</a></h3>
+<p>Take <code>f(x) = (x−4)²</code> from the guided lab and find, by reasoning about the update <code>x ← x − η·2(x−4)</code>, the
+learning rate above which it diverges. Confirm it in code.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Substitute the gradient into the update and write it as <code>x_new − 4 = (1 − 2η)(x_old − 4)</code>. Divergence
+happens when the multiplier's absolute value exceeds 1: <code>|1 − 2η| &gt; 1</code>.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><code>|1 − 2η| &gt; 1</code> ⇒ <code>η &gt; 1</code>. At <code>η = 1</code> the point oscillates without settling; above 1 it flies out.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="s">grad = lambda x: 2*(x-4)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="s">for eta in [0.9, 1.0, 1.1]:</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">    x = 0.0</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s">    for _ in range(50): x = x - eta*grad(x)</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s">    print(f&quot;eta={eta}: x={x:.2f}&quot;)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s">PY</span>
+</code></pre></div>
+The threshold is a property of the surface's curvature, not the code — the calculus reason M26's
+"learning rate too high" hides.</p>
+</details>
+<h3 id="challenge-3-demonstrate-the-clt">Challenge 3 — Demonstrate the CLT<a class="headerlink" href="#challenge-3-demonstrate-the-clt" title="Permanent link">&para;</a></h3>
+<p>Take a decidedly <em>non-normal</em> distribution (e.g. a uniform or an exponential), draw many samples of size
+<code>n = 30</code>, and show that the <strong>distribution of the sample means</strong> looks normal even though the source
+isn't.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="s">rng = np.random.default_rng(31)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="s">means = [rng.exponential(1.0, size=30).mean() for _ in range(20_000)]</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="s">means = np.array(means)</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="s">print(f&quot;sample-of-means: mean={means.mean():.3f} (theory 1.0), std={means.std():.3f}&quot;)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="s">print(f&quot;theory std of the mean = 1/sqrt(30) = {1/np.sqrt(30):.3f}&quot;)   # 1/sqrt(n) law</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="s">PY</span>
+</code></pre></div>
+The exponential is skewed, but its sample means cluster into a bell whose spread is <code>1/√n</code>. That is
+<em>why</em> confidence intervals work — the normal <strong>emerges</strong>.</p>
+</details>
+<h3 id="challenge-4-halve-a-confidence-interval">Challenge 4 — Halve a confidence interval<a class="headerlink" href="#challenge-4-halve-a-confidence-interval" title="Permanent link">&para;</a></h3>
+<p>You have a metric with a 95% CI of ±3% on 1,000 test examples. Roughly how many examples do you need to
+tighten it to ±1.5%? State the law, then verify the margin numerically.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>The margin scales as <code>1/√n</code>, so halving it needs <strong>4×</strong> the data → about <strong>4,000</strong> examples.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="s">import math</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="s">margin = lambda n, p=0.5: 1.96*math.sqrt(p*(1-p)/n)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="s">print(f&quot;n=1000 -&gt; +/-{margin(1000)*100:.2f}%&quot;)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="s">print(f&quot;n=4000 -&gt; +/-{margin(4000)*100:.2f}%&quot;)</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="s">PY</span>
+</code></pre></div>
+Precision improves only with the square root of data — the diminishing return that sets what
+evaluation costs.</p>
+</details>
+<h3 id="challenge-5-stretch-p-hack-yourself">Challenge 5 (stretch) — p-hack yourself<a class="headerlink" href="#challenge-5-stretch-p-hack-yourself" title="Permanent link">&para;</a></h3>
+<p>Generate pure noise, run 20 independent "hypothesis tests" at the 5% level, and count how many come out
+"significant." Then say why finding one is <em>expected</em>, not a discovery.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="s">import numpy as np, math</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="s">rng = np.random.default_rng(7)</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="s">hits = 0</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s">for _ in range(20):</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="s">    a, b = rng.normal(0,1,200), rng.normal(0,1,200)   # SAME distribution — no real effect</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="s">    se = math.sqrt(a.var()/len(a) + b.var()/len(b))</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="s">    z = (a.mean()-b.mean())/se</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="s">    p = 2*(1 - 0.5*(1+math.erf(abs(z)/math.sqrt(2))))</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="s">    hits += p &lt; 0.05</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="s">print(f&quot;&#39;significant&#39; results from pure noise: {hits} of 20  (expected ~1)&quot;)</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="s">PY</span>
+</code></pre></div>
+<code>20 × 0.05 = 1</code> false positive is <em>expected under the null</em>. Optimizing against a metric until it
+"wins" is this trap with extra steps — M27's leakage discipline, stated in statistics.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Derivative vs gradient — how are they related, and when do you use each?</summary>
+<p>The <strong>derivative</strong> is the single-variable rate of change (a scalar slope); the <strong>gradient</strong> is its
+multivariable generalization — a vector of partial derivatives, one per input dimension, pointing
+uphill. Use the derivative for a function of one variable; use the gradient whenever the function has
+many inputs (every model parameter) — training optimizes over millions of dimensions, so it's always
+the gradient.</p>
+</details>
+<details class="question">
+<summary>Explain how backprop IS the chain rule, referencing the computation graph.</summary>
+<p>A network is a deep composition of functions (layers); the loss is a function of them all. Backprop
+computes <code>∂loss/∂each-weight</code> by applying the chain rule <code>(f∘g)' = f'(g)·g'</code> <em>backward</em> through the
+computation graph (a DAG): each node multiplies the upstream gradient by its local derivative and
+passes it back. It's the chain rule, industrialized over the graph (M26's micrograd).</p>
+</details>
+<details class="question">
+<summary>Your gradient descent oscillates and diverges. The cause from the calculus, and the fix?</summary>
+<p>The <strong>learning rate <code>η</code> is too large</strong>: the step overshoots the minimum and the surface's curvature
+sends it to a <em>higher</em> point, compounding into oscillation or divergence. Fix: <strong>reduce <code>η</code></strong> (e.g.
+10×), optionally add a decay schedule or clip gradients, and confirm the loss now falls. It's a
+step-size-vs-curvature trade, not a code bug.</p>
+</details>
+<details class="question">
+<summary>A 90%-accurate test for a 1%-prevalence disease returns positive. P(disease | positive)?</summary>
+<p>With sensitivity 0.9 and (assuming) specificity 0.9: <code>P(pos) = 0.9·0.01 + 0.1·0.99 = 0.108</code>, so
+<code>P(disease|pos) = 0.009/0.108 ≈ 8.3%</code>. Despite "90% accuracy," a positive is ~92% likely a false
+alarm — the <strong>base rate</strong> dominates rare events. This IS precision under class imbalance (M27).</p>
+</details>
+<details class="question">
+<summary>Why does a test-set metric need a confidence interval?</summary>
+<p>A test set is a random <strong>sample</strong> of the data distribution; the metric estimates the true performance
+but varies from sample to sample (<strong>sampling error</strong>). A confidence interval quantifies that
+variation — without it, "94%" hides whether the truth could be 90% or 98%, and comparing two models
+becomes a signal-vs-noise guess. "94%" should read "94% ± X%."</p>
+</details>
+<details class="question">
+<summary>What is a p-value, and name two things it is NOT.</summary>
+<p>A p-value IS <code>P(observing data at least this extreme | the null hypothesis is true)</code>. It is <strong>NOT</strong>
+the probability the null is true, and <strong>NOT</strong> the effect size (nor proof a result matters). Small p =
+"surprising under the null," nothing more.</p>
+</details>
+<details class="question">
+<summary>You tested 20 hypotheses on random noise and one came out p &lt; 0.05. What happened?</summary>
+<p>With 20 independent tests at α = 0.05, the <em>expected</em> number of false positives under pure noise is
+<code>20 × 0.05 = 1</code> — so "one significant" in noise is <strong>expected, not a discovery</strong>. The trap is
+<strong>multiple comparisons / the garden of forking paths</strong>. Fixes: correct for multiplicity
+(Bonferroni/FDR), pre-register, or hold out a fresh test set (M27's touched-once).</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>, using the <strong>accelerator/speedometer</strong> analogy: <em>"What are the
+two languages this module teaches, and why does an AI engineer need BOTH?"</em> You must (1) state that
+<strong>backprop IS the chain rule walking downhill</strong> and explain <code>η</code>, and (2) put a <strong>confidence interval</strong>
+on a metric and frame <em>"+2% real or noise?"</em> as a <strong>hypothesis test</strong> with a p-hacking guardrail.
+Then field two challenges: <em>"why not just trust 94%?"</em> and <em>"isn't calculus too advanced?"</em> — and
+name the bridges to <strong>M26</strong> (training) and <strong>M27</strong> (evaluation). If you can't yet, that's your signal
+to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M31 (with M30) completes the
+mathematics of </em><em>Stage 11</em><em>. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> derivative, gradient, integral, distribution, Bayes, confidence interval, and p-value — one line each, cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> why backprop IS the chain rule over the computation graph (M26/M30).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compute</strong> derivatives including the chain rule, verified against a numerical derivative.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Assemble</strong> the gradient as the vector of partial derivatives, and say why it's a vector (M30).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> gradient descent from scratch and <strong>reason</strong> about <code>η</code> (overshoot / crawl / converge) from the calculus, not trial-and-error.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Gradient-check</strong> a hand derivative numerically (the M26 habit).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> integrals and why a probability density integrates to 1.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> Bernoulli, binomial, and normal distributions with their mean and variance; distinguish pmf from pdf.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>State and apply</strong> Bayes' theorem to the mammogram, and <strong>connect</strong> it to M27 precision under class imbalance.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> the CLT by simulation and <strong>explain</strong> the standard error and the 1/√n law.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compute</strong> a confidence interval on a real metric and <strong>reframe</strong> the metric as a sample with uncertainty ("94% ± X%").</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Run and interpret</strong> a hypothesis test on two models; <strong>state</strong> what a p-value is and is NOT; <strong>distinguish</strong> significance from effect size.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify and avoid</strong> p-hacking / multiple comparisons; apply the base-rate fallacy to security detection (M24/M25).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach</strong> calculus-as-accelerator and statistics-as-speedometer, making both curriculum bridges (M26/M27).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active —
+every M31 review also pulls in one <strong>Module 30</strong> item (its discrete/linear-algebra companion; the
+gradient is a vector M30 built). Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M30 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards 1–20 · re-derive one gradient-descent step and one Bayes problem by hand</td>
+<td>One "why is the gradient a vector?" recall — a vector is M30's object</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>The three cases (Cauchy/GPT · mammogram · replication) · what a p-value is/isn't · compute a CI from scratch</td>
+<td>Restate matrix–vector multiply as the linear map M30 defined</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Reproduce the full Visual Model blank · run a two-model hypothesis test · name the p-hacking trap</td>
+<td>Reproduce the PCA-via-eigenvalues idea from memory</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Chain rule ⇄ backprop · base-rate ⇄ precision · gradient-check a hand derivative</td>
+<td>A short proof by induction, cold (M30's proof card)</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Whole module in five-minute-review form · reproduce both artifacts (GD notebook + "make M27 rigorous" notebook)</td>
+<td>Big-O-as-counting on a small combinatorics problem</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M26 (backprop and training — the chain rule and gradient descent, now owned,
+explain learning rates and vanishing/exploding gradients) · M27 (evaluation — metrics with confidence
+intervals, model comparison as a hypothesis test) · M38 (NLP — naive Bayes, probabilistic language
+models) · M39 (Computer Vision — loss surfaces, interval-honest metrics) · information theory and
+optimization theory (entropy, cross-entropy loss, convex optimization — the named next mathematics).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M31 is the two continuous languages under the curriculum's spine — calculus is how the model <em>moves</em>
+(M26's training, owned) and statistics is how you <em>know</em> it moved (M27's evaluation, made honest) —
+completing, with M30, the mathematics an AI engineer reads by.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-30/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 30 — Discrete Math &amp; Linear Algebra">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 30 — Discrete Math & Linear Algebra
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-32/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 32 — Data Structures &amp; Algorithms">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 32 — Data Structures & Algorithms
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

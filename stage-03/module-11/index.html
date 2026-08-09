@@ -1,0 +1,3449 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The toolbelt gains an AI engineer you direct. Sessions, permission modes, CLAUDE.md, and the explore→plan→code→verify→review workflow — plus the review discipline that keeps AI assistance safe. Closes Stage 3.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-10/">
+      
+      
+        <link rel="next" href="../../stage-04/module-12/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 11 — Claude Code - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-11-claude-code" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 11 — Claude Code
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-directed-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the directed loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-context-window-the-scarce-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The context window — the scarce resource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instruction-layers-where-each-rule-belongs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instruction layers — where each rule belongs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permission-modes-the-trust-dial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permission modes — the trust dial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claudemd-placement-and-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLAUDE.md — placement and content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#useful-slash-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Useful slash commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-workflow-the-recommended-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The workflow (the recommended shape)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-scaffold-your-ai-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: scaffold your AI environment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-layering-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The layering decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-an-allowlist-thats-narrow-but-useful" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — An allowlist that's narrow but useful
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-prune-test-applied-your-own-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The prune test, applied (your own terminal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-headless-composition-your-own-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Headless composition (your own terminal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-writerreviewer-split-your-own-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The Writer/Reviewer split (your own terminal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-directed-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the directed loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-context-window-the-scarce-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The context window — the scarce resource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instruction-layers-where-each-rule-belongs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instruction layers — where each rule belongs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permission-modes-the-trust-dial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permission modes — the trust dial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claudemd-placement-and-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLAUDE.md — placement and content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#useful-slash-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Useful slash commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-workflow-the-recommended-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The workflow (the recommended shape)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-scaffold-your-ai-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: scaffold your AI environment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-layering-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The layering decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-an-allowlist-thats-narrow-but-useful" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — An allowlist that's narrow but useful
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-prune-test-applied-your-own-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The prune test, applied (your own terminal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-headless-composition-your-own-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Headless composition (your own terminal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-writerreviewer-split-your-own-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The Writer/Reviewer split (your own terminal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-11-claude-code">Module 11 — Claude Code<a class="headerlink" href="#module-11-claude-code" title="Permanent link">&para;</a></h1>
+<p><small>Stage 3 · Intermediate Skills · ~1 week at 4 h/day · Prerequisite — Module 08 (Git — the diff-reading that becomes your review discipline). This module closes Stage 3.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Claude Code</strong> is an <em>agentic</em> coding tool: an AI (Claude) that reads your codebase, edits files, runs
+commands, and works through multi-step tasks <strong>in your terminal</strong> — while you scope the work, watch or
+step away, review the diffs, and decide what ships. It is not autocomplete and not a chat window; it is
+a junior engineer you <strong>direct</strong>.</p>
+<p>Two things braid together here. As a <strong>tool</strong>, Claude Code multiplies your output on real work —
+exploration, refactors, tests, debugging — and every later module assumes you can direct it well. As a
+<strong>discipline</strong>, working safely with an AI engineer needs exactly the skills Stage 3 built: Git
+diff-reading (M8), atomic commits, verification habits. This module turns them into a review workflow.
+One rule stands above all for a <strong>learner</strong>: <em>the AI accelerates your work; it must never do your
+learning</em> — the gates in every module test <strong>you</strong>, unassisted.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>From here to the capstone you work as <strong>director and engineer-of-record</strong> of a tireless junior. M12–M13
+learn to program <em>with</em> an explainer on tap (roles deliberately inverted as pedagogy) · M15 puts
+headless runs + verification gates into CI · M23 makes it your debugging partner · M29 (the sequel)
+builds the full agentic layer — hooks, MCP, subagent orchestration, the SDK — <strong>on whatever discipline
+survives this week.</strong> The directing skills (scope · context · verify · review) transfer to <em>every</em>
+agent tool, which is why they, not the tool, are the real content.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 11 — Claude Code&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+the contractor analogy (fast, tireless, needs a clear brief — you still inspect the work) →
+the agentic loop (think→tool→observe→repeat) and its stop-condition problem → the check that turns
+"looks done" into "the evidence passed" → the role shift (writer → director + engineer-of-record) →
+context economics in two sentences (the desk drowning in papers) → the Learner's Law.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-scaffold-your-ai-environment">Guided Lab</a> and build the config yourself as it
+appears. The Killercoda scenario needs <strong>no API key</strong> — you author and validate the files. The <em>live</em>
+agent drills are flagged "in your own terminal" — that is where the muscle memory actually forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-the-directed-loop">The picture: the directed loop<a class="headerlink" href="#the-picture-the-directed-loop" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    You["You: scope the task&lt;br/&gt;precise prompt + a check"] --&gt; Loop
+    subgraph Loop["Claude Code — the agentic loop (permission-gated)"]
+        Think["Think"] --&gt; Tool["Use a tool&lt;br/&gt;Read · Edit · Bash"]
+        Tool --&gt; Obs["Observe the result"]
+        Obs --&gt; Check{"Your CHECK&lt;br/&gt;tests / build"}
+        Check --&gt;|fail| Think
+    end
+    Check --&gt;|pass| Review["You: review the diff&lt;br/&gt;M8 eyes"]
+    Review --&gt; Commit["You: commit&lt;br/&gt;M8 standard message"]
+    You -.-&gt;|"course-correct: Esc · /rewind"| Loop</code></pre>
+<p>The model proposes a tool call; the harness runs it and feeds the result back; repeat. It stops when the
+work <strong>looks</strong> done — which is a <em>plausibility</em> judgement, not a <em>correctness</em> one. So the single
+highest-leverage move is giving it a <strong>check it can run</strong> (tests, a build, a diff against a fixture):
+then "done" means <em>the check passed</em>, and you turn from a supervisor watching into an evidence-reader.
+Note where things sit — the check lives <strong>inside</strong> the loop (the agent iterates against it); your review
+is <strong>outside</strong> it (you gate what ships).</p>
+<h3 id="the-context-window-the-scarce-resource">The context window — the scarce resource<a class="headerlink" href="#the-context-window-the-scarce-resource" title="Permanent link">&para;</a></h3>
+<p>The <strong>context window</strong> is the finite working memory that holds <em>everything</em>: the system prompt +
+CLAUDE.md, every message, every file read, every command output. Performance <strong>degrades as it fills</strong> —
+forgotten instructions, more mistakes. Context hygiene is matching a tool to each inflow:</p>
+<table>
+<thead>
+<tr>
+<th>Inflow that fills the window</th>
+<th>Hygiene tool</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Switching to an unrelated task</td>
+<td><code>/clear</code></td>
+<td>Between tasks — the kitchen-sink session is the #1 failure pattern</td>
+</tr>
+<tr>
+<td>A long single task, history worth keeping</td>
+<td><code>/compact</code></td>
+<td>Mid-task; optionally with focus instructions</td>
+</tr>
+<tr>
+<td>A side question</td>
+<td><code>/btw</code></td>
+<td>Keeps the aside out of the working context entirely</td>
+</tr>
+<tr>
+<td>Wide reading (survey many files)</td>
+<td><strong>Subagent</strong></td>
+<td>Reads in a <em>separate</em> window; only a summary returns</td>
+</tr>
+<tr>
+<td>Junk entering at all</td>
+<td>Scoped prompts</td>
+<td>Name the files; don't let exploration run unbounded</td>
+</tr>
+</tbody>
+</table>
+<h3 id="instruction-layers-where-each-rule-belongs">Instruction layers — where each rule belongs<a class="headerlink" href="#instruction-layers-where-each-rule-belongs" title="Permanent link">&para;</a></h3>
+<p>Instructions live in layers; escalate to a more deterministic/persistent layer only what earns it. The
+prune test for CLAUDE.md: <em>"would removing this line cause a mistake?"</em> — if not, cut it (a bloated file
+gets ignored, and the docs say so plainly).</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Loaded</th>
+<th>Use it for</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hook</strong></td>
+<td>Deterministic — always fires</td>
+<td>Rules that must <strong>never</strong> be skipped</td>
+<td><code>shellcheck</code> after every <code>*.sh</code> edit</td>
+</tr>
+<tr>
+<td><strong>CLAUDE.md</strong></td>
+<td>Every session, advisory</td>
+<td>Universal, <strong>non-inferable</strong> facts (short!)</td>
+<td>The test command · the exit-code contract</td>
+</tr>
+<tr>
+<td><strong>Skill</strong></td>
+<td>On demand</td>
+<td>Sometimes-relevant workflows / knowledge</td>
+<td><code>/new-tool</code> script-scaffolding routine</td>
+</tr>
+<tr>
+<td><strong>Prompt</strong></td>
+<td>This task only</td>
+<td>Everything specific to right now</td>
+<td>"Follow <code>backup-lite.sh</code>'s getopts style"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="permission-modes-the-trust-dial">Permission modes — the trust dial<a class="headerlink" href="#permission-modes-the-trust-dial" title="Permanent link">&para;</a></h3>
+<p>Trust is <strong>configured</strong>, not assumed — M3's least-privilege thinking, applied to an AI. Every mutating
+action is checkable:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>What it does</th>
+<th>Trust posture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Default (ask)</strong></td>
+<td>Prompts you per mutating action</td>
+<td>Per-decision — you gate each one</td>
+</tr>
+<tr>
+<td><strong>Plan mode</strong> (<code>Shift+Tab</code>)</td>
+<td>Read-only: explore and <em>plan</em> with no changes</td>
+<td>Zero trust needed — mutation is impossible</td>
+</tr>
+<tr>
+<td><strong>Auto-accept edits</strong> (<code>Shift+Tab</code>)</td>
+<td>Applies edits without asking</td>
+<td>Standing trust for a scoped, watched task</td>
+</tr>
+<tr>
+<td><strong>Allowlist</strong></td>
+<td>Named, narrow commands run without asking</td>
+<td>Earned by evidence — <code>Bash(npm run lint)</code>, never <code>Bash(*)</code></td>
+</tr>
+<tr>
+<td><strong>Sandbox</strong></td>
+<td>OS-level isolation bounds the blast radius</td>
+<td>Containment regardless of any decision</td>
+</tr>
+</tbody>
+</table>
+<h3 id="claudemd-placement-and-content">CLAUDE.md — placement and content<a class="headerlink" href="#claudemd-placement-and-content" title="Permanent link">&para;</a></h3>
+<p><code>/init</code> generates a starter file; then <strong>you prune it</strong> (the M6 vimrc rule: own every line). Three
+scopes, all versioned with your dotfiles / repos (M8/M10):</p>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Path</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User</strong></td>
+<td><code>~/.claude/CLAUDE.md</code></td>
+<td>Your standing rules — <strong>including the Learner's Law, verbatim</strong></td>
+</tr>
+<tr>
+<td><strong>Project</strong></td>
+<td><code>./CLAUDE.md</code></td>
+<td>Checked in, reviewed like code — the repo's shared conventions</td>
+</tr>
+<tr>
+<td><strong>Local</strong></td>
+<td><code>./CLAUDE.local.md</code></td>
+<td>Personal, gitignored — your own notes for this repo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="useful-slash-commands">Useful slash commands<a class="headerlink" href="#useful-slash-commands" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/init</code></td>
+<td>Generate a starter project <code>CLAUDE.md</code> — then prune it</td>
+</tr>
+<tr>
+<td><code>/clear</code> · <code>/compact</code></td>
+<td>Reset context between tasks · condense it mid-task</td>
+</tr>
+<tr>
+<td><code>/context</code></td>
+<td>Show what is filling the window right now</td>
+</tr>
+<tr>
+<td><code>/permissions</code></td>
+<td>View and edit the allowlist</td>
+</tr>
+<tr>
+<td><code>/rewind</code></td>
+<td>Restore conversation and/or Claude's file edits to a checkpoint</td>
+</tr>
+<tr>
+<td><code>/rename</code> · <code>--resume</code> · <code>--continue</code></td>
+<td>Name a session · re-open one deliberately · resume the last</td>
+</tr>
+<tr>
+<td><code>/btw</code></td>
+<td>Ask a side question without polluting the task context</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-workflow-the-recommended-shape">The workflow (the recommended shape)<a class="headerlink" href="#the-workflow-the-recommended-shape" title="Permanent link">&para;</a></h3>
+<p><strong>Explore</strong> (plan mode: read, understand — no changes) → <strong>Plan</strong> (a written plan you <strong>edit</strong> before
+approving) → <strong>Implement</strong> (with the check: "run the tests, fix failures") → <strong>Verify</strong> (evidence shown —
+test output, not claims) → <strong>Review</strong> (you read the <em>full diff</em> — M8 eyes) → <strong>Commit</strong> (M8 standard
+message). Skip the ceremony for one-sentence diffs; <strong>never</strong> skip review. Course-correct early (Esc);
+two failed corrections → <code>/clear</code> + a better prompt that encodes what you just learned.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>The loop stops when it <em>looks</em> done.</strong> A <strong>check it can run</strong> turns plausibility into evidence — this is practice #1.</li>
+<li><strong>Context is finite and degrades as it fills.</strong> <code>/clear</code> between tasks · <code>/compact</code> mid-task · <code>/btw</code> for asides · subagents for wide reads.</li>
+<li><strong>Instructions live in layers:</strong> hooks (never-skip) · CLAUDE.md (every-session facts, short) · skills (sometimes) · prompt (now).</li>
+<li><strong>Trust is a dial, configured narrowly:</strong> default-ask · plan mode (read-only) · allowlists (named commands, never <code>Bash(*)</code>).</li>
+<li><strong>You are the engineer of record</strong> — review <em>every</em> diff (correctness gaps · scope drift · pattern drift). Authorship moved; accountability didn't.</li>
+<li><strong>Checkpoints are not Git.</strong> <code>/rewind</code> undoes Claude's edits only; Bash side effects escape it. <strong>Git (M8) is the real net.</strong></li>
+<li><strong>The Learner's Law:</strong> the AI does your chores, never your practice. The gates are cold and bare-handed by design.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-scaffold-your-ai-environment">Guided Lab: scaffold your AI environment<a class="headerlink" href="#guided-lab-scaffold-your-ai-environment" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. Claude Code needs an account + network, so a free browser VM can't run it live.
+What it </em><em>can</em><em> do — and what this lab drills — is authoring and validating the </em><em>configuration</em><em> that
+directs the agent: a <code>CLAUDE.md</code>, a <code>.claude/</code> project structure, a custom slash command, a skill, and a
+<code>settings.json</code> permission allowlist. The </em><em>live</em><em> agent drills are flagged "in your own terminal."</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-11" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-11" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — for THIS module, local is the real one</p>
+<ul>
+<li><strong>Local, with your key — the emphasized path</strong> — install Claude Code in <em>your own</em> Linux / macOS / WSL terminal, <code>claude</code> login, and run the live drills against a <strong>gym copy</strong> of a repo. This is the only place the agent actually works; the reflexes form here.</li>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal that <strong>scaffolds and validates the config</strong> (CLAUDE.md, <code>.claude/</code>, a slash command, a skill, a permissions file) with <strong>no API key</strong>. Perfect for the file-shape half of the skill.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: your GitHub free tier (120 core-hrs/mo); scaffold there, or install Claude Code and run live if you have a key.</li>
+</ul>
+<p>Killercoda proves you can <em>author</em> the environment offline; your own terminal proves you can <em>direct</em>
+the agent. You need both halves — do the scaffolding in the browser, the live drills at home.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Ask before you configure (your own terminal)</label><label for="__tabbed_1_2">2 · Write a pruned project CLAUDE.md</label><label for="__tabbed_1_3">3 · Build the .claude/ structure + a slash command</label><label for="__tabbed_1_4">4 · Author a permissions allowlist (settings.json)</label><label for="__tabbed_1_5">5 · Write a skill (SKILL.md)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>In a <strong>gym copy</strong> of a repo, in your own terminal with your key:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>claude<span class="w">          </span><span class="c1"># start a session</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># then, as prompts — codebase Q&amp;A only, the senior-engineer-question pattern:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">#   &quot;explain this repo&#39;s structure&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">#   &quot;how does &lt;script&gt;.sh decide its exit code?&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1">#   &quot;what would break if lib.sh&#39;s log() changed its format?&quot;</span>
+</code></pre></div>
+<strong>Watch the loop:</strong> which files does it read? Read its tool calls as they happen — that observation
+<em>is</em> trust-calibration data. Run <code>/context</code> after to see what the session cost in window space. No
+key yet? Skip to step 2 and scaffold the config the browser lab builds.</p>
+</div>
+<div class="tabbed-block">
+<p>This works anywhere — it's just a file. Create <code>./CLAUDE.md</code> with only <strong>non-inferable, universal</strong>
+facts:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>claude-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>claude-lab
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>CLAUDE.md<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s"># Project: Caretaker</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">## Commands</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">- Test: `./run-tests.sh`</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">- Lint: `shellcheck *.sh` — must pass before commit</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">## Conventions</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">- Every tool exits 0 on success, non-zero on failure (the exit-code contract).</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">- New scripts follow `backup-lite.sh`&#39;s getopts pattern.</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">## Gotchas</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s">- `lib.sh` must be sourced before any function call.</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s">EOF</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>cat<span class="w"> </span>CLAUDE.md
+</code></pre></div>
+Apply the <strong>prune test</strong> to every line: <em>would removing it cause a mistake?</em> If not, it doesn't earn
+its place — a bloated file gets ignored.</p>
+</div>
+<div class="tabbed-block">
+<p>A <strong>custom slash command</strong> is just a Markdown file under <code>.claude/commands/</code>. <code>$ARGUMENTS</code> is
+substituted from what you type after the command name:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>.claude/commands
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>.claude/commands/new-tool.md<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">---</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">description: Scaffold a new shell tool with our standards</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">argument-hint: &lt;tool-name&gt;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">---</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">Create a new script named `$ARGUMENTS.sh` following `backup-lite.sh`&#39;s getopts style.</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">Include a usage function, the exit-code contract, and a failure-matrix comment block.</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">Run `shellcheck` on it at the end and show me the output.</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s">EOF</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>ls<span class="w"> </span>-R<span class="w"> </span>.claude
+</code></pre></div>
+Invoked in a real session as <code>/new-tool logrotate-check</code>. The file existing with the right
+frontmatter is what the browser lab checks.</p>
+</div>
+<div class="tabbed-block">
+<p>Trust is <strong>earned narrowly</strong>. Encode your top few provably-safe commands in <code>.claude/settings.json</code> —
+named forms, never <code>Bash(*)</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>.claude/settings.json<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="s">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s">  &quot;permissions&quot;: {</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s">    &quot;allow&quot;: [</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s">      &quot;Bash(shellcheck:*)&quot;,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s">      &quot;Bash(bash -n:*)&quot;,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s">      &quot;Bash(git status:*)&quot;,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s">      &quot;Bash(git diff:*)&quot;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s">    ],</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s">    &quot;deny&quot;: [</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s">      &quot;Bash(rm -rf:*)&quot;</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s">    ]</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s">  }</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s">}</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s">EOF</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>python3<span class="w"> </span>-m<span class="w"> </span>json.tool<span class="w"> </span>.claude/settings.json<span class="w">   </span><span class="c1"># prove it&#39;s valid JSON</span>
+</code></pre></div>
+Read-only + idempotent commands earn the allowlist; anything mutating outside the repo keeps asking.</p>
+</div>
+<div class="tabbed-block">
+<p>A <strong>skill</strong> is on-demand knowledge: <code>.claude/skills/&lt;name&gt;/SKILL.md</code> with YAML frontmatter naming and
+describing it.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>.claude/skills/failure-matrix
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>.claude/skills/failure-matrix/SKILL.md<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">---</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">name: failure-matrix</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">description: Add a standard failure-matrix comment block to a shell tool and verify every path.</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">---</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">When adding a failure matrix: list each failure condition, its exit code, and the message.</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">Confirm `shellcheck` passes and the exit-code contract holds for every path before finishing.</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">EOF</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>ls<span class="w"> </span>-R<span class="w"> </span>.claude/skills
+</code></pre></div>
+Journal the <strong>layering rule</strong>: the lint is a <em>hook</em> (never-skip), the scaffold a <em>skill</em>
+(sometimes), the exit-code contract a <em>CLAUDE.md line</em> (every-session fact).</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can write a pruned CLAUDE.md, lay out a valid <code>.claude/</code> (a slash command, a skill, a JSON
+permissions file), and say <strong>which layer each rule belongs in and why</strong> — the guided lab is done.
+Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. The config challenges run anywhere; the live-direction
+challenges are flagged "your own terminal, your key." Struggle here is the point; reveal a hint only
+after you've tried.</em></p>
+<h3 id="challenge-1-the-layering-decision">Challenge 1 — The layering decision<a class="headerlink" href="#challenge-1-the-layering-decision" title="Permanent link">&para;</a></h3>
+<p>You have three rules: (a) "run <code>shellcheck</code> after every <code>.sh</code> edit", (b) "the test command is
+<code>./run-tests.sh</code>", (c) "scaffold new scripts from <code>backup-lite.sh</code>". Place each in the right layer —
+hook, CLAUDE.md, or skill — and justify each in one sentence.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Ask of each: <em>must it NEVER be skipped</em> (→ hook, deterministic), <em>is it a universal every-session
+fact</em> (→ CLAUDE.md), or <em>is it only sometimes relevant</em> (→ skill)?</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<ul>
+<li>(a) <strong>Hook</strong> — a never-skip rule; an instruction can be missed, a hook always fires.</li>
+<li>(b) <strong>CLAUDE.md</strong> — a non-inferable fact needed every session, short and universal.</li>
+<li>(c) <strong>Skill</strong> — a workflow relevant only when you're creating a new script.</li>
+</ul>
+<p>The gradient is <em>determinism/persistence</em>: escalate to a firmer layer only what earns it.</p>
+</details>
+<h3 id="challenge-2-an-allowlist-thats-narrow-but-useful">Challenge 2 — An allowlist that's narrow but useful<a class="headerlink" href="#challenge-2-an-allowlist-thats-narrow-but-useful" title="Permanent link">&para;</a></h3>
+<p>Write a <code>.claude/settings.json</code> that lets the agent run your <strong>test runner</strong> and <code>git diff</code> without
+asking, but still prompts for anything that writes outside the repo. State why <code>Bash(*)</code> would be wrong.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">&quot;allow&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Bash(./run-tests.sh:*)&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Bash(git diff:*)&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Bash(git status:*)&quot;</span><span class="p">],</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&quot;deny&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Bash(rm -rf:*)&quot;</span><span class="p">]</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">}</span>
+</code></pre></div>
+<code>Bash(*)</code> grants <em>standing</em> trust to every command — it destroys the whole point of the gate. The
+allowlist encodes trust <strong>narrowly and by evidence</strong>: only the provably-safe, read-only/idempotent
+commands you approved repeatedly yesterday.</p>
+</details>
+<h3 id="challenge-3-the-prune-test-applied-your-own-terminal">Challenge 3 — The prune test, applied (your own terminal)<a class="headerlink" href="#challenge-3-the-prune-test-applied-your-own-terminal" title="Permanent link">&para;</a></h3>
+<p>Run <code>/init</code> in a gym repo, read the generated <code>CLAUDE.md</code> critically, and cut it to only the lines that
+pass the prune test. Then <strong>verify the behavior shifts</strong>: bloat a copy with 40 lines of noise + 2
+critical rules, and watch the agent miss a critical rule; prune, and watch adherence return.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The docs' own claim is that a bloated file gets ignored. Don't assume it — <em>observe</em> it. Treat
+CLAUDE.md like code: versioned, and tested-by-observation.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>Keep: the test command, the exit-code contract, "shellcheck must pass", one or two real gotchas. Cut:
+anything the code already says, restated prose, aspirational style essays. The behavior shift <em>is</em> the
+lesson — rules drown in noise, and the fix is subtraction, not more instructions.</p>
+</details>
+<h3 id="challenge-4-headless-composition-your-own-terminal">Challenge 4 — Headless composition (your own terminal)<a class="headerlink" href="#challenge-4-headless-composition-your-own-terminal" title="Permanent link">&para;</a></h3>
+<p>Compose Claude Code with your M4/M5 pipes: get a <strong>one-line</strong> summary of the current failing systemd
+units, using <code>claude -p</code> as just another Unix filter.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>systemctl<span class="w"> </span>--failed<span class="w"> </span><span class="p">|</span><span class="w"> </span>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;anything needing attention? one line&quot;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># JSON out for further piping (M5 composition):</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;list the .sh files missing a failure-matrix comment&quot;</span><span class="w"> </span>--output-format<span class="w"> </span>json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+</code></pre></div>
+<code>claude -p</code> is non-interactive, pipeable, scriptable — the Unix philosophy, M5 meeting AI.
+<code>--allowedTools</code> scopes an unattended run; keep secrets out of reachable scope.</p>
+</details>
+<h3 id="challenge-5-stretch-the-writerreviewer-split-your-own-terminal">Challenge 5 (stretch) — The Writer/Reviewer split (your own terminal)<a class="headerlink" href="#challenge-5-stretch-the-writerreviewer-split-your-own-terminal" title="Permanent link">&para;</a></h3>
+<p>Have session A implement a small change; open a <strong>fresh</strong> session B and ask it to review A's diff against
+criteria <em>you</em> write. Journal what B caught that A's own self-assessment missed — and the one instruction
+B needs to stay useful.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>B sees only the <strong>diff + criteria</strong> — not the reasoning, assumptions, and momentum that produced the
+code, so it isn't biased toward defending it (self-review inherits all three biases). The necessary
+instruction: <em>"flag only gaps affecting correctness or stated requirements"</em> — because a reviewer
+asked for findings will always produce findings, and chasing all of them yields over-engineering.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>The agentic loop stops when the work 'looks done'. Why does that make verification practice #1?</summary>
+<p>"Looks done" is a <strong>plausibility</strong> judgement, not a correctness one. A <strong>check the agent can run</strong>
+(tests, build, fixture-diff) changes the stop condition from <em>appearance</em> to <em>evidence</em> — and turns
+you from a supervisor <em>watching</em> into an evidence-<em>reader</em>.</p>
+</details>
+<details class="question">
+<summary>What fills the context window, and which hygiene tool addresses which inflow?</summary>
+<p>Everything: system + CLAUDE.md, all messages, every file read, every output — and it <strong>degrades</strong> as
+it fills. Task switch → <code>/clear</code>; long single task → <code>/compact</code>; side question → <code>/btw</code>; wide reads →
+a <strong>subagent</strong> (separate window, summary returns); junk-in → scoped prompts.</p>
+</details>
+<details class="question">
+<summary>Name the four instruction layers and the rule for what belongs in each.</summary>
+<p><strong>Hook</strong> (deterministic, always fires) → never-skip rules · <strong>CLAUDE.md</strong> (every session, advisory) →
+universal non-inferable facts, short · <strong>Skill</strong> (on demand) → sometimes-relevant workflows ·
+<strong>Prompt</strong> (this task) → everything specific now. Escalate to a firmer layer only what earns it.</p>
+</details>
+<details class="question">
+<summary>Plan mode, allowlist, sandbox — what does each change about trust?</summary>
+<p><strong>Plan mode</strong> (<code>Shift+Tab</code>): read-only, so mutation is impossible — zero trust needed.
+<strong>Allowlist</strong>: standing trust for <em>named, narrow</em> commands, earned by evidence (never <code>Bash(*)</code>).
+<strong>Sandbox</strong>: OS-level isolation that bounds the blast radius regardless of any decision.</p>
+</details>
+<details class="question">
+<summary>The agent keeps ignoring a rule that IS in your CLAUDE.md. The three hypotheses, in order?</summary>
+<p>(1) <strong>File too long</strong> — rules drowning in bloat (most common; test by pruning hard and watching
+adherence return). (2) <strong>Rule ambiguous</strong> — test by rephrasing to one concrete behavior in one
+sentence. (3) <strong>Rule needs determinism</strong> — it's hook-shaped; convert it so it can't be missed.</p>
+</details>
+<details class="question">
+<summary>'It said the tests pass but the feature is broken.' Run the autopsy.</summary>
+<p>Three process questions — never "the AI failed": (a) Did a <strong>check</strong> exist that it could run, or was
+"done" just plausible? (b) Did I read <strong>evidence</strong> (test output) or accept a claim? (c) Did my
+<strong>review</strong> interrogate the diff or skim it? The gap is always one of the three; the fix is <em>process</em>.</p>
+</details>
+<details class="question">
+<summary>Checkpoints / <code>/rewind</code> vs Git — what does each track, and the one thing checkpoints must never be?</summary>
+<p>Checkpoints snapshot the <strong>conversation + Claude's own edits</strong> per prompt, session-scoped — and they
+<strong>miss Bash side effects</strong>. Git tracks everything, forever, shareably. Compose them: checkpoints for
+intra-task experiments, Git for every completed unit. Never treat a checkpoint as a <strong>Git replacement</strong>.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>: <em>"What is an agentic coding tool, and what changes about YOUR
+job when you use one?"</em> The <strong>contractor analogy</strong> must appear and then <strong>yield to mechanism</strong> — the
+loop, the stop-condition problem, the check that fixes it, the writer→director role shift, context
+economics in two sentences. Then, in <strong>90 seconds</strong>, teach <em>"Is the computer writing your programs
+now?"</em> to a beginner — the master-builder-and-apprentice story (the apprentice drafts everything; the
+builder still draws the plans, checks every joint, and <strong>signs the building</strong>). If you can't yet,
+reread the Key Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M11 also closes </em><em>Stage 3</em><em>. A
+module is only "done" when every box is true. Per the Learner's Law: the knowledge is yours, unassisted
+(you direct the agent live only where a test says so).</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the loop + the stop-condition problem + context economics + layer placement, flawless.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> 15 random terms cold (plan mode, allowlist, compaction, subagent, hook, skill, checkpoint, MCP, headless…).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all four blanks from memory: the directed loop, context economics, instruction layers, your trust policy.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure:</strong> a pruned, behavior-tested CLAUDE.md ×2 scopes; a firing hook; an invoked skill — all versioned (M8/M10).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> five first-pass task briefs (files + constraints + pattern-reference + done-criteria-with-check), ≤1 correction average.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Develop</strong> a real multi-file feature through full ceremony (explore→plan→code→verify→review→commit) with an honest ledger.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Automate:</strong> compose <code>claude -p</code> headless in a pipe; run one <code>--allowedTools</code>-scoped run; write the unattended-run charter.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> state the three surfaces (prompt-injection · MCP servers · secrets in scope) + never-approve-unread, each with a mitigation.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Monitor:</strong> transcript-reading habit evidenced; evidence-not-claims demanded in reviews; correction-count tracked across the week.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> the three scenarios cold: ignored rule · dumb session · done-but-broken — each with its diagnosis.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design &amp; defend</strong> a trust policy per least-privilege; <strong>architect</strong> the instruction-layer map with every item justified in its layer.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back (5/6, the concept task mandatory) — and use <code>code.claude.com/docs</code> to learn ≥3 things independently.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory forms. <strong>Interleaving stays active</strong> — every M11 review also pulls
+one item from the modules that close Stage 3 with it (M8/M9/M10). Daily driving <em>is</em> review; the
+scheduled sessions protect the <strong>discipline</strong> (the part convenience erodes). Schedule these and <em>keep</em>
+them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved (M8–M10)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 4</strong></td>
+<td>Directed-loop + context blanks · workflow &amp; hygiene sprints · validation A1–A4</td>
+<td>M10 mise/tool loop sprint · M8 three-areas blank</td>
+</tr>
+<tr>
+<td><strong>Day 7 (gate)</strong></td>
+<td>All four blanks · all sprints · validation J23–J24, G18 · <strong>STAGE 3 GATE</strong></td>
+<td>M9 SSH-hardening sprint · M8 recovery sprint</td>
+</tr>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · autopsy sprint · validation B5–B7</td>
+<td>One M8 diff-reading question cold</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>CLAUDE.md audit (still lean? behavior-tested?) · validation K25–K27</td>
+<td>M9 tunnel sprint</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>The rematch-ledger revisited — has the delegation boundary moved, and is it justified?</td>
+<td>M10 dotfiles drift drill</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Full discipline self-audit: correction counts, review depth, any vibe-merges (honest)</td>
+<td>M7/M6 sampler</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> every module from M12 on (a study + build accelerator, gates staying
+bare-hands) · M15 (headless + gates become CI stages) · M23 (the debugging partner) · M29 (hooks at
+depth, MCP, subagent orchestration, the Agent SDK — the full agentic layer on this week's discipline) ·
+the capstone, built end-to-end with this system.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>From here to the capstone you work as director and engineer-of-record of a tireless junior whose work
+you always verify — while your own hands stay strong enough to pass every gate alone.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-10/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 10 — Dotfiles &amp; Toolchains">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 10 — Dotfiles & Toolchains
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../stage-04/module-12/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 12 — Programming Fundamentals">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 12 — Programming Fundamentals
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

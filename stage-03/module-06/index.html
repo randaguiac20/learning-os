@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The terminal and the shell — the interface you will operate every later topic from. Navigate, manipulate files, read man pages, and build the safety habits that prevent production accidents.">
+        <meta name="description" content="Editing as a language — modes, verbs + motions + text objects, registers, macros, and a versioned vimrc. Convert the daily tax of slow editing into compound interest, on every server you will ever touch.">
       
       
         <meta name="author" content="Learning OS">
       
       
       
-        <link rel="prev" href="../module-01/">
+        <link rel="prev" href="../../stage-02/module-05/">
       
       
-        <link rel="next" href="../../stage-02/module-03/">
+        <link rel="next" href="../module-07/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Module 02 — First Contact with the Terminal - Learning OS</title>
+        <title>Module 06 — Vim - Learning OS</title>
       
     
     
@@ -97,7 +97,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#module-02-first-contact-with-the-terminal" class="md-skip">
+        <a href="#module-06-vim" class="md-skip">
           Skip to content
         </a>
       
@@ -133,7 +133,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Module 02 — First Contact with the Terminal
+              Module 06 — Vim
             
           </span>
         </div>
@@ -308,8 +308,6 @@
       
   
   
-    
-  
   
   
     
@@ -322,11 +320,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -347,7 +345,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -365,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../module-01/" class="md-nav__link">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
         
   
   
@@ -390,37 +388,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Module 02 — First Contact with the Terminal
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
         
   
   
@@ -436,247 +407,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#why-this-matters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why this matters
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#watch" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Watch
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#key-notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key Notes
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Key Notes">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-picture-keystroke-to-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The picture: keystroke to output
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#command-line-anatomy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Command line anatomy
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paths-the-address-system" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Paths — the address system
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prompt-anatomy-read-it-before-you-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prompt anatomy — read it before you type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#six-mechanisms-that-explain-the-rest" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Six mechanisms that explain the rest
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#the-safety-model-because-rm-has-no-undo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The safety model — because rm has no undo
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#guided-lab-your-first-working-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Guided Lab: your first working session
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#solo-lab-figure-it-out" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solo Lab: figure it out
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Solo Lab: figure it out">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#challenge-1-one-command-whole-tree" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 1 — One command, whole tree
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#challenge-2-count-without-counting-by-eye" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 2 — Count without counting by eye
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 3 — Prove the shell expands the glob, not the program
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#challenge-4-learn-an-unseen-option-from-man-only" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 4 — Learn an unseen option from man only
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#challenge-5-stretch-type-vs-which-disagree" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 5 (stretch) — type vs which disagree
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#self-check" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Self-Check
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mastery-checklist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Mastery checklist
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#review-lock-it-in" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Review — lock it in
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -836,8 +566,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -848,11 +580,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
@@ -873,7 +605,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -888,10 +620,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../stage-03/module-06/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -907,6 +666,258 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-mode-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the mode map
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-four-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-grammar-count-verb-motionobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The grammar — [count] verb motion/object
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verbs-motions-objects-the-vocabularies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verbs, motions, objects — the vocabularies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registers-vims-many-clipboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registers — Vim's many clipboards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dot-formula-macros-and-ex-heritage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dot formula, macros, and Ex heritage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config-is-code-and-edits-leak-to-disk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config is code, and edits leak to disk
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-survival-and-the-grammar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: survival and the grammar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-rescue-a-clobbered-yank" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Rescue a clobbered yank
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-one-macro-twelve-times" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — One macro, twelve times
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-extract-error-lines-with-ex-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Extract error lines with Ex only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-surgery-with-objects-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Surgery with objects only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-your-first-earned-vimrc-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Your first earned vimrc line
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -919,7 +930,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-03/module-07/" class="md-nav__link">
+      <a href="../module-07/" class="md-nav__link">
         
   
   
@@ -947,7 +958,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-03/module-08/" class="md-nav__link">
+      <a href="../module-08/" class="md-nav__link">
         
   
   
@@ -975,7 +986,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-03/module-09/" class="md-nav__link">
+      <a href="../module-09/" class="md-nav__link">
         
   
   
@@ -1003,7 +1014,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-03/module-10/" class="md-nav__link">
+      <a href="../module-10/" class="md-nav__link">
         
   
   
@@ -1031,7 +1042,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-03/module-11/" class="md-nav__link">
+      <a href="../module-11/" class="md-nav__link">
         
   
   
@@ -2494,10 +2505,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-picture-keystroke-to-output" class="md-nav__link">
+  <a href="#the-picture-the-mode-map" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The picture: keystroke to output
+        The picture: the mode map
       
     </span>
   </a>
@@ -2505,10 +2516,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#command-line-anatomy" class="md-nav__link">
+  <a href="#the-four-modes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Command line anatomy
+        The four modes
       
     </span>
   </a>
@@ -2516,10 +2527,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#paths-the-address-system" class="md-nav__link">
+  <a href="#the-grammar-count-verb-motionobject" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paths — the address system
+        The grammar — [count] verb motion/object
       
     </span>
   </a>
@@ -2527,10 +2538,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#prompt-anatomy-read-it-before-you-type" class="md-nav__link">
+  <a href="#verbs-motions-objects-the-vocabularies" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prompt anatomy — read it before you type
+        Verbs, motions, objects — the vocabularies
       
     </span>
   </a>
@@ -2538,10 +2549,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#six-mechanisms-that-explain-the-rest" class="md-nav__link">
+  <a href="#registers-vims-many-clipboards" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Six mechanisms that explain the rest
+        Registers — Vim's many clipboards
       
     </span>
   </a>
@@ -2549,10 +2560,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-safety-model-because-rm-has-no-undo" class="md-nav__link">
+  <a href="#the-dot-formula-macros-and-ex-heritage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The safety model — because rm has no undo
+        The dot formula, macros, and Ex heritage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config-is-code-and-edits-leak-to-disk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config is code, and edits leak to disk
       
     </span>
   </a>
@@ -2565,10 +2587,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#guided-lab-your-first-working-session" class="md-nav__link">
+  <a href="#guided-lab-survival-and-the-grammar" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Guided Lab: your first working session
+        Guided Lab: survival and the grammar
       
     </span>
   </a>
@@ -2588,10 +2610,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#challenge-1-one-command-whole-tree" class="md-nav__link">
+  <a href="#challenge-1-rescue-a-clobbered-yank" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 1 — One command, whole tree
+        Challenge 1 — Rescue a clobbered yank
       
     </span>
   </a>
@@ -2599,10 +2621,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-2-count-without-counting-by-eye" class="md-nav__link">
+  <a href="#challenge-2-one-macro-twelve-times" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 2 — Count without counting by eye
+        Challenge 2 — One macro, twelve times
       
     </span>
   </a>
@@ -2610,10 +2632,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" class="md-nav__link">
+  <a href="#challenge-3-extract-error-lines-with-ex-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 3 — Prove the shell expands the glob, not the program
+        Challenge 3 — Extract error lines with Ex only
       
     </span>
   </a>
@@ -2621,10 +2643,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-4-learn-an-unseen-option-from-man-only" class="md-nav__link">
+  <a href="#challenge-4-surgery-with-objects-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 4 — Learn an unseen option from man only
+        Challenge 4 — Surgery with objects only
       
     </span>
   </a>
@@ -2632,10 +2654,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-5-stretch-type-vs-which-disagree" class="md-nav__link">
+  <a href="#challenge-5-stretch-your-first-earned-vimrc-line" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 5 (stretch) — type vs which disagree
+        Challenge 5 (stretch) — Your first earned vimrc line
       
     </span>
   </a>
@@ -2697,22 +2719,26 @@
 
 
 
-<h1 id="module-02-first-contact-with-the-terminal">Module 02 — First Contact with the Terminal<a class="headerlink" href="#module-02-first-contact-with-the-terminal" title="Permanent link">&para;</a></h1>
-<p><small>Stage 1 · Foundations · ~1 week at 4 h/day · Prerequisite — Module 01 (the machine model you now talk to).</small></p>
+<h1 id="module-06-vim">Module 06 — Vim<a class="headerlink" href="#module-06-vim" title="Permanent link">&para;</a></h1>
+<p><small>Stage 3 · Intermediate Skills · ~1 week at 4 h/day · Prerequisites — M2 (terminal fluency; <code>less</code>/<code>man</code> already trained your vi-keys <code>j k / n G q</code>), M5 (the Caretaker codebase — your practice gym). Opens Stage 3.</small></p>
 <h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
-<p>A <strong>terminal</strong> (terminal emulator) is a program that displays text and forwards your keystrokes to a
-<strong>shell</strong>. The <strong>shell</strong> (Bash here) reads your command lines, runs programs for you, and prints their
-output. Terminal = the window; shell = the interpreter inside it.</p>
-<p>Module 01 gave you the model of the machine; this module gives you your <strong>hands</strong>. Every topic in this
-curriculum — Linux, Docker, Kubernetes, Git, Python, remote GPU boxes — is operated from a shell. This
-is the last module that "teaches the terminal": afterwards the terminal is simply the medium everything
-else lives in. By the end of the week the prompt is a place you <em>work</em>, not a hazard you avoid.</p>
+<p><strong>Vim</strong> ("Vi IMproved") is a <strong>modal</strong> text editor: instead of one mode where every key inserts a
+character, it has modes where keys are <strong>commands</strong> — and those commands form a <strong>grammar</strong> (verb +
+count + motion/object, e.g. <code>d2w</code> = <em>delete two words</em>) that turns editing intentions into a few
+repeatable, automatable keystrokes.</p>
+<p>You will spend the rest of this curriculum — and your career — editing text: scripts (M5), configs
+(M4), manifests (M19), code (M12+). Editing is 90% navigating and changing existing text and only 10%
+typing new text, yet ordinary editors optimize the 10% and tax the 90% (hands leave home row, mouse
+round-trips, arrow-mashing). Modal editing gives the 90% its own keyboard. And on the minimal servers
+and containers you will meet, GUI editors simply aren't there — <code>vi</code> always is.</p>
 <div class="admonition info">
 <p class="admonition-title">What this unlocks</p>
-<p>M3–M4 administer Linux <em>through</em> this prompt · M5 turns today's command lines into scripts · M6 (Vim)
-and M7 (Tmux) live inside the terminal · M9 (SSH) is this exact interface over the network · a
-<code>docker exec -it … bash</code> (M16) drops you into a container's shell — <strong>this module, inside a box.</strong>
-Learn it as reflexes now and every later tool is just new vocabulary in the same conversation.</p>
+<p><strong>M7</strong> Tmux copy-mode speaks these exact vi-keys — M6 pays off in days · <strong>M8</strong> Git opens Vim for
+commit messages, rebase-todo lists, and <code>vimdiff</code> conflict resolution · <strong>M9</strong> SSH is the payoff:
+full editing power on any remote machine, where GUI editors can't follow · <strong>M10</strong> your vimrc
+becomes a chezmoi-managed dotfile · <strong>M16</strong> containers ship at most BusyBox <code>vi</code> · <strong>M19</strong>
+<code>kubectl edit</code> drops you into <code>$EDITOR</code> mid-incident. Learn the grammar once; it outlives every
+program that hosts it.</p>
 </div>
 <hr />
 <h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
@@ -2727,161 +2753,249 @@ Learn it as reflexes now and every later tool is just new vocabulary in the same
 <p>Once the explainer is on YouTube, replace the placeholder card above with:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 02 — First Contact with the Terminal&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 06 — Vim&quot;</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div>
 Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
-terminal vs shell (the window vs the person answering the phone) → prompt anatomy →
-the keystroke→output loop (fork/exec back to M1) → globbing happens in the shell, not the program →
-the three safety habits that stand in for <code>rm</code>'s missing undo.</p>
+the two-keyboards idea (one for driving, one for writing) → the mode map, <code>Esc</code> as <em>going home</em> →
+the grammar as multiplication (10 verbs × 20 motions, learned as 10 + 20) → text objects making
+edits position-independent, hence repeatable with <code>.</code> → the honest cost (the week-one cliff), then
+the compounding payoff.</p>
 </details>
 <p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
 <div class="admonition tip">
 <p class="admonition-title">Follow along, don't just watch</p>
-<p>Open the <a href="#guided-lab-your-first-working-session">Guided Lab</a> in a browser terminal and run each
-command yourself as it appears. Typing beats watching every time — and it is part of how the memory
-forms.</p>
+<p>Open the <a href="#guided-lab-survival-and-the-grammar">Guided Lab</a> in a browser terminal and run each step
+yourself as it appears. With Vim especially, typing beats watching every time — the skill is
+physical, and it is part of how the memory forms.</p>
 </div>
 <hr />
 <h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
 <p><em>Standalone. This is the reference you keep.</em></p>
-<h3 id="the-picture-keystroke-to-output">The picture: keystroke to output<a class="headerlink" href="#the-picture-keystroke-to-output" title="Permanent link">&para;</a></h3>
+<h3 id="the-picture-the-mode-map">The picture: the mode map<a class="headerlink" href="#the-picture-the-mode-map" title="Permanent link">&para;</a></h3>
+<p>Normal mode is <strong>home</strong>: keys are commands. Every other mode is a quick trip you return from with <code>Esc</code>
+— reflexively.</p>
 <pre class="mermaid"><code>flowchart TB
-    K["You — keyboard"] --&gt; T["Terminal emulator&lt;br/&gt;draws text, sends keys"]
-    T --&gt; Sh["Shell (bash)&lt;br/&gt;parse · expand globs and vars"]
-    Sh --&gt; P["PATH search&lt;br/&gt;find the program"]
-    P --&gt; FE["fork + exec&lt;br/&gt;(M1's workflow)"]
-    FE --&gt; Pr["Program — ls, cat, cp"]
-    Pr --&gt; Sy["syscalls to the kernel"]
-    Sy --&gt; Out["Text output"]
-    Out --&gt; T</code></pre>
-<p>The shell is just a program (M1: a <strong>process</strong>) that starts <em>other</em> processes and wires their text
-input/output back to your terminal. When you type <code>ls</code>, the shell searches the directories in <code>$PATH</code>
-for a program named <code>ls</code>, then <code>fork</code>+<code>exec</code>s it — the exact workflow you traced in Module 01, now
-under your fingers.</p>
-<h3 id="command-line-anatomy">Command line anatomy<a class="headerlink" href="#command-line-anatomy" title="Permanent link">&para;</a></h3>
-<p>Read a command left to right — <code>command -options arguments</code>:</p>
+    N["NORMAL — home&lt;br/&gt;keys = commands"]
+    N --&gt;|"i a o c"| I["INSERT&lt;br/&gt;keys = text"]
+    I --&gt;|"Esc"| N
+    N --&gt;|"v V Ctrl-v"| V["VISUAL&lt;br/&gt;select, then verb"]
+    V --&gt;|"Esc"| N
+    N --&gt;|":"| C["COMMAND-LINE&lt;br/&gt;:w :q :s :g :help"]
+    C --&gt;|"Enter / Esc"| N</code></pre>
+<p>The famous beginner pain ("I can't type!") <em>is</em> the design: typing is the special case; commanding is
+the default. The famous escape ("how do I quit Vim?") dissolves the moment you know which mode you're
+in — <code>Esc</code> gets you to Normal, then <code>:q!</code> leaves without saving, <code>:wq</code> or <code>ZZ</code> saves and leaves.</p>
+<h3 id="the-four-modes">The four modes<a class="headerlink" href="#the-four-modes" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Piece of <code>ls -l /home</code></th>
+<th>Mode</th>
+<th>Keys mean</th>
+<th>Enter with</th>
+<th>Leave with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Normal</strong> (home)</td>
+<td>commands</td>
+<td><em>(where you start / <code>Esc</code>)</em></td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Insert</strong></td>
+<td>literal text</td>
+<td><code>i</code> <code>a</code> <code>o</code> <code>O</code> <code>c</code></td>
+<td><code>Esc</code></td>
+</tr>
+<tr>
+<td><strong>Visual</strong></td>
+<td>select a region, then a verb</td>
+<td><code>v</code> (char) <code>V</code> (line) <code>Ctrl-v</code> (block)</td>
+<td><code>Esc</code></td>
+</tr>
+<tr>
+<td><strong>Command-line</strong></td>
+<td><code>:</code> ex commands over ranges</td>
+<td><code>:</code></td>
+<td><code>Enter</code> runs · <code>Esc</code> cancels</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-grammar-count-verb-motionobject">The grammar — <code>[count] verb motion/object</code><a class="headerlink" href="#the-grammar-count-verb-motionobject" title="Permanent link">&para;</a></h3>
+<p>Read an edit as a <strong>sentence</strong>. Verbs and motions/objects are independent vocabularies Vim composes at
+runtime — so <strong>10 verbs × 20 motions = 200 commands you never memorized</strong>, and one new motion instantly
+upgrades <em>every</em> verb.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>The word</th>
+<th>Read as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>2</code></td>
+<td>count</td>
+<td><em>twice</em></td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>verb (operator)</td>
+<td><em>delete</em></td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>motion</td>
+<td><em>to next word</em></td>
+</tr>
+<tr>
+<td>→ <code>d2w</code></td>
+<td></td>
+<td><strong>delete two words</strong></td>
+</tr>
+<tr>
+<td><code>c</code> + <code>i"</code></td>
+<td>verb + text object</td>
+<td><strong>change inside quotes</strong> (<code>ci"</code>)</td>
+</tr>
+<tr>
+<td><code>y</code> + <code>ap</code></td>
+<td>verb + text object</td>
+<td><strong>yank a paragraph</strong> (<code>yap</code>)</td>
+</tr>
+<tr>
+<td><code>gU</code> + <code>iw</code></td>
+<td>verb + text object</td>
+<td><strong>UPPERCASE a word</strong> (<code>gUiw</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Doubled verb = <strong>whole line</strong>: <code>dd</code> delete line · <code>yy</code> yank line · <code>cc</code> change line · <code>&gt;&gt;</code> indent line.</p>
+<h3 id="verbs-motions-objects-the-vocabularies">Verbs, motions, objects — the vocabularies<a class="headerlink" href="#verbs-motions-objects-the-vocabularies" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
 <th>Kind</th>
-<th>Role</th>
+<th>Examples</th>
+<th>What they do</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>ls</code></td>
-<td>command</td>
-<td>the program to run</td>
+<td><strong>Verbs</strong> (operators)</td>
+<td><code>d</code> delete · <code>c</code> change · <code>y</code> yank · <code>&gt;</code>/<code>&lt;</code> indent · <code>gu</code>/<code>gU</code> case · <code>.</code> repeat last change</td>
+<td>act on whatever motion/object follows</td>
 </tr>
 <tr>
-<td><code>-l</code></td>
-<td>option / flag</td>
-<td><strong>HOW</strong> it behaves (here: long listing)</td>
+<td><strong>Motions</strong> (from the cursor)</td>
+<td><code>w b e</code> words · <code>0 ^ $</code> line ends · <code>f{c}</code> / <code>t{c}</code> char-find · <code>/{pat}</code> search · <code>{ }</code> paragraphs · <code>gg G 42G</code> file/line</td>
+<td>move a distance the verb consumes</td>
 </tr>
 <tr>
-<td><code>/home</code></td>
-<td>argument</td>
-<td><strong>WHAT</strong> it operates on</td>
+<td><strong>Text objects</strong> (around the cursor)</td>
+<td><code>iw</code>/<code>aw</code> word · <code>i"</code>/<code>a"</code> quotes · <code>i(</code>/<code>a(</code> parens · <code>ip</code>/<code>ap</code> paragraph · <code>it</code>/<code>at</code> tags</td>
+<td>select a structural region — <em>inner</em> vs <em>around</em></td>
 </tr>
 </tbody>
 </table>
-<p>Options modify behaviour; arguments say what to act on; <code>man &lt;command&gt;</code> documents every option there is.</p>
-<h3 id="paths-the-address-system">Paths — the address system<a class="headerlink" href="#paths-the-address-system" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Absolute</strong> starts at root <code>/</code> — <code>/home/you/notes.md</code> — same location from anywhere.</li>
-<li><strong>Relative</strong> starts at your <strong>working directory</strong> — <code>notes.md</code> — depends on where you are.</li>
-<li><code>.</code> = here · <code>..</code> = parent · <code>~</code> = your home · <code>-</code> (with <code>cd</code>) = the previous directory.</li>
-<li><code>pwd</code> + <code>ls</code> are your <strong>eyes</strong>: where am I, and what's here?</li>
-</ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── home/
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   └── you/            ← ~  (your home)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│       └── terminal-lab/
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>├── etc/
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├── usr/bin/
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>└── proc/
-</code></pre></div>
-<p>Same folder, named two ways: <code>terminal-lab</code> from your home (<strong>relative</strong>), or
-<code>/home/you/terminal-lab</code> from anywhere (<strong>absolute</strong>).</p>
-<h3 id="prompt-anatomy-read-it-before-you-type">Prompt anatomy — read it before you type<a class="headerlink" href="#prompt-anatomy-read-it-before-you-type" title="Permanent link">&para;</a></h3>
-<p>Read the prompt before you type. In <code>you@machine:~/notes$</code>:</p>
+<p><strong>Motions vs objects</strong> is the load-bearing distinction: a motion runs <strong>from</strong> the cursor to a target
+(<code>dw</code> mid-word leaves the front half); a text object selects the region <strong>around</strong> the cursor
+(<code>diw</code> deletes the whole word from anywhere inside it). Because objects are position-independent, the
+same keystrokes work at the next site — which is exactly what <code>.</code> replays.</p>
+<h3 id="registers-vims-many-clipboards">Registers — Vim's many clipboards<a class="headerlink" href="#registers-vims-many-clipboards" title="Permanent link">&para;</a></h3>
+<p><code>:reg</code> shows them all. The classic frustration ("my yank vanished after a delete") is solved by knowing
+<code>"0</code>.</p>
 <table>
 <thead>
 <tr>
-<th>Part</th>
-<th>Meaning</th>
+<th>Register</th>
+<th>Holds</th>
+<th>Written by</th>
+<th>Rescue / use</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>you</code></td>
-<td>your username</td>
+<td><code>""</code> unnamed</td>
+<td>last delete <strong>or</strong> yank</td>
+<td><code>d</code> <code>x</code> <code>y</code></td>
+<td><code>p</code> puts it</td>
 </tr>
 <tr>
-<td><code>machine</code></td>
-<td>which host you're on</td>
+<td><code>"0</code> yank</td>
+<td>last <strong>yank only</strong> (deletes never touch it)</td>
+<td><code>y</code></td>
+<td><code>"0p</code> — rescues a yank after a delete</td>
 </tr>
 <tr>
-<td><code>~/notes</code></td>
-<td>your current directory (<code>~</code> = home)</td>
+<td><code>"a</code>–<code>"z</code> named</td>
+<td>whatever you aim at them</td>
+<td><code>"ay{motion}</code>, <code>qa</code>…<code>q</code> records into <code>"a</code></td>
+<td><code>"ap</code>, <code>@a</code> replays</td>
 </tr>
 <tr>
-<td><code>$</code></td>
-<td>ready for input — <strong>warning:</strong> a <code>#</code> here instead means you are <strong>root</strong></td>
+<td><code>"+</code> system</td>
+<td>the OS clipboard</td>
+<td><code>"+y</code> (needs <code>+clipboard</code>)</td>
+<td><code>"+p</code> pastes from other apps</td>
+</tr>
+<tr>
+<td><code>"%</code> · <code>".</code></td>
+<td>filename · last inserted text</td>
+<td>Vim</td>
+<td>reference</td>
 </tr>
 </tbody>
 </table>
-<p>A <code>$</code> prompt is a normal user (you own your home, mistakes are cheap). A <code>#</code> prompt is <strong>root</strong> — every
-keystroke has full-system power. This module never needs <code>#</code>, and never uses <code>sudo</code>.</p>
-<h3 id="six-mechanisms-that-explain-the-rest">Six mechanisms that explain the rest<a class="headerlink" href="#six-mechanisms-that-explain-the-rest" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>The PATH search.</strong> Typing <code>ls</code> makes the shell scan <code>$PATH</code>'s directories for a program named
-   <code>ls</code>, then fork/exec it. <code>command not found</code> means: typo, not installed, or not in PATH.</li>
-<li><strong>Globbing is the shell's job.</strong> <code>*.md</code> is expanded by the <strong>shell</strong> into matching filenames
-   <em>before</em> the program runs. The program never sees the <code>*</code>. Prove it: <code>echo *.md</code>.</li>
-<li><strong>Built-in vs program.</strong> <code>cd</code> must be a shell <strong>built-in</strong> — a child process couldn't change its
-   parent's directory. <code>ls</code> is a real program in <code>/usr/bin</code>. <code>type &lt;cmd&gt;</code> tells you which.</li>
-<li><strong>Everything is a file.</strong> Directories, devices, even kernel state (<code>/proc</code>) — one namespace, one set
-   of tools.</li>
-<li><strong>Exit status.</strong> Commands succeed (status <code>0</code>) or fail (non-zero) and <em>say so</em>. <code>echo $?</code> shows the
-   last one — your first taste of programmatic error handling (M5 builds on it).</li>
-<li><strong>Tab &amp; history are accuracy tools, not conveniences.</strong> Tab completion can't typo a path; <code>↑</code> and
-   <code>Ctrl-R</code> recall exactly what you ran. At scale that's minutes saved and near-zero path errors.</li>
-</ol>
-<h3 id="the-safety-model-because-rm-has-no-undo">The safety model — because <code>rm</code> has no undo<a class="headerlink" href="#the-safety-model-because-rm-has-no-undo" title="Permanent link">&para;</a></h3>
-<p>There is <strong>no trash can</strong> in the terminal: <code>rm</code> deletes forever. The three habits that stand in for the
-missing undo:</p>
+<h3 id="the-dot-formula-macros-and-ex-heritage">The dot formula, macros, and Ex heritage<a class="headerlink" href="#the-dot-formula-macros-and-ex-heritage" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Sandbox discipline</strong> — do destructive work only where mistakes are cheap (<code>~/terminal-lab/</code>).</li>
-<li><strong><code>ls</code> before <code>rm</code>/<code>mv</code></strong> — look at what exists before you change it.</li>
-<li><strong><code>echo</code> the glob</strong> — see what <code>*.md</code> expands to <em>before</em> a destructive command uses it.</li>
+<li><strong>The dot command <code>.</code></strong> repeats the last change. Ideal Vim: one keystroke to move (<code>n</code>, <code>;</code>, <code>j</code>),
+  one to act (<code>.</code>). Structure edits so <code>.</code> can repeat them — <code>ciwNAME&lt;Esc&gt;</code> then <code>n.n.n.</code> beats
+  retyping. <code>;</code>/<code>,</code> repeat the last <code>f</code>/<code>t</code> find the same way.</li>
+<li><strong>Macros</strong> generalize <code>.</code>: <code>qa</code> records keystrokes into register <code>a</code>, <code>q</code> stops, <code>@a</code> replays, <code>10@a</code>
+  bulk-applies, <code>@@</code> repeats the last. Macros are <strong>supervised</strong> automation — a failing motion aborts
+  the replay, so brittle macros are <em>fine</em> (you're watching), unlike scripts (M5), which run unwatched.</li>
+<li><strong>Ex commands</strong> (<code>:</code>) operate on <strong>ranges</strong> — the line-editor DNA that makes file-wide edits
+  one-liners: <code>:%s/old/new/gc</code> (whole file, confirm each), <code>:5,12s/…</code>, <code>:g/^#/d</code> (delete comment
+  lines), <code>:g/TODO/p</code>. <code>:g</code> (global) is literally <code>grep</code>'s ancestor — read the name: <strong>g/re/p</strong>.</li>
 </ul>
-<p>Plus: never paste an unread multi-line command (its newlines <strong>execute</strong> as they arrive), and never run
-what you can't explain — <em>especially</em> with <code>sudo</code>.</p>
+<h3 id="config-is-code-and-edits-leak-to-disk">Config is code, and edits leak to disk<a class="headerlink" href="#config-is-code-and-edits-leak-to-disk" title="Permanent link">&para;</a></h3>
+<p>Your lasting artifact is <code>~/.vimrc</code>: ~25–40 lines built <strong>line by line as friction appears</strong>, <em>every
+line commented with the pain it solves</em> — never a 300-line block pasted from the internet (you can only
+maintain what you understand). Sensible starters: <code>set number relativenumber</code>, the search quartet
+(<code>incsearch hlsearch ignorecase smartcase</code>), <code>set hidden</code>, persistent undo (<code>undofile</code> + <code>undodir</code>),
+a whitespace policy (<code>expandtab shiftwidth=2</code>), <code>syntax on</code>.</p>
+<p>Editing privileged files is a <strong>security</strong> act: use <code>sudoedit</code> (edits a copy <em>as you</em>, writes back with
+sudo) — never <code>sudo vim</code> (runs your <em>entire</em> editor, vimrc, and <code>:!</code> shell access <strong>as root</strong>). Know
+that three artifacts can leak file contents onto disk — <strong>swap</strong> (<code>.swp</code>), <strong>undo</strong> (<code>undodir</code>), and
+<strong>viminfo</strong> (registers + search history) — and set <code>nomodeline</code> on servers (modelines were a
+config-in-file attack vector).</p>
 <div class="lo-remember">
 <p><strong>Must remember (if you keep only six things):</strong></p>
 <ol>
-<li><strong>Terminal = the window; shell (bash) = the interpreter inside it.</strong> Different things.</li>
-<li><strong>The shell expands</strong> <code>*</code>, <code>~</code>, <code>$VAR</code> <em>before</em> the program sees anything — <code>echo</code> shows you what.</li>
-<li><strong>Paths:</strong> absolute starts at <code>/</code>; relative starts at your working directory. <code>pwd</code> + <code>ls</code> are your eyes.</li>
-<li><strong><code>cd</code> is a built-in, <code>ls</code> is a program</strong> — <code>type &lt;cmd&gt;</code> tells you which; <code>$PATH</code> is where programs are found.</li>
-<li><strong><code>rm</code> is forever.</strong> Sandbox · <code>ls</code>-before-<code>rm</code> · <code>echo</code>-the-glob — the three habits that replace undo.</li>
-<li><strong>Learn commands from <code>man</code></strong> (start at SYNOPSIS, search with <code>/</code>, quit with <code>q</code>) — not from guessing.</li>
+<li><strong>Normal mode is home; <code>Esc</code> returns you there.</strong> Typing (Insert) is the errand, not the default.</li>
+<li><strong>Think in sentences:</strong> <code>[count] verb motion/object</code>. One new motion upgrades every verb — grammar multiplies.</li>
+<li><strong>Text objects beat motions for repeatability:</strong> <code>ciw</code> works from anywhere in the word, so <code>.</code> can replay it.</li>
+<li><strong><code>"0</code> rescues a yank a delete clobbered</strong> (<code>"0p</code>); deletes and yanks both fill the unnamed register.</li>
+<li><strong>Make it repeatable (<code>.</code>, <code>n.</code>), then cheap (macros); scale file-wide with Ex</strong> (<code>:%s//gc</code>, <code>:g/pat/d</code>).</li>
+<li><strong>Earn your vimrc line by line, commented;</strong> edit privileged files with <code>sudoedit</code>, never <code>sudo vim</code>.</li>
 </ol>
 </div>
 <hr />
-<h2 id="guided-lab-your-first-working-session">Guided Lab: your first working session<a class="headerlink" href="#guided-lab-your-first-working-session" title="Permanent link">&para;</a></h2>
-<p><em>Basic, step-by-step. Read-only commands inspect; the create/copy/delete steps happen ONLY inside a
-throwaway <code>~/terminal-lab/</code> sandbox you build first — nothing outside it is ever touched.</em></p>
+<h2 id="guided-lab-survival-and-the-grammar">Guided Lab: survival and the grammar<a class="headerlink" href="#guided-lab-survival-and-the-grammar" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You edit </em><em>real files</em><em> in a throwaway <code>~/vim-gym/</code> sandbox you build first —
+nothing outside it is touched. Rule for the week: when you don't know a command, <code>:help</code> it before you
+Google it.</em></p>
 <div class="lo-lab-actions">
-<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-02" target="_blank">▶ Open interactive lab</a>
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-06" target="_blank">▶ Open interactive lab</a>
 <a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
 <a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
-<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-02" target="_blank">View lab source</a></p>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-06" target="_blank">View lab source</a></p>
 </div>
 <p><span id="run-locally"></span></p>
 <div class="admonition tip">
@@ -2889,259 +3003,272 @@ throwaway <code>~/terminal-lab/</code> sandbox you build first — nothing outsi
 <ul>
 <li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
 <li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
-<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code> (then <code>apt-get update &amp;&amp; apt-get install -y vim</code>), and follow the steps below.</li>
 </ul>
 <p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Read the prompt, get your bearings</label><label for="__tabbed_1_2">2 · Navigate</label><label for="__tabbed_1_3">3 · Build a sandbox and a tree</label><label for="__tabbed_1_4">4 · Copy, move, rename — verify each time</label><label for="__tabbed_1_5">5 · Delete, safely</label><label for="__tabbed_1_6">6 · Look inside files, then get help</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Check your Vim, then vimtutor</label><label for="__tabbed_1_2">2 · Feel the mode map</label><label for="__tabbed_1_3">3 · Verbs × motions (the multiplication)</label><label for="__tabbed_1_4">4 · Text objects — the killer feature</label><label for="__tabbed_1_5">5 · The dot formula</label><label for="__tabbed_1_6">6 · Save, quit, and never be trapped</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">pwd</span><span class="w">            </span><span class="c1"># where am I?</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ls<span class="w">             </span><span class="c1"># what&#39;s here?</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ls<span class="w"> </span>-l<span class="w">          </span><span class="c1"># long form: is each line a file or a directory?</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>ls<span class="w"> </span>-la<span class="w"> </span>~<span class="w">       </span><span class="c1"># -a reveals hidden dotfiles like .bashrc</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>vim<span class="w"> </span>--version<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-3<span class="w">        </span><span class="c1"># vim or vim-tiny? apt-get install -y vim if tiny</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>vim<span class="w"> </span>--version<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>clipboard<span class="w"> </span><span class="c1"># +clipboard (usable &quot;+) or -clipboard?</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/vim-gym<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/vim-gym
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>vimtutor<span class="w">                       </span><span class="c1"># do lessons 1–7, no skipping; q-to-quit lives inside</span>
 </code></pre></div>
-In <em>your</em> prompt, identify the four parts: user, host, current directory, the <code>$</code>. Journal: what did
-<code>-a</code> reveal, and what is the first character of each <code>ls -l</code> line?</p>
+<code>vimtutor</code> is a real Vim editing a throwaway copy of its own lesson file — the safest place to
+make every beginner mistake. Journal (in Vim from now on): which three commands felt most alien?</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>/<span class="w">            </span><span class="c1"># to root — recognise M1&#39;s filesystem tour</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">cd</span><span class="w"> </span>/usr/bin<span class="w">     </span><span class="c1"># where the programs live</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">      </span><span class="c1"># how many programs? (two programs composed!)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">cd</span><span class="w">              </span><span class="c1"># bare cd = home</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">cd</span><span class="w"> </span>-<span class="w">            </span><span class="c1"># back to where you just were</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;one\ntwo\nthree\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>modes.txt
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>vim<span class="w"> </span>modes.txt
 </code></pre></div>
-Practice until <code>cd</code>, <code>pwd</code>, <code>ls</code> need zero thought. Reach <code>/etc</code> two ways: absolute (<code>cd /etc</code>) and
-relative (<code>cd ../../etc</code> — adjust for where you are).</p>
+Inside, deliberately enter and leave every mode, noting <strong>where</strong> each insert lands:
+<code>i</code> (before cursor) · <code>a</code> (after) · <code>o</code> (new line below) · <code>O</code> (above) → <code>Esc</code> home;
+<code>v</code> <code>V</code> <code>Ctrl-v</code> (visuals) → <code>Esc</code>; <code>:</code> (command-line) → <code>Esc</code>. Do 20 round-trips until <code>Esc</code> is
+automatic. Meet the traps calmly, on purpose: press <code>q</code> then a key (you're <em>recording</em> — <code>q</code> stops
+it); <code>Ctrl-s</code> (terminal <em>frozen</em> — <code>Ctrl-q</code> thaws it; that's flow control from M2). Quit with <code>:q!</code>.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>~/terminal-lab<span class="w">            </span><span class="c1"># your sandbox — all destructive work lives here</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">cd</span><span class="w"> </span>~/terminal-lab
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">pwd</span><span class="w">                             </span><span class="c1"># confirm: /home/&lt;you&gt;/terminal-lab</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>projects/<span class="o">{</span>alpha,beta<span class="o">}</span>/notes<span class="w">   </span><span class="c1"># one command builds a tree (brace expansion)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># see the whole structure</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>touch<span class="w"> </span>projects/alpha/notes/day1.md
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;the quick brown fox jumps\nover the lazy dog today\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>grammar.txt
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>vim<span class="w"> </span>grammar.txt
 </code></pre></div>
-Journal: what does <code>-p</code> do? (Check <code>man mkdir</code>.) Verify after every step — that rhythm <em>is</em> the lab.</p>
+With <code>w b e 0 ^ $</code> as your motions, apply each with <strong>no verb</strong> (just move), then with <code>d</code>, <code>c</code>,
+<code>y</code>. Feel it: you're learning 6 motions + 3 verbs, not 18 commands. Counts: <code>d2w</code>, <code>c3w</code>. Whole
+line: <code>dd</code> <code>yy</code> <code>&gt;&gt;</code>. Ban the arrow keys today. <code>:q!</code> when done exploring.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cp<span class="w"> </span>projects/alpha/notes/day1.md<span class="w"> </span>day1-backup.md
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify the copy exists</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>mv<span class="w"> </span>day1-backup.md<span class="w"> </span>projects/beta/<span class="w">            </span><span class="c1"># move it</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>mv<span class="w"> </span>projects/beta/day1-backup.md<span class="w"> </span>projects/beta/day1-copy.md<span class="w">   </span><span class="c1"># mv also renames</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify after EVERY mutation</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;greeting=&quot;hello&quot;\nname=&quot;stranger&quot;\nrun(one, two, three)\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>objects.sh
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>vim<span class="w"> </span>objects.sh
 </code></pre></div>
-<code>mv</code> both moves and renames. The verification rhythm (<code>ls -R</code> between mutations) is the real content.</p>
+Put the cursor <strong>anywhere</strong> inside the quotes → <code>ci"</code> retypes the value; inside the parens → <code>da(</code>
+deletes the whole argument list; on a word → <code>ciw</code> vs <code>caw</code> (inner keeps the surrounding space,
+around eats it). This is the single highest-value 15 minutes of the week. <code>:wq</code> to save.</p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>touch<span class="w"> </span>trash1<span class="w"> </span>trash2<span class="w"> </span>trash3
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>ls<span class="w">                              </span><span class="c1"># look before you delete</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>rm<span class="w"> </span>-i<span class="w"> </span>trash1<span class="w">                    </span><span class="c1"># -i prompts before removing — answer it</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>rm<span class="w"> </span>trash2<span class="w"> </span>trash3
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w">                              </span><span class="c1"># confirm they&#39;re gone</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;total = old + 1\necho old\nreturn old\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>dot.txt
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>vim<span class="w"> </span>dot.txt
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Only inside the sandbox</p>
-<p>Every <code>rm</code> here targets scratch files you just created in <code>~/terminal-lab/</code>. Never run <code>rm</code> (and
-never <code>rm -rf</code> at all this month) outside a directory you built for throwaway practice. <code>ls</code>
-first, always.</p>
-</div>
+Rename <code>old</code> everywhere with judgment: <code>/old&lt;Enter&gt;</code> to the first hit, <code>ciwnew&lt;Esc&gt;</code>, then
+<code>n.</code> <code>n.</code> — search-next, dot-repeat, <em>deciding at each <code>n</code></em>. Compare with the bulk tool
+<code>:%s/\&lt;old\&gt;/new/gc</code> (<code>\&lt;…\&gt;</code> = word boundaries, <code>c</code> = confirm each). Two idioms, same job: dot for
+judgment calls, <code>:s</code> for mechanical sweeps.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cat<span class="w"> </span>/etc/hostname<span class="w">               </span><span class="c1"># whole (small) file</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>less<span class="w"> </span>/etc/profile<span class="w">               </span><span class="c1"># page it: space, b, /word to search, q to quit</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>head<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># first lines</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>tail<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># last lines</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>wc<span class="w"> </span>-l<span class="w"> </span>/etc/passwd<span class="w">               </span><span class="c1"># count lines</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>man<span class="w"> </span>ls<span class="w">                          </span><span class="c1"># the reference: find what -h, -t, -r do — q to quit</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>vim<span class="w"> </span>dot.txt
 </code></pre></div>
-A pager is not "frozen" — it's <em>waiting</em>. <code>q</code> gets you out of <code>less</code> and <code>man</code>. In <code>man</code>, read the
-<strong>SYNOPSIS</strong> first and search with <code>/</code>.</p>
+From Normal mode: <code>:w</code> writes · <code>:wq</code> or <code>ZZ</code> writes and quits · <code>:q</code> quits (refuses if unsaved) ·
+<code>:q!</code> quits <strong>discarding</strong> changes · <code>:x</code> writes only if changed. If you're ever stuck, <code>Esc</code>
+first — get to Normal — <em>then</em> choose. That is the whole "how do I exit Vim?" mystery, solved.</p>
 </div>
 </div>
 </div>
 <div class="admonition success">
 <p class="admonition-title">You can stop here and have learned something real</p>
-<p>If you can read your prompt, navigate anywhere, build and reorganise a tree, delete safely, and
-learn an option from <code>man</code> — the guided lab is done. Now make it harder.</p>
+<p>If you can move by grammar (not arrows), change inside quotes and parens from anywhere, rename with
+<code>n.</code>, and leave Vim on purpose — the guided lab is done. Now make it harder.</p>
 </div>
 <hr />
 <h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
-<p><em>Harder. Goals only — minimal hand-holding. Work in your <code>~/terminal-lab/</code> sandbox. Struggle here is
-the point; reveal a hint only after you've tried.</em></p>
-<h3 id="challenge-1-one-command-whole-tree">Challenge 1 — One command, whole tree<a class="headerlink" href="#challenge-1-one-command-whole-tree" title="Permanent link">&para;</a></h3>
-<p>Create, in a <strong>single</strong> command, the tree <code>journal/2026/aug/{week1,week2}</code> inside the sandbox.</p>
+<p><em>Harder. Goals only — minimal hand-holding. Work on copies in <code>~/vim-gym/</code>. Struggle here is the point;
+reveal a hint only after you've tried. <code>:help</code> before Google.</em></p>
+<h3 id="challenge-1-rescue-a-clobbered-yank">Challenge 1 — Rescue a clobbered yank<a class="headerlink" href="#challenge-1-rescue-a-clobbered-yank" title="Permanent link">&para;</a></h3>
+<p>Yank one line (<code>yy</code>), then delete a <em>different</em> unwanted line (<code>dd</code>), then <code>p</code>. The wrong text appears.
+Put the line you originally yanked, without re-yanking it.</p>
 <details class="tip">
 <summary>Hint</summary>
-<p><code>mkdir</code> has a flag that creates parent directories as needed, and the shell can expand <code>{a,b}</code> into
-two names in one go.</p>
+<p>Deletes and yanks both overwrite the <em>unnamed</em> register — but yanks also write a second register
+that deletes never touch.</p>
 </details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>journal/2026/aug/<span class="o">{</span>week1,week2<span class="o">}</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ls<span class="w"> </span>-R<span class="w"> </span>journal
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>&quot;0p
 </code></pre></div>
-<code>-p</code> makes the intermediate dirs (<code>2026</code>, <code>aug</code>); brace expansion <code>{week1,week2}</code> is the shell
-writing out both leaf names before <code>mkdir</code> runs.</p>
+<code>dd</code> overwrote the unnamed register <code>""</code>, so a plain <code>p</code> puts the deleted line. The last <strong>yank</strong>
+still lives in <code>"0</code> (deletes don't touch it), so <code>"0p</code> puts it back. Confirm with <code>:reg</code> — read
+<code>""</code> and <code>"0</code> side by side.</p>
 </details>
-<h3 id="challenge-2-count-without-counting-by-eye">Challenge 2 — Count without counting by eye<a class="headerlink" href="#challenge-2-count-without-counting-by-eye" title="Permanent link">&para;</a></h3>
-<p>Find out how many files in <code>/etc</code> end in <code>.conf</code> — without counting them yourself.</p>
+<h3 id="challenge-2-one-macro-twelve-times">Challenge 2 — One macro, twelve times<a class="headerlink" href="#challenge-2-one-macro-twelve-times" title="Permanent link">&para;</a></h3>
+<p>Turn a block of <code>key=value</code> lines into aligned <code>key = value</code> (spaces around the <code>=</code>) using <strong>one</strong>
+recorded macro replayed with a count — not twelve manual edits.</p>
 <details class="tip">
 <summary>Hint</summary>
-<p>List them, then pipe into a line-counter. Beware: some names may hide in subdirectories.</p>
+<p>Record on the first line (<code>qa</code>), do the edit with a motion that lands you on the <strong>next</strong> line's
+start, stop (<code>q</code>), then replay with a count (<code>@a</code>). <code>f=</code> finds the <code>=</code>; <code>s</code> substitutes a char.</p>
 </details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ls<span class="w"> </span>/etc/*.conf<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>qa 0 f= s␣=␣&lt;Esc&gt; j q       (record: find =, replace with &quot; = &quot;, down to next line)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>11@a                         (replay on the remaining 11 lines)
 </code></pre></div>
-The shell expands <code>/etc/*.conf</code> to the matching paths; <code>wc -l</code> counts the lines <code>ls</code> prints. (This
-counts the top level of <code>/etc</code> only — a fair reading of the task.)</p>
+Start position and ending on the next line's first column are what make the macro re-runnable.
+A line without an <code>=</code> makes the macro <em>stop</em> — which is fine: you're watching, so you fix that one
+by hand. That's the supervised-automation contrast with M5's unwatched scripts.</p>
 </details>
-<h3 id="challenge-3-prove-the-shell-expands-the-glob-not-the-program">Challenge 3 — Prove the shell expands the glob, not the program<a class="headerlink" href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" title="Permanent link">&para;</a></h3>
-<p>Show, with one command, exactly what <code>*.md</code> becomes <em>before</em> any program acts on it.</p>
+<h3 id="challenge-3-extract-error-lines-with-ex-only">Challenge 3 — Extract error lines with Ex only<a class="headerlink" href="#challenge-3-extract-error-lines-with-ex-only" title="Permanent link">&para;</a></h3>
+<p>From a copy of a log, produce a file containing <strong>only</strong> the lines matching <code>error</code> — using ex
+commands, no manual selection. Find <em>two</em> different one-liners.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>One approach keeps matches and writes them out; the other <em>deletes the non-matches</em> and saves.
+<code>:v/pat/d</code> is "delete lines that do <strong>not</strong> match".</p>
+</details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nb">echo</span><span class="w"> </span>*.md
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>:g/error/normal :w! &gt;&gt; errors.txt&lt;CR&gt;     (append each matching line to a file)
 </code></pre></div>
-<code>echo</code> just prints its arguments — so it prints the filenames the <strong>shell</strong> already substituted for
-<code>*.md</code>. The program never sees the <code>*</code>. In an <em>empty</em> directory <code>echo *.md</code> prints the literal
-<code>*.md</code> (no match, so bash leaves the pattern alone) — a preview of M5's <code>nullglob</code>.</p>
-</details>
-<h3 id="challenge-4-learn-an-unseen-option-from-man-only">Challenge 4 — Learn an unseen option from <code>man</code> only<a class="headerlink" href="#challenge-4-learn-an-unseen-option-from-man-only" title="Permanent link">&para;</a></h3>
-<p>Using <strong>only</strong> <code>man ls</code> (no web), make <code>ls</code> sort by size, largest last, in human-readable units. State
-the SYNOPSIS notation you relied on.</p>
-<details class="success">
-<summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ls<span class="w"> </span>-lShr<span class="w">        </span><span class="c1"># -S sort by size, -r reverse (largest last), -h human units, -l long</span>
+or, working on the copy in place:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>:v/error/d      then      :w errors.txt   (delete every non-error line, then save)
 </code></pre></div>
-Found by searching the OPTIONS section (<code>/size</code>, <code>/reverse</code>, <code>/human</code>). SYNOPSIS shows <code>ls [OPTION]…
-[FILE]…</code> — options are optional and combinable, which is why <code>-lShr</code> bundles four.</p>
+<code>:g</code> runs a command on every <strong>matching</strong> line; <code>:v</code> (aka <code>:g!</code>) on every <strong>non-matching</strong> one.
+This is the <code>ed</code>→<code>ex</code>→<code>vi</code>→<code>vim</code> lineage you're now <em>using</em>, not just reading about.</p>
 </details>
-<h3 id="challenge-5-stretch-type-vs-which-disagree">Challenge 5 (stretch) — <code>type</code> vs <code>which</code> disagree<a class="headerlink" href="#challenge-5-stretch-type-vs-which-disagree" title="Permanent link">&para;</a></h3>
-<p><code>type cd</code> says "shell builtin"; <code>which cd</code> may print nothing. Explain the discrepancy precisely.</p>
+<h3 id="challenge-4-surgery-with-objects-only">Challenge 4 — Surgery with objects only<a class="headerlink" href="#challenge-4-surgery-with-objects-only" title="Permanent link">&para;</a></h3>
+<p>Given a function whose <code>if</code> block is wrongly indented, fix the indentation using only text objects and
+<code>&gt;</code>/<code>&lt;</code> — <strong>no Insert mode</strong>. Then delete the function's entire argument list from anywhere inside it.</p>
 <details class="success">
 <summary>Solution</summary>
-<p><code>type</code> reports how <strong>bash</strong> will interpret the word, and a built-in wins over any file — so it names
-<code>cd</code> a builtin. <code>which</code> only searches <code>$PATH</code> for executable <strong>files</strong>; it knows nothing about
-builtins, so for <code>cd</code> it finds nothing (or an unrelated file that would never actually run).</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>&gt;ip        (indent the inner paragraph — the block)   or   &gt;i{ inside braces
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>da(        (delete a-parens: the whole (arg, list), cursor anywhere within)
+</code></pre></div>
+Objects make the edit position-independent: <code>&gt;ip</code> re-indents the whole block regardless of where
+the cursor sits in it, and <code>da(</code> removes the parens <em>and</em> their contents from any point inside.
+No visual-select, so both stay <code>.</code>-repeatable.</p>
+</details>
+<h3 id="challenge-5-stretch-your-first-earned-vimrc-line">Challenge 5 (stretch) — Your first earned vimrc line<a class="headerlink" href="#challenge-5-stretch-your-first-earned-vimrc-line" title="Permanent link">&para;</a></h3>
+<p>Add exactly one line to <code>~/.vimrc</code> that solves a real friction you hit this week — a mapping for your
+most-repeated action — and be able to explain it cold.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c">&quot; &lt;leader&gt;s: save, then lint the current file without leaving Vim (M5 gate, now in-editor)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">nnoremap</span> <span class="p">&lt;</span>leader<span class="p">&gt;</span>s :<span class="k">w</span><span class="p">&lt;</span>CR<span class="p">&gt;</span>:<span class="p">!</span>shellcheck %<span class="p">&lt;</span>CR<span class="p">&gt;</span>
+</code></pre></div>
+<code>nnoremap</code> = a non-recursive <strong>N</strong>ormal-mode map; <code>&lt;leader&gt;</code> is your namespace prefix; <code>%</code> expands
+to the current file; <code>&lt;CR&gt;</code> is Enter. Reload with <code>:source %</code>. The rule that outranks the mapping:
+<strong>every vimrc line is commented with the pain it solves</strong> — you must own it, not borrow it.</p>
 </details>
 <hr />
 <h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
 <p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
 is what builds the memory.</em></p>
 <details class="question">
-<summary>Terminal vs shell — what is each, and which one is Bash?</summary>
-<p>The <strong>terminal</strong> is the window program that draws text and forwards your keystrokes; the <strong>shell</strong>
-is the command interpreter running inside it. <strong>Bash is the shell.</strong> (Phone line vs the person
-answering: the terminal carries the conversation; bash is who answers.)</p>
+<summary>Why is Vim modal — what editing reality does the design bet on?</summary>
+<p>Editing is ~90% navigating and changing existing text, ~10% typing new text. Modal design gives the
+<em>majority</em> activity — commanding — the whole keyboard, and makes typing (Insert) the special case.
+Normal mode optimizes precision movement and surgical change.</p>
 </details>
 <details class="question">
-<summary>In <code>ls -l /home</code>, which part is the option and which the argument?</summary>
-<p><code>-l</code> is the <strong>option</strong> (modifies <em>how</em> <code>ls</code> behaves — long format); <code>/home</code> is the <strong>argument</strong>
-(<em>what</em> it operates on).</p>
+<summary>State the grammar formula. Why is learning one new motion worth more than one new command?</summary>
+<p><code>[count] verb motion/object</code>. Verbs and motions are independent sets composed at use-time, so
+<em>V</em> verbs × <em>M</em> motions = <em>V×M</em> capabilities from <em>V+M</em> learned items. A new motion instantly works
+with <strong>every</strong> verb you already know — multiplicative, not additive.</p>
 </details>
 <details class="question">
-<summary>Who expands <code>*.md</code> — the shell or <code>ls</code>? How would you prove it?</summary>
-<p>The <strong>shell</strong>, before the program runs. Prove it with <code>echo *.md</code>: <code>echo</code> only prints its
-arguments, so what you see is the filenames the shell already substituted — <code>ls</code> never sees the <code>*</code>.</p>
+<summary><code>ci\"</code> works from anywhere inside the quotes; a motion like <code>c/\"</code> doesn't. Why, and why does it matter for <code>.</code>?</summary>
+<p>Motions run <strong>from</strong> the cursor to a target; text objects select a region <strong>around</strong> the cursor
+defined by structure. Objects are position-independent, so the identical keystrokes apply at the
+next site — which is exactly what <code>.</code> replays. Objects are what make edits repeatable.</p>
 </details>
 <details class="question">
-<summary>Why is <code>cd</code> a shell built-in while <code>ls</code> is a separate program?</summary>
-<p><code>cd</code> changes the shell's <em>own</em> working directory; a child process can't change its parent's
-directory, so it must run inside the shell. <code>ls</code> only reads and prints — fine as an external
-program in <code>/usr/bin</code>.</p>
+<summary>You <code>yy</code> a line, then <code>dd</code> another, then <code>p</code> — the wrong text appears. Explain and fix.</summary>
+<p><code>dd</code> overwrote the <strong>unnamed</strong> register (deletes and yanks both write it), so <code>p</code> puts the deleted
+line. Your yank still lives in <code>"0</code> (deletes never touch it). Fix: <strong><code>"0p</code></strong>.</p>
 </details>
 <details class="question">
-<summary><code>rm</code> has no undo. Name the three habits that stand in for one.</summary>
-<p><strong>Sandbox discipline</strong> (act where mistakes are cheap), <strong><code>ls</code>-before-<code>rm</code>/<code>mv</code></strong> (look before you
-change), and <strong><code>echo</code>-the-glob</strong> (see the expansion before a destructive command uses it). Backups
-come later (M15).</p>
+<summary>Whole-line verbs, and the exit keys for each mode?</summary>
+<p>Double the verb for the whole line: <code>dd</code> <code>yy</code> <code>cc</code> <code>&gt;&gt;</code>. To leave any non-Normal mode: <strong><code>Esc</code></strong>
+(Insert/Visual), <code>Enter</code> or <code>Esc</code> (Command-line). Everything returns to Normal — home.</p>
 </details>
 <details class="question">
-<summary><code>bash: lls: command not found</code> — the three likely causes, in order?</summary>
-<p>(1) <strong>Typo</strong> of a real command (most likely — retype or Tab-complete); (2) the program <strong>isn't
-installed</strong> (<code>type lls</code>, <code>man lls</code>); (3) it's installed but <strong>not in <code>$PATH</code></strong> (<code>echo $PATH</code>).</p>
+<summary><code>sudoedit</code> vs <code>sudo vim</code> — what runs as root in each, and why does it matter?</summary>
+<p><code>sudoedit</code> copies the file to a temp path, runs your editor <strong>as you</strong> (your vimrc, no privileges),
+then writes back via sudo with validation. <code>sudo vim</code> runs the entire editor + vimrc + <code>:!</code> shell
+access <strong>as root</strong> — a huge privileged surface. Prefer <code>sudoedit</code>.</p>
 </details>
 <details class="question">
-<summary><code>less</code> shows <code>(END)</code> and won't let you out. What happened, and the key?</summary>
-<p>You're in the <strong>pager</strong> at the end of the file — not frozen, just waiting. Press <strong><code>q</code></strong> to quit.</p>
+<summary>You're on a minimal container with <code>vi</code> only, no config. What still works, what doesn't, and why the split?</summary>
+<p>Still work: modes, the grammar core (<code>d w c $ /</code>), <code>:s</code>, marks — the <strong>POSIX vi</strong> subset. Gone:
+most text objects, multi-level undo, visual block, <code>"0</code> semantics, your vimrc/mappings, persistent
+undo. The split is the standard itself: POSIX froze <code>vi</code> ~1992; Vim's additions are the "IM".</p>
 </details>
 <div class="admonition example">
 <p class="admonition-title">Teach it back (the real test)</p>
-<p>Out loud, in <strong>3 minutes, no notes</strong>: <em>"What is the terminal, what is the shell, and why do
-professionals still use them?"</em> You must distinguish terminal from shell and give <strong>≥2 engineering
-reasons</strong> (scriptable, remote/SSH, identical everywhere). Then, in <strong>90 seconds</strong>, teach <em>"what is a
-path?"</em> to a 10-year-old — postal-address analogy required, then show <code>pwd</code>/<code>cd</code> making it real. If
-you can't yet, that's your signal to reread the Key Notes, not to move on.</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>: <em>"Why does Vim refuse to just let you type?"</em> — the 90/10
+reality, modes as two keyboards, the grammar with the multiplication argument, and repeatability
+(<code>.</code>) as the payoff; the honest week-one cliff <strong>must</strong> appear. Then, in <strong>90 seconds</strong> for a
+non-technical listener: <em>"Why learn a 1991 editor?"</em> — the piano analogy (one hard week, a lifetime
+of playing) plus "it's on every server like stairs in every building — elevators are nicer until
+the power's out." If you can't yet, reread the Key Notes — don't move on.</p>
 </div>
 <hr />
 <h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
-<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M2 also closes </em><em>Stage 1</em><em>. A
-module is only "done" when every box is true.</em></p>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress to M7 (Tmux). A module is only "done"
+when every box is true — except the stage-gate race, which may legitimately land at the D14 retest.</em></p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> terminal vs shell vs prompt vs command precisely, with the process model underneath.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all three from memory: the keystroke→output loop, the path tree, and prompt anatomy.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Navigate</strong> to any of <code>/etc</code>, <code>/var/log</code>, <code>/usr/bin</code>, <code>~</code>, the sandbox, <code>/proc</code> and prove arrival with <code>pwd</code> — Tab-completing, no wrong turns.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> the Level-2 sequence (tree, files, copy, rename, safe delete) in under 3 minutes, zero errors, a verify between every mutation.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Develop</strong> a novel two-command pipe (e.g. count matching files) and explain each part.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> state <em>and</em> demonstrate the safety habits — sandbox, <code>ls</code>-before-<code>rm</code>, <code>echo</code>-the-glob, read-before-paste, no-sudo.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> one unseen planted failure (typo / wrong dir / stuck pager / empty glob) with a stated method: hypothesis → check → fix.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a misbehaving glob with <code>echo</code> and interpret both possible findings (no match vs wrong directory).</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> show Tab / <code>Ctrl-R</code> / <code>Ctrl-A</code> / <code>Ctrl-E</code> / <code>Ctrl-C</code> fluency live, and say why keystrokes matter at scale.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure:</strong> show and explain 3 lines of your own <code>~/.bashrc</code> (read-only understanding).</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Self-serve:</strong> solve ≥3 unseen tasks using only <code>man</code> (start at SYNOPSIS), and score ≥80% on the validation bank.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (terminal-vs-shell explanation mandatory).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> modal design + the grammar + the dot formula flawlessly, with <code>i</code> vs <code>a</code> objects precise.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all four blanks from memory: the mode map, the grammar table, the register map, and your own vimrc.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Navigate</strong> to any target in a ~100-line file in ≤3 keystrokes, arrow-free (search, char-finds, counts, <code>*</code>, <code>G</code>).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Change</strong> by grammar first-try on 8/10 dictated edits — objects over visual-select — stating each as a sentence before the keys.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Scale</strong> one edit three ways with the right tool each: dot + <code>n.</code> (judgment), <code>:%s/\&lt;…\&gt;//gc</code> (mechanical), macro (structural).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Automate:</strong> record a macro first-take and bulk-apply it on real work; <code>@@</code> and counted replay fluent.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Registers:</strong> demonstrate the <code>"0p</code> rescue, a named register, and <code>:reg</code> reading, unprompted.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> articulate <code>sudoedit</code> vs <code>sudo vim</code> mechanics, <code>nomodeline</code> reasoning, and the swap/undo/viminfo leak points.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure</strong> a vimrc v1 (25–40 lines) live, and explain any line cold on random pointing — zero unexplainable lines.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> the ops gauntlet: <code>Ctrl-s</code> freeze (<code>Ctrl-q</code>), swap recovery (<code>vim -r</code>), stair-stepped paste (<code>:set paste</code>), stuck-in-a-mode.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a planted-bug vimrc by bisection: <code>vim -u NONE</code> → halve the file → <code>:verbose set opt?</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Self-serve:</strong> learn ≥3 capabilities from <code>:help</code> alone (named), and score ≥80% on the validation bank.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (the "why does Vim refuse to let you type?" explanation is mandatory).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Race (stage-gate):</strong> record Day-6 old-editor vs Vim times; if Vim is slower, schedule the D14 retest (the gate accepts it).</li>
 </ul>
 <hr />
 <h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
-<p>Spaced repetition is not optional; it's where the memory actually forms. From this module on
-<strong>interleaving is active</strong> — every M2 review also pulls in one Module 01 item. Schedule these and
-<em>keep</em> them:</p>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active —
+every M6 review also pulls in one <strong>Module 05</strong> item (the Caretaker scripts are the files you edit).
+And Vim has a special property: <strong>it reviews itself</strong> — every future editing session is implicit
+practice, so these reviews keep the <em>concepts</em> and stretch goals alive. Schedule these and <em>keep</em> them:</p>
 <table>
 <thead>
 <tr>
 <th>When</th>
 <th>Do</th>
-<th>Interleaved M1 item</th>
+<th>Interleaved M5 item</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Day 1</strong></td>
-<td>Command sprint cold (dir → file → copy → rename → verify → safe delete) · all flashcards</td>
-<td>One 1-minute "what is an OS" explanation</td>
+<td>Flashcards · escape-room sprint (recording trap, frozen terminal, stuck in Insert, unsaved-quit)</td>
+<td>The 8-line script skeleton, shellcheck-clean</td>
 </tr>
 <tr>
 <td><strong>Day 3</strong></td>
-<td>Redraw the keystroke loop · glob-prediction sprint · debug an empty-glob scenario</td>
-<td><code>free -h</code> interpretation cold</td>
+<td>Macro cold-task (fresh list→array variant) · the register + <code>"0p</code> questions</td>
+<td>Write a getopts skeleton <em>in Vim</em>, timed</td>
 </tr>
 <tr>
 <td><strong>Day 7</strong></td>
-<td>Rebuild the sandbox tree from nothing, unaided · the safety-habit questions</td>
-<td>Memory-hierarchy diagram from memory</td>
+<td>Registers + Ex sprints · the vimrc blank (still own every line?)</td>
+<td>Quoting-gauntlet redo in a fresh minefield</td>
 </tr>
 <tr>
 <td><strong>Day 14</strong></td>
-<td>Learn one unseen command via <code>man</code>/SYNOPSIS only · "press Enter" walkthrough, timed</td>
-<td>Boot-sequence narration</td>
+<td><strong>THE RACE, retest</strong> (same task shape as Day 6) — record the delta</td>
+<td><code>shellcheck</code> an old Caretaker script</td>
 </tr>
 <tr>
 <td><strong>Day 30</strong></td>
-<td>Recreate the Terminal Home structure in ≤10 min · the two stretch challenges</td>
-<td>M1 machine-inspection diagnosis</td>
+<td>Keystroke audit redo on real work · adopt one new <code>:help</code> topic</td>
+<td>Cold-write a small tool to the full standard</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Connects forward to:</strong> Bash scripting (M5 — today's command lines, written to a file) · Vim (M6) and
-Tmux (M7), which live inside the terminal · SSH (M9 — this interface over the network) · Git (M8) and
-Claude Code (M11), commands obeying today's anatomy · Docker (M16), where <code>docker exec -it … bash</code> is
-this module inside a container.</p>
+<p><strong>Connects forward to:</strong> Tmux (M7 — the session layer around the editor; copy-mode is vi-keys) · Git
+(M8 — commit messages, rebase-todo, <code>vimdiff</code> conflicts; the vimrc becomes your first versioned file) ·
+SSH (M9 — full editing power on any remote box) · Chezmoi (M10 — vimrc becomes a managed dotfile) ·
+Programming (M12+ — editing is the inner loop; <code>kubectl edit</code> at M19 drops you here under pressure).</p>
 <div class="admonition quote">
 <p class="admonition-title">The one-sentence takeaway</p>
-<p>M1 taught what the machine is; M2 taught how to talk to it — every remaining module is just new
-vocabulary in this same conversation.</p>
+<p>M6 converts editing from a tax on every future module into compound interest — the same keystrokes,
+on your laptop today and inside a broken production node in Stage 8.</p>
 </div>
 
 
@@ -3183,7 +3310,7 @@ vocabulary in this same conversation.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../module-01/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 01 — Computer &amp; OS Fundamentals">
+          <a href="../../stage-02/module-05/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 05 — Bash Scripting">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3193,20 +3320,20 @@ vocabulary in this same conversation.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Module 01 — Computer & OS Fundamentals
+                Module 05 — Bash Scripting
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../stage-02/module-03/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 03 — Linux Essentials">
+          <a href="../module-07/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 07 — Tmux">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Module 03 — Linux Essentials
+                Module 07 — Tmux
               </div>
             </div>
             <div class="md-footer__button md-icon">

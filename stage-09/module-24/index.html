@@ -1,0 +1,3593 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The curriculum re-read with an adversary in the margins — threat modeling, least privilege, defense in depth, and the hardening loop. Turn 23 modules of good practice into a fortress you can defend line by line.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../../stage-08/module-23/">
+      
+      
+        <link rel="next" href="../module-25/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 24 — Security - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-24-security" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 24 — Security
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-threat-model-comes-first-then-the-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the threat model comes first, then the loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cia-what-secure-actually-protects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CIA — what "secure" actually protects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#least-privilege-one-idea-in-six-uniforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Least privilege — one idea in six uniforms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defense-in-depth-because-one-wall-always-falls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Defense in depth — because one wall always falls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#users-permissions-sudo-read-the-bits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Users, permissions &amp; sudo — read the bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#firewalls-default-deny-fails-safe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firewalls — default-deny fails safe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssh-hardening-keys-only-justified-line-by-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH hardening — keys-only, justified line by line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secrets-the-hierarchy-of-sin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets — the hierarchy of sin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tls-pki-identity-plus-confidentiality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TLS &amp; PKI — identity plus confidentiality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authn-vs-authz-logged-in-never-means-authorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AuthN vs AuthZ — logged in never means authorized
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auditing-logging-measure-the-delta-preserve-the-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditing &amp; logging — measure the delta, preserve the evidence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-harden-a-box-you-own" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: harden a box you own
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-unrecognized-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The unrecognized listener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-lockout-safe-sshd-narrated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Lockout-safe sshd, narrated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-teammate-who-wants-privileged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The teammate who wants --privileged
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-stretch-rank-two-controls-by-adversary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 (stretch) — Rank two controls by adversary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-fortress-line-defended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The Fortress line, defended
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-threat-model-comes-first-then-the-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the threat model comes first, then the loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cia-what-secure-actually-protects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CIA — what "secure" actually protects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#least-privilege-one-idea-in-six-uniforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Least privilege — one idea in six uniforms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defense-in-depth-because-one-wall-always-falls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Defense in depth — because one wall always falls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#users-permissions-sudo-read-the-bits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Users, permissions &amp; sudo — read the bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#firewalls-default-deny-fails-safe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firewalls — default-deny fails safe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssh-hardening-keys-only-justified-line-by-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH hardening — keys-only, justified line by line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secrets-the-hierarchy-of-sin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets — the hierarchy of sin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tls-pki-identity-plus-confidentiality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TLS &amp; PKI — identity plus confidentiality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authn-vs-authz-logged-in-never-means-authorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AuthN vs AuthZ — logged in never means authorized
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auditing-logging-measure-the-delta-preserve-the-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditing &amp; logging — measure the delta, preserve the evidence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-harden-a-box-you-own" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: harden a box you own
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-unrecognized-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The unrecognized listener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-lockout-safe-sshd-narrated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Lockout-safe sshd, narrated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-teammate-who-wants-privileged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The teammate who wants --privileged
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-stretch-rank-two-controls-by-adversary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 (stretch) — Rank two controls by adversary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-fortress-line-defended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The Fortress line, defended
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-24-security">Module 24 — Security<a class="headerlink" href="#module-24-security" title="Permanent link">&para;</a></h1>
+<p><small>Stage 9 · Professional Workflows · ~3 weeks at 4 h/day · Prerequisites — M3 (permissions — least privilege's original mechanism), M9 (SSH — your first hardening target), M23 (the debugging loop and the bug-or-attack fork). Opens Stage 9.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Security</strong> is the engineering discipline of making a system resist an <strong>adversary</strong> — someone
+intelligent who wants what the system has and probes it where you didn't look. It is not a product or a
+checklist; it is a <strong>posture</strong> built from four practices: <strong>threat modeling</strong> (what am I protecting,
+from whom, at what cost?), <strong>least privilege</strong> (everything gets the minimum it needs — M3's permissions
+philosophy, universalized), <strong>hardening</strong> (attack surface reduced, each change justified), and
+<strong>hygiene</strong> (secrets encrypted, patches applied, evidence preserved). The defining asymmetry:
+<strong>you must be right everywhere; the attacker needs to be right once.</strong></p>
+<p>Everything you built in 23 modules currently <strong>trusts its environment</strong>. This module removes that
+assumption. Your SSH port is a doorway (M9); your containers share a kernel (M17); your cluster API has
+power over everything (M19–20); your dotfiles repo may already contain a token you forgot (M8/M11). You
+will threat-model your own stack, harden it with <strong>measured</strong> before/after audits (numbers, not vibes),
+and take over M23's bug-or-attack fork as a full discipline — the same loop, but now the logs may have
+been edited by the intruder.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>This is the module that re-reads the whole curriculum <strong>adversarially</strong>. Every permission (M3), key
+(M9), digest (M16), and RBAC verb (M20) you learned as <em>good practice</em> turns out to be a wall in a
+fortress you were already building. <strong>M25 (Observability)</strong> gives that fortress a watchtower — the
+audit scores become metrics, auth events become alerts. <strong>M29</strong> applies least privilege to AI agents
+(tool allowlists are the blast-radius question asked of a model). The <strong>capstone</strong> inherits the
+hardened substrate wholesale. Learn the posture now and every later system is defended by reflex.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 24 — Security&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Analogy / Misconceptions): the defender's
+asymmetry (right everywhere vs right once) → the four questions that come <em>before</em> any control →
+least privilege as one idea in six uniforms → the hardening loop (audit → one change → re-audit →
+document) → the medieval city (gates that must stay open, the postern everyone forgot, the gift horse
+from upstream) → "nobody would target me" answered by Mirai (bots target addresses, not people).</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-harden-a-box-you-own">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. Security is muscle memory — the lockout-safe order, the <code>ls</code>-before-<code>chmod</code>
+habit, <code>sshd -t</code> before every reload — and typing beats watching every time.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-the-threat-model-comes-first-then-the-loop">The picture: the threat model comes first, then the loop<a class="headerlink" href="#the-picture-the-threat-model-comes-first-then-the-loop" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph model["Threat model — ask BEFORE any control"]
+        A["1 · Assets&lt;br/&gt;data · keys · accounts · compute"]
+        B["2 · Adversaries&lt;br/&gt;bots · thieves · supply chain"]
+        C["3 · Attack surface&lt;br/&gt;ports · accounts · deps · you"]
+    end
+    A --&gt; D["4 · Which mitigations&lt;br/&gt;are worth their cost?"]
+    B --&gt; D
+    C --&gt; D
+    D --&gt; Loop
+    subgraph Loop["The hardening loop"]
+        E["Audit&lt;br/&gt;baseline score"] --&gt; F["ONE justified&lt;br/&gt;change"]
+        F --&gt; G["Re-audit&lt;br/&gt;measure the delta"]
+        G --&gt; H["Document&lt;br/&gt;why this line exists"]
+        H --&gt; E
+    end</code></pre>
+<p>Security without a threat model is superstition — buying padlocks for the windows while the door stands
+open. The four questions run <em>before</em> you touch a control; the loop then applies each control <strong>one at a
+time</strong>, measures the delta, and writes down why the line exists. Cargo-culting a hardening guide
+produces a system nobody can debug; every line carries its justification.</p>
+<h3 id="cia-what-secure-actually-protects">CIA — what "secure" actually protects<a class="headerlink" href="#cia-what-secure-actually-protects" title="Permanent link">&para;</a></h3>
+<p>Every control serves one (or more) of three goals. Name the goal before you name the control:</p>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Question it answers</th>
+<th>Broken by</th>
+<th>Guarded by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Confidentiality</strong></td>
+<td>Can only the right eyes see it?</td>
+<td>leaked secret, stolen disk, sniffed traffic</td>
+<td>permissions, encryption at rest, TLS</td>
+</tr>
+<tr>
+<td><strong>Integrity</strong></td>
+<td>Is it unchanged and authentic?</td>
+<td>tampering, backdoored dependency</td>
+<td>checksums, signatures, pinned digests</td>
+</tr>
+<tr>
+<td><strong>Availability</strong></td>
+<td>Is it there when needed?</td>
+<td>DoS, resource exhaustion, ransomware</td>
+<td>resource limits, backups, rate-limiting</td>
+</tr>
+</tbody>
+</table>
+<p>A control that raises confidentiality can cost availability (a firewall that locks <em>you</em> out). The
+threat model decides which corner of the triad matters here — and gives you permission to say <strong>no</strong> to
+a control whose cost exceeds its value.</p>
+<h3 id="least-privilege-one-idea-in-six-uniforms">Least privilege — one idea in six uniforms<a class="headerlink" href="#least-privilege-one-idea-in-six-uniforms" title="Permanent link">&para;</a></h3>
+<p>The load-bearing principle: <strong>everything gets the minimum access it needs to function.</strong> You have already
+met it five times; this module names it once and enforces it everywhere:</p>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>The mechanism</th>
+<th>Module</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File modes &amp; users</td>
+<td><code>rwx</code> bits, ownership, no needless root</td>
+<td>M3</td>
+</tr>
+<tr>
+<td>Service accounts</td>
+<td>systemd <code>DynamicUser</code>, <code>ProtectSystem</code></td>
+<td>M15</td>
+</tr>
+<tr>
+<td>Container user</td>
+<td>non-root <code>USER</code> in the image</td>
+<td>M16</td>
+</tr>
+<tr>
+<td>Capabilities</td>
+<td>root split into grantable slivers, <code>--cap-drop=ALL</code></td>
+<td>M17</td>
+</tr>
+<tr>
+<td>Cluster identity</td>
+<td>RBAC least-verbs (<code>kubectl auth can-i</code>)</td>
+<td>M20</td>
+</tr>
+<tr>
+<td>Escalation</td>
+<td><code>sudo</code> rules, no <code>NOPASSWD</code> without justification</td>
+<td>M3/M24</td>
+</tr>
+</tbody>
+</table>
+<p>Its dual is <strong>blast radius</strong>: assume this identity <em>is</em> compromised — what can it reach? An unjustified
+grant is debt; every standing privilege is a wall you must defend.</p>
+<h3 id="defense-in-depth-because-one-wall-always-falls">Defense in depth — because one wall always falls<a class="headerlink" href="#defense-in-depth-because-one-wall-always-falls" title="Permanent link">&para;</a></h3>
+<p>The asymmetry (right everywhere vs right once) means <strong>no single control may be load-bearing alone.</strong>
+Layer them so a breach of one meets another, and add <strong>detection</strong> for when prevention fails:</p>
+<pre class="mermaid"><code>flowchart TB
+    Cd["Code&lt;br/&gt;no secrets in git · scanned deps"] --&gt; Co["Container&lt;br/&gt;non-root · drop caps · pinned digest"]
+    Co --&gt; Cl["Cluster&lt;br/&gt;RBAC · PSS · default-deny NetPol"]
+    Cl --&gt; Ho["Host + Network&lt;br/&gt;firewall default-deny · SSH keys-only · patched"]
+    Ho --&gt; De["Detection&lt;br/&gt;logs as evidence · the bug-or-attack fork"]</code></pre>
+<p>This is the <strong>4 C's</strong> (Code → Container → Cluster → Cloud/host), each an independent layer with its own
+controls, wrapped by detection. The perimeter died with laptops and clouds; identity, patching, and
+provenance became the walls.</p>
+<h3 id="users-permissions-sudo-read-the-bits">Users, permissions &amp; sudo — read the bits<a class="headerlink" href="#users-permissions-sudo-read-the-bits" title="Permanent link">&para;</a></h3>
+<p>Least privilege on a host starts with the <code>rwx</code> bits M3 taught. Read a mode as three triads (owner /
+group / other) plus special bits — and treat any surprise as an incident:</p>
+<table>
+<thead>
+<tr>
+<th>Symbolic</th>
+<th>Octal</th>
+<th>Meaning</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-rw-------</code></td>
+<td><code>600</code></td>
+<td>owner read/write only</td>
+<td>a secrets file — nobody else reads it</td>
+</tr>
+<tr>
+<td><code>-rw-r--r--</code></td>
+<td><code>644</code></td>
+<td>owner writes, all read</td>
+<td>normal config, code</td>
+</tr>
+<tr>
+<td><code>-rwxr-xr-x</code></td>
+<td><code>755</code></td>
+<td>owner writes, all read/execute</td>
+<td>programs, directories</td>
+</tr>
+<tr>
+<td><code>-rw-rw-rw-</code></td>
+<td><code>666</code></td>
+<td><strong>world-writable</strong> — anyone edits it</td>
+<td><strong>never</strong> — a tampering hole</td>
+</tr>
+<tr>
+<td><code>-rwsr-xr-x</code></td>
+<td><code>4755</code></td>
+<td><strong>SUID</strong> — runs as the file's <em>owner</em></td>
+<td>rare, audited (<code>find / -perm -4000</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>A world-writable file (<code>666</code>, <code>777</code>) lets any local user rewrite it — integrity gone. A <strong>SUID-root</strong>
+binary runs with root's power regardless of who launches it: "root by another door." <code>sudo -l</code> shows
+what escalation <em>you</em> hold; <code>NOPASSWD</code> without a written reason is a standing hole.</p>
+<h3 id="firewalls-default-deny-fails-safe">Firewalls — default-deny fails safe<a class="headerlink" href="#firewalls-default-deny-fails-safe" title="Permanent link">&para;</a></h3>
+<p>A host firewall (<code>ufw</code>, <code>nftables</code>, <code>iptables</code>) decides which listeners the network can reach. The only
+sane default is <strong>deny inbound, then allow by exception</strong> — because of <em>how each policy fails</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>New/forgotten service is…</th>
+<th>Fails</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Default-deny</strong> (allowlist)</td>
+<td>unreachable until you allow it</td>
+<td><strong>safe</strong> — errors are visible, fixable</td>
+<td>you must KNOW your flows (enumeration)</td>
+</tr>
+<tr>
+<td><strong>Default-allow</strong> (blocklist)</td>
+<td>exposed until you remember to block it</td>
+<td><strong>open</strong> — errors are invisible until exploited</td>
+<td>none up front — you pay on breach</td>
+</tr>
+</tbody>
+</table>
+<p>Default-deny demands you enumerate your flows (that work <em>is the point</em>). The lockout law: <strong>allow SSH
+first, and test it from a second session, before you enable the firewall</strong> — never close a door you are
+standing behind.</p>
+<h3 id="ssh-hardening-keys-only-justified-line-by-line">SSH hardening — keys-only, justified line by line<a class="headerlink" href="#ssh-hardening-keys-only-justified-line-by-line" title="Permanent link">&para;</a></h3>
+<p>SSH is your first and most important hardening target (M9's key ceremony, now enforced). Harden
+<code>sshd_config</code> against <code>man sshd_config</code>, <strong>one line at a time, each with its WHY</strong> — and always
+<code>sshd -t</code> before reloading:</p>
+<table>
+<thead>
+<tr>
+<th>Directive</th>
+<th>Set to</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PasswordAuthentication</code></td>
+<td><code>no</code></td>
+<td>passwords on a reachable port are Mirai food — keys can't be brute-forced</td>
+</tr>
+<tr>
+<td><code>PermitRootLogin</code></td>
+<td><code>no</code></td>
+<td>force a named user + <code>sudo</code> — accountability and one less target</td>
+</tr>
+<tr>
+<td><code>PubkeyAuthentication</code></td>
+<td><code>yes</code></td>
+<td>keys are the AuthN you keep</td>
+</tr>
+<tr>
+<td><code>AllowUsers</code></td>
+<td><code>you</code></td>
+<td>an explicit allowlist of who may even try</td>
+</tr>
+<tr>
+<td><code>MaxAuthTries</code></td>
+<td><code>3</code></td>
+<td>cut brute-force room and log noise</td>
+</tr>
+</tbody>
+</table>
+<p>The lockout-safe order: keep a second session alive → verify <strong>key</strong> login works while passwords are
+still on → <em>then</em> set <code>PasswordAuthentication no</code> → <code>sshd -t</code> → <strong><code>reload</code>, not restart</strong> → confirm a
+fresh login in a third session while the lifeboats stay open.</p>
+<h3 id="secrets-the-hierarchy-of-sin">Secrets — the hierarchy of sin<a class="headerlink" href="#secrets-the-hierarchy-of-sin" title="Permanent link">&para;</a></h3>
+<p>Where a secret lives decides how badly it leaks. Climb the ladder worst-to-best, and name the leak path
+at each rung:</p>
+<table>
+<thead>
+<tr>
+<th>Rung (worst → best)</th>
+<th>Leak path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hardcoded in code</td>
+<td>anyone who reads the source</td>
+</tr>
+<tr>
+<td>Committed to git</td>
+<td>history is forever — clones, forks, scrapers already have it</td>
+</tr>
+<tr>
+<td>In an env var</td>
+<td><code>/proc/PID/environ</code>, crash dumps, <code>docker inspect</code>, logging frameworks</td>
+</tr>
+<tr>
+<td>In a <code>0600</code> file</td>
+<td>plaintext at rest — any process running as you reads it; a stolen disk ignores the mode</td>
+</tr>
+<tr>
+<td><strong>Encrypted at rest</strong> (sops+age)</td>
+<td>ciphertext in the repo; plaintext exists only <em>at time of use</em></td>
+</tr>
+</tbody>
+</table>
+<p>The rule that surprises everyone: <strong>a committed secret is burned the moment it's pushed.</strong> History
+rewriting only cleans <em>your</em> copy — clones and mirrors kept it. The only real fix is <strong>rotation</strong>
+(making the old value worthless). <code>gitleaks</code> audits your own history because git never forgets (M8's
+feature, now a liability).</p>
+<h3 id="tls-pki-identity-plus-confidentiality">TLS &amp; PKI — identity plus confidentiality<a class="headerlink" href="#tls-pki-identity-plus-confidentiality" title="Permanent link">&para;</a></h3>
+<p>TLS (M14's handshake, operationalized) does two jobs at once: <strong>confidentiality</strong> (the traffic is
+encrypted) and <strong>identity</strong> (a certificate, signed by a Certificate Authority you trust, proves the
+server is who it claims). The chain of trust: a <strong>CA</strong> signs a server's <strong>certificate</strong>; your machine
+ships a store of trusted CA roots; the handshake verifies the chain and the hostname. Hygiene that
+actually matters at home scale: <strong>modern versions only</strong> (TLS 1.2+), watch <strong>expiry dates</strong> of anything
+you serve (<code>openssl s_client -connect host:443</code> inspects the chain), and remember encryption only
+<em>relocates</em> trust — now the <strong>private key's</strong> storage and rotation are the attack surface.</p>
+<h3 id="authn-vs-authz-logged-in-never-means-authorized">AuthN vs AuthZ — logged in never means authorized<a class="headerlink" href="#authn-vs-authz-logged-in-never-means-authorized" title="Permanent link">&para;</a></h3>
+<p>Two different questions, endlessly confused: <strong>AuthN</strong> (authentication) = <em>who are you?</em> (keys,
+passwords); <strong>AuthZ</strong> (authorization) = <em>what may you do?</em> (<code>sudo</code>, RBAC). The classic hole is treating
+"the request is authenticated" as "the request is allowed" — any logged-in identity then reaches admin
+actions. Keys beat passwords for AuthN; least privilege governs AuthZ.</p>
+<h3 id="auditing-logging-measure-the-delta-preserve-the-evidence">Auditing &amp; logging — measure the delta, preserve the evidence<a class="headerlink" href="#auditing-logging-measure-the-delta-preserve-the-evidence" title="Permanent link">&para;</a></h3>
+<p>Two uses of observation. <strong>Auditing</strong> is the loop's measuring instrument: a baseline <strong>number</strong> (a
+hardening index), one change, the delta <em>measured</em> not asserted — <code>ss -tlnp</code> enumerates every listener,
+<code>find / -perm -4000</code> every SUID binary, <code>sudo -l</code> every grant. <strong>Logging</strong> is detection's raw material:
+<code>journalctl -u ssh</code>, <code>auth.log</code>, <code>lastb</code> (the failed-login census makes Mirai concrete). When an anomaly
+appears, the <strong>bug-or-attack fork</strong> (M23's handoff): <strong>preserve first</strong> — timestamped copies of logs,
+<code>last</code>/<code>who</code> output — <em>then</em> diagnose, because mitigation destroys evidence and the logs themselves may
+have been edited by the intruder.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>The threat model comes first</strong> — assets, adversaries, attack surface, mitigations-worth-their-cost. Honest adversaries only (bots, not nation-states).</li>
+<li><strong>Least privilege is one idea in six uniforms</strong> — file modes, service accounts, container users, capabilities, RBAC verbs, sudo. Always ask the blast-radius question.</li>
+<li><strong>The hardening loop:</strong> audit (score) → <strong>one</strong> justified change → re-audit (delta) → document (why). Cargo-cult hardening is a system nobody can debug.</li>
+<li><strong>Default-deny fails safe; default-allow fails open.</strong> Firewall + SSH: allow the door, test from a second session, <em>then</em> close — the lockout law.</li>
+<li><strong>A committed secret is burned — rotate it.</strong> History rewriting is cosmetic; encrypted-at-rest (sops+age) is the ceiling. Env vars leak through a dozen side channels.</li>
+<li><strong>Preserve before you mitigate.</strong> Logs are evidence; the bug-or-attack fork copies first, diagnoses second — the intruder may have edited the logs.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-harden-a-box-you-own">Guided Lab: harden a box you own<a class="headerlink" href="#guided-lab-harden-a-box-you-own" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. Every action targets the throwaway machine in front of you — a box you own. You
+will enumerate its attack surface, add a least-privilege user, fix an over-permissioned secret and a
+SUID surprise, put up a default-deny firewall, and harden <code>sshd</code> — verifying at every step, the way
+real hardening is done.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-24" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-24" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a root-capable Linux VM in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — a <strong>throwaway</strong> VM or container you own: <code>docker run -it --rm ubuntu bash</code>, then <code>apt-get update</code>. Never run the hardening steps on a machine you can't afford to lock yourself out of.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">The lockout law — read before you touch sshd</p>
+<p>Every hardening change is a <strong>change</strong>: one at a time, verified, reversible. The <code>sshd</code> step disables
+password login — in this disposable lab that is safe, but on any machine you reach <em>by</em> SSH you
+<strong>test key login in a second session first</strong>, run <code>sshd -t</code>, and <strong>reload</strong> (never blindly restart).
+Test the door before you close it behind you.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Map the attack surface</label><label for="__tabbed_1_2">2 · Add a least-privilege user</label><label for="__tabbed_1_3">3 · Fix the leak — permissions &amp; a SUID surprise</label><label for="__tabbed_1_4">4 · Lock the doors — firewall + sshd</label><label for="__tabbed_1_5">5 · Re-audit — measure the delta</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>You cannot secure what you haven't enumerated. Use instruments, not memory:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ss<span class="w"> </span>-tlnp<span class="w">                    </span><span class="c1"># every listening socket — each is a doorway</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sudo<span class="w"> </span>-l<span class="w">                     </span><span class="c1"># what escalation do I hold?</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>id<span class="w">                          </span><span class="c1"># who am I, and in which groups?</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w">   </span><span class="c1"># every SUID binary on the box</span>
+</code></pre></div>
+Journal: which listeners do you recognize? Which SUID files are the normal system set (<code>sudo</code>,
+<code>passwd</code>, <code>mount</code>) versus a surprise? This snapshot is your <strong>baseline</strong> — everything after is a
+measured delta.</p>
+</div>
+<div class="tabbed-block">
+<p>Root does everything; a service should do almost nothing. Create a named, minimal user — <strong>not</strong> in
+the sudo group, <strong>no</strong> <code>NOPASSWD</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>useradd<span class="w"> </span>-m<span class="w"> </span>-s<span class="w"> </span>/bin/bash<span class="w"> </span>webops
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>id<span class="w"> </span>webops<span class="w">                   </span><span class="c1"># confirm: no sudo/admin groups</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>sudo<span class="w"> </span>-l<span class="w"> </span>-U<span class="w"> </span>webops<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;webops holds no sudo grants — good&quot;</span>
+</code></pre></div>
+<code>webops</code> can own and run one service without holding the keys to the whole host. That is least
+privilege: the bakers don't hold the gate keys.</p>
+</div>
+<div class="tabbed-block">
+<p>The previous admin left two holes. First reproduce the found state, then fix it the right way:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/opt/app
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;API_TOKEN=sk-live-DEADBEEF&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/opt/app/config.env<span class="w">   </span><span class="c1"># a real-looking secret</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">0666</span><span class="w"> </span>/opt/app/config.env<span class="w">         </span><span class="c1"># world-writable AND world-readable — the surprise</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/bin/bash<span class="w"> </span>/opt/app/backup-tool
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">4755</span><span class="w"> </span>/opt/app/backup-tool<span class="w">        </span><span class="c1"># SUID-root — root by another door</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>ls<span class="w"> </span>-l<span class="w"> </span>/opt/app<span class="w">                              </span><span class="c1"># SEE the problem before you fix it</span>
+</code></pre></div>
+Now harden — least privilege on the bits:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>chown<span class="w"> </span>root:root<span class="w"> </span>/opt/app/config.env
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">0600</span><span class="w"> </span>/opt/app/config.env<span class="w">         </span><span class="c1"># owner-only: confidentiality restored</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>chmod<span class="w"> </span>u-s<span class="w"> </span>/opt/app/backup-tool<span class="w">         </span><span class="c1"># strip the SUID bit: no more root-by-another-door</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>ls<span class="w"> </span>-l<span class="w"> </span>/opt/app<span class="w">                              </span><span class="c1"># verify: -rw------- and no &#39;s&#39;</span>
+</code></pre></div>
+Click <strong>Check</strong> to verify the secret is <code>0600</code> root-owned and the SUID bit is gone.</p>
+</div>
+<div class="tabbed-block">
+<p>Put up a <strong>default-deny</strong> firewall, but <strong>allow SSH first</strong> (the lockout law), then harden <code>sshd</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>-qq<span class="w"> </span>ufw<span class="w"> </span>openssh-server
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>default<span class="w"> </span>deny<span class="w"> </span>incoming<span class="w">        </span><span class="c1"># deny inbound by default — fails safe</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>default<span class="w"> </span>allow<span class="w"> </span>outgoing
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>OpenSSH<span class="w">                 </span><span class="c1"># the ONE door we keep open — before enabling</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>--force<span class="w"> </span><span class="nb">enable</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose<span class="w">                </span><span class="c1"># confirm: Default deny (incoming) + OpenSSH ALLOW</span>
+</code></pre></div>
+Now harden <code>sshd</code> — keys-only, no root login — with a drop-in, and <strong>validate before reload</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;PasswordAuthentication no\nPermitRootLogin no\nMaxAuthTries 3\n&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/ssh/sshd_config.d/99-hardening.conf
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>sudo<span class="w"> </span>sshd<span class="w"> </span>-t<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;config OK&quot;</span><span class="w">       </span><span class="c1"># syntax test BEFORE touching the running daemon</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="w"> </span>ssh<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="w"> </span>sshd<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+</code></pre></div>
+Click <strong>Check</strong> to verify the firewall is default-deny with SSH allowed and <code>sshd</code> is keys-only,
+no-root, and passes <code>sshd -t</code>.</p>
+</div>
+<div class="tabbed-block">
+<p>The loop closes with a <strong>second</strong> look — the delta is the proof:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ss<span class="w"> </span>-tlnp<span class="w">                     </span><span class="c1"># what still listens? (compare to Step 1)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose<span class="w">      </span><span class="c1"># the firewall&#39;s live policy</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>sudo<span class="w"> </span>sshd<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Ei<span class="w"> </span><span class="s1">&#39;passwordauthentication|permitrootlogin&#39;</span><span class="w">   </span><span class="c1"># effective sshd config</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w">   </span><span class="c1"># the SUID surprise should be gone from /opt</span>
+</code></pre></div>
+Write one justification line per change — that journal <em>is</em> the Fortress doc. A change you can't
+justify is debt: learn why it's there, or remove it.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you enumerated a surface with instruments, added a least-privilege user, fixed an
+over-permissioned secret and a SUID surprise, stood up a default-deny firewall the lockout-safe way,
+and hardened <code>sshd</code> with <code>sshd -t</code> before reload — the guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work on the throwaway box. Every change is one-at-a-time,
+verified, and reversible; struggle here is the point. Reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-the-unrecognized-listener">Challenge 1 — The unrecognized listener<a class="headerlink" href="#challenge-1-the-unrecognized-listener" title="Permanent link">&para;</a></h3>
+<p><code>ss -tlnp</code> shows a process listening on <code>0.0.0.0:6379</code>. Walk your response using the hardening loop and
+M23's method — do not just kill it.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>6379</code> is a well-known service port. Observe before you judge: which process (<code>-p</code>), since when, what
+package put it there, and does it <em>need</em> to face the network at all?</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="m">6379</span><span class="w">     </span><span class="c1"># -p reveals the pid/name — it&#39;s redis-server</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>dpkg<span class="w"> </span>-S<span class="w"> </span><span class="k">$(</span>which<span class="w"> </span>redis-server<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w">   </span><span class="c1"># package origin</span>
+</code></pre></div>
+6379 is Redis. Observe (M23: quit thinking and look), then the loop: <strong>justify or remove.</strong> If it's
+only used locally, bind it to <code>127.0.0.1</code> (one change) and re-check with <code>ss</code>; if unused, disable the
+unit; if genuinely unexplained <em>and</em> reachable from outside → the <strong>bug-or-attack fork</strong>: preserve
+logs before you touch anything.</p>
+</details>
+<h3 id="challenge-2-lockout-safe-sshd-narrated">Challenge 2 — Lockout-safe sshd, narrated<a class="headerlink" href="#challenge-2-lockout-safe-sshd-narrated" title="Permanent link">&para;</a></h3>
+<p>You must harden <code>sshd</code> on a machine you can reach <strong>only</strong> by SSH. State the order of steps so you cannot
+lock yourself out, and name the command that proves the config is valid <em>before</em> it takes effect.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Keep a <strong>second</strong> session alive as a lifeboat. Add your key; verify <strong>key-only</strong> login works in a
+<strong>third</strong> session <em>while passwords are still on</em>. Only then set <code>PasswordAuthentication no</code> /
+<code>PermitRootLogin no</code>; run <strong><code>sshd -t</code></strong> (syntax test) <em>before</em> touching the daemon;
+<strong><code>reload</code></strong> (not restart); confirm a fresh login while the old sessions stay open. Console/out-of-band
+access confirmed first if it exists.</p>
+</details>
+<h3 id="challenge-3-the-teammate-who-wants-privileged">Challenge 3 — The teammate who wants <code>--privileged</code><a class="headerlink" href="#challenge-3-the-teammate-who-wants-privileged" title="Permanent link">&para;</a></h3>
+<p>A teammate proposes running a container with <code>--privileged</code> because it needs to read one device. Give the
+least-privilege alternative and name the module that taught the mechanism.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Grant only what's needed: <code>--device=/dev/thing</code> for the one device and/or <code>--cap-drop=ALL</code> then
+<code>--cap-add</code> the single capability that breaks — run <strong>non-root</strong>. <code>--privileged</code> grants <em>all</em>
+capabilities + device access and disables most isolation: root by another door. <strong>M17</strong> taught
+capabilities; <strong>M16</strong> the non-root discipline.</p>
+</details>
+<h3 id="challenge-4-stretch-rank-two-controls-by-adversary">Challenge 4 (stretch) — Rank two controls by adversary<a class="headerlink" href="#challenge-4-stretch-rank-two-controls-by-adversary" title="Permanent link">&para;</a></h3>
+<p>Compare <strong>sops+age</strong> encryption against a plain <strong><code>0600</code></strong> secrets file for three different adversaries:
+(a) a stolen laptop disk, (b) a leaked repo, (c) a compromised process running <em>as you</em>. State which wins
+each and the general lesson.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>(a) Stolen disk: <code>0600</code> is worthless — an offline mount ignores file modes; <strong>sops wins</strong> (ciphertext).
+(b) Leaked repo: <code>0600</code> is irrelevant, the sops file stays ciphertext — <strong>sops wins decisively</strong>.
+(c) Compromised process as you: <strong>both lose at time-of-use</strong> — the process reads the decrypted material
+either way; sops only narrows the <em>window</em>. The lesson: <strong>name the adversary before you score the
+control</strong> — every control relocates risk rather than abolishing it.</p>
+</details>
+<h3 id="challenge-5-stretch-the-fortress-line-defended">Challenge 5 (stretch) — The Fortress line, defended<a class="headerlink" href="#challenge-5-stretch-the-fortress-line-defended" title="Permanent link">&para;</a></h3>
+<p>Pick one hardening change you made in the Guided Lab. In writing, answer the three interrogation
+questions: <strong>why does this line exist? what does it cost? what breaks if it's wrong?</strong> Then justify one
+line you would deliberately <strong>skip</strong>, and what the skip must carry.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Example — <code>PasswordAuthentication no</code>: <em>exists</em> because passwords on a reachable port are brute-forced
+at internet scale (Mirai); <em>costs</em> new-device onboarding friction (a key must be enrolled first);
+<em>breaks</em> all access if you disable it before verifying key login works — hence the lockout law. A
+justified <strong>skip</strong> (e.g. a kube-bench check that assumes cloud metadata on a local kind cluster) must
+carry, in writing, <strong>the line, the reasoning, and the residual risk accepted.</strong> A silent skip is
+negligence; a justified skip is engineering.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>State the four threat-model questions, in order.</summary>
+<p><strong>What are the assets? Who are the adversaries? What is the attack surface? Which mitigations are
+worth their cost?</strong> They run <em>before</em> any control — and the fourth question exists to say <strong>no</strong> to
+controls too. Honest adversaries only (bots and thieves, not nation-state cosplay).</p>
+</details>
+<details class="question">
+<summary>Least privilege appears as a concrete mechanism in five modules — name them.</summary>
+<p>File modes/users (<strong>M3</strong>), sandboxed systemd units / <code>DynamicUser</code> (<strong>M15</strong>), non-root container
+<code>USER</code> (<strong>M16</strong>), dropped capabilities (<strong>M17</strong>), RBAC least-verbs (<strong>M20</strong>). One principle, five (or
+six, with <code>sudo</code>) enforcement points — plus its dual, the <strong>blast-radius</strong> question.</p>
+</details>
+<details class="question">
+<summary>Why must a committed secret be ROTATED rather than just removed from git history?</summary>
+<p>History is effectively <strong>unerasable</strong>: clones, forks, mirrors, reflogs, and scrapers already have it,
+and rewriting your copy changes nothing they hold. The secret is <strong>burned</strong>; only rotation — making
+the value worthless — actually fixes it.</p>
+</details>
+<details class="question">
+<summary>Default-deny vs default-allow — which fails safe, and what does it cost?</summary>
+<p><strong>Default-deny fails safe</strong>: an unknown service is unreachable until explicitly allowed, so errors are
+<em>visible and fixable</em>. Default-allow <strong>fails open</strong>: a forgotten block leaves you exposed, invisibly,
+until exploited. Default-deny's cost is that you must <strong>know your flows</strong> (enumeration, occasional
+breakage) — and that cost is the point.</p>
+</details>
+<details class="question">
+<summary>You must harden sshd on a box you can only reach by SSH. Order the steps.</summary>
+<p>Second session alive → add key, verify key-only login in a third session <strong>while passwords still on</strong>
+→ set <code>PasswordAuthentication no</code> / <code>PermitRootLogin no</code> → <strong><code>sshd -t</code></strong> before touching the daemon →
+<strong><code>reload</code></strong> not restart → confirm a fresh login while lifeboats stay open. The lockout law: test the
+door before closing it.</p>
+</details>
+<details class="question">
+<summary>Why is a world-writable (666) file or a SUID-root binary an incident?</summary>
+<p>A world-writable file lets <strong>any</strong> local user rewrite it — <strong>integrity</strong> gone (tampering). A SUID-root
+binary runs with <strong>root's</strong> power no matter who launches it — "root by another door," an <strong>elevation</strong>
+path. Both are least-privilege violations you find with <code>find / -perm -4000</code> and fix with <code>chmod</code>.</p>
+</details>
+<details class="question">
+<summary>\"There's nothing valuable on this box.\" Rebut it in three sentences.</summary>
+<p>Bots don't target value, they target <strong>addresses</strong> — scanners try every reachable port on the whole
+internet and keep whatever answers. A hit yields bandwidth, CPU, a residential IP for laundering
+traffic, and a lateral hop toward things that <em>do</em> matter (your keys reach other machines). Mirai built
+a record-breaking weapon entirely from "worthless" devices — your box is valuable precisely because
+it's a computer that answers.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong>, teach <em>"The minimum key"</em>: pull <strong>one</strong> real workload through
+its constraint layers — file perms → non-root user/container → dropped caps → RBAC verbs → firewall —
+asking the <strong>blast-radius question at each layer</strong> ("if THIS is compromised, what does it reach?").
+Close with the asymmetry (right everywhere vs right once) and <em>why layers exist</em>. Then, in <strong>3
+minutes</strong>, teach the <strong>medieval city</strong> to a non-technical friend — gates that must stay open for
+commerce, the postern everyone forgot, the gift horse from upstream — with the bots-scan-addresses
+truth in one sentence. If you can't yet, that's your signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M24 ships the Fortress; Stage 9
+closes at M25 when the Watchtower stands beside it. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the four threat-model questions and STRIDE, and run them cold on any system named at random.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the defender's asymmetry and what it implies — layers (defense in depth) plus detection, never one load-bearing wall.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> least privilege as one principle across five modules' mechanisms, and ask the blast-radius question on a new example.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> a full attack surface with instruments (<code>ss -tlnp</code>, <code>sudo -l</code>, <code>find / -perm -4000</code>, authorized_keys), not memory.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Use</strong> the hardening loop: one justified change, measured delta, documented why — no batching.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> lockout-safe, keys-only sshd hardening, justified line by line, <code>sshd -t</code> before reload.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure</strong> a host firewall default-deny with the intended allow, added the lockout-safe way (door first, then close).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Fix</strong> an over-permissioned secret (to <code>0600</code>) and a SUID surprise (strip the bit), verifying with <code>ls -l</code> each time.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>List</strong> the secrets hierarchy of sin with each rung's leak path, and know that a committed secret is rotated, not deleted.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compare</strong> controls against named adversaries (stolen disk vs leaked repo vs live compromise) — name the adversary first.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a hardening change that broke a service with M23's loop, and add the missing post-change check to the list.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Assess</strong> an anomaly through the bug-or-attack fork with <strong>preservation first</strong> (copy logs, <code>last</code>/<code>who</code>, before mitigating).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Evaluate</strong> a benchmark line into fix / justified-skip / investigate — the skip carrying line, reasoning, and residual risk in writing.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach</strong> least privilege through one workload's constraint layers, and pass the teach-back rubric.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active —
+every M24 review also pulls in one <strong>Module 23</strong> item (the debugging gauntlet stays warm) and the
+four-questions sprint runs on one random system daily. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M23 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · STRIDE + least-privilege sprints · the hierarchy-of-sin sprint (worst→best)</td>
+<td>The smell-test sprint (bug-or-attack tells)</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>The four questions on a NEW random system, cold · recite the lockout-safe sshd procedure</td>
+<td><code>make gauntlet N=1</code> — one planted scenario</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Re-audit the box (<code>ss</code> / <code>ufw status</code> / <code>sshd -T</code>) — explain or investigate every delta</td>
+<td>The MTTR glance — is the loop still fast?</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Secrets lifecycle drilled: one rotation rehearsed for real · re-run the SUID/permissions hunt</td>
+<td>Re-run one gauntlet scenario with preservation-first</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Validation retake ≥90% · the residual-risk list re-read — is each acceptance still honest?</td>
+<td>The bug-or-attack fork narrated on a fresh anomaly</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> Observability (M25 — the audit scores become metrics, auth events become
+alerts; prevention fails eventually and the Watchtower sees it happen) · AI/ML security (M26–28 — prompt
+injection and model provenance; xz's lesson recurs for model weights) · Claude Code advanced (M29 —
+agent permissions ARE least privilege for AI: tool allowlists and the blast-radius question asked of an
+agent) · the <strong>Capstone</strong>, which serves models on this hardened substrate — API keys in the sops estate,
+containers non-root with dropped caps, cluster enforcing PSS + default-deny.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>Security is the curriculum re-read with an adversary in the margins — this module drew the map,
+measured the walls, and wrote down why each one stands: you must be right everywhere, so you build in
+layers and watch for the day one falls.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../stage-08/module-23/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 23 — Debugging Methodology">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 23 — Debugging Methodology
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-25/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 25 — Observability">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 25 — Observability
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

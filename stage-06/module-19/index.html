@@ -1,0 +1,3566 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Kubernetes as a MODEL, not a command list — desired state plus reconciliation, the two planes, and the object algebra (pods, ReplicaSets, Deployments, Services). Inspect a real cluster, deploy, expose, scale, and watch a killed pod heal itself, all through kubectl.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../../stage-05/module-18/">
+      
+      
+        <link rel="next" href="../module-20/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 19 — Kubernetes Core - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-19-kubernetes-core" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 19 — Kubernetes Core
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-one-idea-desired-state-reconciliation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The one idea: desired state + reconciliation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-two-planes-the-tables-to-keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two planes — the tables to keep
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-apply-trace-one-manifest-to-running-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The apply trace — one manifest to running containers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-object-algebra-the-workhorse-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The object algebra — the workhorse chain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services-endpoints-and-dns-the-stable-name-over-churn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Services, endpoints, and DNS — the stable name over churn
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#probes-are-contracts-three-different-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Probes are contracts — three different questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requests-schedule-limits-enforce-two-different-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Requests schedule, limits enforce — two different machines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-pod-debugging-ladder-evidence-before-hypothesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The pod debugging ladder — evidence before hypothesis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-inspect-deploy-expose-heal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: inspect, deploy, expose, heal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-break-the-service-then-read-the-truth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Break the Service, then read the truth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-manufacture-a-pending-pod-and-read-the-verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Manufacture a Pending pod and read the verdict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-roll-an-update-then-roll-it-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Roll an update, then roll it back
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-prove-reconciliation-is-level-triggered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Prove reconciliation is level-triggered
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-read-a-services-dnat-on-the-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Read a Service's DNAT on the node
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-one-idea-desired-state-reconciliation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The one idea: desired state + reconciliation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-two-planes-the-tables-to-keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two planes — the tables to keep
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-apply-trace-one-manifest-to-running-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The apply trace — one manifest to running containers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-object-algebra-the-workhorse-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The object algebra — the workhorse chain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services-endpoints-and-dns-the-stable-name-over-churn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Services, endpoints, and DNS — the stable name over churn
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#probes-are-contracts-three-different-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Probes are contracts — three different questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requests-schedule-limits-enforce-two-different-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Requests schedule, limits enforce — two different machines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-pod-debugging-ladder-evidence-before-hypothesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The pod debugging ladder — evidence before hypothesis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-inspect-deploy-expose-heal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: inspect, deploy, expose, heal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-break-the-service-then-read-the-truth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Break the Service, then read the truth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-manufacture-a-pending-pod-and-read-the-verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Manufacture a Pending pod and read the verdict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-roll-an-update-then-roll-it-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Roll an update, then roll it back
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-prove-reconciliation-is-level-triggered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Prove reconciliation is level-triggered
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-read-a-services-dnat-on-the-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Read a Service's DNAT on the node
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-19-kubernetes-core">Module 19 — Kubernetes Core<a class="headerlink" href="#module-19-kubernetes-core" title="Permanent link">&para;</a></h1>
+<p><small>Stage 6 · Enterprise Architecture · ~4 weeks at 4 h/day · Prerequisites — M16 (images/digests — the supply chain the cluster consumes), M17 (CRI → containerd → runc — the node's spine), M15 (convergence + declared state — reconciliation's platform form), M14 (Services/DNS/NAT — unlearnable without it).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Kubernetes</strong> is a declarative container orchestrator: you write the state you <strong>want</strong> into its API —
+as objects (pods, Deployments, Services…) — and a swarm of controllers works forever to make reality
+match, across many machines, through failures, without you watching. It is <strong>M15's convergence idea
+industrialized into a platform</strong>, running your <strong>M16 images</strong> on <strong>M17's runtime spine</strong>.</p>
+<p>You wrote the problem statement yourself back in M16: a compose file can't schedule across hosts, replace
+an unhealthy container, roll an update safely, or self-heal. Kubernetes is the industry's answer and the
+substrate of modern infrastructure — every cloud sells it, every ML platform assumes it, and the job
+market prices it. This module makes one bet: <strong>learn the model first</strong> (reconciliation, the object
+algebra) and <code>kubectl</code> becomes obvious; learn <code>kubectl</code> first and you recite commands forever without
+understanding what they set in motion.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>M20 (Kubernetes Operations) operates <strong>this</strong> cluster — Helm, ingress, RBAC, upgrades, backups · M21
+tunes requests/limits against <strong>real measurement</strong> (the cgroup files from M17, now a platform interface)
+· M23 folds cluster debugging into a forensics method · M24 hardens the flat network and RBAC into a
+security surface · M25 (Prometheus) was <strong>born</strong> for this terrain — it scrapes the kubelet/cAdvisor
+metrics whose cgroup files you read by hand in M17 · M26–M28 (the ML platform) schedule GPUs, run
+distributed-training operators, and serve models <strong>as exactly these objects</strong>. Learn the model once and
+every later platform tool is just another controller plugged into the same loop.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 19 — Kubernetes Core&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+the thermostat frame (set the temperature, walk away — the furnace figures it out) → the two planes drawn,
+every component with its one job → the apply trace narrated top to bottom (apiserver → etcd → controller →
+ReplicaSet → scheduler → kubelet → CRI, M17's spine at the bottom) → the killer demo: <code>kubectl delete pod</code>
+mid-sentence, keep talking as it returns ("I never told it to make a new one — I told it there should BE
+three") → the honest seam: when a compose file should STAY a compose file.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-inspect-deploy-expose-heal">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. You will inspect a running control plane, deploy an app, expose it with a Service,
+scale it, and delete a pod to watch it heal — typing beats watching every time, and it is part of how the
+memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-one-idea-desired-state-reconciliation">The one idea: desired state + reconciliation<a class="headerlink" href="#the-one-idea-desired-state-reconciliation" title="Permanent link">&para;</a></h3>
+<p>Everything in Kubernetes is this single loop wearing a different object. You <strong>declare</strong> the state you
+want; the system <strong>owns the choreography</strong> of getting there and staying there.</p>
+<pre class="mermaid"><code>flowchart TB
+    You["you&lt;br/&gt;kubectl apply -f"] --&gt; API
+    subgraph cp["Control plane — the brain"]
+        API["kube-apiserver&lt;br/&gt;the only door"]
+        ETCD["etcd&lt;br/&gt;state store"]
+        SCH["kube-scheduler&lt;br/&gt;places pods on nodes"]
+        CM["controller-manager&lt;br/&gt;the reconcile loops"]
+        API &lt;--&gt; ETCD
+        CM --&gt;|observe · diff · act| API
+        SCH --&gt;|bind pod to node| API
+    end
+    subgraph node["Node — the muscle"]
+        KL["kubelet&lt;br/&gt;runs my pods · probes · status"]
+        KP["kube-proxy&lt;br/&gt;programs Service routing"]
+        RT["containerd + runc&lt;br/&gt;M17's spine"]
+        KL --&gt; RT
+    end
+    KL --&gt;|watch assignments · report status| API</code></pre>
+<p>The loop that <strong>IS</strong> Kubernetes: you apply desired state → the apiserver stores it → controllers notice
+the diff → they write sub-objects → the scheduler places pods → the kubelet runs them → status flows
+back → <strong>repeat forever</strong>. Two structural facts do most of the work: <strong>the API is the system</strong> (every
+component talks <em>through</em> the apiserver — there are no side channels, which is why <code>kubectl</code> can see
+everything), and <strong>controllers are level-triggered</strong> (they compare IS vs SHOULD every loop, with no
+memory of past events — so <em>any</em> divergence heals on the next pass).</p>
+<h3 id="the-two-planes-the-tables-to-keep">The two planes — the tables to keep<a class="headerlink" href="#the-two-planes-the-tables-to-keep" title="Permanent link">&para;</a></h3>
+<p>The <strong>control plane</strong> is the brain; the <strong>nodes</strong> are the muscle. Draw both until it is reflex.</p>
+<table>
+<thead>
+<tr>
+<th>Control-plane component</th>
+<th>Its one job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>kube-apiserver</strong></td>
+<td>THE front door — every read/write of every object; validation, authn/z. Everything talks <em>through</em> it, nothing around it</td>
+</tr>
+<tr>
+<td><strong>etcd</strong></td>
+<td>The state store — every object's source of truth (a Raft-replicated key-value store)</td>
+</tr>
+<tr>
+<td><strong>kube-scheduler</strong></td>
+<td>Assigns pods → nodes: <strong>filter</strong> (does it fit? predicates) then <strong>score</strong> (best node?); writes the binding via the API</td>
+</tr>
+<tr>
+<td><strong>kube-controller-manager</strong></td>
+<td>The reconciliation swarm — deployment, replicaset, node, job controllers… each a loop: observe → diff desired/actual → act</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Node component</th>
+<th>Its one job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>kubelet</strong></td>
+<td>The node agent — watches the API for pods assigned here, drives the runtime (CRI → containerd → runc, M17's spine), runs probes, reports status</td>
+</tr>
+<tr>
+<td><strong>kube-proxy</strong></td>
+<td>Programs Service routing on the node (iptables/IPVS — M14's NAT, fleet edition)</td>
+</tr>
+<tr>
+<td><strong>containerd + runc</strong></td>
+<td>Stage 5's stack, employed — the kubelet's hands</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-apply-trace-one-manifest-to-running-containers">The apply trace — one manifest to running containers<a class="headerlink" href="#the-apply-trace-one-manifest-to-running-containers" title="Permanent link">&para;</a></h3>
+<p><code>kubectl apply -f deploy.yaml</code> sets off a cascade you can witness live (two terminals: <code>get events -w</code> +
+<code>get pods -w</code>). This is the single most important thing to understand in the module.</p>
+<pre class="mermaid"><code>flowchart TB
+    K["kubectl apply -f deploy.yaml&lt;br/&gt;validate · POST"] --&gt; A["apiserver&lt;br/&gt;authn/z · admission"]
+    A --&gt; E["etcd&lt;br/&gt;Deployment persisted"]
+    E --&gt; DC["deployment controller&lt;br/&gt;creates a ReplicaSet"]
+    DC --&gt; RC["replicaset controller&lt;br/&gt;creates N Pod objects"]
+    RC --&gt; S["scheduler&lt;br/&gt;filter · score · bind each pod"]
+    S --&gt; KL["kubelet on that node&lt;br/&gt;sees its assignment"]
+    KL --&gt; CRI["CRI → containerd&lt;br/&gt;pull by digest · runc starts"]
+    CRI --&gt; ST["status conditions&lt;br/&gt;flow back up the same API"]
+    ST --&gt; A</code></pre>
+<p>Note where it bottoms out: the kubelet makes <strong>CRI</strong> calls to containerd, which pulls the image <strong>by
+digest</strong> and has <code>runc</code> start the container — the exact stack you climbed by hand in M17, now wearing a
+control plane. The kubelet then runs the probes and reports status back up the <em>same</em> API.</p>
+<h3 id="the-object-algebra-the-workhorse-chain">The object algebra — the workhorse chain<a class="headerlink" href="#the-object-algebra-the-workhorse-chain" title="Permanent link">&para;</a></h3>
+<p>You own the <strong>Deployment</strong>; it manages <strong>ReplicaSets</strong> (one per revision); each keeps <strong>N Pods</strong> alive.
+Nothing holds a hard reference — everything couples by <strong>labels and selectors</strong> (the design idea that
+makes the whole algebra compose). Here is the chain mid-rolling-update:</p>
+<pre class="mermaid"><code>flowchart TB
+    D["Deployment&lt;br/&gt;image · replicas · strategy"]
+    D --&gt; RSnew["ReplicaSet v2 — new&lt;br/&gt;scaling up"]
+    D --&gt; RSold["ReplicaSet v1 — old&lt;br/&gt;scaling down"]
+    RSnew --&gt; P3["Pod new · Ready"]
+    RSnew --&gt; P4["Pod new · not Ready yet"]
+    RSold --&gt; P1["Pod old · Ready"]
+    RSold --&gt; P2["Pod old · terminating"]</code></pre>
+<p>The <strong>pod</strong> is the atom: one or more containers sharing one network identity (<strong>one IP</strong> — the pause
+container from M17 holds the namespaces) and storage. Pods are <strong>cattle</strong> — created by controllers, never
+hand-fed in production (a naked pod has no controller, so a delete means it is simply <em>gone</em>). The other
+kinds plug into the same loop:</p>
+<table>
+<thead>
+<tr>
+<th>Object kind</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pod</strong></td>
+<td>The atom — containers sharing network + storage; created by controllers, not by hand</td>
+</tr>
+<tr>
+<td><strong>ReplicaSet</strong></td>
+<td>Keeps N identical pods alive; one per Deployment revision (rollback = re-inflate the old one)</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>The workhorse you own — image, replicas, update strategy; drives ReplicaSets</td>
+</tr>
+<tr>
+<td><strong>Service</strong></td>
+<td>A stable name + virtual IP for a churning pod set — ClusterIP (internal), NodePort (dev door), LoadBalancer (cloud door)</td>
+</tr>
+<tr>
+<td><strong>ConfigMap / Secret</strong></td>
+<td>Config injected as env or mounted files (Secret's base64 is <strong>encoding, not encryption</strong>)</td>
+</tr>
+<tr>
+<td><strong>Namespace</strong></td>
+<td>The cluster's folders — scoping names, quotas, RBAC domains</td>
+</tr>
+<tr>
+<td><strong>DaemonSet / Job / CronJob</strong></td>
+<td>One-per-node agents · run-to-completion · M15's timer in cluster form</td>
+</tr>
+<tr>
+<td><strong>PVC / PV / StorageClass</strong></td>
+<td>Claim (want) / volume (have) / class (how to provision) — the storage indirection</td>
+</tr>
+</tbody>
+</table>
+<h3 id="services-endpoints-and-dns-the-stable-name-over-churn">Services, endpoints, and DNS — the stable name over churn<a class="headerlink" href="#services-endpoints-and-dns-the-stable-name-over-churn" title="Permanent link">&para;</a></h3>
+<p>A <strong>ClusterIP is a virtual IP</strong> — there is no "service machine" to log into. <code>kube-proxy</code> programs DNAT
+rules on <strong>every</strong> node; CoreDNS maps the name; <strong>readiness gates membership</strong>.</p>
+<pre class="mermaid"><code>flowchart TB
+    C["client pod&lt;br/&gt;curl http://netscope"] --&gt; DNS["CoreDNS&lt;br/&gt;name → ClusterIP"]
+    DNS --&gt; VIP["ClusterIP&lt;br/&gt;a virtual IP · no machine"]
+    VIP --&gt; KP["kube-proxy on the node&lt;br/&gt;iptables/IPVS DNAT"]
+    KP --&gt; EP["ready endpoints only&lt;br/&gt;readiness gates membership"]
+    EP --&gt; P1["pod IP"]
+    EP --&gt; P2["pod IP"]</code></pre>
+<p><code>kubectl get endpoints SVC</code> is the <strong>moment-of-truth</strong> command: if it is empty, your selector does not
+match any pod's labels, or every pod is failing readiness — either way, nobody is behind the Service. The
+four ports confuse everyone until you draw them once:</p>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Where it lives</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>containerPort</strong></td>
+<td>Pod spec</td>
+<td>The port the app listens on inside the container</td>
+</tr>
+<tr>
+<td><strong>port</strong></td>
+<td>Service spec</td>
+<td>The port the Service itself exposes (the ClusterIP's port)</td>
+</tr>
+<tr>
+<td><strong>targetPort</strong></td>
+<td>Service spec</td>
+<td>Where the Service forwards to on the pod — usually = containerPort</td>
+</tr>
+<tr>
+<td><strong>nodePort</strong></td>
+<td>Service spec (NodePort type)</td>
+<td>A high port opened on every node — the dev door from outside</td>
+</tr>
+</tbody>
+</table>
+<h3 id="probes-are-contracts-three-different-questions">Probes are contracts — three different questions<a class="headerlink" href="#probes-are-contracts-three-different-questions" title="Permanent link">&para;</a></h3>
+<p>Each probe answers a <strong>different</strong> question. Confusing readiness with liveness turns a slow start into a
+restart storm — a top-five production K8s incident class.</p>
+<table>
+<thead>
+<tr>
+<th>Probe</th>
+<th>The question</th>
+<th>On failure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>readiness</strong></td>
+<td>"Route to me?"</td>
+<td>Removed from endpoints — <strong>no traffic, no restart</strong></td>
+</tr>
+<tr>
+<td><strong>liveness</strong></td>
+<td>"Restart me?"</td>
+<td>Container killed and restarted</td>
+</tr>
+<tr>
+<td><strong>startup</strong></td>
+<td>"Patience with me?"</td>
+<td>Holds liveness off until the first success (protects slow-boot apps)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="requests-schedule-limits-enforce-two-different-machines">Requests schedule, limits enforce — two different machines<a class="headerlink" href="#requests-schedule-limits-enforce-two-different-machines" title="Permanent link">&para;</a></h3>
+<p><code>requests</code> and <code>limits</code> are separate numbers because they feed <strong>different consumers</strong>. Their gap is the
+overcommit dial.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>requests</strong></th>
+<th><strong>limits</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consumed by</td>
+<td>the <strong>scheduler</strong> — placement reserves them</td>
+<td>the <strong>runtime</strong> — cgroups enforce them (M17)</td>
+</tr>
+<tr>
+<td>Mechanism</td>
+<td>bin-packing math; QoS/eviction ranking</td>
+<td><code>cpu.max</code> throttling, <code>memory.max</code> → OOM kill</td>
+</tr>
+<tr>
+<td>Set too low</td>
+<td>the noisy-neighbor / eviction lottery</td>
+<td>throttling or <code>OOMKilled</code> (exit 137)</td>
+</tr>
+<tr>
+<td>The rule</td>
+<td><strong>only requests schedule</strong> — a <code>Pending</code> pod is always a <em>requests</em> verdict, never limits</td>
+<td>limits are walls, not reservations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-pod-debugging-ladder-evidence-before-hypothesis">The pod debugging ladder — evidence before hypothesis<a class="headerlink" href="#the-pod-debugging-ladder-evidence-before-hypothesis" title="Permanent link">&para;</a></h3>
+<p>The module's centerpiece drill. Every rung names its <strong>evidence command before you touch anything</strong>.</p>
+<pre class="mermaid"><code>flowchart TB
+    Start["pod not serving"] --&gt; Pending{"Pending?"}
+    Pending --&gt;|yes| Pdesc["describe → Events&lt;br/&gt;fits? constraints? volume unbound?"]
+    Pending --&gt;|no| Pull{"ImagePullBackOff?"}
+    Pull --&gt;|yes| Puldesc["name/tag/digest?&lt;br/&gt;registry auth? (the NODE pulls)"]
+    Pull --&gt;|no| Crash{"CrashLoopBackOff?"}
+    Crash --&gt;|yes| Cdesc["logs --previous&lt;br/&gt;the dead container's last words"]
+    Crash --&gt;|no| Serve{"Running but no traffic?"}
+    Serve --&gt;|yes| Sdesc["get endpoints&lt;br/&gt;selector? readiness? port quartet?"]
+    Serve --&gt;|no| DNS["DNS from a debug pod&lt;br/&gt;nslookup svc — M14's ladder INSIDE the cluster"]</code></pre>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>The one idea:</strong> desired state as objects in the API + controllers converging reality <strong>forever</strong>. Everything else is an object plugged into that loop.</li>
+<li><strong>The API is the system.</strong> Every component talks <em>through</em> the apiserver — no side channels. That is why <code>kubectl</code> (a REST client) can see everything, and why the ecosystem could extend it cheaply.</li>
+<li><strong>Controllers are level-triggered.</strong> They compare IS vs SHOULD each loop with no event memory — so a deleted pod comes back because the <strong>diff itself</strong> recreates it. Nothing "restarts" it.</li>
+<li><strong>The workhorse chain:</strong> Deployment → ReplicaSet (one per revision) → Pods; <strong>rollback = re-inflate the old ReplicaSet</strong> (<code>rollout undo</code>). Labels/selectors are the load-bearing glue.</li>
+<li><strong><code>get endpoints</code> is the moment of truth.</strong> Running ≠ reachable — readiness, endpoints, and the Service chain decide whether anyone can reach a pod. A ClusterIP is DNAT on every node, not a middlebox.</li>
+<li><strong>Requests schedule, limits enforce.</strong> Requests feed the scheduler; limits feed cgroups (<code>memory.max</code> → OOM). <code>Pending</code> is always a requests verdict.</li>
+<li><strong>Naked pods are forbidden in production.</strong> No controller = no healing, no rollout, no scale. Deleted or node lost = gone. Deployments (a controller) heal; bare pods do not.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-inspect-deploy-expose-heal">Guided Lab: inspect, deploy, expose, heal<a class="headerlink" href="#guided-lab-inspect-deploy-expose-heal" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You start on a </em><em>real single-node cluster</em><em> with <code>kubectl</code> already configured — no
+install. You inspect the control plane, deploy an app from a handwritten manifest, expose it with a
+Service, scale it, then delete a pod and watch the reconcile loop replace it — the module's whole thesis,
+proven with your own hands.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-19" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-19" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a ready single-node Kubernetes cluster in your browser with <code>kubectl</code> already wired up. Nothing to install.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo); create a local cluster inside it with one command (below).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL box with Docker: <code>kind create cluster</code> (Kubernetes-in-Docker) or <code>k3d cluster create</code> gives you a real cluster in ~1 minute, then follow the steps below. <code>kind delete cluster</code> throws it away — clusters are cattle too.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Meet the control plane</label><label for="__tabbed_1_2">2 · Deploy from a handwritten manifest</label><label for="__tabbed_1_3">3 · Expose it with a Service</label><label for="__tabbed_1_4">4 · Scale, and watch the spread</label><label for="__tabbed_1_5">5 · Delete a pod — watch it heal</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Confirm the cluster is up, then name every control-plane and node component against the Key Notes table:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>cluster-info<span class="w">                       </span><span class="c1"># the apiserver&#39;s address = the only door</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>kubectl<span class="w"> </span>get<span class="w"> </span>nodes<span class="w"> </span>-o<span class="w"> </span>wide<span class="w">                  </span><span class="c1"># the machine(s) the muscle runs on</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>kube-system<span class="w">            </span><span class="c1"># apiserver · etcd · scheduler · controller-manager · coredns · kube-proxy</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>kubectl<span class="w"> </span>version<span class="w"> </span>--short<span class="w">                    </span><span class="c1"># client and server versions (keep them within one minor)</span>
+</code></pre></div>
+Every pod in <code>kube-system</code> maps to a row in the two-planes tables. Kubernetes runs its <strong>own</strong> control
+plane as pods on the cluster — the platform, hosting itself.</p>
+</div>
+<div class="tabbed-block">
+<p>The iron law of this module: <strong>manifests written from scratch</strong>. Write a minimal Deployment (three
+replicas), reading each field against <code>kubectl explain</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>web.yaml<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">apiVersion: apps/v1</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">kind: Deployment</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">metadata:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">  name: web</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">  labels: { app: web }</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">spec:</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">  replicas: 3</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">  selector:</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">    matchLabels: { app: web }</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">  template:</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">    metadata:</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">      labels: { app: web }</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s">    spec:</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s">      containers:</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s">        - name: web</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s">          image: registry.k8s.io/e2e-test-images/agnhost:2.53</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s">          args: [&quot;netexec&quot;, &quot;--http-port=8080&quot;]</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s">          ports:</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s">            - containerPort: 8080</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s">EOF</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>kubectl<span class="w"> </span>explain<span class="w"> </span>deployment.spec.template.spec.containers<span class="w">   </span><span class="c1"># the built-in dictionary — first doc stop</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>web.yaml
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>kubectl<span class="w"> </span>get<span class="w"> </span>deploy,rs,pods<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w">       </span><span class="c1"># the ownership chain: Deployment → ReplicaSet → 3 Pods</span>
+</code></pre></div>
+Notice you created <strong>one</strong> object (the Deployment) and got a ReplicaSet and three Pods for free — the
+controllers filled in the chain.</p>
+<p>Click <strong>Check</strong> to verify the Deployment has 3 ready replicas.</p>
+</div>
+<div class="tabbed-block">
+<p>A Service is a stable name + virtual IP over the churning pods. Expose the Deployment, then read the
+<strong>endpoints</strong> — the moment-of-truth command:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span>expose<span class="w"> </span>deployment<span class="w"> </span>web<span class="w"> </span>--port<span class="o">=</span><span class="m">80</span><span class="w"> </span>--target-port<span class="o">=</span><span class="m">8080</span><span class="w"> </span>--name<span class="o">=</span>web
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>kubectl<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>web<span class="w">                         </span><span class="c1"># a ClusterIP is assigned — a virtual IP, no machine</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>kubectl<span class="w"> </span>get<span class="w"> </span>endpoints<span class="w"> </span>web<span class="w">                   </span><span class="c1"># the 3 pod IPs behind it — readiness gated this membership</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>kubectl<span class="w"> </span>run<span class="w"> </span>tmp<span class="w"> </span>--image<span class="o">=</span>registry.k8s.io/e2e-test-images/agnhost:2.53<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--<span class="w"> </span>/bin/sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;wget -qO- http://web/hostname; echo&#39;</span><span class="w">   </span><span class="c1"># CoreDNS resolved &quot;web&quot; → ClusterIP → a ready pod</span>
+</code></pre></div>
+The <code>endpoints</code> list <em>is</em> the Service's membership. If it were ever empty, the Service would route to
+nothing — a selector typo or failing readiness, diagnosed in one command.</p>
+<p>Click <strong>Check</strong> to verify the Service exists and its endpoints are populated.</p>
+</div>
+<div class="tabbed-block">
+<p>Change the desired replica count and watch reconciliation converge:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl<span class="w"> </span>scale<span class="w"> </span>deployment<span class="w"> </span>web<span class="w"> </span>--replicas<span class="o">=</span><span class="m">5</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span>-w<span class="w">             </span><span class="c1"># watch two new pods appear; Ctrl-C to stop watching</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>kubectl<span class="w"> </span>get<span class="w"> </span>endpoints<span class="w"> </span>web<span class="w">                  </span><span class="c1"># the Service membership grew to 5 automatically</span>
+</code></pre></div>
+You never created a pod — you changed the <strong>wish</strong> (replicas: 5) and the ReplicaSet's diff (3 ≠ 5)
+created the rest. Scale back down with <code>kubectl scale deployment web --replicas=3</code> and watch the
+surplus terminate.</p>
+</div>
+<div class="tabbed-block">
+<p>The rite of passage. Delete a pod and watch the controller replace it — because you deleted a <em>fact</em>,
+not the <em>wish</em>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w">                 </span><span class="c1"># note the pod names</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>pod<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span>--field-selector<span class="o">=</span>status.phase<span class="o">=</span>Running<span class="w"> </span>--wait<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span>-w<span class="w">             </span><span class="c1"># a NEW pod appears within seconds; Ctrl-C when you&#39;ve seen it</span>
+</code></pre></div>
+Then read a pod's real YAML — what the controller actually wrote, including its <code>ownerReferences</code> back
+up the chain:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A4<span class="w"> </span>ownerReferences<span class="w">   </span><span class="c1"># this pod is OWNED by the ReplicaSet</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>kubectl<span class="w"> </span>describe<span class="w"> </span>pod<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;1,25p&#39;</span><span class="w">                 </span><span class="c1"># conditions, QoS, events — read them</span>
+</code></pre></div>
+Nothing "restarted" the pod: the ReplicaSet's loop saw <code>2 ≠ 3</code> and created one. That is level-triggered
+reconciliation, felt.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you inspected the control plane, deployed from a handwritten manifest, exposed a Service and read its
+endpoints, scaled the Deployment, and watched a deleted pod heal itself — the guided lab is done. Now
+make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work on the same cluster. The iron law holds: </em><em>manifests
+from scratch</em><em>, <code>kubectl explain</code> and the reference are your dictionary — no copy-paste from blogs.
+Struggle here is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-break-the-service-then-read-the-truth">Challenge 1 — Break the Service, then read the truth<a class="headerlink" href="#challenge-1-break-the-service-then-read-the-truth" title="Permanent link">&para;</a></h3>
+<p>Relabel one of your <code>web</code> pods so it no longer matches the Service selector. <strong>Predict</strong> what
+<code>get endpoints</code> will show <em>before</em> you run it, then prove yourself right — and put the pod back.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>A Service selects pods by label; endpoints membership is exactly the set of ready pods that match.
+<code>kubectl label pod &lt;name&gt; app=broken --overwrite</code> takes one out. <code>--show-labels</code> and <code>get endpoints</code>
+are your eyes.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nv">POD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span>-o<span class="w"> </span>name<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>kubectl<span class="w"> </span>get<span class="w"> </span>endpoints<span class="w"> </span>web<span class="w">                       </span><span class="c1"># N addresses now</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>kubectl<span class="w"> </span>label<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$POD</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">app</span><span class="o">=</span>broken<span class="w"> </span>--overwrite<span class="w">     </span><span class="c1"># it no longer matches selector app=web</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>kubectl<span class="w"> </span>get<span class="w"> </span>endpoints<span class="w"> </span>web<span class="w">                        </span><span class="c1"># membership SHRANK by one — live</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w">                      </span><span class="c1"># and the ReplicaSet made a REPLACEMENT (still wants 3 matching)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>kubectl<span class="w"> </span>label<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$POD</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span>--overwrite<span class="w">         </span><span class="c1"># re-adopt it</span>
+</code></pre></div>
+Two lessons at once: selectors are <strong>load-bearing API</strong> (a one-word label change moved a pod out of a
+Service), and the ReplicaSet's selector <em>also</em> matches <code>app=web</code>, so orphaning a pod made the controller
+create a fresh one to keep the count at three. Loose coupling, felt from both sides.</p>
+</details>
+<h3 id="challenge-2-manufacture-a-pending-pod-and-read-the-verdict">Challenge 2 — Manufacture a Pending pod and read the verdict<a class="headerlink" href="#challenge-2-manufacture-a-pending-pod-and-read-the-verdict" title="Permanent link">&para;</a></h3>
+<p>Create a pod that can <strong>never</strong> be scheduled, then extract the exact reason from the cluster — without
+guessing.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The scheduler only reads <strong>requests</strong>. Ask for more of a resource than any node has (e.g. 100 CPUs).
+<code>describe pod</code> → the <strong>Events</strong> section is where the scheduler writes its verdict.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>hog<span class="w"> </span>--image<span class="o">=</span>registry.k8s.io/pause:3.9<span class="w"> </span>--overrides<span class="o">=</span><span class="s1">&#39;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="s1">{&quot;spec&quot;:{&quot;containers&quot;:[{&quot;name&quot;:&quot;hog&quot;,&quot;image&quot;:&quot;registry.k8s.io/pause:3.9&quot;,&quot;resources&quot;:{&quot;requests&quot;:{&quot;cpu&quot;:&quot;100&quot;}}}]}}&#39;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>hog<span class="w">                              </span><span class="c1"># STATUS: Pending, forever</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>kubectl<span class="w"> </span>describe<span class="w"> </span>pod<span class="w"> </span>hog<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;/Events/,$p&#39;</span><span class="w">  </span><span class="c1"># &quot;0/1 nodes are available: Insufficient cpu&quot;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>pod<span class="w"> </span>hog
+</code></pre></div>
+<code>Pending</code> is never a mystery — it is the scheduler saying <em>no node passed a filter</em>, and <code>describe</code>'s
+Events names which filter (insufficient resources, unsatisfiable constraints, or an unbound volume).
+Note it is the <strong>request</strong> (100 CPUs) that blocked placement; limits never schedule.</p>
+</details>
+<h3 id="challenge-3-roll-an-update-then-roll-it-back">Challenge 3 — Roll an update, then roll it back<a class="headerlink" href="#challenge-3-roll-an-update-then-roll-it-back" title="Permanent link">&para;</a></h3>
+<p>Change your Deployment's image to a new tag, watch the rolling update pod-by-pod, then <code>rollout undo</code> and
+prove the old ReplicaSet came back.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>kubectl<span class="w"> </span><span class="nb">set</span><span class="w"> </span>image<span class="w"> </span>deployment/web<span class="w"> </span><span class="nv">web</span><span class="o">=</span>registry.k8s.io/e2e-test-images/agnhost:2.52
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployment/web<span class="w">            </span><span class="c1"># the choreography: new RS up as old scales down</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>kubectl<span class="w"> </span>get<span class="w"> </span>rs<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w">                         </span><span class="c1"># TWO ReplicaSets now — one per revision</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span><span class="nb">history</span><span class="w"> </span>deployment/web
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span>undo<span class="w"> </span>deployment/web<span class="w">               </span><span class="c1"># re-inflate the previous ReplicaSet</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>kubectl<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployment/web
+</code></pre></div>
+Rollback is not a re-deploy — it is the <strong>old ReplicaSet re-scaled up</strong>. The revision history is the
+list of ReplicaSets the Deployment still owns; <code>undo</code> just changes which one is at the desired count.</p>
+</details>
+<h3 id="challenge-4-prove-reconciliation-is-level-triggered">Challenge 4 — Prove reconciliation is level-triggered<a class="headerlink" href="#challenge-4-prove-reconciliation-is-level-triggered" title="Permanent link">&para;</a></h3>
+<p>Try to "fix" the replica count by editing the <strong>ReplicaSet</strong> directly instead of the Deployment. Predict
+what happens, then explain the mechanism.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The ReplicaSet is <em>owned</em> by the Deployment controller. <code>kubectl scale rs &lt;name&gt; --replicas=1</code> sets it
+low; watch what the owner does on its next loop.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">RS</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>rs<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span>-o<span class="w"> </span>name<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>kubectl<span class="w"> </span>scale<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RS</span><span class="s2">&quot;</span><span class="w"> </span>--replicas<span class="o">=</span><span class="m">1</span><span class="w">                  </span><span class="c1"># you set the RS low by hand</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>web<span class="w"> </span>-w<span class="w">                    </span><span class="c1"># it climbs BACK to 3 within seconds; Ctrl-C</span>
+</code></pre></div>
+You fought the controller and lost — on purpose. The Deployment's spec still says three; its next
+reconcile loop sees the ReplicaSet diverged from desired and corrects it. The lesson: <strong>always edit the
+top of the ownership chain</strong> (the Deployment, in git), never the objects a controller owns. Hand-edits
+to owned objects are drift, and drift gets reverted.</p>
+</details>
+<h3 id="challenge-5-stretch-read-a-services-dnat-on-the-node">Challenge 5 (stretch) — Read a Service's DNAT on the node<a class="headerlink" href="#challenge-5-stretch-read-a-services-dnat-on-the-node" title="Permanent link">&para;</a></h3>
+<p>A ClusterIP has no machine behind it — it is DNAT rules. Find the <code>kube-proxy</code>'s rules for your Service's
+virtual IP and connect them back to M14.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Get the ClusterIP (<code>kubectl get svc web</code>). On a single-node cluster the node <em>is</em> reachable; look at the
+NAT table for the VIP: <code>iptables -t nat -L -n | grep &lt;clusterip&gt;</code> (or <code>sudo</code> / a node shell, depending on
+the environment). On kind, <code>docker exec</code> into the node container first.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">VIP</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>web<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec.clusterIP}&#39;</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$VIP</span><span class="s2">&quot;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># on the node (kind: docker exec -it &lt;node&gt; bash first):</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>iptables<span class="w"> </span>-t<span class="w"> </span>nat<span class="w"> </span>-L<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$VIP</span><span class="s2">|KUBE-SVC&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+</code></pre></div>
+You will find <code>KUBE-SVC-*</code> / <code>KUBE-SEP-*</code> chains that DNAT the ClusterIP to a <strong>random ready endpoint's
+pod IP</strong> — M14's NAT, programmed on every node by kube-proxy. There is no proxy appliance and no "service
+machine": the load-spreading is packet-rewriting in the kernel. That is why there is nothing to log into.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Name the four control-plane components and two node components, one job each.</summary>
+<p><strong>Control plane:</strong> kube-apiserver (the only door — validation, authn/z, persistence), etcd (the state
+store), kube-scheduler (pod → node placement: filter then score), kube-controller-manager (the
+reconciliation loops). <strong>Node:</strong> kubelet (runs assigned pods via CRI, runs probes, reports status),
+kube-proxy (programs Service routing). containerd/runc is the acceptable third node citizen.</p>
+</details>
+<details class="question">
+<summary>State the reconciliation model in two sentences. Which earlier module's concept does it industrialize?</summary>
+<p>Desired state lives as objects in the API; controllers perpetually observe actual state, diff it against
+desired, and act to converge — forever, with no memory beyond the diff. It industrializes <strong>M15's</strong>
+convergence / declared-state concept into a platform.</p>
+</details>
+<details class="question">
+<summary>Trace <code>kubectl apply</code> of a new Deployment to running containers — every hop.</summary>
+<p>kubectl validates and POSTs → apiserver authn/z + admission → etcd persists → the <strong>deployment
+controller</strong> (watching) creates a <strong>ReplicaSet</strong> → the <strong>RS controller</strong> creates <strong>Pod</strong> objects → the
+<strong>scheduler</strong> filters + scores nodes and binds each pod → that node's <strong>kubelet</strong> sees its assignment →
+<strong>CRI</strong>: containerd pulls by digest, shim + runc start the container (M17) → the kubelet runs probes and
+reports status back up the same API.</p>
+</details>
+<details class="question">
+<summary>How does a Service's ClusterIP actually route traffic? Name the programmer, the mechanism, and what gates membership.</summary>
+<p><strong>kube-proxy</strong> programs iptables/IPVS <strong>DNAT</strong> rules on <strong>every</strong> node: traffic to the virtual ClusterIP
+is rewritten to a <strong>random ready endpoint's</strong> pod IP (M14's NAT). CoreDNS maps the name to the ClusterIP.
+Membership is gated by <strong>readiness</strong> — fail readiness and the pod leaves the endpoints, so traffic stops
+with no restart.</p>
+</details>
+<details class="question">
+<summary>Why are controllers level-triggered rather than event-driven? Give the healing consequence.</summary>
+<p>Level-triggered loops only compare IS vs SHOULD — they need no event history, so <strong>any</strong> divergence (a
+missed event, a crashed controller, a deleted pod, a restored etcd) heals on the next loop. Correctness
+comes from <em>state</em>, not from a fragile ledger of actions. The consequence: delete a pod, and the diff
+itself recreates it — nothing "restarts" it.</p>
+</details>
+<details class="question">
+<summary>Why do requests and limits exist as separate numbers? Name each one's consumer.</summary>
+<p><strong>Requests</strong> are consumed by the <strong>scheduler</strong> — placement reserves them, and QoS/eviction ranks by them.
+<strong>Limits</strong> are consumed by the <strong>runtime</strong> — cgroup ceilings (<code>cpu.max</code> throttling, <code>memory.max</code> → OOM
+kill; M17's files). Placement honesty and runtime protection are different problems; the gap between the
+two numbers is the overcommit dial. <code>Pending</code> comes from requests, never limits.</p>
+</details>
+<details class="question">
+<summary>Your pod is Pending. Give the evidence command and the three most common verdicts.</summary>
+<p><code>kubectl describe pod X</code> → the <strong>Events</strong> section. Verdicts: <strong>insufficient resources</strong> (requests fit no
+node), <strong>unsatisfiable constraints</strong> (nodeSelector / affinity / taints), or a <strong>volume problem</strong> (PVC
+unbound). It is always a scheduler verdict — read the Events, don't guess.</p>
+</details>
+<details class="question">
+<summary>The Service returns connection refused but pods are Running. Two evidence commands, in order.</summary>
+<p>(1) <code>kubectl get endpoints SVC</code> — <strong>empty?</strong> then a selector mismatch or failing readiness (the routing
+layer is ruled in or out in one command). (2) If endpoints exist, audit the <strong>port quartet</strong>: Service
+<code>port</code>/<code>targetPort</code> vs the pod's <code>containerPort</code> — refused with correct endpoints usually means a wrong
+<code>targetPort</code> or an app bound to localhost (M16's lesson, cluster edition). Running ≠ reachable.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong> — audience: a compose power-user: <em>"What does Kubernetes actually
+do?"</em> Name their compose file's limits back to them (your own M16 problem statement), give the
+<strong>thermostat</strong> frame (set 21°, walk away — the furnace figures it out; open a window, it compensates;
+nobody "remembers" the window — the temperature IS the instruction), draw the two planes, then the
+<strong>killer demo</strong>: <code>kubectl delete pod</code> mid-sentence and keep talking as it returns — <em>"I never told it to
+make a new one; I told it there should BE three."</em> Close with the honest <strong>seam</strong>: when their compose
+file should stay a compose file (single host, no multi-node scheduling or SLO healing needed — K8s's
+complexity budget unearned). If you catch yourself listing components instead of telling the loop story,
+reread the Key Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress into M20 (Kubernetes Operations), which
+operates </em><em>this</em><em> cluster and completes the stage project. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the reconciliation model with the thermostat frame <strong>and</strong> the mechanism (level-triggered, the diff heals).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> all control-plane + node components with their one job — the two-planes blank drawn cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the object algebra (pod / ReplicaSet / Deployment / Service / endpoints and their label glue) from memory.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> the apply trace live — narrated against real events, no hop skipped, the M17 spine at the bottom.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compare</strong> the three probes with a failure story each (the restart storm, the silent traffic-drain).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Contrast</strong> requests vs limits — two consumers (scheduler vs cgroups), two mechanisms — and why <code>Pending</code> is a requests verdict.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> a workload's manifest from stated requirements: Deployment (digest, replicas, probes, resources, non-root) + Service, from a blank buffer.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> the deploy → expose → scale → heal sequence from scratch in under 20 minutes, every field explainable.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> the pod ladder's rung from a status + events glance — Pending / ImagePull / CrashLoop / not-ready / DNS.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> with evidence-first discipline: <code>describe</code>/Events, <code>logs --previous</code>, <code>get endpoints</code> — command named <strong>before</strong> hypothesis.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Deploy</strong> a rolling change and roll it back calmly — the old ReplicaSet re-inflated, revision history read.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> self-healing: delete a pod, watch the diff replace it; edit an owned ReplicaSet, watch it revert.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach</strong> the 10-minute "What Kubernetes actually does" lesson — the returning pod lands as the thesis proof, the seam stated honestly.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory forms. <strong>Interleaving stays active</strong> — every M19 review also pulls
+one item from an earlier module (the runtime spine and the networking chapter this module stands on).
+This is a four-week module, so in-module reviews land at each week's close; schedule the rest and <em>keep</em>
+them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved earlier item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Week-1 close</strong></td>
+<td>Two-planes + apply-trace blanks · components + manifest sprints · validation A1–B3</td>
+<td>M17: the CLI-to-syscall stack sprint</td>
+</tr>
+<tr>
+<td><strong>Week-2 close</strong></td>
+<td>Probe + port-quartet sprints · the pod ladder (break-lab I debrief) · validation C7, D10–D12</td>
+<td>M16: the image-build / forensics sprint</td>
+</tr>
+<tr>
+<td><strong>Week-3 close</strong></td>
+<td>Service-routing + rollout blanks · break-lab II debrief · validation F16–F18, G20</td>
+<td>M14: the refused-vs-timeout DNS walk</td>
+</tr>
+<tr>
+<td><strong>Module close (gate)</strong></td>
+<td>All five blanks · all sprints · validation J25–J26, K27 · <strong>mastery gate</strong></td>
+<td>M17: the exit-137 forensics chain</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Speed rep: a fresh app deployed + exposed from scratch in ≤20 min, every field explained</td>
+<td>M18: the 15-minute devcontainer spec</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>The cluster <strong>recreate-drill</strong>: delete → create → apply-from-git → green (a cluster you can't rebuild is a pet)</td>
+<td>M15: a restore test observed</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Validation retake ≥90 · the deferred-items table reviewed against M20's actual coverage</td>
+<td>Stage-5 sampler</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M20 (Kubernetes Operations — Helm, ingress, RBAC, upgrades, backups; the
+deferred-items table becomes its syllabus) · M21 (requests/limits meet real measurement — the cgroup files
+as a tuning interface) · M23 (cluster debugging folded into a forensics method) · M24 (the flat network and
+RBAC hardened into a security surface) · M25 (Prometheus/Grafana — born for this terrain, scraping the
+kubelet/cAdvisor metrics) · M26–M28 (the ML platform — GPU scheduling, distributed-training operators,
+model-serving Deployments — all K8s-shaped).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M19 turns Stage 5's artifacts into orchestrated workloads under the industry's one big idea — desired
+state plus reconciliation — making the cluster home terrain for everything ahead: operations,
+measurement, security, observability, and the ML platforms of the capstone.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../stage-05/module-18/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 18 — devcontainers">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 18 — devcontainers
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-20/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 20 — Kubernetes Operations">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 20 — Kubernetes Operations
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

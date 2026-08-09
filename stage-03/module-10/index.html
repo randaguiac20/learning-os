@@ -1,0 +1,3316 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Turn your environment into code — chezmoi versions and templates your dotfiles into a one-command bootstrap, and mise pins the runtime for every project. Make "works on my machine" a solved problem before it can cost you days.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-09/">
+      
+      
+        <link rel="next" href="../module-11/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 10 — Dotfiles & Toolchains - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-10-dotfiles-toolchains" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 10 — Dotfiles & Toolchains
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-reconcile-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the reconcile loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filename-attributes-metadata-carried-in-the-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filename attributes — metadata carried in the name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates-one-source-many-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates — one source, many machines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mise-the-toolchain-switched-per-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mise — the toolchain, switched per directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-scope-boundary-what-goes-where" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The scope boundary — what goes where
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-adopt-your-dotfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: adopt your dotfiles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-template-a-real-machine-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Template a real machine difference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-auto-detect-instead-of-prompting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Auto-detect instead of prompting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-prove-asdf-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Prove asdf compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-a-run_once-script-that-rides-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — A run_once script that rides along
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-scope-boundary-rapid-fire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The scope-boundary rapid fire
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-reconcile-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the reconcile loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filename-attributes-metadata-carried-in-the-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filename attributes — metadata carried in the name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates-one-source-many-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates — one source, many machines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mise-the-toolchain-switched-per-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mise — the toolchain, switched per directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-scope-boundary-what-goes-where" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The scope boundary — what goes where
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-adopt-your-dotfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: adopt your dotfiles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-template-a-real-machine-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Template a real machine difference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-auto-detect-instead-of-prompting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Auto-detect instead of prompting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-prove-asdf-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Prove asdf compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-a-run_once-script-that-rides-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — A run_once script that rides along
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-scope-boundary-rapid-fire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The scope-boundary rapid fire
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-10-dotfiles-toolchains">Module 10 — Dotfiles &amp; Toolchains<a class="headerlink" href="#module-10-dotfiles-toolchains" title="Permanent link">&para;</a></h1>
+<p><small>Stage 3 · Intermediate Skills · ~½ week at 4 h/day · Prerequisites — M8 (chezmoi's source <em>is</em> a git repo), M9 (bootstrap clones over SSH; ssh config becomes a managed file), M6/M7 (the vimrc and tmux.conf being unified), M5 (run_ scripts to standard), M3 (PATH, permissions, the system-vs-user boundary).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>chezmoi</strong> is a dotfile manager: it keeps the <em>source of truth</em> for your config files in a Git repo and
+computes each machine's actual files from it — with <strong>templates</strong> for the differences. <strong>mise</strong> is a
+polyglot toolchain manager: it installs and auto-switches versions of runtimes and tools (Python, Node,
+kubectl, a thousand more) <em>per directory</em>, from a checked-in <code>mise.toml</code>. Together they turn "my setup"
+from accumulated luck into versioned, tested infrastructure.</p>
+<p>Stage 3 built four precious artifacts — vimrc (M6), tmux.conf (M7), ssh config (M9), gitconfig (M8) —
+plus scripts, all currently hand-copied (you felt that friction in M9 and journaled "M10 fixes this").
+This module makes any machine yours in <strong>one command</strong>, and makes "works on my machine" a solved problem
+for <strong>tools</strong> before M13 makes it matter for code. The half-week size is honest: these are small tools
+that leverage everything you already know — Git, SSH, templates-as-code.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p><strong>M11</strong> (Claude Code) runs <em>inside</em> the environment you codify here — its <code>CLAUDE.md</code> and settings
+ride the same repo · <strong>M13</strong> layers venvs on top of mise's interpreter pinning (the three-layer
+Python story completes) · <strong>M15</strong> (Ansible) is this exact reconcile idea at <em>fleet</em> scope · <strong>M18</strong>
+(devcontainers) is the team version of your personal dotfiles · <strong>M19</strong> (GitOps) reconciles cluster
+state from git — the same kernel idea you first meet as <code>chezmoi apply</code>, at maximum blast radius.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 10 — Dotfiles &amp; Toolchains&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Analogy / Visual Model / Misconceptions):
+the drift problem (which machine has the <em>good</em> vimrc?) → source-of-truth + reconcile, the
+sheet-music analogy (one score, every orchestra plays it) → <code>diff</code> before <code>apply</code>, always →
+attributes-in-filenames (<code>private_</code> carries mode 600 that Git can't) → one <code>.tmpl</code> renders the
+laptop <em>and</em> the server flavor → mise's PATH surgery per <code>cd</code>, system Python untouched → the two
+laws: test the bootstrap like a backup (M4), never <code>init --apply</code> a stranger's repo unread.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-adopt-your-dotfiles">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. Typing beats watching every time — and it is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-the-reconcile-loop">The picture: the reconcile loop<a class="headerlink" href="#the-picture-the-reconcile-loop" title="Permanent link">&para;</a></h3>
+<p>chezmoi never "syncs" — it <strong>reconciles</strong>. One direction of truth (source → target); it renders your
+desired files from the source repo plus data, diffs them against reality, and applies the delta. You
+declare <strong>what</strong>; it handles <strong>how</strong> — the exact model behind systemd units (M4) and Kubernetes
+manifests (M19).</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph SRC["Source state — a git repo, GitHub-backed"]
+      A["dot_vimrc"]
+      B["dot_tmux.conf.tmpl"]
+      C["private_dot_ssh/config"]
+      D["run_once_install.sh"]
+    end
+    SRC --&gt;|"render with data"| R["Desired files"]
+    R --&gt;|"chezmoi diff&lt;br/&gt;(dry run — what would change?)"| G{"drift?"}
+    G --&gt;|"chezmoi apply"| HOME
+    subgraph HOME["Target — your home directory"]
+      V["~/.vimrc"]
+      T["~/.tmux.conf"]
+      S["~/.ssh/config (600)"]
+    end
+    HOME --&gt;|"edit source · commit · push"| SRC</code></pre>
+<p>The daily loop is one path through this picture: <strong>edit the source → <code>chezmoi diff</code> → <code>apply</code> → commit →
+push</strong>. Edit a <em>target</em> by mistake and the next <code>diff</code> will try to "revert" it — that is drift, and it
+tells you which direction the truth flows.</p>
+<h3 id="filename-attributes-metadata-carried-in-the-name">Filename attributes — metadata carried in the name<a class="headerlink" href="#filename-attributes-metadata-carried-in-the-name" title="Permanent link">&para;</a></h3>
+<p>chezmoi encodes each file's metadata in its <strong>source filename</strong>, versioned right alongside the content —
+no post-apply <code>chmod</code> scripts:</p>
+<table>
+<thead>
+<tr>
+<th>Prefix / suffix on the source file</th>
+<th>Renders as</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dot_vimrc</code></td>
+<td><code>~/.vimrc</code> (leading dot)</td>
+<td>Git-safe names; the dot is restored on apply</td>
+</tr>
+<tr>
+<td><code>private_dot_ssh/config</code></td>
+<td><code>~/.ssh/config</code>, <strong>mode 600</strong></td>
+<td>Git stores only <code>+x</code>, never <code>600</code> — <code>private_</code> closes exactly the gap M3 says matters</td>
+</tr>
+<tr>
+<td><code>executable_workstation.sh</code></td>
+<td><code>~/workstation.sh</code>, <strong>+x</strong></td>
+<td>The execute bit, declared</td>
+</tr>
+<tr>
+<td><code>dot_tmux.conf.tmpl</code></td>
+<td><code>~/.tmux.conf</code>, <strong>rendered</strong></td>
+<td>Passed through the Go template engine first</td>
+</tr>
+<tr>
+<td><code>run_once_install.sh</code></td>
+<td><em>executed once ever</em></td>
+<td>Setup automation carried <em>with</em> the dotfiles</td>
+</tr>
+</tbody>
+</table>
+<h3 id="templates-one-source-many-machines">Templates — one source, many machines<a class="headerlink" href="#templates-one-source-many-machines" title="Permanent link">&para;</a></h3>
+<p>A template renders <strong>differences</strong> from <strong>data</strong>. Data is prompted once at init (via
+<code>.chezmoi.toml.tmpl</code>) or read from built-ins (<code>chezmoi data</code> shows hostname, os, arch…). One
+<code>dot_tmux.conf.tmpl</code> renders the laptop flavor <em>and</em> the server flavor — your M6/M7 server-profile files
+stop being separate copies:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>dot_vimrc.tmpl
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  {{ if eq .role &quot;server&quot; }}   → minimal render   (the VM)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  {{ else }}                   → full render      (the laptop)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  {{ end }}
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>data ← .chezmoi.toml.tmpl (prompted at init: role, name, email…)
+</code></pre></div>
+<p>The rule is <strong>restraint</strong>: template only the <em>real</em> differences, keep conditionals few and commented. A
+vimrc template nobody understands fails the stranger test harder than two honest files would.</p>
+<h3 id="mise-the-toolchain-switched-per-directory">mise — the toolchain, switched per directory<a class="headerlink" href="#mise-the-toolchain-switched-per-directory" title="Permanent link">&para;</a></h3>
+<p>mise reads a <code>mise.toml</code> in (or above) your working directory and rewrites <code>PATH</code> <strong>once per <code>cd</code></strong> via a
+shell activation hook — no per-command shim tax (asdf's old pain). <code>which -a python</code> always shows the
+truth; the system's Python stays exactly where <code>apt</code> put it.</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph PA["cd proj-a  ·  mise.toml: python 3.11"]
+      HA["activation hook"] --&gt; XA["PATH → mise installs/python/3.11/bin"]
+    end
+    subgraph PB["cd proj-b  ·  mise.toml: python 3.13"]
+      HB["activation hook"] --&gt; XB["PATH → .../3.13/bin"]
+    end
+    XA --&gt; W["which -a python&lt;br/&gt;shows the truth (M3)"]
+    XB --&gt; W
+    SYS["system python /usr/bin&lt;br/&gt;owned by apt — untouched"] --&gt; W</code></pre>
+<p>The three layers never fight — each owns one thing:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Owns</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>system Python</strong></td>
+<td>the OS's own tools</td>
+<td><code>apt</code>'s <code>/usr/bin/python3</code> — never yours to swap (M3)</td>
+</tr>
+<tr>
+<td><strong>mise</strong></td>
+<td>which <em>interpreter version</em> a directory sees</td>
+<td><code>python@3.11</code> here, <code>python@3.13</code> there</td>
+</tr>
+<tr>
+<td><strong>venv</strong> (M13)</td>
+<td>which <em>packages</em> a project sees</td>
+<td><code>pip install</code> isolated atop whichever interpreter</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-scope-boundary-what-goes-where">The scope boundary — what goes where<a class="headerlink" href="#the-scope-boundary-what-goes-where" title="Permanent link">&para;</a></h3>
+<p>Not everything belongs to chezmoi. The judgment that separates an engineer from a folder-keeper:</p>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Managed by</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vimrc, tmux.conf, ssh config, gitconfig</td>
+<td><strong>chezmoi</strong> (environment)</td>
+<td>personal config, versioned + templated</td>
+</tr>
+<tr>
+<td>a project's <code>mise.toml</code>, <code>.env</code>, source</td>
+<td><strong>project repo</strong> (M8)</td>
+<td>belongs <em>with</em> the project, not your home</td>
+</tr>
+<tr>
+<td><code>sshd_config</code>, machine/fleet config</td>
+<td><strong>system</strong> (apt / M15 Ansible)</td>
+<td>machine policy, not personal environment</td>
+</tr>
+<tr>
+<td>a per-project runtime (<code>python@3.11</code>)</td>
+<td><strong>mise</strong></td>
+<td>pinned in the project's <code>mise.toml</code></td>
+</tr>
+<tr>
+<td>a secret token, a colleague's cool vimrc</td>
+<td><strong>nowhere</strong> (as-is)</td>
+<td>secrets never in the repo; strangers' repos run <em>their</em> code on apply</td>
+</tr>
+</tbody>
+</table>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>chezmoi reconciles, it doesn't sync</strong> — one direction of truth (source → target); edit the SOURCE, never the target.</li>
+<li><strong>The daily loop is law:</strong> edit source → <code>chezmoi diff</code> → <code>apply</code> → commit → push. Diff before apply, <em>always</em> (M4's habit).</li>
+<li><strong>Attributes live in filenames:</strong> <code>dot_</code> → leading dot · <code>private_</code> → mode 600 (the gap Git can't fill) · <code>.tmpl</code> → template.</li>
+<li><strong>Templates declare differences, not copies</strong> — one <code>.tmpl</code>, data-driven, renders laptop <em>and</em> server. Template only <em>real</em> differences.</li>
+<li><strong>Three Python layers, no conflict:</strong> system (apt, untouched) · mise (interpreter version) · venv (packages, M13). <code>which -a</code> reads the truth.</li>
+<li><strong>Two laws:</strong> an untested bootstrap is a <em>hope</em> (test it like a backup, M4); never <code>init --apply</code> a stranger's repo unread — <code>run_</code> scripts execute as you.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-adopt-your-dotfiles">Guided Lab: adopt your dotfiles<a class="headerlink" href="#guided-lab-adopt-your-dotfiles" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You install chezmoi + mise, put a real dotfile under management, drill the
+edit → diff → apply loop, and pin a project's runtime. Everything happens in a throwaway home you can
+reset — nothing outside the lab is touched.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-10" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-10" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Install the managers</label><label for="__tabbed_1_2">2 · Put a real dotfile under management</label><label for="__tabbed_1_3">3 · Drill the loop (edit source → diff → apply)</label><label for="__tabbed_1_4">4 · Enforce a mode with private_</label><label for="__tabbed_1_5">5 · Pin a project's runtime with mise</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sh<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsLS<span class="w"> </span>get.chezmoi.io<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>--<span class="w"> </span>-b<span class="w"> </span>/usr/local/bin<span class="w">   </span><span class="c1"># single Go binary</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chezmoi<span class="w"> </span>--version
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://mise.run<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w">                            </span><span class="c1"># mise → ~/.local/bin</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>mise<span class="w"> </span>activate<span class="w"> </span>bash<span class="k">)</span><span class="s2">&quot;</span><span class="w">                                </span><span class="c1"># the activation hook, for this shell</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>mise<span class="w"> </span>--version
+</code></pre></div>
+Both are single binaries — no runtime, no plugins to bootstrap. <code>chezmoi doctor</code> and <code>mise doctor</code>
+both ship real diagnostics; run each once while healthy so you recognise <em>sick</em> later.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chezmoi<span class="w"> </span>init<span class="w">                          </span><span class="c1"># creates the source repo at ~/.local/share/chezmoi</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;set number\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>~/.vimrc<span class="w">      </span><span class="c1"># a real dotfile in your home</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>chezmoi<span class="w"> </span>add<span class="w"> </span>~/.vimrc<span class="w">                  </span><span class="c1"># copy it INTO the source state</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ls<span class="w"> </span>-la<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>chezmoi<span class="w"> </span>source-path<span class="k">)</span><span class="s2">&quot;</span><span class="w">       </span><span class="c1"># look: it became dot_vimrc — the attribute, live</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>chezmoi<span class="w"> </span>managed<span class="w">                       </span><span class="c1"># the inventory begins</span>
+</code></pre></div>
+<code>chezmoi add</code> reads the <em>target</em> and writes the <em>source</em> — note the <code>dot_</code> prefix chezmoi chose. This
+source directory is a git repo; in real life you <code>git remote add</code> your dotfiles repo and push (M8).</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;syntax on&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>chezmoi<span class="w"> </span>source-path<span class="k">)</span><span class="s2">/dot_vimrc&quot;</span><span class="w">   </span><span class="c1"># edit the SOURCE, never ~/.vimrc</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>chezmoi<span class="w"> </span>diff<span class="w">                                             </span><span class="c1"># READ it — what would change?</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>chezmoi<span class="w"> </span>apply<span class="w">                                            </span><span class="c1"># reconcile the target to source</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>cat<span class="w"> </span>~/.vimrc<span class="w">                                             </span><span class="c1"># both lines present now</span>
+</code></pre></div>
+Now the anti-pattern <strong>on purpose</strong> — edit the <em>target</em> and watch chezmoi want to revert it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;set ruler&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.vimrc<span class="w">     </span><span class="c1"># editing the TARGET (the wrong way)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>chezmoi<span class="w"> </span>diff<span class="w">                     </span><span class="c1"># chezmoi wants to UNDO your edit — that&#39;s drift</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>chezmoi<span class="w"> </span>add<span class="w"> </span>~/.vimrc<span class="w">             </span><span class="c1"># accept it upstream instead (one legitimate exit)</span>
+</code></pre></div>
+Two legitimate exits from drift: <code>chezmoi add</code> (accept the target change into source) or <code>chezmoi
+apply</code> (discard it, source wins). The process fix is <code>chezmoi edit</code> next time.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;Host *\n    ServerAliveInterval 60\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>~/.ssh/config
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/config
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>chezmoi<span class="w"> </span>add<span class="w"> </span>~/.ssh/config<span class="w">              </span><span class="c1"># source becomes private_… (mode carried in the name)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>ls<span class="w"> </span>-la<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>chezmoi<span class="w"> </span>source-path<span class="k">)</span><span class="s2">&quot;</span><span class="w">        </span><span class="c1"># see the private_ prefix</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;%a %n&#39;</span><span class="w"> </span>~/.ssh/config<span class="w">          </span><span class="c1"># applied mode is 600 — attribute → mode (M3 payoff)</span>
+</code></pre></div>
+Git can store <code>+x</code> but never <code>600</code>; <code>private_</code> closes exactly that gap. On any future machine the ssh
+config lands at 600 automatically — you can't forget it.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/dotfiles-lab/mise-demo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/dotfiles-lab/mise-demo
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>mise.toml<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s">[tools]</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">python = &quot;3.11&quot;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">node = &quot;22&quot;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">EOF</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>mise<span class="w"> </span>ls<span class="w">                    </span><span class="c1"># what mise sees for this directory (installs on first use)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>which<span class="w"> </span>-a<span class="w"> </span>python<span class="w">            </span><span class="c1"># the M3 truth-reader — mise&#39;s path first, system&#39;s untouched</span>
+</code></pre></div>
+This <code>mise.toml</code> <strong>is</strong> the reproducibility contract for M12+ projects: a teammate runs <code>mise install</code>
+and gets identical tools. Note the boundary — the curriculum's own <code>.venv</code> stays as-is; mise pins the
+<em>interpreter</em>, venvs isolate <em>packages</em> (M13 formalises the layering).</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can put a dotfile under management, drill the edit → diff → apply loop, resolve drift both
+directions, enforce a mode with <code>private_</code>, and pin a project runtime — the guided lab is done. Now
+make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work in the lab home you can reset. Struggle here is the
+point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-template-a-real-machine-difference">Challenge 1 — Template a real machine difference<a class="headerlink" href="#challenge-1-template-a-real-machine-difference" title="Permanent link">&para;</a></h3>
+<p>Turn a single setting into a role-branched template: on a <strong>server</strong> tmux gets <em>no</em> mouse mode; on a
+<strong>laptop</strong> it stays on. Prove the render in isolation <em>before</em> you apply.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Add <code>role</code> to <code>.chezmoi.toml.tmpl</code> as prompted data, then branch with <code>{{ if eq .role "server" }}</code>.
+<code>chezmoi execute-template</code> renders a snippet against the current data without touching any file.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># .chezmoi.toml.tmpl (prompts once at init):</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1">#   [data]</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1">#   role = {{ promptString &quot;role&quot; | quote }}</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>chezmoi<span class="w"> </span>execute-template<span class="w"> </span><span class="s1">&#39;{{ if eq .role &quot;server&quot; }}set -g mouse off{{ else }}set -g mouse on{{ end }}&#39;</span>
+</code></pre></div>
+<code>execute-template</code> proves the <em>logic</em> against real data before any apply — data before logic is how
+you debug templates (most "template bugs" are data surprises).</p>
+</details>
+<h3 id="challenge-2-auto-detect-instead-of-prompting">Challenge 2 — Auto-detect instead of prompting<a class="headerlink" href="#challenge-2-auto-detect-instead-of-prompting" title="Permanent link">&para;</a></h3>
+<p>Add a difference that needs <strong>no prompt</strong>: enable a setting only on machines that have <code>systemd</code>. Justify
+auto-detect vs a prompt.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>chezmoi templates can call <code>lookPath</code>. Facts the machine <em>knows</em> (os, arch, hostname, whether a binary
+exists) should be detected, not asked — you can't answer them wrong.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>chezmoi<span class="w"> </span>execute-template<span class="w"> </span><span class="s1">&#39;{{ if lookPath &quot;systemctl&quot; }}# systemd present{{ else }}# no systemd{{ end }}&#39;</span>
+</code></pre></div>
+Prompt for facts the machine can't know (role, work-vs-personal email); <strong>detect</strong> facts it does
+(<code>os</code>, <code>arch</code>, <code>lookPath</code> results) — zero friction, impossible to answer wrong.</p>
+</details>
+<h3 id="challenge-3-prove-asdf-compatibility">Challenge 3 — Prove asdf compatibility<a class="headerlink" href="#challenge-3-prove-asdf-compatibility" title="Permanent link">&para;</a></h3>
+<p>Write a <code>.tool-versions</code> file by hand (asdf's format) and confirm mise reads it natively — no conversion.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/dotfiles-lab/asdf-demo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/dotfiles-lab/asdf-demo
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;python 3.11.9\nnode 22.0.0\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>.tool-versions
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>mise<span class="w"> </span>ls<span class="w">          </span><span class="c1"># mise picks the versions straight from .tool-versions</span>
+</code></pre></div>
+Interface compatibility (reading asdf's registry <em>and</em> <code>.tool-versions</code>) is exactly how a better
+implementation won adoption <em>without</em> an ecosystem reset — the tmux-over-screen story (M7) again.</p>
+</details>
+<h3 id="challenge-4-a-run_once-script-that-rides-along">Challenge 4 — A run_once script that rides along<a class="headerlink" href="#challenge-4-a-run_once-script-that-rides-along" title="Permanent link">&para;</a></h3>
+<p>Add a <code>run_once_</code> script to the source that installs a baseline tool the first time chezmoi applies, and
+prove it runs exactly once. What makes it "the highest-privilege code you own"?</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Name it <code>run_once_install-baseline.sh</code> in the source. Apply, watch it fire; apply again, watch silence.
+Idempotency is not optional — applies re-run normally, on every future machine.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>chezmoi<span class="w"> </span>source-path<span class="k">)</span><span class="s2">/run_once_install-baseline.sh&quot;</span><span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="s">#!/bin/bash</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="s">set -euo pipefail</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="s">command -v shellcheck &gt;/dev/null || echo &quot;would install shellcheck (idempotent guard)&quot;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s">EOF</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>chezmoi<span class="w"> </span>apply<span class="w">    </span><span class="c1"># script fires once (hash recorded in chezmoi state)</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>chezmoi<span class="w"> </span>apply<span class="w">    </span><span class="c1"># silence — once means once</span>
+</code></pre></div>
+It runs <strong>automatically on every machine you ever bootstrap</strong>, as you — a sloppy or compromised
+script propagates everywhere you go. Hence M5-standard, idempotent, and audited like any installer.</p>
+</details>
+<h3 id="challenge-5-stretch-the-scope-boundary-rapid-fire">Challenge 5 (stretch) — The scope-boundary rapid fire<a class="headerlink" href="#challenge-5-stretch-the-scope-boundary-rapid-fire" title="Permanent link">&para;</a></h3>
+<p>For each of these, state in one breath <em>where it's managed and why</em>: <code>sshd_config</code>, a project's <code>.env</code>,
+your prompt config, <code>kubectl</code>, a work-only alias, the curriculum's <code>.venv</code>, a secret token, a colleague's
+vimrc you admire.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><code>sshd_config</code> → <strong>system</strong> (machine policy, M4 drop-ins; fleet = M15 — never chezmoi) · project <code>.env</code>
+→ <strong>project repo</strong>, and secrets <em>out</em> of it · prompt config → <strong>chezmoi</strong> (personal environment) ·
+<code>kubectl</code> → <strong>mise</strong> (pinned per cluster-repo) · work-only alias → <strong>chezmoi template</strong> (role branch)
+· curriculum <code>.venv</code> → <strong>as-is</strong> (project rule; mise pins the interpreter, venv the packages) · secret
+token → <strong>nowhere in the repo</strong> (agent/manager/age if it must travel) · colleague's vimrc → <strong>read it,
+adopt pieces into YOUR source</strong> — never <code>init --apply</code> their repo (their <code>run_</code> scripts are their
+code).</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard — is
+what builds the memory.</em></p>
+<details class="question">
+<summary>Source state vs target state — what is each, and what do <code>diff</code> and <code>apply</code> do between them?</summary>
+<p><strong>Source</strong> is the repo's declarative truth (files + attributes + templates); <strong>target</strong> is your actual
+home files. <code>chezmoi diff</code> computes the desired-vs-actual delta (a dry run); <code>apply</code> reconciles the
+target <em>to</em> the desired. Direction matters: source wins unless you deliberately <code>add</code> a target change
+upstream.</p>
+</details>
+<details class="question">
+<summary>How do the filename attributes work, and what gap does <code>private_</code> close that Git alone can't?</summary>
+<p>Metadata is encoded in the source <strong>name</strong>, versioned with content: <code>dot_</code> → leading dot; <code>private_</code> →
+mode <strong>600</strong> on apply; <code>executable_</code> → <code>+x</code>; <code>.tmpl</code> → rendered through the template engine. Git tracks
+only <code>+x</code>, never <code>600</code> — <code>private_</code> closes exactly that gap (the ssh-config case M3 warned about).</p>
+</details>
+<details class="question">
+<summary>You edited <code>~/.tmux.conf</code> directly and <code>chezmoi diff</code> now wants to 'undo' it. What happened, and your two legitimate exits?</summary>
+<p>You edited the <strong>target</strong>; the source still holds the old truth, so reconcile wants to enforce it.
+Exits: <code>chezmoi add</code> (accept the target change into the source, then commit/push) <strong>or</strong> <code>chezmoi
+apply</code> (discard the local edit — source wins). Process fix: use <code>chezmoi edit</code> next time.</p>
+</details>
+<details class="question">
+<summary>mise vs venv vs system Python — what does each own, and how do they stack without conflict?</summary>
+<p><strong>System</strong> Python is apt's, owned by the OS for OS tools (never yours to swap). <strong>mise</strong> picks which
+<em>interpreter version</em> a directory sees (per-project pins). <strong>venv</strong> isolates which <em>packages</em> a project
+sees, atop whichever interpreter (M13). Stack: system untouched → mise selects 3.11 vs 3.13 → venv
+isolates deps on top. <code>which -a python</code> shows the whole stack.</p>
+</details>
+<details class="question">
+<summary>'mise isn't switching versions' — the three-step diagnosis, with commands?</summary>
+<p>(1) <code>mise doctor</code> — is activation on, config found? (2) Is the hook actually in <em>this</em> shell —
+<code>type mise</code>, and did chezmoi apply the activation line to <code>.bashrc</code>? (3) <code>echo $PATH</code> + <code>which -a
+python</code> — is something earlier shadowing it (a venv, an alias)? Data/PATH truth over guesses (M3).</p>
+</details>
+<details class="question">
+<summary>Why must <code>run_</code> scripts be idempotent, and what makes them 'the highest-privilege code you own'?</summary>
+<p>Applies re-run <em>normally</em> — every machine, every drift-fix — so a non-idempotent script fails or
+duplicates on run 2. They execute <strong>automatically on every future machine you own, forever</strong>, as you;
+a compromised or sloppy one propagates everywhere. Hence M5-standard and audited like an installer.</p>
+</details>
+<details class="question">
+<summary>Why is <code>init --apply</code> on a stranger's repo equivalent to running their code?</summary>
+<p><code>run_</code> scripts and hooks execute on apply <em>with your privileges</em>, and templates can write data into
+rendered files. Applying a repo you haven't read is executing code you haven't audited (case study:
+dotfiles repos have shipped credential-stealers). Rule: read the scripts first — fork, audit, adopt
+pieces into <em>your</em> source.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>: <em>"What does it mean that your environment is 'code', and what
+does that buy you?"</em> — the drift problem, source-of-truth + reconcile (<code>diff</code>/<code>apply</code>), templates for
+differences, pinned toolchains, and the proof standard (bootstrap tested like a backup — M4's law).
+The sheet-music analogy must appear <strong>and then yield to mechanism</strong>. Then, in <strong>90 seconds</strong>, teach
+<em>"why does it take some people a week to set up a new computer, and you two minutes?"</em> — the
+recipe-vs-leftovers story, no jargon until the last sentence. If you can't yet, that's your signal to
+reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — a module is only "done" when every box is
+true. Passing M10 ships the </em><em>Portable Workstation</em><em> and closes Stage 3's tooling loop.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the reconcile model (direction of truth!) + template data flow + the mise/venv/system layering, flawless.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all three from memory: the reconcile loop (with git edges + the daily path), template branching, and mise switching.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure</strong> <code>.chezmoi.toml.tmpl</code> (role prompt + sensible default) and mise global vs project config, every choice explained.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Develop</strong> the M6/M7 server profiles UNIFIED as one template, no-regression proven (empty diff on the laptop role).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Automate</strong> a <code>run_once</code> and a <code>run_onchange</code> script, both idempotent and M5-standard (shellcheck-clean).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> <code>private_</code>→600 verified live; a written secrets policy; the strangers'-repo + run_-scripts-as-code rules articulated.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> the three planted faults (missing template data, lost activation hook, non-idempotent script) each with a stated method.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> with data-before-logic isolation (<code>chezmoi data</code> → <code>chezmoi execute-template</code>) and a PATH truth-read for mise.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Deploy</strong> THE BOOTSTRAP: a clean, timed run on a reset VM; both roles render correctly; tag <code>v1.0</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> bootstrap timed, profiled, and meaningfully cut — before/after numbers, not impressions.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design:</strong> ≥8/10 scope-boundary placements (chezmoi / project / system / mise / nowhere) with clean reasoning, incl. the secret and colleague's-vimrc traps.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Self-serve:</strong> ≥3 things learned from chezmoi.io / mise.jdx.dev docs alone (a template function, an attribute, a mise setting), and ≥80% on the validation bank.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (reconcile-not-sync mandatory).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active — every
+M10 review also pulls in one <strong>Module 09</strong> (SSH) item, since the bootstrap clones over SSH and ssh config
+is now a managed file. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M9 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · the loop sprint (five commands, 20 s) · attribute + truth sprints · validation A1–A3</td>
+<td>M9 handshake sprint — the key-exchange steps in order</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Add a small real difference via <code>.tmpl</code> cold · <code>execute-template</code> proof · validation D11–D12</td>
+<td>M9 tunnel sprint — local vs remote forward drawn</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Drift drill: plant + resolve both directions (<code>add</code> vs <code>apply</code>) · the security questions</td>
+<td>M9 denied-connection checklist from memory</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Scope-boundary table redrawn from memory · <code>env-status.sh</code> review</td>
+<td>M9 ssh config block cold (Host/User/IdentityFile)</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td><strong>BOOTSTRAP RE-TEST on a reset VM</strong> (timed vs baseline) · managed-inventory audit</td>
+<td>M9 break-glass: recover access with keys lost</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> Claude Code (M11 — its <code>CLAUDE.md</code> and settings ride the same repo) · venvs
+(M13 — package isolation layered on mise's interpreter pinning) · Ansible (M15 — reconcile-from-git at
+<em>machine/fleet</em> scope) · devcontainers (M18 — the team version of your personal dotfiles) · GitOps
+(M19 — cluster state reconciled from git, the same kernel idea at maximum blast radius).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M10 closes Stage 3's loop: the tools you spent five modules mastering now install, configure, and
+prove themselves from one command — "my setup" becomes versioned, tested infrastructure every
+remaining module (and machine) inherits for free.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-09/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 09 — SSH">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 09 — SSH
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-11/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 11 — Claude Code">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 11 — Claude Code
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

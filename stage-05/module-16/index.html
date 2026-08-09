@@ -1,0 +1,3405 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Package a process with its entire userland into an image and run it as a disposable container. Build images properly (layers, Dockerfile, multi-stage, non-root), understand volumes and networks, and compose multi-service rigs — the environment itself becomes a shippable artifact.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-15/">
+      
+      
+        <link rel="next" href="../module-17/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 16 — Docker - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-16-docker" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 16 — Docker
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-one-demystifying-fact-a-container-is-a-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The one demystifying fact: a container is a process
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-vs-container-recipe-vs-meal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image vs container — recipe vs meal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layers-are-the-economy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layers are the economy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dockerfile-the-build-recipe-read-top-to-bottom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Dockerfile — the build recipe, read top to bottom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registries-where-images-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registries — where images live
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volumes-and-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Volumes and networks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compose-the-multi-service-rig-in-one-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compose — the multi-service rig in one file
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-your-first-images-and-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: your first images and containers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-fix-the-cache-order-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Fix the cache-order law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-publish-host-only-and-prove-the-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Publish host-only, and prove the difference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-diagnose-the-10-second-stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Diagnose the 10-second stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-a-minimal-hardened-multi-stage-image-level-2-wright" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — A minimal hardened multi-stage image (Level 2 "Wright")
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-a-2-service-compose-rig-with-dns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — A 2-service compose rig with DNS
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-one-demystifying-fact-a-container-is-a-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The one demystifying fact: a container is a process
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-vs-container-recipe-vs-meal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image vs container — recipe vs meal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layers-are-the-economy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layers are the economy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dockerfile-the-build-recipe-read-top-to-bottom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Dockerfile — the build recipe, read top to bottom
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registries-where-images-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registries — where images live
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volumes-and-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Volumes and networks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compose-the-multi-service-rig-in-one-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compose — the multi-service rig in one file
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-your-first-images-and-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: your first images and containers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-fix-the-cache-order-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Fix the cache-order law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-publish-host-only-and-prove-the-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Publish host-only, and prove the difference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-diagnose-the-10-second-stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Diagnose the 10-second stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-a-minimal-hardened-multi-stage-image-level-2-wright" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — A minimal hardened multi-stage image (Level 2 "Wright")
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-a-2-service-compose-rig-with-dns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — A 2-service compose rig with DNS
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-16-docker">Module 16 — Docker<a class="headerlink" href="#module-16-docker" title="Permanent link">&para;</a></h1>
+<p><small>Stage 5 · Production Practices · ~3 weeks at 4 h/day · Prerequisites — M15 (the CI rails images ride), M14 (bridges, NAT, DNS — the networking chapter re-staged), M13 (the wheel the image carries), M1 (a container <em>is</em> a process).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Docker</strong> packages a process together with its entire userland — code, dependencies, filesystem,
+config — into an <strong>image</strong> (an immutable, layered artifact) and runs it as a <strong>container</strong> (an isolated
+process on a <em>shared</em> kernel). It is <strong>not</strong> a virtual machine: one kernel, many isolated userlands. The
+isolation is ordinary kernel features (namespaces, cgroups — M17 dissects them); the <em>revolution</em> is the
+artifact.</p>
+<p>M13 built the wheel and M15 built the rail that ships it; this module builds the <strong>hull that carries the
+wheel</strong>. The recreate-drills of the last stage proved environments must be rebuildable — containers make
+the environment <em>shippable</em>: "works on my machine" becomes "runs from this digest, anywhere." The exact
+same digest runs in CI, on your laptop, and in the cluster. Everything ahead assumes container literacy.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p><strong>M17</strong> dissects the substrate under Docker (containerd · runc · OCI specs — your own images become
+the cadavers) · <strong>M18</strong> moves your dev loop <em>inside</em> a container (devcontainers) · <strong>M19–20</strong>
+(Kubernetes) orchestrate exactly these images — Deployments replace restart policies, Services
+replace <code>-p</code>, probes replace healthchecks · <strong>M25</strong> scrapes the cgroup numbers <code>docker stats</code> shows
+you · <strong>M27–28</strong> serve models from images built with this module's discipline. Learn to build,
+harden, and debug a container now, and every later platform is just orchestration on top.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 16 — Docker&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+image vs container (the recipe vs the meal) → <strong>a container is just a process</strong> (find it in the
+host's <code>ps -ef --forest</code>, kill it by PID, watch <code>docker ps</code> agree) → layers and the cache-order law →
+Dockerfile + multi-stage hardening (deps-then-code, non-root <code>USER</code>, exec form) → port publishing is
+NAT you already understand (M14) → a compose rig by service name → the VM myth killed explicitly.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-your-first-images-and-containers">Guided Lab</a> in a browser terminal and run
+each command yourself as it appears. Typing beats watching every time — and it is part of how the
+memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-one-demystifying-fact-a-container-is-a-process">The one demystifying fact: a container is a process<a class="headerlink" href="#the-one-demystifying-fact-a-container-is-a-process" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    CLI["docker CLI&lt;br/&gt;docker run ..."] --&gt; D["dockerd&lt;br/&gt;the engine daemon"]
+    D --&gt; Cd["containerd&lt;br/&gt;container supervisor"]
+    Cd --&gt; R["runc&lt;br/&gt;spawns the process"]
+    subgraph host["Host kernel — shared by everything"]
+      R --&gt; P["Your process&lt;br/&gt;PID 1 inside · an ordinary PID outside"]
+      P --&gt; NS["namespaces + cgroups&lt;br/&gt;its blindfold + its resource limits"]
+    end</code></pre>
+<p><code>docker run</code> does <strong>not</strong> boot a machine. The CLI asks <code>dockerd</code>, which asks <code>containerd</code>, which has
+<code>runc</code> start <strong>one ordinary process</strong> — visible in the host's <code>ps</code>, killable by its host PID. What makes
+it <em>feel</em> isolated is <strong>namespaces</strong> (its own view of files, network, PIDs) and <strong>cgroups</strong> (its resource
+limits). A VM brings its own kernel and boots; a container shares the host kernel and starts in
+milliseconds. Hold this and every misconception dissolves.</p>
+<h3 id="image-vs-container-recipe-vs-meal">Image vs container — recipe vs meal<a class="headerlink" href="#image-vs-container-recipe-vs-meal" title="Permanent link">&para;</a></h3>
+<p>The single most important distinction in the module:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Image</th>
+<th>Container</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>What it is</strong></td>
+<td>Immutable, layered filesystem + metadata (entrypoint, config)</td>
+<td>A running (or stopped) <em>instance</em>: image + a writable layer + namespaces/cgroups</td>
+</tr>
+<tr>
+<td><strong>Analogy</strong></td>
+<td>A class · a frozen recipe</td>
+<td>An instance · a cooked meal</td>
+</tr>
+<tr>
+<td><strong>Mutability</strong></td>
+<td>Never changes — you build a <em>new</em> one</td>
+<td>Disposable; you throw it away and run another</td>
+</tr>
+<tr>
+<td><strong>Where change goes</strong></td>
+<td>A new image (rebuild + replace)</td>
+<td>The writable layer — <strong>lost on removal</strong></td>
+</tr>
+<tr>
+<td><strong>Survives <code>docker rm</code>?</strong></td>
+<td>Yes (the image stays)</td>
+<td>No (the writable layer dies)</td>
+</tr>
+</tbody>
+</table>
+<p>Containers are <strong>cattle, not pets</strong>: config lives in <strong>env vars</strong>, state lives in <strong>volumes</strong>, so
+recreating a container loses nothing that matters. You never patch a running container — you build a new
+image and replace it (M15's deploy-as-artifact, universalised).</p>
+<h3 id="layers-are-the-economy">Layers are the economy<a class="headerlink" href="#layers-are-the-economy" title="Permanent link">&para;</a></h3>
+<p>An image is a stack of <strong>layers</strong> — each layer is a content-addressed filesystem <em>diff</em> produced by one
+Dockerfile instruction (think <strong>git commits for filesystems</strong>). Layers are billed three ways, and shared
+by content address (same digest = same bytes, stored once):</p>
+<ul>
+<li><strong>Build time</strong> — a cached layer is reused instead of rebuilt.</li>
+<li><strong>Disk</strong> — each <em>unique</em> layer stored once; two images <code>FROM</code> the same base share it.</li>
+<li><strong>Network</strong> — <code>push</code>/<code>pull</code> transfer only the layers you don't already have.</li>
+</ul>
+<p><strong>Copy-on-write:</strong> reads fall through the read-only stack to the first layer that has the file; the
+<em>first write</em> copies that file up into the writable layer. Nothing is copied at start — that is why
+containers launch in milliseconds, and why writing a lot <em>inside</em> a container is the smell of a missing
+volume.</p>
+<p><strong>The cache-order law:</strong> a changed layer invalidates <strong>every later layer</strong>. So order instructions
+<strong>least-volatile first, most-volatile (your code) last</strong> — copy dependency manifests and install deps
+<em>before</em> copying source. Edit code and only one cheap layer rebuilds; put <code>COPY . .</code> above <code>pip install</code>
+and you rebuild the install on every keystroke.</p>
+<h3 id="the-dockerfile-the-build-recipe-read-top-to-bottom">The Dockerfile — the build recipe, read top to bottom<a class="headerlink" href="#the-dockerfile-the-build-recipe-read-top-to-bottom" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>What it does</th>
+<th>The rule you keep</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FROM</code></td>
+<td>Base image every layer builds on</td>
+<td><strong>Pin it</strong> (exact tag; digest for prod) — <code>latest</code> is "whoever pushed last"</td>
+</tr>
+<tr>
+<td><code>RUN</code></td>
+<td>Executes a command, freezes the result as a layer</td>
+<td>Chain with <code>&amp;&amp;</code> so related work is one layer</td>
+</tr>
+<tr>
+<td><code>COPY</code></td>
+<td>Copies build-context files in</td>
+<td>Prefer <code>COPY</code>; use <code>ADD</code> only for its auto-extract/URL trick, knowingly</td>
+</tr>
+<tr>
+<td><code>WORKDIR</code></td>
+<td>Sets the working directory</td>
+<td>Use it instead of <code>RUN cd</code></td>
+</tr>
+<tr>
+<td><code>ARG</code> / <code>ENV</code></td>
+<td>Build-time variable / runtime variable</td>
+<td><code>ARG</code> = build only · <code>ENV</code> = baked into the image <strong>and its history</strong></td>
+</tr>
+<tr>
+<td><code>EXPOSE</code></td>
+<td>Documents a port</td>
+<td><strong>Documentation only</strong> — <code>-p</code> is what actually publishes</td>
+</tr>
+<tr>
+<td><code>USER</code></td>
+<td>Switches the user layers/process run as</td>
+<td>Create a uid and <code>USER</code> it — <strong>non-root in every image you author</strong></td>
+</tr>
+<tr>
+<td><code>ENTRYPOINT</code> / <code>CMD</code></td>
+<td>The program / its default args</td>
+<td><strong>Exec form</strong> <code>["prog","arg"]</code> so signals arrive (see below)</td>
+</tr>
+<tr>
+<td><code>HEALTHCHECK</code></td>
+<td>A command Docker runs to judge health</td>
+<td>Make it <em>mean</em> something — not <code>exit 0</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Multi-stage builds</strong> are the standard hull: a <strong>builder</strong> stage carries compilers and dev deps; the
+<strong>final</strong> stage is a slim base that <code>COPY --from=builder</code>s only the runtime artifact — smaller image,
+smaller attack surface. <strong>Exec form vs shell form</strong> decides <code>docker stop</code>: with exec form your process
+<em>is</em> PID 1 and receives <code>SIGTERM</code> (clean stop); with shell form <code>/bin/sh</code> is PID 1, eats the signal, and
+<code>docker stop</code> hangs the full 10-second grace before <code>SIGKILL</code> — the signature of a shell-form entrypoint.</p>
+<h3 id="registries-where-images-live">Registries — where images live<a class="headerlink" href="#registries-where-images-live" title="Permanent link">&para;</a></h3>
+<p>The whole lifecycle is one pipeline, with the registry in the middle:</p>
+<pre class="mermaid"><code>flowchart TB
+    DF["Dockerfile&lt;br/&gt;the build recipe"] --&gt; B["docker build&lt;br/&gt;runs each instruction"]
+    B --&gt; IMG["Image&lt;br/&gt;immutable layer stack"]
+    IMG --&gt; PUSH["docker push"]
+    PUSH --&gt; REG["Registry&lt;br/&gt;Hub · GHCR"]
+    REG --&gt; PULL["docker pull"]
+    PULL --&gt; RUN["docker run"]
+    RUN --&gt; C["Container&lt;br/&gt;image + writable layer + isolation"]</code></pre>
+<p>An image name reads <code>registry/namespace/repo:tag@digest</code>. A <strong>tag</strong> is a <em>mutable pointer</em> (it can move
+under you); a <strong>digest</strong> is the <em>immutable</em> content address. <strong>Tags lie, digests don't</strong> — pin by digest
+for anything that ships, and take base-image updates as <em>reviewed</em> changes on a cadence, not silent
+drift. The registry (Docker Hub, GHCR) is a package index with <strong>all of PyPI's threat model</strong> (M13):
+popularity ≠ integrity, and pulling an image executes a whole userland — so prefer official/verified
+images, pin digests, and scan.</p>
+<h3 id="volumes-and-networks">Volumes and networks<a class="headerlink" href="#volumes-and-networks" title="Permanent link">&para;</a></h3>
+<p>State and reachability both must be <strong>declared explicitly</strong> — the runtime forces it. Three ways to give
+a container storage:</p>
+<table>
+<thead>
+<tr>
+<th>Mount type</th>
+<th>What it is</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Named volume</strong></td>
+<td>Docker-managed storage that outlives the container</td>
+<td><strong>Persistent state</strong> (databases, decks) — the portable default</td>
+</tr>
+<tr>
+<td><strong>Bind mount</strong></td>
+<td>A host path mapped straight in</td>
+<td>Dev iteration (live source) — powerful but host-coupled</td>
+</tr>
+<tr>
+<td><strong>tmpfs</strong></td>
+<td>In-memory scratch, never on disk</td>
+<td>Secrets/scratch that must not persist</td>
+</tr>
+</tbody>
+</table>
+<p>The over-mount footgun: bind-mounting an <strong>empty</strong> directory over the app's own path makes the app
+"disappear." On networking, <strong>publishing is NAT you already understand</strong> — <code>-p 8080:80</code> writes a DNAT
+rule that steers host <code>:8080</code> to the container's <code>:80</code>:</p>
+<pre class="mermaid"><code>flowchart LR
+    H["Host :8080"] --&gt; DN["DNAT rule&lt;br/&gt;DOCKER chain"]
+    DN --&gt; BR["docker0 bridge&lt;br/&gt;+ veth pair"]
+    BR --&gt; CP["Container :80"]</code></pre>
+<p>Two ports, easily confused: publish <code>8080:80</code>, then <code>curl :8080</code> on the <strong>host</strong> but <code>:80</code> <strong>inside</strong>.
+On a <strong>user-defined</strong> network (which Compose creates for you) containers reach each other <strong>by name</strong> via
+an embedded DNS resolver at <strong>127.0.0.11</strong>; the default bridge gives you IPs only. And the infamous
+surprise: Docker's DNAT chain runs <em>before</em> ufw's <code>INPUT</code> chain, so a published <code>0.0.0.0</code> port bypasses a
+firewall's default-deny — mitigate by publishing to <code>127.0.0.1</code> for host-only services.</p>
+<h3 id="compose-the-multi-service-rig-in-one-file">Compose — the multi-service rig in one file<a class="headerlink" href="#compose-the-multi-service-rig-in-one-file" title="Permanent link">&para;</a></h3>
+<p><code>compose.yaml</code> declares <strong>services</strong>, <strong>networks</strong>, <strong>volumes</strong>, and <code>depends_on</code>. <code>docker compose up -d</code>
+brings the whole rig up; services find each other by name; <code>depends_on</code> with a <code>condition:
+service_healthy</code> fixes the <em>started ≠ ready</em> classic (the container is up, but the database process isn't
+accepting connections yet). One concern per container; Compose <em>composes</em> them — the Unix-pipe philosophy
+at service scale. <code>docker compose down -v</code> also deletes volumes — <strong>a decision, not a habit</strong>.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>A container is a process</strong>, not a mini-VM — namespaces + cgroups on the <em>shared</em> kernel; find it in the host's <code>ps</code>, kill it by PID.</li>
+<li><strong>Image = recipe, container = meal.</strong> Images are immutable; containers are disposable — state to <strong>volumes</strong>, config to <strong>env</strong>.</li>
+<li><strong>Layers are the economy.</strong> Order <strong>deps before code</strong>; a changed layer invalidates every layer after it.</li>
+<li><strong>Exec form, always.</strong> <code>["prog","arg"]</code> makes your process PID 1 so <code>SIGTERM</code> arrives — shell form causes the 10-second stop.</li>
+<li><strong><code>EXPOSE</code> documents; <code>-p</code> publishes</strong> (a DNAT rule). <strong>Tags lie, digests don't</strong> — pin by digest, update deliberately.</li>
+<li><strong>Non-root <code>USER</code> in every image you author</strong>, and <strong>never</strong> bake a secret into a layer — history is forever (<code>docker history</code> proves it).</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-your-first-images-and-containers">Guided Lab: your first images and containers<a class="headerlink" href="#guided-lab-your-first-images-and-containers" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You run a real container, prove it is just a process, then write a Dockerfile,
+<code>docker build</code> an image, run it, publish a port, and use a named volume — verifying at each step.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-16" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-16" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a full Linux VM in your browser where Docker runs.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo), Docker preinstalled.</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL machine with Docker installed (<code>docker --version</code> to check), then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size. (Docker needs a real kernel — a container-in-a-container playground may not suffice, which is why the browser option here is a full VM.)</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Run a container, read the output</label><label for="__tabbed_1_2">2 · Prove a container is just a process</label><label for="__tabbed_1_3">3 · Immutability, felt</label><label for="__tabbed_1_4">4 · Layers and the build cache</label><label for="__tabbed_1_5">5 · Write a Dockerfile and build an image</label><label for="__tabbed_1_6">6 · Run it, publish a port, add a volume</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>version<span class="w">            </span><span class="c1"># client + engine present?</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>run<span class="w"> </span>hello-world<span class="w">    </span><span class="c1"># pulls a tiny image, runs it, prints what just happened</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>ubuntu<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cat /etc/os-release; whoami&#39;</span><span class="w">   </span><span class="c1"># a shell in another distro&#39;s userland</span>
+</code></pre></div>
+Read <code>hello-world</code>'s message — it <em>narrates</em> the pull → run pipeline you'll build. The <code>ubuntu</code>
+line proves the container has its <strong>own userland</strong> (a whole other distro) on your <strong>one</strong> kernel.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>sleeper<span class="w"> </span>ubuntu<span class="w"> </span>sleep<span class="w"> </span><span class="m">3000</span><span class="w">   </span><span class="c1"># -d = detached; prints a container ID</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>ps<span class="w">                                        </span><span class="c1"># it&#39;s running</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ps<span class="w"> </span>-ef<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-m1<span class="w"> </span><span class="s2">&quot;sleep 3000&quot;</span><span class="w">                   </span><span class="c1"># the SAME process, in the HOST&#39;s process table</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>sleeper<span class="w"> </span>ps<span class="w"> </span>-ef<span class="w">                   </span><span class="c1"># inside: your sleep is PID 1</span>
+</code></pre></div>
+Outside it is an ordinary PID; inside it is <strong>PID 1</strong>. Same process, two views — that is the whole
+"magic." <code>docker stop sleeper &amp;&amp; docker rm sleeper</code> when you're done looking.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--name<span class="w"> </span>scratch<span class="w"> </span>ubuntu<span class="w"> </span>bash<span class="w">        </span><span class="c1"># inside: touch /tmp/ifixedit ; then type: exit</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>ubuntu<span class="w"> </span>ls<span class="w"> </span>/tmp<span class="w">               </span><span class="c1"># a FRESH container — your file is gone</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>docker<span class="w"> </span>diff<span class="w"> </span>scratch<span class="w">                              </span><span class="c1"># what changed in the stopped container&#39;s writable layer</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>docker<span class="w"> </span>rm<span class="w"> </span>scratch
+</code></pre></div>
+Changes live in a container's <strong>writable layer</strong> and die with it. Real change belongs in the
+<em>image</em>, not in a container you edited by hand.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>python:3.12-slim
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>docker<span class="w"> </span><span class="nb">history</span><span class="w"> </span>python:3.12-slim<span class="w">      </span><span class="c1"># read the recipe&#39;s per-layer costs</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>docker<span class="w"> </span>images<span class="w">                        </span><span class="c1"># sizes on disk</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>docker<span class="w"> </span>system<span class="w"> </span>df<span class="w">                     </span><span class="c1"># the disk census — always BEFORE any prune</span>
+</code></pre></div>
+<code>docker history</code> reads the layers like a git log for a filesystem. Note how much of an image is the
+shared base — that base is stored <strong>once</strong> even across many images.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mkdir<span class="w"> </span>~/docker-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/docker-lab
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;&lt;h1&gt;Hello from my own image&lt;/h1&gt;&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>index.html
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;FROM nginx:alpine\nCOPY index.html /usr/share/nginx/html/index.html\nEXPOSE 80\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>Dockerfile
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>hello-web<span class="w"> </span>.<span class="w">          </span><span class="c1"># each instruction becomes a layer</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>docker<span class="w"> </span>images<span class="w"> </span>hello-web<span class="w">              </span><span class="c1"># your image now exists</span>
+</code></pre></div>
+<code>FROM</code> pins the base, <code>COPY</code> adds your file as a layer, <code>EXPOSE</code> <em>documents</em> the port (it does not
+publish). <code>docker build -t name .</code> — the <code>.</code> is the <strong>build context</strong> sent to the engine.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>web<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:80<span class="w"> </span>hello-web<span class="w">    </span><span class="c1"># -p writes the DNAT rule</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080<span class="w">                            </span><span class="c1"># your page, served from your image</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>mydata:/data<span class="w"> </span>alpine<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo &quot;survives&quot; &gt; /data/note.txt&#39;</span><span class="w">   </span><span class="c1"># write to a NAMED volume</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>mydata:/data<span class="w"> </span>alpine<span class="w"> </span>cat<span class="w"> </span>/data/note.txt<span class="w">                          </span><span class="c1"># a new container reads it back</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>docker<span class="w"> </span>volume<span class="w"> </span>ls<span class="w">                                  </span><span class="c1"># the volume outlived both containers</span>
+</code></pre></div>
+<code>-p 8080:80</code> publishes host <code>:8080</code> → container <code>:80</code>. The <strong>named volume</strong> <code>mydata</code> persists across
+<em>different</em> containers — that is the state boundary: data outside, container disposable.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can run a container, see it in the host's <code>ps</code>, build an image from a Dockerfile, publish its
+port, and persist data in a named volume — the guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work in <code>~/docker-lab/</code>. Struggle here is the point; reveal
+a hint only after you've tried.</em></p>
+<h3 id="challenge-1-fix-the-cache-order-law">Challenge 1 — Fix the cache-order law<a class="headerlink" href="#challenge-1-fix-the-cache-order-law" title="Permanent link">&para;</a></h3>
+<p>Take a Dockerfile that does <code>COPY . .</code> <strong>before</strong> <code>pip install -r requirements.txt</code>. Reorder it so that
+editing a source file does <strong>not</strong> re-run the install, and explain which layer now rebuilds.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Copy only the file the install depends on first, install, <em>then</em> copy the rest. The cache breaks at
+the first changed layer and everything after it.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.<span class="w">          </span>#<span class="w"> </span>least-volatile:<span class="w"> </span>changes<span class="w"> </span>rarely
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.<span class="w">                         </span>#<span class="w"> </span>most-volatile:<span class="w"> </span>your<span class="w"> </span>code,<span class="w"> </span>copied<span class="w"> </span>last
+</code></pre></div>
+Now editing source invalidates only the final <code>COPY . .</code> layer; <code>requirements.txt</code> is unchanged, so
+the expensive <code>pip install</code> layer is served from cache. Deps-before-code is the whole game.</p>
+</details>
+<h3 id="challenge-2-publish-host-only-and-prove-the-difference">Challenge 2 — Publish host-only, and prove the difference<a class="headerlink" href="#challenge-2-publish-host-only-and-prove-the-difference" title="Permanent link">&para;</a></h3>
+<p>Run a container reachable <strong>only from the host</strong>, not the LAN. Show the flag, and state how it differs
+mechanically from a plain <code>-p 8080:80</code>.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>local-only<span class="w"> </span>-p<span class="w"> </span><span class="m">127</span>.0.0.1:8081:80<span class="w"> </span>hello-web
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8081<span class="w">        </span><span class="c1"># works from the host</span>
+</code></pre></div>
+<code>-p 127.0.0.1:8081:80</code> binds the published port to the <strong>loopback</strong> address, so the DNAT rule only
+matches host-local traffic. Plain <code>-p 8080:80</code> binds <code>0.0.0.0</code> — reachable from the LAN, and (the ufw
+surprise) often reachable <em>despite</em> a firewall's default-deny, because Docker's DNAT chain precedes
+<code>INPUT</code>.</p>
+</details>
+<h3 id="challenge-3-diagnose-the-10-second-stop">Challenge 3 — Diagnose the 10-second stop<a class="headerlink" href="#challenge-3-diagnose-the-10-second-stop" title="Permanent link">&para;</a></h3>
+<p>Build an image whose entrypoint is <strong>shell form</strong> running a loop, <code>docker stop</code> it, and time it. Then fix
+it and time again. Explain the mechanism.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Shell form (<code>ENTRYPOINT command</code>) launches your program as a <strong>child of <code>/bin/sh</code></strong>. Exec form
+(<code>ENTRYPOINT ["command"]</code>) makes your program PID 1 directly.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>Shell form: <code>/bin/sh</code> is PID 1, doesn't forward <code>SIGTERM</code>; <code>docker stop</code> waits the full 10-second
+grace, then <code>SIGKILL</code>. Exec form (<code>ENTRYPOINT ["python","app.py"]</code>) makes your process PID 1, so
+<code>SIGTERM</code> reaches it and it exits at once. The 10-second stop is the shell form's fingerprint.</p>
+</details>
+<h3 id="challenge-4-a-minimal-hardened-multi-stage-image-level-2-wright">Challenge 4 — A minimal hardened multi-stage image (Level 2 "Wright")<a class="headerlink" href="#challenge-4-a-minimal-hardened-multi-stage-image-level-2-wright" title="Permanent link">&para;</a></h3>
+<p>For any small app with dependencies, write a <strong>multi-stage</strong> Dockerfile that ships a slim, <strong>non-root</strong>
+final image with an <strong>exec-form</strong> entrypoint and a <strong>meaningful</strong> <code>HEALTHCHECK</code>. Prove non-root with
+<code>docker exec … whoami</code>.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>--prefix<span class="o">=</span>/install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span><span class="w">                      </span><span class="c"># pin by digest for real ships</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="k">RUN</span><span class="w"> </span>useradd<span class="w"> </span>--create-home<span class="w"> </span>--uid<span class="w"> </span><span class="m">10001</span><span class="w"> </span>app
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder<span class="w"> </span>/install<span class="w"> </span>/usr/local<span class="w">    </span>#<span class="w"> </span>runtime<span class="w"> </span>deps<span class="w"> </span>only<span class="w"> </span>—<span class="w"> </span>build<span class="w"> </span>tools<span class="w"> </span>stay<span class="w"> </span>behind
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="k">COPY</span><span class="w"> </span>--chown<span class="o">=</span>app:app<span class="w"> </span>.<span class="w"> </span>/app
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="k">USER</span><span class="w"> </span><span class="s">app                                    # non-root before the entrypoint</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="k">HEALTHCHECK</span><span class="w"> </span><span class="k">CMD</span><span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import urllib.request,sys; urllib.request.urlopen(&#39;http://localhost:8000/health&#39;); &quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;app.py&quot;</span><span class="p">]</span><span class="w">             </span>#<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>form<span class="w"> </span>—<span class="w"> </span>signals<span class="w"> </span>arrive
+</code></pre></div>
+<code>whoami</code> inside prints <code>app</code>, not <code>root</code>. The builder stage's compilers never reach the final image
+— smaller, and a smaller attack surface.</p>
+</details>
+<h3 id="challenge-5-stretch-a-2-service-compose-rig-with-dns">Challenge 5 (stretch) — A 2-service compose rig with DNS<a class="headerlink" href="#challenge-5-stretch-a-2-service-compose-rig-with-dns" title="Permanent link">&para;</a></h3>
+<p>Write a <code>compose.yaml</code> with a web service and a second service that reaches the web service <strong>by name</strong>
+(not IP). Bring it up, prove the name resolves, then tear it down.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">web</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:alpine</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;8082:80&quot;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">probe</span><span class="p">:</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">busybox</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sh -c &quot;sleep 3 &amp;&amp; wget -qO- http://web &amp;&amp; sleep 3600&quot;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>probe<span class="w">      </span><span class="c1"># shows nginx&#39;s HTML — fetched via the name &quot;web&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8082
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w">            </span><span class="c1"># add -v ONLY if you mean to delete volumes</span>
+</code></pre></div>
+<code>probe</code> resolves <code>web</code> through the embedded DNS at <code>127.0.0.11</code> on the user-defined network Compose
+created. Service discovery is DNS — M14's mechanism, container edition.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Image vs container vs volume — define each, and say what survives a <code>docker rm</code> of the container.</summary>
+<p><strong>Image:</strong> an immutable layered filesystem + config (the recipe). <strong>Container:</strong> an instance — image
++ a writable layer + isolation (the meal). <strong>Volume:</strong> Docker-managed persistent data. Remove the
+container and its <strong>writable layer dies</strong>, but the <strong>image and any volumes survive</strong>.</p>
+</details>
+<details class="question">
+<summary>What actually happens when you type <code>docker run</code>? Name the chain and the endpoint.</summary>
+<p>CLI → <code>dockerd</code> → <code>containerd</code> → <code>runc</code> → <strong>one ordinary process</strong> in namespaces under cgroups, with
+an overlay root filesystem. The endpoint is a <em>process</em> — visible in the host's <code>ps</code>, killable by its
+host PID. No machine boots.</p>
+</details>
+<details class="question">
+<summary>State the cache-order law and its mechanism.</summary>
+<p>Order instructions <strong>least-volatile first, most-volatile (code) last</strong>. Mechanism: a changed layer
+invalidates <strong>every later layer's</strong> cache — so deps-before-code means editing code rebuilds one cheap
+layer, not the whole <code>pip install</code>.</p>
+</details>
+<details class="question">
+<summary><code>EXPOSE 80</code> is set but <code>curl</code> from the host fails. Why, and what was missed?</summary>
+<p><code>EXPOSE</code> only <strong>documents</strong> the port — it publishes nothing. The missing piece is <strong><code>-p</code></strong> (or
+Compose <code>ports:</code>). Without it the service is reachable only on the container's own network.</p>
+</details>
+<details class="question">
+<summary><code>docker stop</code> takes exactly 10 seconds every time. Diagnose and fix.</summary>
+<p>A <strong>shell-form</strong> entrypoint (or a PID 1 ignoring <code>SIGTERM</code>): the signal never reaches your app, the
+10-second grace expires, then <code>SIGKILL</code>. Fix: use <strong>exec form</strong> <code>["prog","arg"]</code> (add a <code>SIGTERM</code>
+handler if cleanup matters; <code>--init</code> where zombie reaping is the issue).</p>
+</details>
+<details class="question">
+<summary>Why is a secret in an <code>ENV</code> instruction unrecoverable-bad, even if a later layer unsets it?</summary>
+<p>Layers are <strong>append-only history</strong> — the value lives in the layer that set it forever; <code>docker
+history --no-trunc</code> shows it, and unsetting only <em>adds</em> a layer. Correct: build-time secrets via
+BuildKit <code>--secret</code> (mounted, never layered); runtime secrets via env/files injected at <code>run</code>.</p>
+</details>
+<details class="question">
+<summary>Two compose services can't find each other by name on the default bridge. What's the fix, and the mechanism?</summary>
+<p>Put them on a <strong>user-defined</strong> network (Compose does this automatically). Then an <strong>embedded DNS
+resolver at 127.0.0.11</strong> maps service names to container IPs. The <strong>default</strong> bridge has no such DNS —
+IPs only.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong> — <em>"It's just a process"</em>: perform the demystification (host
+<code>ps</code> → kill by PID → <code>docker ps</code> agrees), give the recipe-vs-meal image/container distinction, then
+live-build a <strong>6-line</strong> correct Dockerfile narrating order · non-root <code>USER</code> · exec form, and end on
+<code>docker stop</code> instant vs the 10-second shell-form contrast. The listener must be able to state the
+exec-form law and image-vs-container afterwards, and you must <strong>kill the "lightweight VM" myth
+explicitly</strong>. If you can't yet, reread the Key Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress into M17 (containerd &amp; OCI), which
+dissects what you can now build. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> image vs container vs volume with the survival matrix (what outlives a container <code>rm</code>, an image <code>rm</code>, a reboot).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> the daemon chain (CLI → dockerd → containerd → runc → process) and what each hop adds.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Prove</strong> a container is a process: <code>docker run -d</code>, find it in the host <code>ps</code>, kill by PID, watch <code>docker ps</code> agree.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the layer economy (build/disk/network) and the content-address sharing mechanism.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> a hardened multi-stage image — pinned <code>FROM</code>, deps-then-code order, non-root <code>USER</code>, <code>COPY --chown</code>, exec-form entrypoint, meaningful <code>HEALTHCHECK</code> — in ≤45 minutes.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize</strong> a build by cache order and <em>measure</em> it (edit code, rebuild, watch one layer rebuild).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> Dockerfile smells on sight: <code>latest</code>, <code>ADD</code> misuse, root user, shell-form entrypoint, <code>COPY . .</code> above the install.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Contrast</strong> named volume vs bind mount vs tmpfs, and defend one real choice; demonstrate the over-mount footgun.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Publish</strong> correctly: <code>-p 8080:80</code> vs <code>-p 127.0.0.1:8080:80</code>, and read the DNAT rule that backs it.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> by the five-rung ladder: builds? → runs (exit code)? → healthy? → reachable (two ports)? → the app (logs → exec)?</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> non-root verified with <code>whoami</code>, pinned digests, no secret in any layer (prove with <code>docker history</code>), image scanned and triaged.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compose</strong> a multi-service rig with by-name DNS, a healthcheck driving <code>depends_on</code>, a named volume, and host-only publishes.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Deploy</strong> by digest and <strong>roll back</strong> to a previous digest, timed and exact.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Narrate</strong> Docker's interface-wins story (2013) and the Hub supply-chain lesson cleanly.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory forms. <strong>Interleaving stays active</strong> — every M16 review also pulls
+one item from the rails it rides on (M15/M14/M13). From M17 on, containers are <em>ambient</em> (you dissect,
+inhabit, and orchestrate them daily), so these scheduled sessions catch what daily use doesn't. Schedule
+them and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved (M13–M15)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · the image-vs-container survival matrix · validation A1–A2, C6, C8</td>
+<td>M15: organ/health sprint</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Speed-run: containerize a trivial tool correctly (slim, order, non-root, exec form) ≤20 min</td>
+<td>M14: one capture/ladder read</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Debugging drills cold — five planted faults through the ladder (exit code → logs → inspect → diff → exec)</td>
+<td>M15: fire-drill / idempotency sprint</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Weekly base-rebuild job reviewed (new digest? scan drift?) · the rollback drill re-run</td>
+<td>M13: recreate-drill · package sprint</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Golf table refreshed on current bases (naive/slim/alpine sizes) · validation retake ≥90%</td>
+<td>M14: refused-vs-timeout cold</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> <strong>M17</strong> (the substrate beneath — containerd, runc, OCI; your images as the
+cadavers) · <strong>M18</strong> (devcontainers — the dev loop moves inside) · <strong>M19–20</strong> (Kubernetes — Deployments
+replace restart policies, Services replace <code>-p</code>, probes replace healthchecks) · <strong>M25</strong> (Prometheus
+scraping the cgroup numbers <code>docker stats</code> showed you) · <strong>M27–28</strong> (serving models from images built
+with exactly this discipline) · the capstone, whose serving stack is images end to end.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M16 makes the environment itself an artifact — built by CI, pinned by digest, run as a disposable
+process — completing the packaging arc (M13's wheel → M15's rail → the image) and setting the table
+for Kubernetes to orchestrate what you can now build, harden, and debug.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-15/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 15 — Automation">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 15 — Automation
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-17/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 17 — containerd &amp; OCI">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 17 — containerd & OCI
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

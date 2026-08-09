@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The terminal and the shell — the interface you will operate every later topic from. Navigate, manipulate files, read man pages, and build the safety habits that prevent production accidents.">
+        <meta name="description" content="The four pillars every admin stands on — files & inodes, ownership & permissions, package management, and process control — plus your first disciplined sudo.">
       
       
         <meta name="author" content="Learning OS">
       
       
       
-        <link rel="prev" href="../module-01/">
+        <link rel="prev" href="../../stage-01/module-02/">
       
       
-        <link rel="next" href="../../stage-02/module-03/">
+        <link rel="next" href="../module-04/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Module 02 — First Contact with the Terminal - Learning OS</title>
+        <title>Module 03 — Linux Essentials - Learning OS</title>
       
     
     
@@ -97,7 +97,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#module-02-first-contact-with-the-terminal" class="md-skip">
+        <a href="#module-03-linux-essentials" class="md-skip">
           Skip to content
         </a>
       
@@ -133,7 +133,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Module 02 — First Contact with the Terminal
+              Module 03 — Linux Essentials
             
           </span>
         </div>
@@ -308,8 +308,6 @@
       
   
   
-    
-  
   
   
     
@@ -322,11 +320,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -347,7 +345,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -365,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../module-01/" class="md-nav__link">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
         
   
   
@@ -390,6 +388,95 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
     
   
   
@@ -409,7 +496,7 @@
   <span class="md-ellipsis">
     
   
-    Module 02 — First Contact with the Terminal
+    Module 03 — Linux Essentials
   
 
     
@@ -427,7 +514,7 @@
   <span class="md-ellipsis">
     
   
-    Module 02 — First Contact with the Terminal
+    Module 03 — Linux Essentials
   
 
     
@@ -487,10 +574,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-picture-keystroke-to-output" class="md-nav__link">
+  <a href="#the-picture-the-four-pillars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The picture: keystroke to output
+        The picture: the four pillars
       
     </span>
   </a>
@@ -498,10 +585,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#command-line-anatomy" class="md-nav__link">
+  <a href="#the-fhs-map-where-things-belong" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Command line anatomy
+        The FHS map — where things belong
       
     </span>
   </a>
@@ -509,10 +596,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#paths-the-address-system" class="md-nav__link">
+  <a href="#files-name-vs-inode" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paths — the address system
+        Files: name vs inode
       
     </span>
   </a>
@@ -520,10 +607,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#prompt-anatomy-read-it-before-you-type" class="md-nav__link">
+  <a href="#permissions-identity-mode-bits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prompt anatomy — read it before you type
+        Permissions: identity × mode bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-the-apt-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software: the apt pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processes-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processes &amp; signals
       
     </span>
   </a>
@@ -541,27 +650,16 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#the-safety-model-because-rm-has-no-undo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The safety model — because rm has no undo
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#guided-lab-your-first-working-session" class="md-nav__link">
+  <a href="#guided-lab-become-a-resident" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Guided Lab: your first working session
+        Guided Lab: become a resident
       
     </span>
   </a>
@@ -581,10 +679,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#challenge-1-one-command-whole-tree" class="md-nav__link">
+  <a href="#challenge-1-prove-your-home-has-no-world-writable-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 1 — One command, whole tree
+        Challenge 1 — Prove your home has no world-writable files
       
     </span>
   </a>
@@ -592,10 +690,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-2-count-without-counting-by-eye" class="md-nav__link">
+  <a href="#challenge-2-the-deletion-trap-then-prevent-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 2 — Count without counting by eye
+        Challenge 2 — The deletion trap, then prevent it
       
     </span>
   </a>
@@ -603,10 +701,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" class="md-nav__link">
+  <a href="#challenge-3-sudo-own-the-software-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 3 — Prove the shell expands the glob, not the program
+        Challenge 3 — [sudo] Own the software lifecycle
       
     </span>
   </a>
@@ -614,10 +712,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-4-learn-an-unseen-option-from-man-only" class="md-nav__link">
+  <a href="#challenge-4-sudo-signals-without-collateral-damage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 4 — Learn an unseen option from man only
+        Challenge 4 — [sudo] Signals without collateral damage
       
     </span>
   </a>
@@ -625,10 +723,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-5-stretch-type-vs-which-disagree" class="md-nav__link">
+  <a href="#challenge-5-stretch-which-package-owns-binls" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 5 (stretch) — type vs which disagree
+        Challenge 5 (stretch) — Which package owns /bin/ls?
       
     </span>
   </a>
@@ -682,65 +780,6 @@
 
               
             
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Stage 2 — Core Concepts
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Stage 2 — Core Concepts
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
               
                 
   
@@ -748,35 +787,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-02/module-03/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Module 03 — Linux Essentials
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stage-02/module-04/" class="md-nav__link">
+      <a href="../module-04/" class="md-nav__link">
         
   
   
@@ -804,7 +815,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-02/module-05/" class="md-nav__link">
+      <a href="../module-05/" class="md-nav__link">
         
   
   
@@ -2494,10 +2505,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-picture-keystroke-to-output" class="md-nav__link">
+  <a href="#the-picture-the-four-pillars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The picture: keystroke to output
+        The picture: the four pillars
       
     </span>
   </a>
@@ -2505,10 +2516,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#command-line-anatomy" class="md-nav__link">
+  <a href="#the-fhs-map-where-things-belong" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Command line anatomy
+        The FHS map — where things belong
       
     </span>
   </a>
@@ -2516,10 +2527,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#paths-the-address-system" class="md-nav__link">
+  <a href="#files-name-vs-inode" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paths — the address system
+        Files: name vs inode
       
     </span>
   </a>
@@ -2527,10 +2538,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#prompt-anatomy-read-it-before-you-type" class="md-nav__link">
+  <a href="#permissions-identity-mode-bits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prompt anatomy — read it before you type
+        Permissions: identity × mode bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-the-apt-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software: the apt pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processes-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processes &amp; signals
       
     </span>
   </a>
@@ -2548,27 +2581,16 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#the-safety-model-because-rm-has-no-undo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The safety model — because rm has no undo
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#guided-lab-your-first-working-session" class="md-nav__link">
+  <a href="#guided-lab-become-a-resident" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Guided Lab: your first working session
+        Guided Lab: become a resident
       
     </span>
   </a>
@@ -2588,10 +2610,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#challenge-1-one-command-whole-tree" class="md-nav__link">
+  <a href="#challenge-1-prove-your-home-has-no-world-writable-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 1 — One command, whole tree
+        Challenge 1 — Prove your home has no world-writable files
       
     </span>
   </a>
@@ -2599,10 +2621,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-2-count-without-counting-by-eye" class="md-nav__link">
+  <a href="#challenge-2-the-deletion-trap-then-prevent-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 2 — Count without counting by eye
+        Challenge 2 — The deletion trap, then prevent it
       
     </span>
   </a>
@@ -2610,10 +2632,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" class="md-nav__link">
+  <a href="#challenge-3-sudo-own-the-software-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 3 — Prove the shell expands the glob, not the program
+        Challenge 3 — [sudo] Own the software lifecycle
       
     </span>
   </a>
@@ -2621,10 +2643,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-4-learn-an-unseen-option-from-man-only" class="md-nav__link">
+  <a href="#challenge-4-sudo-signals-without-collateral-damage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 4 — Learn an unseen option from man only
+        Challenge 4 — [sudo] Signals without collateral damage
       
     </span>
   </a>
@@ -2632,10 +2654,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-5-stretch-type-vs-which-disagree" class="md-nav__link">
+  <a href="#challenge-5-stretch-which-package-owns-binls" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 5 (stretch) — type vs which disagree
+        Challenge 5 (stretch) — Which package owns /bin/ls?
       
     </span>
   </a>
@@ -2697,22 +2719,25 @@
 
 
 
-<h1 id="module-02-first-contact-with-the-terminal">Module 02 — First Contact with the Terminal<a class="headerlink" href="#module-02-first-contact-with-the-terminal" title="Permanent link">&para;</a></h1>
-<p><small>Stage 1 · Foundations · ~1 week at 4 h/day · Prerequisite — Module 01 (the machine model you now talk to).</small></p>
+<h1 id="module-03-linux-essentials">Module 03 — Linux Essentials<a class="headerlink" href="#module-03-linux-essentials" title="Permanent link">&para;</a></h1>
+<p><small>Stage 2 · Core Concepts · ~3 weeks at 4 h/day · Prerequisite — Module 02 (the terminal you'll type all of this in).</small></p>
 <h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
-<p>A <strong>terminal</strong> (terminal emulator) is a program that displays text and forwards your keystrokes to a
-<strong>shell</strong>. The <strong>shell</strong> (Bash here) reads your command lines, runs programs for you, and prints their
-output. Terminal = the window; shell = the interpreter inside it.</p>
-<p>Module 01 gave you the model of the machine; this module gives you your <strong>hands</strong>. Every topic in this
-curriculum — Linux, Docker, Kubernetes, Git, Python, remote GPU boxes — is operated from a shell. This
-is the last module that "teaches the terminal": afterwards the terminal is simply the medium everything
-else lives in. By the end of the week the prompt is a place you <em>work</em>, not a hazard you avoid.</p>
+<p><strong>Linux</strong> is, strictly, a kernel (M1); practically, a family of operating systems (<strong>distributions</strong>)
+that bundle that kernel with a GNU userland, a package manager, and defaults. <strong>Linux Essentials</strong> is
+the resident-level skill set: knowing <em>where</em> everything lives, <em>who</em> may touch what, <em>how</em> software
+arrives, and <em>how</em> running programs are controlled.</p>
+<p>Module 02 gave you hands at the prompt; this module makes you a resident instead of a visitor. Every
+privileged action in your career — deploying, securing, debugging production — reduces to <strong>four
+pillars</strong>: files, permissions, packages, and processes. Install them properly now and nothing later is
+mysterious; a container (M16) is just these four pillars boxed.</p>
 <div class="admonition info">
 <p class="admonition-title">What this unlocks</p>
-<p>M3–M4 administer Linux <em>through</em> this prompt · M5 turns today's command lines into scripts · M6 (Vim)
-and M7 (Tmux) live inside the terminal · M9 (SSH) is this exact interface over the network · a
-<code>docker exec -it … bash</code> (M16) drops you into a container's shell — <strong>this module, inside a box.</strong>
-Learn it as reflexes now and every later tool is just new vocabulary in the same conversation.</p>
+<p>M4 supervises files + users as <strong>services</strong> (units in <code>/etc</code>, logs in <code>/var/log</code>) · M5 scripts
+manipulate all four pillars · M9 SSH <strong>refuses</strong> keys that aren't <code>600</code> — this module explains why
+that's right · M16 Docker images are an FHS tree + a dpkg database, and a Dockerfile's <code>USER</code> is
+<code>useradd</code> thinking · M19 Kubernetes <code>securityContext</code> (<code>runAsUser</code>, <code>fsGroup</code>) is this permission
+model declared in YAML · M24 least privilege starts here. <strong>Learn the four pillars at laptop scale
+now, or debug them blind at production scale later.</strong></p>
 </div>
 <hr />
 <h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
@@ -2727,161 +2752,297 @@ Learn it as reflexes now and every later tool is just new vocabulary in the same
 <p>Once the explainer is on YouTube, replace the placeholder card above with:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 02 — First Contact with the Terminal&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 03 — Linux Essentials&quot;</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div>
-Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
-terminal vs shell (the window vs the person answering the phone) → prompt anatomy →
-the keystroke→output loop (fork/exec back to M1) → globbing happens in the shell, not the program →
-the three safety habits that stand in for <code>rm</code>'s missing undo.</p>
+Video script beats (from the blueprint's Analogy / Visual Model / Misconceptions):
+the four pillars (files · identity · software · processes) → the library-card analogy (name vs
+inode — the card points to the book) → permissions as first-match evaluation, not additive → the
+directory-<code>w</code> surprise (deleting edits the <em>directory</em>, not the file) → apt as a librarian with a
+signed catalog, not a downloader → <code>sudo</code> as a scalpel with a logbook, not a crown → TERM before
+KILL, always.</p>
 </details>
 <p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
 <div class="admonition tip">
 <p class="admonition-title">Follow along, don't just watch</p>
-<p>Open the <a href="#guided-lab-your-first-working-session">Guided Lab</a> in a browser terminal and run each
-command yourself as it appears. Typing beats watching every time — and it is part of how the memory
-forms.</p>
+<p>Open the <a href="#guided-lab-become-a-resident">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. Typing beats watching every time — and it is part of how the memory forms.</p>
 </div>
 <hr />
 <h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
 <p><em>Standalone. This is the reference you keep.</em></p>
-<h3 id="the-picture-keystroke-to-output">The picture: keystroke to output<a class="headerlink" href="#the-picture-keystroke-to-output" title="Permanent link">&para;</a></h3>
+<h3 id="the-picture-the-four-pillars">The picture: the four pillars<a class="headerlink" href="#the-picture-the-four-pillars" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TB
-    K["You — keyboard"] --&gt; T["Terminal emulator&lt;br/&gt;draws text, sends keys"]
-    T --&gt; Sh["Shell (bash)&lt;br/&gt;parse · expand globs and vars"]
-    Sh --&gt; P["PATH search&lt;br/&gt;find the program"]
-    P --&gt; FE["fork + exec&lt;br/&gt;(M1's workflow)"]
-    FE --&gt; Pr["Program — ls, cat, cp"]
-    Pr --&gt; Sy["syscalls to the kernel"]
-    Sy --&gt; Out["Text output"]
-    Out --&gt; T</code></pre>
-<p>The shell is just a program (M1: a <strong>process</strong>) that starts <em>other</em> processes and wires their text
-input/output back to your terminal. When you type <code>ls</code>, the shell searches the directories in <code>$PATH</code>
-for a program named <code>ls</code>, then <code>fork</code>+<code>exec</code>s it — the exact workflow you traced in Module 01, now
-under your fingers.</p>
-<h3 id="command-line-anatomy">Command line anatomy<a class="headerlink" href="#command-line-anatomy" title="Permanent link">&para;</a></h3>
-<p>Read a command left to right — <code>command -options arguments</code>:</p>
+    subgraph ID["Identity — who you are"]
+        U["Users + groups&lt;br/&gt;/etc/passwd · /etc/group"]
+    end
+    subgraph FS["Files — what is stored (laid out per FHS)"]
+        I["Inode&lt;br/&gt;metadata + data-block pointers"]
+        M["Mode bits&lt;br/&gt;rwx × user/group/other"]
+    end
+    subgraph SW["Software — how it arrives"]
+        A["apt / dpkg&lt;br/&gt;repos → deps → files on disk"]
+    end
+    subgraph PR["Processes — what is running"]
+        P["PIDs in a parent/child tree&lt;br/&gt;signals are the control channel"]
+    end
+    U --&gt;|"permission check (first match wins)"| M
+    M --&gt; I
+    A --&gt;|"installs files per FHS"| I
+    U --&gt;|"sudo: one command's worth of power"| A
+    P --&gt;|"runs as"| U</code></pre>
+<p>Access is <strong>identity × mode bits</strong>: the kernel decides what you may do by matching <em>who you are</em> against
+the <em>rwx bits</em> on the inode. Software enters only one sane way (packages), and running programs are
+governed only one polite way (signals). Master these four and you can audit any Linux system.</p>
+<h3 id="the-fhs-map-where-things-belong">The FHS map — where things belong<a class="headerlink" href="#the-fhs-map-where-things-belong" title="Permanent link">&para;</a></h3>
+<p>The <strong>Filesystem Hierarchy Standard</strong> (FHS 3.0) is why your skills transfer between distros: the layout
+is a standard, not a distro quirk.</p>
 <table>
 <thead>
 <tr>
-<th>Piece of <code>ls -l /home</code></th>
-<th>Kind</th>
-<th>Role</th>
+<th>Directory</th>
+<th>Holds</th>
+<th>Remember it as</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>ls</code></td>
-<td>command</td>
-<td>the program to run</td>
+<td><code>/etc</code></td>
+<td>host-specific <strong>config</strong> (text files)</td>
+<td>the settings drawer</td>
 </tr>
 <tr>
-<td><code>-l</code></td>
-<td>option / flag</td>
-<td><strong>HOW</strong> it behaves (here: long listing)</td>
+<td><code>/var/log</code></td>
+<td><strong>variable</strong> data — logs especially</td>
+<td>what grows over time</td>
+</tr>
+<tr>
+<td><code>/usr/bin</code></td>
+<td><strong>package-installed</strong> binaries</td>
+<td>software apt put there</td>
+</tr>
+<tr>
+<td><code>/usr/local/bin</code></td>
+<td><strong>locally-built</strong> software (outside the package manager)</td>
+<td>what <em>you</em> compiled</td>
 </tr>
 <tr>
 <td><code>/home</code></td>
-<td>argument</td>
-<td><strong>WHAT</strong> it operates on</td>
+<td>each user's data</td>
+<td>your stuff</td>
+</tr>
+<tr>
+<td><code>/srv</code></td>
+<td>data served to others (shared workspaces)</td>
+<td>shared drives</td>
+</tr>
+<tr>
+<td><code>/tmp</code></td>
+<td>scratch, world-writable + sticky (<code>1777</code>)</td>
+<td>throwaway</td>
+</tr>
+<tr>
+<td><code>/opt</code></td>
+<td>self-contained add-on packages</td>
+<td>bundled add-ons</td>
+</tr>
+<tr>
+<td><code>/proc</code>, <code>/sys</code></td>
+<td>live kernel views as files</td>
+<td>the kernel, as files</td>
+</tr>
+<tr>
+<td><code>/boot</code></td>
+<td>kernel images + bootloader</td>
+<td>what M1's boot loaded</td>
 </tr>
 </tbody>
 </table>
-<p>Options modify behaviour; arguments say what to act on; <code>man &lt;command&gt;</code> documents every option there is.</p>
-<h3 id="paths-the-address-system">Paths — the address system<a class="headerlink" href="#paths-the-address-system" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Absolute</strong> starts at root <code>/</code> — <code>/home/you/notes.md</code> — same location from anywhere.</li>
-<li><strong>Relative</strong> starts at your <strong>working directory</strong> — <code>notes.md</code> — depends on where you are.</li>
-<li><code>.</code> = here · <code>..</code> = parent · <code>~</code> = your home · <code>-</code> (with <code>cd</code>) = the previous directory.</li>
-<li><code>pwd</code> + <code>ls</code> are your <strong>eyes</strong>: where am I, and what's here?</li>
-</ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── home/
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   └── you/            ← ~  (your home)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│       └── terminal-lab/
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>├── etc/
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├── usr/bin/
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>└── proc/
-</code></pre></div>
-<p>Same folder, named two ways: <code>terminal-lab</code> from your home (<strong>relative</strong>), or
-<code>/home/you/terminal-lab</code> from anywhere (<strong>absolute</strong>).</p>
-<h3 id="prompt-anatomy-read-it-before-you-type">Prompt anatomy — read it before you type<a class="headerlink" href="#prompt-anatomy-read-it-before-you-type" title="Permanent link">&para;</a></h3>
-<p>Read the prompt before you type. In <code>you@machine:~/notes$</code>:</p>
+<h3 id="files-name-vs-inode">Files: name vs inode<a class="headerlink" href="#files-name-vs-inode" title="Permanent link">&para;</a></h3>
+<p>A filename is <em>not</em> the file. The <strong>inode</strong> is the file — its metadata (owner, mode, times, link count)
+plus pointers to the data blocks. A name is just a directory entry mapping a label to an inode number.</p>
 <table>
 <thead>
 <tr>
-<th>Part</th>
+<th>Operation</th>
+<th>What it does to the inode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ln original hardlink</code></td>
+<td>second <strong>name</strong> → same inode (<code>links=2</code>); either name reaches the data</td>
+</tr>
+<tr>
+<td><code>ln -s target softlink</code></td>
+<td>separate tiny inode holding a <strong>path</strong>; resolved at open, can <strong>dangle</strong></td>
+</tr>
+<tr>
+<td><code>mv</code> (same filesystem)</td>
+<td>renames — <strong>same</strong> inode</td>
+</tr>
+<tr>
+<td><code>cp</code></td>
+<td><strong>new</strong> inode, new data blocks</td>
+</tr>
+<tr>
+<td><code>rm name</code></td>
+<td>removes a <strong>name</strong>; the inode (and disk space) dies only when its <strong>last name</strong> <em>and</em> <strong>last open handle</strong> are gone</td>
+</tr>
+</tbody>
+</table>
+<p>That last row is the answer to <em>"I deleted a huge log but <code>df</code> didn't change"</em>: a process still holds the
+inode open, so the blocks stay allocated until it closes them. This is <code>ls -i</code> and <code>stat</code> truth.</p>
+<h3 id="permissions-identity-mode-bits">Permissions: identity × mode bits<a class="headerlink" href="#permissions-identity-mode-bits" title="Permanent link">&para;</a></h3>
+<p>Read <code>-rwxr-x--- 2 alice dev 1200 Aug 20 deploy.sh</code> left to right:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>you</code></td>
-<td>your username</td>
+<td>type</td>
+<td><code>-</code></td>
+<td><code>-</code> file · <code>d</code> directory · <code>l</code> symlink</td>
 </tr>
 <tr>
-<td><code>machine</code></td>
-<td>which host you're on</td>
+<td>owner</td>
+<td><code>rwx</code></td>
+<td>alice: read, write, execute → <strong>7</strong></td>
 </tr>
 <tr>
-<td><code>~/notes</code></td>
-<td>your current directory (<code>~</code> = home)</td>
+<td>group</td>
+<td><code>r-x</code></td>
+<td>dev: read, execute/traverse → <strong>5</strong></td>
 </tr>
 <tr>
-<td><code>$</code></td>
-<td>ready for input — <strong>warning:</strong> a <code>#</code> here instead means you are <strong>root</strong></td>
+<td>other</td>
+<td><code>---</code></td>
+<td>everyone else: nothing → <strong>0</strong></td>
+</tr>
+<tr>
+<td>links</td>
+<td><code>2</code></td>
+<td>a hard link exists somewhere</td>
+</tr>
+<tr>
+<td>owner / group</td>
+<td><code>alice</code> / <code>dev</code></td>
+<td>the identities that own it</td>
 </tr>
 </tbody>
 </table>
-<p>A <code>$</code> prompt is a normal user (you own your home, mistakes are cheap). A <code>#</code> prompt is <strong>root</strong> — every
-keystroke has full-system power. This module never needs <code>#</code>, and never uses <code>sudo</code>.</p>
+<p>So <code>rwxr-x---</code> is octal <strong>750</strong>. Two rules do most of the work:</p>
+<ul>
+<li><strong>Evaluation is first-match, not additive.</strong> The kernel checks: are you the owner? apply <strong>owner</strong>
+  bits and stop. Else in the group? apply <strong>group</strong> bits and stop. Else <strong>other</strong> bits. An owner whose
+  bits are <code>---</code> is locked out of their own world-readable file.</li>
+<li><strong>Directory bits mean something different:</strong> <code>r</code> = list names, <code>w</code> = <strong>create/delete entries (even
+  files you don't own!)</strong>, <code>x</code> = traverse/enter. Directory <code>w</code> is <em>deletion power</em> — the #1 permissions
+  surprise. The fix is the <strong>sticky bit</strong> (<code>+t</code>, as on <code>/tmp</code>'s <code>1777</code>): only an entry's owner may
+  delete it.</li>
+</ul>
+<p>Two more you'll meet in the labs: <strong><code>umask</code></strong> subtracts from the defaults (<code>022</code> → new files <code>644</code>,
+dirs <code>755</code>), and <strong>setgid on a directory</strong> (<code>2775</code>, shown <code>drwxrwsr-x</code>) makes new files inherit the
+<em>directory's</em> group — the trick that keeps a shared space group-consistent.</p>
+<h3 id="software-the-apt-pipeline">Software: the apt pipeline<a class="headerlink" href="#software-the-apt-pipeline" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    S["sources.list(.d)&lt;br/&gt;repo URLs"] --&gt; UP["apt update&lt;br/&gt;fetch SIGNED metadata"]
+    UP --&gt; R["apt install&lt;br/&gt;resolve dependencies"]
+    R --&gt; D["download .debs&lt;br/&gt;verify checksums"]
+    D --&gt; UN["dpkg unpacks&lt;br/&gt;files land per FHS"]
+    UN --&gt; DB["dpkg database&lt;br/&gt;records what + where"]</code></pre>
+<p><code>update</code> refreshes repo <strong>metadata</strong> (signature checked <strong>here</strong> — the software trust chain); <code>install</code>
+resolves dependencies against it, downloads <code>.deb</code>s, unpacks per FHS, runs maintainer scripts, and
+records state. That database is why installs are inspectable and reversible: <code>dpkg -L pkg</code> lists what
+landed where, <code>dpkg -S /path</code> finds which package owns a file, and <strong><code>remove</code></strong> keeps config files
+(state <code>rc</code>) while <strong><code>purge</code></strong> deletes them too. Packages are the <em>only</em> sane way software enters — and
+the only way it leaves cleanly. <code>curl | bash</code> is the anti-pattern.</p>
+<h3 id="processes-signals">Processes &amp; signals<a class="headerlink" href="#processes-signals" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    S["systemd (PID 1)"] --&gt; SS["sshd"]
+    S --&gt; CR["cron"]
+    SS --&gt; B["bash"]
+    B --&gt; V["vim"]
+    B --&gt; F["find &amp;amp; (background job)"]</code></pre>
+<p>Processes form a <strong>tree</strong> (<code>ps auxf</code> shows it); <strong>signals</strong> are the only polite way to talk to them:</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th><code>kill</code> form</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIGTERM</td>
+<td><code>kill PID</code> (default)</td>
+<td><strong>ask</strong> politely — a handler may flush data and clean up</td>
+</tr>
+<tr>
+<td>SIGKILL</td>
+<td><code>kill -9 PID</code></td>
+<td><strong>unrefusable</strong> — the kernel just stops scheduling it; no cleanup, data at risk</td>
+</tr>
+<tr>
+<td>SIGHUP</td>
+<td><code>kill -HUP PID</code></td>
+<td>conventionally <strong>reload config</strong></td>
+</tr>
+<tr>
+<td>SIGTSTP</td>
+<td><code>Ctrl-Z</code></td>
+<td>suspend the foreground job</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TERM before KILL, always</strong> — <code>-9</code> forbids last words. Job control (<code>&amp;</code>, <code>Ctrl-Z</code>, <code>bg</code>, <code>fg</code>, <code>jobs</code>)
+is the shell multiplexing your terminal between processes.</p>
 <h3 id="six-mechanisms-that-explain-the-rest">Six mechanisms that explain the rest<a class="headerlink" href="#six-mechanisms-that-explain-the-rest" title="Permanent link">&para;</a></h3>
 <ol>
-<li><strong>The PATH search.</strong> Typing <code>ls</code> makes the shell scan <code>$PATH</code>'s directories for a program named
-   <code>ls</code>, then fork/exec it. <code>command not found</code> means: typo, not installed, or not in PATH.</li>
-<li><strong>Globbing is the shell's job.</strong> <code>*.md</code> is expanded by the <strong>shell</strong> into matching filenames
-   <em>before</em> the program runs. The program never sees the <code>*</code>. Prove it: <code>echo *.md</code>.</li>
-<li><strong>Built-in vs program.</strong> <code>cd</code> must be a shell <strong>built-in</strong> — a child process couldn't change its
-   parent's directory. <code>ls</code> is a real program in <code>/usr/bin</code>. <code>type &lt;cmd&gt;</code> tells you which.</li>
-<li><strong>Everything is a file.</strong> Directories, devices, even kernel state (<code>/proc</code>) — one namespace, one set
-   of tools.</li>
-<li><strong>Exit status.</strong> Commands succeed (status <code>0</code>) or fail (non-zero) and <em>say so</em>. <code>echo $?</code> shows the
-   last one — your first taste of programmatic error handling (M5 builds on it).</li>
-<li><strong>Tab &amp; history are accuracy tools, not conveniences.</strong> Tab completion can't typo a path; <code>↑</code> and
-   <code>Ctrl-R</code> recall exactly what you ran. At scale that's minutes saved and near-zero path errors.</li>
+<li><strong>Name vs inode.</strong> Names point to inodes; permissions live on inodes; directories are just
+   name→inode tables. Explains hard links, <code>mv</code> vs <code>cp</code>, and deleted-but-full disks.</li>
+<li><strong>First-match permission evaluation.</strong> Owner → group → other, first match wins and stops.</li>
+<li><strong>Directory <code>w</code> is deletion power.</strong> Deleting a file edits its <em>directory</em>, not the file — sticky bit
+   is the fix.</li>
+<li><strong><code>umask</code> explains birth modes.</strong> Files are born <code>644</code>, dirs <code>755</code> under the usual <code>022</code> mask.</li>
+<li><strong>apt's pipeline ends in a database.</strong> Signed metadata → dependency resolution → files per FHS →
+   recorded — which is why removal is clean and <code>dpkg</code> can answer <em>what</em> and <em>where</em>.</li>
+<li><strong>Signals govern the process tree.</strong> TERM asks, KILL forces, HUP reloads; <code>sudo</code> is per-command,
+   scoped, and logged — a scalpel with a logbook, not a skeleton key.</li>
 </ol>
-<h3 id="the-safety-model-because-rm-has-no-undo">The safety model — because <code>rm</code> has no undo<a class="headerlink" href="#the-safety-model-because-rm-has-no-undo" title="Permanent link">&para;</a></h3>
-<p>There is <strong>no trash can</strong> in the terminal: <code>rm</code> deletes forever. The three habits that stand in for the
-missing undo:</p>
-<ul>
-<li><strong>Sandbox discipline</strong> — do destructive work only where mistakes are cheap (<code>~/terminal-lab/</code>).</li>
-<li><strong><code>ls</code> before <code>rm</code>/<code>mv</code></strong> — look at what exists before you change it.</li>
-<li><strong><code>echo</code> the glob</strong> — see what <code>*.md</code> expands to <em>before</em> a destructive command uses it.</li>
-</ul>
-<p>Plus: never paste an unread multi-line command (its newlines <strong>execute</strong> as they arrive), and never run
-what you can't explain — <em>especially</em> with <code>sudo</code>.</p>
 <div class="lo-remember">
 <p><strong>Must remember (if you keep only six things):</strong></p>
 <ol>
-<li><strong>Terminal = the window; shell (bash) = the interpreter inside it.</strong> Different things.</li>
-<li><strong>The shell expands</strong> <code>*</code>, <code>~</code>, <code>$VAR</code> <em>before</em> the program sees anything — <code>echo</code> shows you what.</li>
-<li><strong>Paths:</strong> absolute starts at <code>/</code>; relative starts at your working directory. <code>pwd</code> + <code>ls</code> are your eyes.</li>
-<li><strong><code>cd</code> is a built-in, <code>ls</code> is a program</strong> — <code>type &lt;cmd&gt;</code> tells you which; <code>$PATH</code> is where programs are found.</li>
-<li><strong><code>rm</code> is forever.</strong> Sandbox · <code>ls</code>-before-<code>rm</code> · <code>echo</code>-the-glob — the three habits that replace undo.</li>
-<li><strong>Learn commands from <code>man</code></strong> (start at SYNOPSIS, search with <code>/</code>, quit with <code>q</code>) — not from guessing.</li>
+<li><strong>A name is not the file — the inode is.</strong> <code>rm</code> removes a name; the data dies when the last name <em>and</em>
+   last open handle go.</li>
+<li><strong>Access = identity × mode bits, evaluated first-match</strong> — owner, else group, else other; owner
+   <code>---</code> locks the owner out.</li>
+<li><strong>Directory <code>w</code> = the right to delete</strong> entries you don't own. Sticky bit (<code>/tmp</code>'s <code>1777</code>) is the fix.</li>
+<li><strong>Groups are how you share; <code>chmod 777</code> is how you leak.</strong> Setgid (<code>2775</code>) keeps shared dirs
+   group-consistent.</li>
+<li><strong>Packages are the only sane way software enters</strong> — <code>apt</code>/<code>dpkg</code> verify, resolve, and record; not
+   <code>curl | bash</code>. <code>remove</code> keeps config, <code>purge</code> deletes it.</li>
+<li><strong>TERM before KILL</strong>, and <code>sudo</code> the <em>command</em>, not a shell — scoped, logged, revocable.</li>
 </ol>
 </div>
 <hr />
-<h2 id="guided-lab-your-first-working-session">Guided Lab: your first working session<a class="headerlink" href="#guided-lab-your-first-working-session" title="Permanent link">&para;</a></h2>
-<p><em>Basic, step-by-step. Read-only commands inspect; the create/copy/delete steps happen ONLY inside a
-throwaway <code>~/terminal-lab/</code> sandbox you build first — nothing outside it is ever touched.</em></p>
+<h2 id="guided-lab-become-a-resident">Guided Lab: become a resident<a class="headerlink" href="#guided-lab-become-a-resident" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. Read-only commands (<code>ls</code>, <code>stat</code>, <code>find</code>) inspect and change nothing; the
+create/link/chmod steps happen ONLY inside a throwaway <code>~/learning/labs/m3/</code> sandbox you build first.
+This guided lab needs </em><em>no <code>sudo</code></em><em> — the sudo work waits for the Solo Lab.</em></p>
 <div class="lo-lab-actions">
-<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-02" target="_blank">▶ Open interactive lab</a>
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-03" target="_blank">▶ Open interactive lab</a>
 <a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
 <a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
-<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-02" target="_blank">View lab source</a></p>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-03" target="_blank">View lab source</a></p>
 </div>
 <p><span id="run-locally"></span></p>
 <div class="admonition tip">
@@ -2893,255 +3054,303 @@ throwaway <code>~/terminal-lab/</code> sandbox you build first — nothing outsi
 </ul>
 <p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Read the prompt, get your bearings</label><label for="__tabbed_1_2">2 · Navigate</label><label for="__tabbed_1_3">3 · Build a sandbox and a tree</label><label for="__tabbed_1_4">4 · Copy, move, rename — verify each time</label><label for="__tabbed_1_5">5 · Delete, safely</label><label for="__tabbed_1_6">6 · Look inside files, then get help</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · FHS expedition</label><label for="__tabbed_1_2">2 · Build the sandbox, then inodes &amp; hard links</label><label for="__tabbed_1_3">3 · Symlinks &amp; their traps</label><label for="__tabbed_1_4">4 · Read and set modes</label><label for="__tabbed_1_5">5 · The directory-permission surprise</label><label for="__tabbed_1_6">6 · find, and index vs scan</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">pwd</span><span class="w">            </span><span class="c1"># where am I?</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ls<span class="w">             </span><span class="c1"># what&#39;s here?</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ls<span class="w"> </span>-l<span class="w">          </span><span class="c1"># long form: is each line a file or a directory?</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>ls<span class="w"> </span>-la<span class="w"> </span>~<span class="w">       </span><span class="c1"># -a reveals hidden dotfiles like .bashrc</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ls<span class="w"> </span>-ld<span class="w"> </span>/etc<span class="w"> </span>/var/log<span class="w"> </span>/usr/bin<span class="w"> </span>/usr/local/bin<span class="w"> </span>/tmp<span class="w"> </span>/home<span class="w">   </span><span class="c1"># who owns each? what mode?</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ls<span class="w"> </span>/etc<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w">                 </span><span class="c1"># config files — name 3 you can explain</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>ls<span class="w"> </span>-ld<span class="w"> </span>/tmp<span class="w">                     </span><span class="c1"># note the trailing t: sticky (1777)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>cat<span class="w"> </span>/etc/hostname<span class="w">               </span><span class="c1"># a real host config file</span>
 </code></pre></div>
-In <em>your</em> prompt, identify the four parts: user, host, current directory, the <code>$</code>. Journal: what did
-<code>-a</code> reveal, and what is the first character of each <code>ls -l</code> line?</p>
+Journal: what's the difference between <code>/usr/bin</code> and <code>/usr/local/bin</code> (check the FHS)? Notice the
+layout has a <em>permission pattern</em> — system dirs are owned by root and world-<strong>readable</strong>, not
+world-writable.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>/<span class="w">            </span><span class="c1"># to root — recognise M1&#39;s filesystem tour</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">cd</span><span class="w"> </span>/usr/bin<span class="w">     </span><span class="c1"># where the programs live</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">      </span><span class="c1"># how many programs? (two programs composed!)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">cd</span><span class="w">              </span><span class="c1"># bare cd = home</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">cd</span><span class="w"> </span>-<span class="w">            </span><span class="c1"># back to where you just were</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/learning/labs/m3<span class="w">    </span><span class="c1"># your sandbox — all mutating work lives here</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>~/learning/labs/m3
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">echo</span><span class="w"> </span>data<span class="w"> </span>&gt;<span class="w"> </span>original
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>ls<span class="w"> </span>-i<span class="w"> </span>original<span class="w">                 </span><span class="c1"># note the inode number</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>ln<span class="w"> </span>original<span class="w"> </span>hardlink<span class="w">           </span><span class="c1"># a second NAME for the same inode</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>ls<span class="w"> </span>-li<span class="w">                         </span><span class="c1"># same inode! link count is now 2</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>rm<span class="w"> </span>original<span class="w">                    </span><span class="c1"># remove one name...</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>cat<span class="w"> </span>hardlink<span class="w">                   </span><span class="c1"># ...the data lives on (inode still has a name)</span>
 </code></pre></div>
-Practice until <code>cd</code>, <code>pwd</code>, <code>ls</code> need zero thought. Reach <code>/etc</code> two ways: absolute (<code>cd /etc</code>) and
-relative (<code>cd ../../etc</code> — adjust for where you are).</p>
+Journal the name-vs-inode explanation in your own words: <code>rm</code> removed a <em>label</em>, not the file.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>~/terminal-lab<span class="w">            </span><span class="c1"># your sandbox — all destructive work lives here</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">cd</span><span class="w"> </span>~/terminal-lab
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">pwd</span><span class="w">                             </span><span class="c1"># confirm: /home/&lt;you&gt;/terminal-lab</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>projects/<span class="o">{</span>alpha,beta<span class="o">}</span>/notes<span class="w">   </span><span class="c1"># one command builds a tree (brace expansion)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># see the whole structure</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>touch<span class="w"> </span>projects/alpha/notes/day1.md
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ln<span class="w"> </span>-s<span class="w"> </span>hardlink<span class="w"> </span>softlink<span class="w">        </span><span class="c1"># a symlink stores a PATH, not an inode</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls<span class="w"> </span>-l<span class="w">                          </span><span class="c1"># see the arrow: softlink -&gt; hardlink</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>rm<span class="w"> </span>hardlink<span class="w">                    </span><span class="c1"># remove the target...</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>cat<span class="w"> </span>softlink<span class="w">                   </span><span class="c1"># ...now it DANGLES (No such file or directory)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>ls<span class="w"> </span>-l<span class="w"> </span>/usr/bin/python3*<span class="w">        </span><span class="c1"># a real symlink chain out in the wild</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>readlink<span class="w"> </span>-f<span class="w"> </span>/usr/bin/python3<span class="w">   </span><span class="c1"># follow it to the final target</span>
 </code></pre></div>
-Journal: what does <code>-p</code> do? (Check <code>man mkdir</code>.) Verify after every step — that rhythm <em>is</em> the lab.</p>
+A dangling symlink points at a path that no longer exists. Recreate <code>hardlink</code> (<code>echo data &gt;
+hardlink</code>) to heal it, then verify with <code>cat softlink</code>.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cp<span class="w"> </span>projects/alpha/notes/day1.md<span class="w"> </span>day1-backup.md
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify the copy exists</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>mv<span class="w"> </span>day1-backup.md<span class="w"> </span>projects/beta/<span class="w">            </span><span class="c1"># move it</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>mv<span class="w"> </span>projects/beta/day1-backup.md<span class="w"> </span>projects/beta/day1-copy.md<span class="w">   </span><span class="c1"># mv also renames</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify after EVERY mutation</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>touch<span class="w"> </span>secret.md
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>secret.md<span class="w">            </span><span class="c1"># owner rw, nobody else</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>ls<span class="w"> </span>-l<span class="w"> </span>secret.md<span class="w">                </span><span class="c1"># say it aloud: rw------- = 600</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>chmod<span class="w"> </span>u+x,g+r,o-r<span class="w"> </span>secret.md<span class="w">    </span><span class="c1"># symbolic: predict ls -l BEFORE running</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>ls<span class="w"> </span>-l<span class="w"> </span>secret.md
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>secret.md<span class="w">            </span><span class="c1"># back to a sane default</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>stat<span class="w"> </span>secret.md<span class="w">                 </span><span class="c1"># inode, links, and the three timestamps</span>
 </code></pre></div>
-<code>mv</code> both moves and renames. The verification rhythm (<code>ls -R</code> between mutations) is the real content.</p>
+Predict every <code>ls -l</code> line <em>before</em> you run the <code>chmod</code>. Octal and symbolic are two notations for the
+same nine bits.</p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>touch<span class="w"> </span>trash1<span class="w"> </span>trash2<span class="w"> </span>trash3
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>ls<span class="w">                              </span><span class="c1"># look before you delete</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>rm<span class="w"> </span>-i<span class="w"> </span>trash1<span class="w">                    </span><span class="c1"># -i prompts before removing — answer it</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>rm<span class="w"> </span>trash2<span class="w"> </span>trash3
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w">                              </span><span class="c1"># confirm they&#39;re gone</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mkdir<span class="w"> </span>vault<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>touch<span class="w"> </span>vault/gem
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>vault<span class="w">                </span><span class="c1"># no x on the dir...</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>ls<span class="w"> </span>vault<span class="w">                       </span><span class="c1"># ...FAILS: can&#39;t list without x</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>chmod<span class="w"> </span><span class="m">100</span><span class="w"> </span>vault<span class="w">                </span><span class="c1"># x but no r</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>cat<span class="w"> </span>vault/gem<span class="w">                  </span><span class="c1"># works! you can traverse to a known name</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>ls<span class="w"> </span>vault<span class="w">                       </span><span class="c1"># still fails: r lists names, x traverses</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>vault<span class="w">                </span><span class="c1"># restore</span>
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Only inside the sandbox</p>
-<p>Every <code>rm</code> here targets scratch files you just created in <code>~/terminal-lab/</code>. Never run <code>rm</code> (and
-never <code>rm -rf</code> at all this month) outside a directory you built for throwaway practice. <code>ls</code>
-first, always.</p>
-</div>
+<code>r</code> lists names, <code>x</code> traverses, <code>w</code> <strong>creates/deletes entries</strong>. Directory <code>w</code> is deletion power —
+which is exactly why <code>/tmp</code> adds the sticky bit.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cat<span class="w"> </span>/etc/hostname<span class="w">               </span><span class="c1"># whole (small) file</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>less<span class="w"> </span>/etc/profile<span class="w">               </span><span class="c1"># page it: space, b, /word to search, q to quit</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>head<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># first lines</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>tail<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># last lines</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>wc<span class="w"> </span>-l<span class="w"> </span>/etc/passwd<span class="w">               </span><span class="c1"># count lines</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>man<span class="w"> </span>ls<span class="w">                          </span><span class="c1"># the reference: find what -h, -t, -r do — q to quit</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>find<span class="w"> </span>~<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.md&#39;</span><span class="w">            </span><span class="c1"># QUOTE the glob — let find expand it, not the shell (M2!)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>find<span class="w"> </span>~<span class="w"> </span>-type<span class="w"> </span>d<span class="w">                 </span><span class="c1"># only directories</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>find<span class="w"> </span>~/learning<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.md&#39;</span><span class="w"> </span>-exec<span class="w"> </span>wc<span class="w"> </span>-l<span class="w"> </span><span class="o">{}</span><span class="w"> </span>+<span class="w">   </span><span class="c1"># compose a search with an action</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>find<span class="w"> </span>/etc<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.conf&#39;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w">            </span><span class="c1"># 2&gt;/dev/null hides permission errors</span>
 </code></pre></div>
-A pager is not "frozen" — it's <em>waiting</em>. <code>q</code> gets you out of <code>less</code> and <code>man</code>. In <code>man</code>, read the
-<strong>SYNOPSIS</strong> first and search with <code>/</code>.</p>
+Those hidden errors are <em>correct</em> — you're not root, so some of <code>/etc</code> is off-limits. <code>find</code> walks
+the live tree (always true, slower); <code>locate</code> reads a prebuilt index (fast, maybe stale) — your first
+scan-vs-index trade-off.</p>
 </div>
 </div>
 </div>
 <div class="admonition success">
 <p class="admonition-title">You can stop here and have learned something real</p>
-<p>If you can read your prompt, navigate anywhere, build and reorganise a tree, delete safely, and
-learn an option from <code>man</code> — the guided lab is done. Now make it harder.</p>
+<p>If you can read the FHS layout, explain name-vs-inode, set modes in both notations, demonstrate the
+directory-<code>w</code> surprise, and compose a <code>find -exec</code> — the guided lab is done. Now make it harder.</p>
 </div>
 <hr />
 <h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
-<p><em>Harder. Goals only — minimal hand-holding. Work in your <code>~/terminal-lab/</code> sandbox. Struggle here is
+<p><em>Harder. Goals only — minimal hand-holding. Work in <code>~/learning/labs/m3/</code>. Challenges 3–5 use your
+</em><em>first <code>sudo</code></em><em>: read the command aloud, state exactly what it touches, then run it. Struggle here is
 the point; reveal a hint only after you've tried.</em></p>
-<h3 id="challenge-1-one-command-whole-tree">Challenge 1 — One command, whole tree<a class="headerlink" href="#challenge-1-one-command-whole-tree" title="Permanent link">&para;</a></h3>
-<p>Create, in a <strong>single</strong> command, the tree <code>journal/2026/aug/{week1,week2}</code> inside the sandbox.</p>
+<h3 id="challenge-1-prove-your-home-has-no-world-writable-files">Challenge 1 — Prove your home has no world-writable files<a class="headerlink" href="#challenge-1-prove-your-home-has-no-world-writable-files" title="Permanent link">&para;</a></h3>
+<p>Find every world-writable file under your home directory. There should be none — if any turn up, explain
+and fix.</p>
 <details class="tip">
 <summary>Hint</summary>
-<p><code>mkdir</code> has a flag that creates parent directories as needed, and the shell can expand <code>{a,b}</code> into
-two names in one go.</p>
+<p><code>find</code> can test permission bits directly. The pattern for "world-writable" is a <code>-perm</code> test on the
+other-write bit (<code>o+w</code>).</p>
 </details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>journal/2026/aug/<span class="o">{</span>week1,week2<span class="o">}</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ls<span class="w"> </span>-R<span class="w"> </span>journal
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>find<span class="w"> </span>~<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-perm<span class="w"> </span>-o+w
 </code></pre></div>
-<code>-p</code> makes the intermediate dirs (<code>2026</code>, <code>aug</code>); brace expansion <code>{week1,week2}</code> is the shell
-writing out both leaf names before <code>mkdir</code> runs.</p>
+<code>-perm -o+w</code> matches files where the <em>other-write</em> bit is set, regardless of the rest. Empty output
+is the healthy answer. Fix any hit with <code>chmod o-w &lt;file&gt;</code> — world-writable is how malware persists.</p>
 </details>
-<h3 id="challenge-2-count-without-counting-by-eye">Challenge 2 — Count without counting by eye<a class="headerlink" href="#challenge-2-count-without-counting-by-eye" title="Permanent link">&para;</a></h3>
-<p>Find out how many files in <code>/etc</code> end in <code>.conf</code> — without counting them yourself.</p>
+<h3 id="challenge-2-the-deletion-trap-then-prevent-it">Challenge 2 — The deletion trap, then prevent it<a class="headerlink" href="#challenge-2-the-deletion-trap-then-prevent-it" title="Permanent link">&para;</a></h3>
+<p>Create a directory where a file <strong>you own</strong> could be deleted by someone else (directory <code>w</code> for group),
+then redesign it so sharing stays but deletion-by-others stops.</p>
 <details class="tip">
 <summary>Hint</summary>
-<p>List them, then pipe into a line-counter. Beware: some names may hide in subdirectories.</p>
+<p>Directory <code>w</code> grants deletion. The fix is the same one <code>/tmp</code> uses — a special bit that restricts
+deletion to each entry's owner. Check <code>man chmod</code> for <code>/sticky</code>.</p>
 </details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ls<span class="w"> </span>/etc/*.conf<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>mkdir<span class="w"> </span><span class="nb">trap</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>chmod<span class="w"> </span><span class="m">770</span><span class="w"> </span><span class="nb">trap</span><span class="w">        </span><span class="c1"># group has w on the dir = can delete anyone&#39;s entries</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>chmod<span class="w"> </span>+t<span class="w"> </span><span class="nb">trap</span><span class="w">                       </span><span class="c1"># sticky bit: only an entry&#39;s owner may delete it</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>ls<span class="w"> </span>-ld<span class="w"> </span><span class="nb">trap</span><span class="w">                         </span><span class="c1"># drwxrwx--T  → the T is the sticky bit</span>
 </code></pre></div>
-The shell expands <code>/etc/*.conf</code> to the matching paths; <code>wc -l</code> counts the lines <code>ls</code> prints. (This
-counts the top level of <code>/etc</code> only — a fair reading of the task.)</p>
+Sharing (group <code>rwx</code>) is preserved; the sticky bit removes the deletion-by-others hazard. This is the
+heart of the "Shared Space, Governed" project below.</p>
 </details>
-<h3 id="challenge-3-prove-the-shell-expands-the-glob-not-the-program">Challenge 3 — Prove the shell expands the glob, not the program<a class="headerlink" href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" title="Permanent link">&para;</a></h3>
-<p>Show, with one command, exactly what <code>*.md</code> becomes <em>before</em> any program acts on it.</p>
+<h3 id="challenge-3-sudo-own-the-software-lifecycle">Challenge 3 — [sudo] Own the software lifecycle<a class="headerlink" href="#challenge-3-sudo-own-the-software-lifecycle" title="Permanent link">&para;</a></h3>
+<p>Investigate an unseen package <strong>before</strong> installing it, install it, inventory its files, use it once,
+then remove it leaving zero trace — narrating each apt pipeline stage as it happens.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Never install blind: <code>apt show</code> (deps, size, origin) and <code>apt policy</code> (which repo?) come <em>before</em>
+<code>install</code>. <code>dpkg -L</code> inventories; <code>purge</code> (not <code>remove</code>) leaves zero trace.</p>
+</details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nb">echo</span><span class="w"> </span>*.md
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w">                     </span><span class="c1"># refresh signed metadata</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>apt<span class="w"> </span>show<span class="w"> </span>tree<span class="w">                       </span><span class="c1"># read deps, size, origin BEFORE installing</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>apt<span class="w"> </span>policy<span class="w"> </span>tree<span class="w">                     </span><span class="c1"># which repo/version would you get?</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>tree
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>dpkg<span class="w"> </span>-L<span class="w"> </span>tree<span class="w">                        </span><span class="c1"># inventory: every file, FHS-shaped</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>tree<span class="w"> </span>~/learning<span class="w"> </span>-L<span class="w"> </span><span class="m">2</span><span class="w">                </span><span class="c1"># use it once, meaningfully</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>sudo<span class="w"> </span>apt<span class="w"> </span>purge<span class="w"> </span>-y<span class="w"> </span>tree<span class="w">              </span><span class="c1"># remove AND delete config (remove alone leaves rc state)</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>dpkg<span class="w"> </span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>tree<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;gone without trace&quot;</span>
 </code></pre></div>
-<code>echo</code> just prints its arguments — so it prints the filenames the <strong>shell</strong> already substituted for
-<code>*.md</code>. The program never sees the <code>*</code>. In an <em>empty</em> directory <code>echo *.md</code> prints the literal
-<code>*.md</code> (no match, so bash leaves the pattern alone) — a preview of M5's <code>nullglob</code>.</p>
+<code>remove</code> would leave config files (<code>dpkg -l</code> state <code>rc</code>); <code>purge</code> deletes them too. Read every apt
+prompt before confirming — never blind-confirm an <code>autoremove</code> list.</p>
 </details>
-<h3 id="challenge-4-learn-an-unseen-option-from-man-only">Challenge 4 — Learn an unseen option from <code>man</code> only<a class="headerlink" href="#challenge-4-learn-an-unseen-option-from-man-only" title="Permanent link">&para;</a></h3>
-<p>Using <strong>only</strong> <code>man ls</code> (no web), make <code>ls</code> sort by size, largest last, in human-readable units. State
-the SYNOPSIS notation you relied on.</p>
+<h3 id="challenge-4-sudo-signals-without-collateral-damage">Challenge 4 — [sudo] Signals without collateral damage<a class="headerlink" href="#challenge-4-sudo-signals-without-collateral-damage" title="Permanent link">&para;</a></h3>
+<p>Start a background job, suspend and resume it with job control, then send TERM (not KILL) to a specific
+PID you locate precisely. No wrong victims.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>Ctrl-Z</code> suspends, <code>bg</code>/<code>fg</code> move a job, <code>jobs</code> lists them. Find an exact PID with <code>pgrep</code>, and reach
+for TERM first — KILL only if TERM is ignored.</p>
+</details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ls<span class="w"> </span>-lShr<span class="w">        </span><span class="c1"># -S sort by size, -r reverse (largest last), -h human units, -l long</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sleep<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="p">&amp;</span><span class="w">                         </span><span class="c1"># background job</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">jobs</span><span class="w">                                </span><span class="c1"># [1]+ Running</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nb">fg</span><span class="w">                                  </span><span class="c1"># bring it forward, then press Ctrl-Z to suspend</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nb">jobs</span><span class="w">                                </span><span class="c1"># [1]+ Stopped</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nb">bg</span><span class="w">                                  </span><span class="c1"># resume in the background</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>pgrep<span class="w"> </span>-a<span class="w"> </span>sleep<span class="w">                      </span><span class="c1"># find the EXACT pid (not a broad match)</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nb">kill</span><span class="w"> </span>-TERM<span class="w"> </span>&lt;pid&gt;<span class="w">                    </span><span class="c1"># ask politely — the default signal</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>pgrep<span class="w"> </span>sleep<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;terminated cleanly&quot;</span>
 </code></pre></div>
-Found by searching the OPTIONS section (<code>/size</code>, <code>/reverse</code>, <code>/human</code>). SYNOPSIS shows <code>ls [OPTION]…
-[FILE]…</code> — options are optional and combinable, which is why <code>-lShr</code> bundles four.</p>
+TERM lets a handler flush and clean up; <code>kill -9</code> (KILL) forbids that and risks data. TERM before
+KILL, every time.</p>
 </details>
-<h3 id="challenge-5-stretch-type-vs-which-disagree">Challenge 5 (stretch) — <code>type</code> vs <code>which</code> disagree<a class="headerlink" href="#challenge-5-stretch-type-vs-which-disagree" title="Permanent link">&para;</a></h3>
-<p><code>type cd</code> says "shell builtin"; <code>which cd</code> may print nothing. Explain the discrepancy precisely.</p>
+<h3 id="challenge-5-stretch-which-package-owns-binls">Challenge 5 (stretch) — Which package owns <code>/bin/ls</code>?<a class="headerlink" href="#challenge-5-stretch-which-package-owns-binls" title="Permanent link">&para;</a></h3>
+<p>In a single command, discover which installed package owns <code>/bin/ls</code> — found via <code>man dpkg</code>, no web.</p>
 <details class="success">
 <summary>Solution</summary>
-<p><code>type</code> reports how <strong>bash</strong> will interpret the word, and a built-in wins over any file — so it names
-<code>cd</code> a builtin. <code>which</code> only searches <code>$PATH</code> for executable <strong>files</strong>; it knows nothing about
-builtins, so for <code>cd</code> it finds nothing (or an unrelated file that would never actually run).</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>dpkg<span class="w"> </span>-S<span class="w"> </span>/bin/ls
+</code></pre></div>
+<code>dpkg -S &lt;path&gt;</code> is the reverse of <code>dpkg -L &lt;pkg&gt;</code>: it searches the dpkg database for the package
+that installed a given file (here, <code>coreutils</code>). Reverse lookup is how you answer "where did this file
+come from?" on any Debian-family system.</p>
+</details>
+<details class="note">
+<summary>Mini-project — Shared Space, Governed (from <code>08-projects.md</code>)</summary>
+<p>Productionize challenges 2–4 into a documented multi-user workspace: a <code>team</code> group and a test user;
+<code>/srv/shared</code> with <strong>setgid + sticky</strong> (<code>3775</code>) so new files inherit the group <em>and</em> only owners may
+delete their own; a <code>drop/</code> (all write) and a <code>published/</code> (you write, others read); every property
+<strong>proven</strong> by a test run as both users; and a reviewed (not run) <code>teardown.sh</code>. Write it up in
+<code>~/learning/projects/shared-space/README.md</code> with the 6-claim test matrix (create/read/delete ×
+own/other's files). M4 will point a service at it; M5 will script an audit of it.</p>
 </details>
 <hr />
 <h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
 <p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
 is what builds the memory.</em></p>
 <details class="question">
-<summary>Terminal vs shell — what is each, and which one is Bash?</summary>
-<p>The <strong>terminal</strong> is the window program that draws text and forwards your keystrokes; the <strong>shell</strong>
-is the command interpreter running inside it. <strong>Bash is the shell.</strong> (Phone line vs the person
-answering: the terminal carries the conversation; bash is who answers.)</p>
+<summary>What is an inode, and what does a filename have to do with it?</summary>
+<p>The <strong>inode is the file itself</strong> — metadata (owner, mode, times, link count) plus pointers to the
+data blocks. A <strong>filename is a directory entry</strong> mapping a label to an inode number: a card in a
+catalog, not the book. Two names (a hard link) can point at one inode.</p>
 </details>
 <details class="question">
-<summary>In <code>ls -l /home</code>, which part is the option and which the argument?</summary>
-<p><code>-l</code> is the <strong>option</strong> (modifies <em>how</em> <code>ls</code> behaves — long format); <code>/home</code> is the <strong>argument</strong>
-(<em>what</em> it operates on).</p>
+<summary>Decode <code>-rwxr-x--- 2 alice dev</code> — every field, plus the octal.</summary>
+<p>Regular file (<code>-</code>); owner <strong>alice</strong> has <code>rwx</code> (7); group <strong>dev</strong> has <code>r-x</code> (5); other has <code>---</code> (0);
+link count <strong>2</strong> means a hard link exists. The mode is <strong>750</strong>.</p>
 </details>
 <details class="question">
-<summary>Who expands <code>*.md</code> — the shell or <code>ls</code>? How would you prove it?</summary>
-<p>The <strong>shell</strong>, before the program runs. Prove it with <code>echo *.md</code>: <code>echo</code> only prints its
-arguments, so what you see is the filenames the shell already substituted — <code>ls</code> never sees the <code>*</code>.</p>
+<summary>State the permission evaluation order exactly. Is it additive?</summary>
+<p><strong>Not additive — first match wins and stops.</strong> Owner? apply owner bits only. Else in the group?
+group bits only. Else other bits. An owner whose bits are <code>---</code> is locked out of their own
+world-readable file.</p>
 </details>
 <details class="question">
-<summary>Why is <code>cd</code> a shell built-in while <code>ls</code> is a separate program?</summary>
-<p><code>cd</code> changes the shell's <em>own</em> working directory; a child process can't change its parent's
-directory, so it must run inside the shell. <code>ls</code> only reads and prints — fine as an external
-program in <code>/usr/bin</code>.</p>
+<summary>A file you own can be deleted by someone else. Which permission on which object, and the fix?</summary>
+<p>The <strong><code>w</code> bit on the containing directory</strong> — deleting a file edits the <em>directory's</em> entry table,
+not the file. Fix: the <strong>sticky bit</strong> (<code>chmod +t</code>, as on <code>/tmp</code>'s <code>1777</code>), which limits deletion to
+each entry's owner.</p>
 </details>
 <details class="question">
-<summary><code>rm</code> has no undo. Name the three habits that stand in for one.</summary>
-<p><strong>Sandbox discipline</strong> (act where mistakes are cheap), <strong><code>ls</code>-before-<code>rm</code>/<code>mv</code></strong> (look before you
-change), and <strong><code>echo</code>-the-glob</strong> (see the expansion before a destructive command uses it). Backups
-come later (M15).</p>
+<summary><code>apt remove</code> vs <code>apt purge</code>?</summary>
+<p><code>remove</code> deletes the package's files but <strong>keeps its config</strong> (dpkg state <code>rc</code>); <code>purge</code> deletes the
+config too. If a reinstall behaves oddly because old config lingered, you should have <code>purge</code>d.</p>
 </details>
 <details class="question">
-<summary><code>bash: lls: command not found</code> — the three likely causes, in order?</summary>
-<p>(1) <strong>Typo</strong> of a real command (most likely — retype or Tab-complete); (2) the program <strong>isn't
-installed</strong> (<code>type lls</code>, <code>man lls</code>); (3) it's installed but <strong>not in <code>$PATH</code></strong> (<code>echo $PATH</code>).</p>
+<summary><code>kill PID</code> vs <code>kill -9 PID</code> — and when does the difference actually matter?</summary>
+<p>Default is <strong>SIGTERM</strong>: a polite <em>ask</em> a handler can catch to flush data and clean up. <strong>SIGKILL</strong>
+(<code>-9</code>) is unrefusable — the kernel just stops scheduling it, no cleanup. They look identical on a
+<code>sleep</code>, but differ the moment a process has cleanup to do. <strong>TERM first, KILL only as last resort.</strong></p>
 </details>
 <details class="question">
-<summary><code>less</code> shows <code>(END)</code> and won't let you out. What happened, and the key?</summary>
-<p>You're in the <strong>pager</strong> at the end of the file — not frozen, just waiting. Press <strong><code>q</code></strong> to quit.</p>
+<summary>Disk is 95% full; you deleted the biggest logs; <code>df</code> didn't move. Why, and how do you find the holder?</summary>
+<p>A process still holds the deleted file's <strong>inode open</strong>, so its blocks stay allocated until the
+handle closes. Deletion removed the <em>name</em>, not the data. Find the holder with <code>lsof</code> (it marks the
+entry <code>(deleted)</code>), then HUP or restart that process to release the space.</p>
 </details>
 <div class="admonition example">
 <p class="admonition-title">Teach it back (the real test)</p>
-<p>Out loud, in <strong>3 minutes, no notes</strong>: <em>"What is the terminal, what is the shell, and why do
-professionals still use them?"</em> You must distinguish terminal from shell and give <strong>≥2 engineering
-reasons</strong> (scriptable, remote/SSH, identical everywhere). Then, in <strong>90 seconds</strong>, teach <em>"what is a
-path?"</em> to a 10-year-old — postal-address analogy required, then show <code>pwd</code>/<code>cd</code> making it real. If
-you can't yet, that's your signal to reread the Key Notes, not to move on.</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>: <em>"Explain Linux's permission model end to end — identity, bits,
+evaluation order, and the directory rules."</em> You <strong>must</strong> land <strong>first-match evaluation</strong> and the
+<strong>directory-<code>w</code> surprise</strong>. Then, in <strong>90 seconds</strong>, teach <em>"why installing from the app store beats
+downloading a random installer"</em> to a non-technical parent — using apt's pipeline (signed catalog,
+dependency resolution, clean removal) in plain words. If you can't yet, that's your signal to reread
+the Key Notes, not to move on.</p>
 </div>
 <hr />
 <h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
-<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M2 also closes </em><em>Stage 1</em><em>. A
-module is only "done" when every box is true.</em></p>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress to Module 04. A module is only "done"
+when every box is true.</em></p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> terminal vs shell vs prompt vs command precisely, with the process model underneath.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all three from memory: the keystroke→output loop, the path tree, and prompt anatomy.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Navigate</strong> to any of <code>/etc</code>, <code>/var/log</code>, <code>/usr/bin</code>, <code>~</code>, the sandbox, <code>/proc</code> and prove arrival with <code>pwd</code> — Tab-completing, no wrong turns.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> the Level-2 sequence (tree, files, copy, rename, safe delete) in under 3 minutes, zero errors, a verify between every mutation.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Develop</strong> a novel two-command pipe (e.g. count matching files) and explain each part.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> state <em>and</em> demonstrate the safety habits — sandbox, <code>ls</code>-before-<code>rm</code>, <code>echo</code>-the-glob, read-before-paste, no-sudo.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> one unseen planted failure (typo / wrong dir / stuck pager / empty glob) with a stated method: hypothesis → check → fix.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a misbehaving glob with <code>echo</code> and interpret both possible findings (no match vs wrong directory).</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> show Tab / <code>Ctrl-R</code> / <code>Ctrl-A</code> / <code>Ctrl-E</code> / <code>Ctrl-C</code> fluency live, and say why keystrokes matter at scale.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure:</strong> show and explain 3 lines of your own <code>~/.bashrc</code> (read-only understanding).</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Self-serve:</strong> solve ≥3 unseen tasks using only <code>man</code> (start at SYNOPSIS), and score ≥80% on the validation bank.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (terminal-vs-shell explanation mandatory).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the permission model with evaluation order <em>and</em> the directory rules, flawlessly.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all four from memory: the mode decoder, name→inode→data (with a hard link + symlink), the apt pipeline, and a process tree.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> 15 random terms cold (inode, setgid, conffile, SIGHUP, repo, umask, sticky bit…) in ≤2 sentences each.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> the shared-space scenario cold in ≤10 min — setgid + sticky, tested as <em>both</em> users.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Administer</strong> a full user lifecycle: create with home + shell, add to a group, verify, remove with <code>-r</code> — narrated.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Develop</strong> a novel <code>find -exec</code> that solves an unseen file-audit ask.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> run a mini-audit — <code>sudo -l</code>, a world-writable sweep, a setuid inventory — and judge each finding.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Monitor</strong> a <code>ps auxf</code> tree and read the STAT column; spot the odd process (Z / D) in a listing.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> the deleted-but-full-disk case: explain the inode model and resolve with <code>lsof</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> measure <code>find</code> vs <code>locate</code> and justify the choice for two different use cases.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure:</strong> add aliases to <code>~/.bashrc</code> (with a dated backup) and explain one <code>sudoers</code> line read via <code>visudo</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Self-serve:</strong> solve ≥3 unseen tasks using only <code>man</code>/FHS, and score ≥80% on the validation bank.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (the permission-model explanation is mandatory).</li>
 </ul>
 <hr />
 <h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
-<p>Spaced repetition is not optional; it's where the memory actually forms. From this module on
-<strong>interleaving is active</strong> — every M2 review also pulls in one Module 01 item. Schedule these and
-<em>keep</em> them:</p>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active —
+every M3 review also pulls in a prior-module item. Schedule these and <em>keep</em> them:</p>
 <table>
 <thead>
 <tr>
 <th>When</th>
 <th>Do</th>
-<th>Interleaved M1 item</th>
+<th>Interleaved prior-module item</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Day 1</strong></td>
-<td>Command sprint cold (dir → file → copy → rename → verify → safe delete) · all flashcards</td>
-<td>One 1-minute "what is an OS" explanation</td>
+<td>Octal + reverse sprints (750, 700, 2775, 1777 → rwx and back) · all flashcards</td>
+<td>M2 flashcards you missed</td>
 </tr>
 <tr>
 <td><strong>Day 3</strong></td>
-<td>Redraw the keystroke loop · glob-prediction sprint · debug an empty-glob scenario</td>
-<td><code>free -h</code> interpretation cold</td>
+<td>Redraw the apt pipeline · rebuild the setgid+sticky shared dir from memory</td>
+<td>M1: memory hierarchy with latencies</td>
 </tr>
 <tr>
 <td><strong>Day 7</strong></td>
-<td>Rebuild the sandbox tree from nothing, unaided · the safety-habit questions</td>
-<td>Memory-hierarchy diagram from memory</td>
+<td>Permission charades cold (6 <code>ls -l</code> lines, who-can-do-what) · the two debugging cases</td>
+<td>M2: the keystroke→output loop</td>
 </tr>
 <tr>
 <td><strong>Day 14</strong></td>
-<td>Learn one unseen command via <code>man</code>/SYNOPSIS only · "press Enter" walkthrough, timed</td>
-<td>Boot-sequence narration</td>
+<td>Design an unseen permission scheme cold, commands included · redo the sudo mini-audit</td>
+<td>M1: boot-sequence narration</td>
 </tr>
 <tr>
 <td><strong>Day 30</strong></td>
-<td>Recreate the Terminal Home structure in ≤10 min · the two stretch challenges</td>
-<td>M1 machine-inspection diagnosis</td>
+<td>Mini-project self-review · the deleted-but-full-disk case + <code>lsof</code> recovery</td>
+<td>M2 cookbook prune</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Connects forward to:</strong> Bash scripting (M5 — today's command lines, written to a file) · Vim (M6) and
-Tmux (M7), which live inside the terminal · SSH (M9 — this interface over the network) · Git (M8) and
-Claude Code (M11), commands obeying today's anatomy · Docker (M16), where <code>docker exec -it … bash</code> is
-this module inside a container.</p>
+<p><strong>Connects forward to:</strong> Linux Administration (M4 — services are processes with users + files, logs in
+<code>/var/log</code>) · Bash scripting (M5 — every command here becomes a building block) · SSH (M9 — keys <em>demand</em>
+<code>600</code>, and now you know why) · Docker (M16 — an image is an FHS tree + a dpkg database; <code>USER</code> is
+<code>useradd</code> thinking) · Kubernetes (M19 — <code>securityContext</code> is this model in YAML) · Security (M24 — least
+privilege, setuid audits, and the supply-chain trust chain, grown up).</p>
 <div class="admonition quote">
 <p class="admonition-title">The one-sentence takeaway</p>
-<p>M1 taught what the machine is; M2 taught how to talk to it — every remaining module is just new
-vocabulary in this same conversation.</p>
+<p>Containers, clusters, and clouds are these four pillars in new packaging — master files, permissions,
+packages, and processes here at laptop scale, or debug them blind at production scale later.</p>
 </div>
 
 
@@ -3183,7 +3392,7 @@ vocabulary in this same conversation.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../module-01/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 01 — Computer &amp; OS Fundamentals">
+          <a href="../../stage-01/module-02/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 02 — First Contact with the Terminal">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3193,20 +3402,20 @@ vocabulary in this same conversation.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Module 01 — Computer & OS Fundamentals
+                Module 02 — First Contact with the Terminal
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../stage-02/module-03/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 03 — Linux Essentials">
+          <a href="../module-04/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 04 — Linux Administration">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Module 03 — Linux Essentials
+                Module 04 — Linux Administration
               </div>
             </div>
             <div class="md-footer__button md-icon">

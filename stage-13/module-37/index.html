@@ -1,0 +1,3451 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Where production AI actually runs — the cloud service models (IaaS/PaaS/SaaS), the shared-responsibility split, the core services mapped to what you already built, Infrastructure as Code, cost as an engineering constraint, and alignment to a recognized entry certification.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../../stage-12/module-36/">
+      
+      
+        <link rel="next" href="../module-38/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 37 — Cloud Platforms & Certification - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-37-cloud-platforms-certification" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 37 — Cloud Platforms & Certification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-your-stack-cloud-native" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: your stack, cloud-native
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-service-models-who-manages-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The service models — who manages what
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-core-services-mapped-to-what-you-already-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The core services — mapped to what you already built
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-shared-responsibility-model-where-breaches-actually-happen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The shared-responsibility model — where breaches actually happen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regions-availability-zones-and-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regions, availability zones, and cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infrastructure-as-code-the-professional-way-to-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infrastructure as Code — the professional way to build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#certification-alignment-you-already-know-most-of-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Certification alignment — you already know most of it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-the-infrastructure-as-code-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: the Infrastructure-as-Code lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-add-an-output-and-a-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Add an output and a variable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-simulate-drift-then-let-iac-heal-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Simulate drift, then let IaC heal it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-real-cloud-path-on-paper-the-two-cost-laws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The real-cloud path (on paper): the two cost laws
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-build-vs-buy-by-the-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Build vs buy, by the numbers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-map-the-curriculum-to-ai-901" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Map the curriculum to AI-901
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-your-stack-cloud-native" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: your stack, cloud-native
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-service-models-who-manages-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The service models — who manages what
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-core-services-mapped-to-what-you-already-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The core services — mapped to what you already built
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-shared-responsibility-model-where-breaches-actually-happen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The shared-responsibility model — where breaches actually happen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regions-availability-zones-and-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regions, availability zones, and cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infrastructure-as-code-the-professional-way-to-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infrastructure as Code — the professional way to build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#certification-alignment-you-already-know-most-of-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Certification alignment — you already know most of it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-the-infrastructure-as-code-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: the Infrastructure-as-Code lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-add-an-output-and-a-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Add an output and a variable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-simulate-drift-then-let-iac-heal-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Simulate drift, then let IaC heal it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-real-cloud-path-on-paper-the-two-cost-laws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The real-cloud path (on paper): the two cost laws
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-build-vs-buy-by-the-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Build vs buy, by the numbers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-map-the-curriculum-to-ai-901" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Map the curriculum to AI-901
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-37-cloud-platforms-certification">Module 37 — Cloud Platforms &amp; Certification<a class="headerlink" href="#module-37-cloud-platforms-certification" title="Permanent link">&para;</a></h1>
+<p><small>Stage 13 · Cloud &amp; AI Domains · ~3 weeks at 4 h/day · Prerequisite — Modules 18–20 (containers/Kubernetes — the cloud runs these), M28 (model serving), M36 (the API you will deploy).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Cloud computing</strong> is the on-demand delivery of computing resources — compute, storage, databases,
+networking, and higher-level services — over the internet with <strong>pay-as-you-go pricing</strong>, instead of
+owning and running physical hardware. Everything you have built so far ran locally or on a
+self-managed <strong>Kubernetes</strong> cluster (M19–20) — but essentially <strong>no production AI runs that way</strong>. It
+runs in the cloud: on managed compute and <strong>GPUs</strong> (Graphics Processing Units — the accelerators that
+train models), behind managed databases and object storage, monitored by managed observability, and
+increasingly using managed AI services.</p>
+<p>This module is the deployment target for everything the curriculum built. The container from Module 18,
+the <strong>API</strong> (Application Programming Interface — the M36 service other programs call), the model from
+Modules 26–28, the database from Module 33, the data lake from Module 34 — this is where they all go to
+run for real. You learn the cloud model well enough to <em>choose</em> the right service, deploy your own
+stack, reason about cost (the pay-per-use model is both a superpower and a footgun), and speak the
+certification vocabulary that job listings demand.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>M38 (NLP) and M39 (Computer Vision) train their models on cloud GPUs and serve them on the M36 API
+running on managed compute — <em>this module</em>. The <strong>capstone</strong> ships cloud-native on the free tier.
+Every high-pay path — cloud engineer, DevOps/platform engineer, ML/AI engineer, SRE (Site
+Reliability Engineer) — deploys to the cloud, and an entry <strong>certification</strong> (Azure AI Fundamentals
+/ AWS Cloud Practitioner) is a near-universal hiring signal. The cloud is where the whole curriculum
+finally runs where real AI runs.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 37 — Cloud Platforms &amp; Certification&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Analogy / Misconceptions):
+renting vs owning a home (IaaS = empty apartment, PaaS = serviced apartment, SaaS = hotel) →
+the management spectrum (who manages the OS, runtime, app) → the shared-responsibility split (the
+open S3 bucket) → cost as a superpower <em>and</em> a footgun (the $10k idle GPU) → the curriculum's own
+stack deployed cloud-native → build-vs-buy and the certification on-ramp.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-the-infrastructure-as-code-lifecycle">Guided Lab</a> in a browser terminal and
+run each command yourself as it appears. Typing beats watching every time — and it is part of how the
+memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-your-stack-cloud-native">The picture: your stack, cloud-native<a class="headerlink" href="#the-picture-your-stack-cloud-native" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    U["Users on the internet"] --&gt; API
+    subgraph you["What YOU secure — IN the cloud (config, data, access)"]
+        API["M36 API + M26–28 model&lt;br/&gt;container on a container-PaaS"]
+        DB["Managed database&lt;br/&gt;(M33 — no Postgres to run)"]
+        OBJ["Object storage&lt;br/&gt;(M34's data lake)"]
+    end
+    subgraph prov["What the PROVIDER secures — OF the cloud"]
+        HW["Physical hardware · global network&lt;br/&gt;regions and availability zones"]
+    end
+    API --&gt; DB
+    API --&gt; OBJ
+    you --&gt; HW
+    IaC["Infrastructure as Code&lt;br/&gt;Terraform/OpenTofu (M17/M35)"] -. defines .-&gt; you
+    IAM["IAM least-privilege + secrets&lt;br/&gt;(M9/M15)"] -. guards .-&gt; you
+    MON["Cloud monitoring + budget alert&lt;br/&gt;(M25 — cost is a metric)"] -. watches .-&gt; you</code></pre>
+<p>The cloud is <em>not</em> just "someone else's computer." It is someone else's computer <strong>plus</strong> managed
+services, elasticity, a global network, and a pricing model — and the managed services and elasticity
+are the point. This module takes the exact stack you built and runs each piece as a <strong>managed service</strong>:
+the provider runs the machines; you configure, secure, and pay for what you use.</p>
+<h3 id="the-service-models-who-manages-what">The service models — who manages what<a class="headerlink" href="#the-service-models-who-manages-what" title="Permanent link">&para;</a></h3>
+<p>The service models layer by how much the provider manages. <strong>IaaS</strong> (Infrastructure as a Service),
+<strong>PaaS</strong> (Platform as a Service), and <strong>SaaS</strong> (Software as a Service) are a spectrum from <em>most
+control, most work</em> to <em>least control, least work</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>You manage</th>
+<th>Provider manages</th>
+<th>Example</th>
+<th>Renting analogy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IaaS</strong></td>
+<td>Your app <strong>+ the OS</strong> (Operating System — the software that runs your programs)</td>
+<td>Hardware, network, storage</td>
+<td>A virtual machine (<strong>VM</strong> — a rented computer): EC2 / Azure VM / Compute Engine</td>
+<td>An <strong>empty apartment</strong> — you bring furniture, cook, clean</td>
+</tr>
+<tr>
+<td><strong>PaaS</strong></td>
+<td>Your app (code) only</td>
+<td>OS, runtime, scaling, hardware</td>
+<td>A container service: AWS App Runner / Azure Container Apps / GCP Cloud Run</td>
+<td>A <strong>serviced apartment</strong> — furnished, cleaned, you just live</td>
+</tr>
+<tr>
+<td><strong>SaaS</strong></td>
+<td>Nothing — you just use it</td>
+<td>Everything</td>
+<td>Web email; a pre-built AI vision/language API</td>
+<td>A <strong>hotel</strong> — you show up, everything's done</td>
+</tr>
+</tbody>
+</table>
+<p>The rule: <strong>more managed = less control and portability, less operational work.</strong> It is a deliberate
+control-vs-convenience trade per workload — not "more managed is always better." The M36 API's natural
+home is the container-PaaS: you deploy the container, the platform runs and scales it.</p>
+<p><strong>Deployment models</strong> describe <em>where</em> it runs: <strong>public</strong> (shared provider infrastructure —
+<strong>AWS</strong> (Amazon Web Services), <strong>Azure</strong> (Microsoft's cloud), <strong>GCP</strong> (Google Cloud Platform)),
+<strong>private</strong> (dedicated), and <strong>hybrid / multi-cloud</strong> (a mix — flexibility vs lock-in).</p>
+<h3 id="the-core-services-mapped-to-what-you-already-built">The core services — mapped to what you already built<a class="headerlink" href="#the-core-services-mapped-to-what-you-already-built" title="Permanent link">&para;</a></h3>
+<p>The big three providers offer hundreds of services, but the load-bearing ones map 1:1 onto the
+curriculum. The concepts are provider-agnostic (the console differs, the ideas transfer):</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>AWS</th>
+<th>Azure</th>
+<th>GCP</th>
+<th>You built it in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Containers / K8s</strong></td>
+<td>ECS / EKS</td>
+<td>Container Apps / AKS</td>
+<td>Cloud Run / GKE</td>
+<td>M18–20 (Docker, Kubernetes)</td>
+</tr>
+<tr>
+<td><strong>Serverless functions</strong></td>
+<td>Lambda</td>
+<td>Functions</td>
+<td>Cloud Functions</td>
+<td>event-driven, no server to manage</td>
+</tr>
+<tr>
+<td><strong>Object storage</strong></td>
+<td><strong>S3</strong> (Simple Storage Service)</td>
+<td>Blob Storage</td>
+<td>GCS (Cloud Storage)</td>
+<td>M34 (the data lake)</td>
+</tr>
+<tr>
+<td><strong>Managed database</strong></td>
+<td><strong>RDS</strong> (Relational Database Service)</td>
+<td>Azure SQL</td>
+<td>Cloud SQL</td>
+<td>M33 (Postgres, run for you)</td>
+</tr>
+<tr>
+<td><strong>Managed AI / ML</strong></td>
+<td>SageMaker</td>
+<td>Azure ML</td>
+<td>Vertex AI</td>
+<td>M26–28 (train, host, serve)</td>
+</tr>
+<tr>
+<td><strong>GPU compute</strong></td>
+<td>GPU instances</td>
+<td>GPU VMs</td>
+<td>GPU VMs</td>
+<td>M22/M28 (rent by the hour)</td>
+</tr>
+<tr>
+<td><strong>Infrastructure as Code</strong></td>
+<td>CloudFormation</td>
+<td>ARM/Bicep</td>
+<td>Deployment Manager</td>
+<td>M17/M35 (reproducibility)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Managed Kubernetes</strong> (EKS / AKS / GKE — Amazon/Azure/Google's hosted Kubernetes) is Modules 19–20's
+Kubernetes, run by the provider. Object storage is M34's lake as a service. A managed database is M33's
+PostgreSQL without you running it. You understand what is <em>underneath</em> each — so you choose "managed" to
+shed the ops burden, not out of ignorance.</p>
+<h3 id="the-shared-responsibility-model-where-breaches-actually-happen">The shared-responsibility model — where breaches actually happen<a class="headerlink" href="#the-shared-responsibility-model-where-breaches-actually-happen" title="Permanent link">&para;</a></h3>
+<p>Security in the cloud is <strong>split</strong>. The provider secures the cloud; you secure what you put <em>in</em> it:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Who secures it</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Physical hardware, data centres, host OS, the managed service itself</td>
+<td><strong>Provider</strong> — security <strong>OF</strong> the cloud</td>
+<td>facilities, hypervisor, network backbone</td>
+</tr>
+<tr>
+<td>Your data, access, and configuration</td>
+<td><strong>YOU</strong> — security <strong>IN</strong> the cloud</td>
+<td><strong>IAM</strong> (Identity &amp; Access Management — least-privilege roles, M9), secrets (M15), private buckets, encryption</td>
+</tr>
+</tbody>
+</table>
+<p>The line matters because <strong>the #1 cause of cloud breaches is customer misconfiguration, not provider
+failure</strong> — a storage bucket accidentally set to public, an over-broad IAM role, a secret committed to
+code. The provider secured the building; the break-ins are your unlocked doors. Config hygiene <em>is</em>
+cloud security.</p>
+<h3 id="regions-availability-zones-and-cost">Regions, availability zones, and cost<a class="headerlink" href="#regions-availability-zones-and-cost" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Regions and availability zones (AZ — an isolated data centre within a region).</strong> Providers run in
+  many geographic <strong>regions</strong>; each region has multiple <strong>AZs</strong> so a single data-centre failure doesn't
+  take you down. This is Modules 19–20's high availability (<strong>HA</strong> — surviving failures) at provider
+  scale.</li>
+<li><strong>Cloud economics — the superpower and the footgun.</strong> Pay-as-you-go turns <strong>CapEx</strong> (Capital
+  Expenditure — buying hardware upfront) into <strong>OpEx</strong> (Operating Expenditure — paying as you go), and
+  lets you rent a supercomputer (a GPU) <em>by the hour</em>. That is the economics that democratized deep
+  learning. <strong>But the meter never stops:</strong> an idle GPU, a runaway job, or an over-sized instance bills
+  relentlessly whether you use it or not — the <strong>$10,000 idle GPU</strong> left running over a weekend is a
+  real story. Cost is an engineering constraint (Module 21 applied to money).</li>
+</ul>
+<h3 id="infrastructure-as-code-the-professional-way-to-build">Infrastructure as Code — the professional way to build<a class="headerlink" href="#infrastructure-as-code-the-professional-way-to-build" title="Permanent link">&para;</a></h3>
+<p><strong>IaC</strong> (Infrastructure as Code) defines your cloud resources <strong>declaratively</strong> in version-controlled
+files, so anyone can recreate the exact infrastructure with one command. Clicking in a web console is
+imperative, un-versioned, and un-reproducible; IaC is Module 35's "reproducible, versioned" discipline
+applied to infrastructure. The industry-standard tool is <strong>OpenTofu</strong> (the open-source successor to
+Terraform, which moved to a restricted licence in 2023) — you write <strong>HCL</strong> (HashiCorp Configuration
+Language) describing the <em>desired state</em>, and the tool computes and applies the difference. Its lifecycle
+— <strong>plan → apply → state → drift → destroy</strong> — is what you drill in the lab, and it transfers <strong>1:1</strong> to
+AWS/Azure/GCP: only the provider block changes.</p>
+<h3 id="certification-alignment-you-already-know-most-of-it">Certification alignment — you already know most of it<a class="headerlink" href="#certification-alignment-you-already-know-most-of-it" title="Permanent link">&para;</a></h3>
+<p>An entry <strong>certification</strong> validates this knowledge in the language employers recognize. The target is
+<strong>Azure AI Fundamentals</strong> (exam <strong>AI-901</strong> — the renumbered AI-900: AI workloads, machine learning,
+computer vision, NLP, and generative AI), or the <strong>AWS Certified Cloud Practitioner</strong> (AWS CP — general
+cloud) / ML Engineer Associate. You already know most of the <em>content</em>: Modules 26–28 <strong>are</strong> the
+machine-learning material (you built it by hand); this module supplies the cloud model. A cert validates
+vocabulary and breadth and is a hiring signal — it is a <strong>complement</strong>, not a substitute for the
+hands-on ability this whole curriculum gives you.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>The service models are a management spectrum:</strong> IaaS = your app + OS · PaaS = your app · SaaS = just
+   use it. More managed = less control, less ops. (Empty apartment → serviced apartment → hotel.)</li>
+<li><strong>The shared-responsibility model:</strong> the provider secures the cloud; <strong>YOU</strong> secure your data, access,
+   and config — and that is where <strong>most breaches</strong> happen (the open bucket).</li>
+<li><strong>The core services map to the curriculum:</strong> containers→M18–20 · object storage→M34 · managed DB→M33 ·
+   AI/GPU→M28 · the app→M36 · IAM→M9 · monitoring→M25 · IaC→M17/M35.</li>
+<li><strong>Cost is a superpower AND a footgun.</strong> Two cost laws: <strong>set a budget alert on day one</strong>, and
+   <strong>STOP/DELETE every resource when done</strong> (especially a GPU).</li>
+<li><strong>Infrastructure as Code</strong> (OpenTofu/Terraform) makes infrastructure reproducible — plan → apply →
+   state → drift → destroy. Console-clicking is not reproducible.</li>
+<li><strong>Build vs buy</strong> an AI capability by <strong>TCO</strong> (Total Cost of Ownership) at your volume, not by vibe — a
+   managed API (fast, per-call) vs your own model (control, no per-call fee).</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-the-infrastructure-as-code-lifecycle">Guided Lab: the Infrastructure-as-Code lifecycle<a class="headerlink" href="#guided-lab-the-infrastructure-as-code-lifecycle" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You cannot use a real cloud account in a browser terminal — so you learn the
+</em><em>transferable</em><em> skill instead: the Infrastructure-as-Code lifecycle with </em><em>OpenTofu</em><em>, using providers
+that need </em><em>no cloud credentials and cost nothing</em><em>. The <code>plan → apply → state → drift → destroy</code> loop
+you drill here transfers </em><em>1:1</em><em> to AWS/Azure/GCP.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-37" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-37" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Why no real cloud here — and how the skill still transfers</p>
+<p>A browser sandbox has <strong>no cloud account</strong>, and putting one there would violate the module's cost
+law. So the lab uses OpenTofu's <strong><code>random</code></strong> and <strong><code>local</code></strong> providers — they create a real local
+file with zero cloud and zero cost. The <em>lifecycle</em> is identical to provisioning a real VM, database,
+or bucket; only the provider block differs. Real-cloud provisioning (free tier + <strong>mandatory budget
+alerts and stop/delete</strong>) is the "run in your own account" path in the Solo Lab.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Install OpenTofu</label><label for="__tabbed_1_2">2 · Write your first config (main.tf)</label><label for="__tabbed_1_3">3 · tofu init — download the providers</label><label for="__tabbed_1_4">4 · tofu plan — read the diff before you change anything</label><label for="__tabbed_1_5">5 · tofu apply — create it, then inspect the state</label><label for="__tabbed_1_6">6 · Change, re-plan, then destroy</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--proto<span class="w"> </span><span class="s1">&#39;=https&#39;</span><span class="w"> </span>--tlsv1.2<span class="w"> </span>-fsSL<span class="w"> </span>https://get.opentofu.org/install-opentofu.sh<span class="w"> </span>-o<span class="w"> </span>install.sh
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>install.sh
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>./install.sh<span class="w"> </span>--install-method<span class="w"> </span>standalone
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>tofu<span class="w"> </span>version
+</code></pre></div>
+<code>tofu version</code> should print a version. (If the standalone installer can't reach GitHub, fall back to
+the Debian package method: <code>./install.sh --install-method deb</code>.) OpenTofu is the open-source
+successor to Terraform — same commands, same <strong>HCL</strong> config language.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/iac-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/iac-lab
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>main.tf<span class="w"> </span><span class="s">&lt;&lt;&#39;HCL&#39;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">terraform {</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">  required_providers {</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">    random = { source = &quot;hashicorp/random&quot; }</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">    local  = { source = &quot;hashicorp/local&quot;  }</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">  }</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">}</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s"># A resource with NO cloud and NO cost — a random pet name.</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">resource &quot;random_pet&quot; &quot;server&quot; {</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">  length = 2</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">}</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s"># A REAL local file, its content driven by the resource above.</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s">resource &quot;local_file&quot; &quot;note&quot; {</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s">  filename = &quot;${path.module}/server-name.txt&quot;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s">  content  = &quot;Provisioned server: ${random_pet.server.id}\n&quot;</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s">}</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s">HCL</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>cat<span class="w"> </span>main.tf
+</code></pre></div>
+This declares the <strong>desired state</strong>: a <code>random_pet</code> name and a <code>local_file</code> whose content depends on
+it. You describe <em>what you want</em>; OpenTofu figures out <em>how</em> to get there — the essence of IaC.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>~/iac-lab
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>tofu<span class="w"> </span>init
+</code></pre></div>
+<code>init</code> reads <code>main.tf</code>, downloads the <code>random</code> and <code>local</code> provider plugins into <code>.terraform/</code>, and
+writes a <code>.terraform.lock.hcl</code> lock file (pinned versions — reproducibility, like Module 17's lockfiles).
+You should see <strong>"OpenTofu has been successfully initialized!"</strong></p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>~/iac-lab
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>tofu<span class="w"> </span>plan
+</code></pre></div>
+<code>plan</code> compares your desired state (<code>main.tf</code>) against reality (nothing yet) and prints exactly what
+it <strong>would</strong> do — here, <code>2 to add, 0 to change, 0 to destroy</code>. <strong>Read the plan every time</strong>: this is
+the "look before you leap" of infrastructure. In real cloud, this is where you catch "wait, that
+would delete the database."</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>~/iac-lab
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>tofu<span class="w"> </span>apply<span class="w"> </span>-auto-approve
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>cat<span class="w"> </span>server-name.txt
+</code></pre></div>
+<code>apply</code> executes the plan and creates the <strong>real</strong> local file. Now inspect the <strong>state file</strong> —
+OpenTofu's record of what it created and manages:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ls<span class="w"> </span>-l<span class="w"> </span>terraform.tfstate
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>tofu<span class="w"> </span>show
+</code></pre></div>
+<code>terraform.tfstate</code> is the source of truth linking your config to real resources. In the cloud it
+records resource IDs, IP addresses, and secrets — so it is sensitive and, on a team, stored remotely.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">cd</span><span class="w"> </span>~/iac-lab
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/length = 2/length = 3/&#39;</span><span class="w"> </span>main.tf<span class="w">   </span><span class="c1"># change the desired state</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>tofu<span class="w"> </span>plan<span class="w">                                   </span><span class="c1"># see: &quot;1 to add, 0 to change, 1 to destroy&quot; (replace)</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>tofu<span class="w"> </span>apply<span class="w"> </span>-auto-approve
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>cat<span class="w"> </span>server-name.txt<span class="w">                         </span><span class="c1"># a new 3-word name</span>
+</code></pre></div>
+You changed the config and OpenTofu computed the <strong>update</strong> — that is drift management. Now tear it
+all down (the cost law, rehearsed):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>tofu<span class="w"> </span>destroy<span class="w"> </span>-auto-approve
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ls<span class="w"> </span>server-name.txt<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;file gone — destroy complete&quot;</span>
+</code></pre></div>
+<code>destroy</code> removes everything in the state. On real cloud, this is how you obey <strong>"STOP/DELETE when
+done"</strong> with a single command — the discipline that prevents the idle-GPU bill.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you installed OpenTofu, wrote a config, ran <code>init → plan → apply</code>, read the <strong>state file</strong>,
+changed the config and saw the <strong>plan</strong> update, then <code>destroy</code>ed it — you have done the <em>exact</em>
+lifecycle that provisions a real VM, database, or GPU. Only the provider block changes. Now make it
+harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. The first three extend the IaC lab; the last two are the
+judgment layer (paper artifacts). Struggle here is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-add-an-output-and-a-variable">Challenge 1 — Add an output and a variable<a class="headerlink" href="#challenge-1-add-an-output-and-a-variable" title="Permanent link">&para;</a></h3>
+<p>Make the pet name's word-count a <strong>variable</strong> (default 2) and expose the generated name as an
+<strong>output</strong>, so <code>tofu output</code> prints it. Re-<code>apply</code> and read the output.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>OpenTofu has <code>variable "name" { ... }</code> and <code>output "name" { value = ... }</code> blocks. Reference a
+variable with <code>var.&lt;name&gt;</code> inside a resource.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kr">variable</span><span class="w"> </span><span class="nv">&quot;words&quot;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="na">type</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kt">number</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="na">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">}</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;random_pet&quot;</span><span class="w"> </span><span class="nv">&quot;server&quot;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="na">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">var.words</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">}</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="kr">output</span><span class="w"> </span><span class="nv">&quot;server_name&quot;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">  </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">random_pet.server.id</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>tofu<span class="w"> </span>apply<span class="w"> </span>-auto-approve<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tofu<span class="w"> </span>output<span class="w"> </span>server_name
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>tofu<span class="w"> </span>apply<span class="w"> </span>-auto-approve<span class="w"> </span>-var<span class="w"> </span><span class="s1">&#39;words=4&#39;</span><span class="w">   </span><span class="c1"># override on the command line</span>
+</code></pre></div>
+Variables parameterize a config (reuse across environments); outputs surface values (an IP, a URL, a
+name) for humans or other tools.</p>
+</details>
+<h3 id="challenge-2-simulate-drift-then-let-iac-heal-it">Challenge 2 — Simulate drift, then let IaC heal it<a class="headerlink" href="#challenge-2-simulate-drift-then-let-iac-heal-it" title="Permanent link">&para;</a></h3>
+<p>With the stack applied, <strong>delete <code>server-name.txt</code> by hand</strong> (as if someone clicked in the console).
+Run <code>tofu plan</code>. What does OpenTofu say, and why?</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>IaC compares <em>desired state</em> (config) against <em>actual state</em>. If reality no longer matches, that gap
+is <strong>drift</strong>.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>rm<span class="w"> </span>server-name.txt
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>tofu<span class="w"> </span>plan<span class="w">     </span><span class="c1"># &quot;1 to add&quot; — it will RECREATE the file to match desired state</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>tofu<span class="w"> </span>apply<span class="w"> </span>-auto-approve
+</code></pre></div>
+OpenTofu detects the file is missing (drift from the desired state recorded in <code>main.tf</code>) and plans to
+recreate it. This is why IaC beats console-clicking: the config is the source of truth, and it heals
+manual changes back to the declared state.</p>
+</details>
+<h3 id="challenge-3-the-real-cloud-path-on-paper-the-two-cost-laws">Challenge 3 — The real-cloud path (on paper): the two cost laws<a class="headerlink" href="#challenge-3-the-real-cloud-path-on-paper-the-two-cost-laws" title="Permanent link">&para;</a></h3>
+<p>You will <em>not</em> run this in the sandbox. <strong>Write the plan</strong> for taking the M36 API to a real provider's
+free tier safely — the first two things you do, in order, before any resource.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The module has two non-negotiable <strong>cost laws</strong>. Both happen before you provision anything heavy.
+Think budget, and think teardown.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<ol>
+<li><strong>Cost law #1 — set a budget + billing alert on day one</strong> (e.g. AWS Budgets / Azure Cost
+   Management / GCP Budgets), <em>before</em> creating any resource. A hard cap where the provider supports it.</li>
+<li><strong>Cost law #2 — STOP/DELETE every resource when done</strong> — ideally as <code>tofu destroy</code> of an IaC stack,
+   plus auto-shutdown for any GPU. Provision → use → destroy.</li>
+</ol>
+<p>Then: deploy the M36 container to a container-PaaS (Cloud Run / App Runner / Container Apps) for a
+public HTTPS URL and autoscaling; inject secrets from the secrets manager (M15, <strong>not</strong> the image);
+point it at a managed DB (M33); give it an IAM role with <strong>least privilege</strong> (M9); ensure <strong>no public
+buckets</strong> (M34); and add cloud monitoring (M25). The $10k-idle-GPU case is what law #2 prevents.</p>
+</details>
+<h3 id="challenge-4-build-vs-buy-by-the-numbers">Challenge 4 — Build vs buy, by the numbers<a class="headerlink" href="#challenge-4-build-vs-buy-by-the-numbers" title="Permanent link">&para;</a></h3>
+<p>A team needs image labels. Option A: call a managed vision API at \$1.50 per 1,000 images. Option B:
+host your own M26–27 model at ~\$70/month for a small always-on instance. At what monthly volume does
+building beat buying? Show the break-even.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Break-even where API cost = hosting cost: <code>$1.50 × (N / 1000) = $70</code> → <code>N ≈ 46,700 images/month</code>.
+Below ~47k images/month, <strong>buy</strong> (the managed API — no ops, pay only for calls); above it, the per-call
+fee exceeds the flat hosting cost, so <strong>build</strong> starts to win — <em>plus</em> control, domain-tuned quality,
+and no lock-in. The decision is <strong>TCO at your actual volume</strong>, not a vibe. (For a genuine one-off,
+always buy — hosting a model for a single job is never worth the effort.)</p>
+</details>
+<h3 id="challenge-5-stretch-map-the-curriculum-to-ai-901">Challenge 5 (stretch) — Map the curriculum to AI-901<a class="headerlink" href="#challenge-5-stretch-map-the-curriculum-to-ai-901" title="Permanent link">&para;</a></h3>
+<p>Open the <strong>AI-901</strong> (Azure AI Fundamentals) exam domains and map each to the module that already taught
+it. Note how much you already know.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>AI workloads &amp; considerations → <strong>M26</strong>; machine-learning fundamentals → <strong>M27</strong> (you built it by
+hand); computer vision → <strong>M39</strong> (preview); NLP → <strong>M38</strong> (preview); generative AI → <strong>M26–28</strong>; the
+cloud model → <strong>this module (M37)</strong>. The curriculum teaches the concepts from first principles; the
+cert mainly adds the <strong>Azure-service vocabulary</strong>. You are largely exam-ready on concepts — take the
+free practice assessment and study the gaps (the provider-specific service names).</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Define IaaS, PaaS, and SaaS with the renting-a-home analogy.</summary>
+<p><strong>IaaS</strong> = rented raw infrastructure (a VM); you manage the OS up — an <strong>empty apartment</strong> (you bring
+furniture, cook, clean). <strong>PaaS</strong> = deploy your code, the platform runs it — a <strong>serviced apartment</strong>
+(furnished, cleaned). <strong>SaaS</strong> = a finished product you just use — a <strong>hotel</strong> (everything's done).
+More managed = less control, less ops work.</p>
+</details>
+<details class="question">
+<summary>State the shared-responsibility model and who owns what.</summary>
+<p>The <strong>provider</strong> secures the cloud (physical hardware, host OS, the managed service itself); <strong>YOU</strong>
+secure what's <em>in</em> the cloud — your <strong>data, access (IAM), and configuration</strong>. Most breaches are on
+the customer side (a public bucket, an over-broad role) — config hygiene is your job.</p>
+</details>
+<details class="question">
+<summary>Why is cloud cost a superpower AND a footgun?</summary>
+<p><strong>Superpower:</strong> pay-as-you-go with no upfront hardware lets you rent an H100 GPU for an hour and scale
+up for a burst then down when idle (CapEx→OpEx). <strong>Footgun:</strong> the meter never stops — an idle GPU, a
+runaway job, or an over-sized instance bills relentlessly. Hence the two cost laws: budget alert on
+day one, STOP/DELETE when done.</p>
+</details>
+<details class="question">
+<summary>Map object storage, managed DB, and managed Kubernetes to the curriculum.</summary>
+<p><strong>Object storage</strong> (S3/Blob/GCS) = M34's data lake, managed. <strong>Managed database</strong> (RDS/Cloud SQL) =
+M33's PostgreSQL, run by the provider. <strong>Managed Kubernetes</strong> (EKS/AKS/GKE) = Modules 19–20's
+Kubernetes, run by the provider. You built each from the ground up; the cloud offers each as a service.</p>
+</details>
+<details class="question">
+<summary>You need to train a model but don't own a GPU. What do you do, and the one rule you can't forget?</summary>
+<p><strong>Rent</strong> a GPU instance (or use a managed training job — SageMaker/Vertex/Azure ML) — pay by the hour
+instead of owning. The unbreakable rule: <strong>STOP/DELETE it the moment the job finishes</strong> (and set a
+budget alert first), because an idle GPU bills relentlessly — the $10k-idle-GPU case. Rent, run, stop.</p>
+</details>
+<details class="question">
+<summary>Your infrastructure isn't reproducible — a teammate can't recreate it. What were you missing?</summary>
+<p>You provisioned by <strong>clicking in the console</strong> (imperative, un-versioned, un-reproducible) instead of
+using <strong>Infrastructure as Code</strong> (OpenTofu/Terraform). IaC defines the stack declaratively in
+version-controlled files, so anyone recreates the exact infrastructure with one command — the M17/M35
+reproducibility discipline for infra.</p>
+</details>
+<details class="question">
+<summary>Is a certification worth it, and what does it (and doesn't it) prove?</summary>
+<p>Worth it as a <strong>hiring signal</strong> and a structured way to learn a provider's vocabulary and breadth —
+especially an entry cert (AI-901 / Cloud Practitioner) early in a career or a cloud/AI role switch. It
+does <strong>not</strong> prove you can do the job — hands-on ability (this curriculum) does that. It's a
+complement that opens doors, not a substitute for capability.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>3 minutes, no notes</strong>: <em>"What is the cloud, and what do IaaS, PaaS, and SaaS mean?"</em> —
+analogy first (renting vs owning), then the management spectrum, then map two services to the
+curriculum. Then field two objections in <strong>60 seconds each</strong>: <em>"Isn't the cloud just someone else's
+computer?"</em> (plus managed services + elasticity + a pricing model — that's the point) and <em>"Isn't the
+cloud always cheaper?"</em> (cheaper for variable/bursty loads; a steady 24/7 heavy load can cost more,
+and idle resources bill relentlessly — it's a trade). If you can't yet, reread the Key Notes, don't
+move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress. A module is only "done" when every box is
+true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> cloud computing and IaaS/PaaS/SaaS — one line each, cold, with the renting analogy.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the deployment models (public/private/hybrid/multi-cloud) and the control-vs-convenience trade.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>State and apply</strong> the shared-responsibility model — and name customer misconfiguration as the #1 breach cause.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Set</strong> a budget/billing alert (cost law #1) and <strong>STOP/DELETE</strong> resources when done (cost law #2).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Deploy</strong> the M36 container to managed compute (container-PaaS) — public HTTPS URL, health probes wired.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Inject</strong> secrets/config in the cloud (M15 — not baked into the image) and <strong>configure IAM least-privilege</strong> (M9).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Use</strong> a managed database (M33) and object storage (M34); <strong>ensure no public buckets / over-broad IAM</strong>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the stack as Infrastructure as Code (OpenTofu/Terraform) and <strong>prove reproducibility</strong> (destroy + re-apply).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Run</strong> the full IaC lifecycle cold — <code>init → plan → apply → inspect state → change → destroy</code> — and read every plan.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Provision and STOP</strong> a GPU (cost law #2 — M22/M28) and <strong>make a build-vs-buy decision</strong> by TCO, not vibe.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> cloud cost, right-size resources (M21), and use cloud observability (M25 at cloud scale).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Map</strong> the curriculum to an entry cert's exam domains (AI-901 / AWS CP-ML) and take a practice assessment.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Recognize</strong> when the cloud is the wrong choice (steady 24/7 heavy load, data-residency, lock-in/egress).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach</strong> the cloud model, deployment, and cloud judgment — stressing the cost laws and shared responsibility.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. <strong>Interleaving is active</strong> —
+every M37 review also pulls in one Module 28 item (serving/GPUs — what you now deploy and rent in the
+cloud). Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M28 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards 1–20 · say the service models fast (app+OS / app / use it) · the two cost laws</td>
+<td>One "why serve a model behind an API, not a notebook?" explanation</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>The three cases (idle GPU · open bucket · build-vs-buy) · shared responsibility cold</td>
+<td>Recall the RED metrics (Rate, Errors, Duration) for a served model</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Reproduce the Visual Model blank · run the IaC lifecycle (<code>init→plan→apply→destroy</code>) unaided</td>
+<td>Latency vs throughput trade for an inference endpoint</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Codify a small stack in OpenTofu, apply + destroy · IAM/least-privilege from memory</td>
+<td>CPU-vs-GPU serving decision — when is a GPU pure waste?</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Whole module in five-minute-review form · take an AI-901/CP practice assessment</td>
+<td>Batching / model-server (M28) recall, cold</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M38 (NLP) and M39 (Computer Vision) — domain models trained on cloud GPUs and
+served on the M36 API on managed compute, with the same managed-API-vs-own-model build-vs-buy call · the
+<strong>capstone</strong>, deployed cloud-native on the free tier · and the deeper disciplines this opens — cloud
+architecture, DevOps, <strong>FinOps</strong> (cloud cost management), and MLOps.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M37 is where the curriculum's locally-built stack — container (M18), API (M36), model (M26–28),
+database (M33), storage (M34) — runs on a real provider's managed compute, secured under the
+shared-responsibility model, reproducible as code, and cost-bounded: the platform where essentially
+all production AI actually runs.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../stage-12/module-36/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 36 — Backend &amp; API Engineering">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 36 — Backend & API Engineering
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-38/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 38 — Natural Language Processing">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 38 — Natural Language Processing
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

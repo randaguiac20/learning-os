@@ -1,0 +1,3681 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Machine learning as a discipline, not a trick — the split contract, honest evaluation, the bias-variance dragon, leakage, the baseline law, and the classical toolbox. Generalization is the only thing you ever buy.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-26/">
+      
+      
+        <link rel="next" href="../module-28/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 27 — Machine Learning - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-27-machine-learning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 27 — Machine Learning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-one-law-and-two-kinds-of-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The one law, and two kinds of learning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-workflow-a-loop-not-a-ritual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The workflow — a loop, not a ritual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-split-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The split contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-training-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The training loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dragon-overunderfitting-and-biasvariance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dragon: over/underfitting and bias–variance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation-metrics-chosen-for-costs-before-the-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluation metrics — chosen for costs, before the test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation-and-why-it-never-replaces-the-test-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-validation — and why it never replaces the test set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-laws-that-keep-you-honest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two laws that keep you honest
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-your-first-honest-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: your first honest model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-whole-workflow-cold-contract-keeper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The whole workflow, cold (Contract Keeper)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-the-accuracy-trap-felt-the-honest-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — The accuracy trap, felt (the honest panel)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-plant-a-leak-then-catch-it-leakage-hunter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Plant a leak, then catch it (Leakage Hunter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-climb-the-classical-ladder-toolbox-journeyman" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Climb the classical ladder (Toolbox Journeyman)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-verdict-dont-ship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The verdict: "don't ship"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-one-law-and-two-kinds-of-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The one law, and two kinds of learning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-workflow-a-loop-not-a-ritual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The workflow — a loop, not a ritual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-split-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The split contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-training-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The training loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dragon-overunderfitting-and-biasvariance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dragon: over/underfitting and bias–variance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation-metrics-chosen-for-costs-before-the-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluation metrics — chosen for costs, before the test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation-and-why-it-never-replaces-the-test-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-validation — and why it never replaces the test set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-laws-that-keep-you-honest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two laws that keep you honest
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-your-first-honest-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: your first honest model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-whole-workflow-cold-contract-keeper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The whole workflow, cold (Contract Keeper)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-the-accuracy-trap-felt-the-honest-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — The accuracy trap, felt (the honest panel)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-plant-a-leak-then-catch-it-leakage-hunter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Plant a leak, then catch it (Leakage Hunter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-climb-the-classical-ladder-toolbox-journeyman" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Climb the classical ladder (Toolbox Journeyman)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-verdict-dont-ship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The verdict: "don't ship"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-27-machine-learning">Module 27 — Machine Learning<a class="headerlink" href="#module-27-machine-learning" title="Permanent link">&para;</a></h1>
+<p><small>Stage 10 · Expert Mastery · ~4 weeks at 4 h/day · Prerequisite — Module 26 (AI Foundations — the mechanism; backprop is glass, and its overfitting preview becomes this module's syllabus). Builds on M13 (Python / numpy / sklearn), M22 (the GPU finally trains real models), M25 (curves as signals), M21 (predict → measure → reconcile).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Machine learning</strong>, done as an engineer rather than a hobbyist, is three commitments layered on M26's
+fitted-function mechanism: a <strong>workflow</strong> (frame → get and split data → baseline → train → evaluate on
+data the model never saw → iterate → ship with documentation), a <strong>methodology</strong> (the train/validation/test
+contract, cross-validation, metrics chosen for the problem's real costs — the machinery that turns "it
+works" into a <em>measured</em> claim), and a <strong>toolbox</strong> (classical models — linear, logistic, trees, ensembles —
+that win on tabular data, plus deep networks where depth pays). Everything derives from one law:
+<strong>generalization is the only thing being purchased.</strong> Performance on data you trained on is an accounting
+fiction — memorization is free; earning it on unseen data is the whole job.</p>
+<p>M26 showed you the mechanism and planted the dragon: train loss falling while held-out loss rises. This
+module is the hunt. You will learn why that plot is <em>the</em> central problem of the field, and master the
+defenses — honest splits, cross-validation, regularization, early stopping — and the cardinal sin's
+detection: <strong>leakage</strong>, when test information seeps into training and your beautiful metric becomes a lie.
+The module's product is not a model. It is a <strong>practice</strong>: every claim measured on unseen data, every
+choice justified, every model shipped with its card.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>This is Stage 10's methodological heart. <strong>M28</strong> (AI Infrastructure) turns your trained models into
+<em>serving</em> problems — the card's "intended use" line becomes deployment policy. <strong>M29</strong> (Agentic
+automation) is this discipline applied to workflows: evals are held-out tasks, honest metrics, slices by
+task type. The <strong>capstone</strong> selects and fine-tunes a model <em>by this exact process</em> — baselines before
+belief, sliced evals before claims, a card before shipping. Learn the discipline now and every AI claim
+you ever make — or are shown — gets weighed on evidence instead of enthusiasm.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 27 — Machine Learning&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Analogy / Misconceptions):
+machine learning as a <em>drug trial</em>, not a potion (bench / animal study / human trial run ONCE) → the
+split contract and why peeking at the test set is fraud even when it feels like diligence → the dragon
+(train error → 0 while validation rises: the bias-variance U-curve) → leakage as contaminating the
+control group (the results glow, the medicine is worthless) → the baseline as the placebo arm ("87%
+recovered" means nothing without it) → metrics chosen for costs before the trial → close on the three
+questions to ask of any impressive number: <em>what baseline? what split? whose slices?</em></p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-your-first-honest-model">Guided Lab</a> in a browser terminal and <strong>run each step
+yourself</strong> — the honest split, the trained model, the confusion matrix, the overfitting you cause on
+purpose and then cure. Every idea here is a number you can compute on a plain CPU in seconds. Typing
+beats watching, and it is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-one-law-and-two-kinds-of-learning">The one law, and two kinds of learning<a class="headerlink" href="#the-one-law-and-two-kinds-of-learning" title="Permanent link">&para;</a></h3>
+<p>The single law from which everything else follows: <strong>generalization is the only thing being purchased.</strong>
+A model that scores 100% on its training data has told you nothing — it may have <em>memorized</em> rather than
+<em>learned</em>. The only honest evidence is performance on data it never saw.</p>
+<p>Most of this module is <strong>supervised</strong> learning — you have labels and you learn to predict them — but it is
+worth knowing the whole map:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Supervised</th>
+<th>Unsupervised</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data you have</strong></td>
+<td>features <code>X</code> <strong>and</strong> labels <code>y</code></td>
+<td>features <code>X</code> only — no labels</td>
+</tr>
+<tr>
+<td><strong>The goal</strong></td>
+<td>learn the mapping <code>X → y</code> (predict the label)</td>
+<td>find structure — groups, or a compression</td>
+</tr>
+<tr>
+<td><strong>Examples</strong></td>
+<td>classification, regression</td>
+<td>k-means clustering, PCA</td>
+</tr>
+<tr>
+<td><strong>A "right answer" to check against?</strong></td>
+<td>yes — the label</td>
+<td>no ground truth — you judge the structure</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Features and labels</strong> are the vocabulary: a <strong>feature</strong> is an input column the model reads (age, pixel,
+word count); the <strong>label</strong> is the answer you want back (spam / not-spam, house price, digit <code>0–9</code>). One row
+= one example = its features plus, in supervised learning, its label.</p>
+<h3 id="the-workflow-a-loop-not-a-ritual">The workflow — a loop, not a ritual<a class="headerlink" href="#the-workflow-a-loop-not-a-ritual" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    Frame["Frame the problem&lt;br/&gt;what are we predicting, and what does each error cost?"] --&gt; Data["Get + inspect data&lt;br/&gt;features and labels"]
+    Data --&gt; Split["Split FIRST&lt;br/&gt;train / validation / test"]
+    Split --&gt; Baseline["Dumb baseline&lt;br/&gt;majority class / mean"]
+    subgraph Iterate["Iterate freely — validation is yours to burn"]
+        Baseline --&gt; Train["Train a model&lt;br/&gt;fit on the training set ONLY"]
+        Train --&gt; Validate["Evaluate on validation&lt;br/&gt;choose model + knobs here"]
+        Validate --&gt;|"not good enough"| Train
+    end
+    subgraph Sacred["Touched ONCE — the sacred set"]
+        Test["Test set&lt;br/&gt;the final, honest number"]
+    end
+    Validate --&gt;|"done choosing"| Test
+    Test --&gt; Doc["Document + ship&lt;br/&gt;the model card"]</code></pre>
+<p>Each stage exists because <em>skipping it produces a specific, named disaster.</em> Learn the disasters and the
+workflow becomes reflex instead of routine:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>What happens</th>
+<th>Disaster if you skip it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frame</strong></td>
+<td>decide what to predict and the cost of each error</td>
+<td>you optimize the wrong thing beautifully</td>
+</tr>
+<tr>
+<td><strong>Split first</strong></td>
+<td>carve out validation + test <em>before</em> exploring</td>
+<td>you grade homework with the answer key (leakage)</td>
+</tr>
+<tr>
+<td><strong>Baseline</strong></td>
+<td>a dumb model — majority class, the mean</td>
+<td>you cannot tell whether your model learned <em>anything</em></td>
+</tr>
+<tr>
+<td><strong>Train</strong></td>
+<td>fit weights on the training set only</td>
+<td>(the only set the model's weights may ever see)</td>
+</tr>
+<tr>
+<td><strong>Validate</strong></td>
+<td>score on validation; make <strong>every</strong> choice here</td>
+<td>choices tuned against test silently inflate the final number</td>
+</tr>
+<tr>
+<td><strong>Test once</strong></td>
+<td>one measurement, logged with the date</td>
+<td>every extra peek converts test into validation</td>
+</tr>
+<tr>
+<td><strong>Document</strong></td>
+<td>the model card — provenance, use, failures</td>
+<td>the next engineer inherits your blind spots</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-split-contract">The split contract<a class="headerlink" href="#the-split-contract" title="Permanent link">&para;</a></h3>
+<p>The heart of the discipline. Three sets, three roles, one law:</p>
+<ul>
+<li><strong>Train</strong> — the model <em>sees</em> it; weights are fit on it.</li>
+<li><strong>Validation</strong> — <strong>you</strong> see it. Every choice (which model, which hyperparameters, which features, when to
+  stop) is made on its evidence. It gets <em>burned</em> by your decisions — that is its job.</li>
+<li><strong>Test</strong> — touched <strong>ONCE</strong>, at the very end, as the generalization claim's only honest measurement. The
+  moment you choose anything <em>by</em> test performance, it has become a validation set and its number is
+  inflated. Touched once means once — log the touch, literally, with a date.</li>
+</ul>
+<p>The analogy that makes it stick: this is a <strong>drug trial</strong>. Train is the lab bench; validation is the animal
+study (you may iterate on its results); test is the human trial — run once, pre-registered. Peek and adjust,
+and your approval is fraud <em>even though it feels like diligence.</em></p>
+<h3 id="the-training-loop">The training loop<a class="headerlink" href="#the-training-loop" title="Permanent link">&para;</a></h3>
+<p>Under the workflow's "Train" box sits M26's mechanism, now industrialized:</p>
+<pre class="mermaid"><code>flowchart TB
+    Batch["Batch of examples&lt;br/&gt;features X, labels y"] --&gt; Forward["Forward pass&lt;br/&gt;model predicts y-hat"]
+    Forward --&gt; Loss["Loss&lt;br/&gt;how wrong is y-hat vs y?"]
+    Loss --&gt; Back["Backward pass&lt;br/&gt;gradients (M26's chain rule)"]
+    Back --&gt; Step["Optimizer step&lt;br/&gt;nudge weights down the loss"]
+    Step --&gt;|"next batch / next epoch"| Batch
+    Step --&gt; Check["Periodically:&lt;br/&gt;score the validation set"]
+    Check --&gt; Stop["Validation stopped improving?&lt;br/&gt;early-stop at the minimum"]</code></pre>
+<p>Classical sklearn models (logistic regression, trees) run this loop internally — you call <code>.fit()</code> and it
+happens. Deep nets in PyTorch (Week 3) make the loop explicit, and it is the <em>same</em> loop you built by hand
+in M26: forward → loss → backward → step, repeated, with validation watched.</p>
+<h3 id="the-dragon-overunderfitting-and-biasvariance">The dragon: over/underfitting and bias–variance<a class="headerlink" href="#the-dragon-overunderfitting-and-biasvariance" title="Permanent link">&para;</a></h3>
+<p>Two ways to be wrong, and they pull in opposite directions:</p>
+<ul>
+<li><strong>Underfitting (high bias)</strong> — the model is too rigid to capture the real structure. Train <em>and</em>
+  validation error are both high. The fix is more capacity or better features.</li>
+<li><strong>Overfitting (high variance)</strong> — the model has enough capacity to memorize <em>noise</em>. Train error keeps
+  falling toward zero while validation error turns and <em>rises</em>. This is the dragon.</li>
+</ul>
+<p>Plot error against capacity (tree depth, epochs, polynomial degree) and you get the <strong>U-curve</strong>: validation
+error falls, bottoms out at the <strong>sweet spot</strong>, then climbs as memorization sets in. The sweet spot is found
+<strong>empirically — via validation curves, never by theory alone.</strong> <strong>Regularization</strong> (L2 / weight decay,
+early stopping, dropout, data augmentation) is <em>deliberately chosen bias</em>: you trade a little flexibility to
+tame a lot of variance. A 100%-train / 71%-validation model is not "almost there" — it is far to the right
+of the U, and the cure is to move left (early stop, regularize, or reduce capacity).</p>
+<h3 id="evaluation-metrics-chosen-for-costs-before-the-test">Evaluation metrics — chosen for costs, before the test<a class="headerlink" href="#evaluation-metrics-chosen-for-costs-before-the-test" title="Permanent link">&para;</a></h3>
+<p><strong>Accuracy lies under imbalance.</strong> In a 99:1 problem, a model that always predicts the majority scores 99%
+while detecting <em>nothing</em>. So you pick the metric that prices the error that actually hurts:</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Metric</th>
+<th>The question it answers</th>
+<th>Reach for it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classification</td>
+<td><strong>Accuracy</strong></td>
+<td>of all predictions, what fraction were right?</td>
+<td>classes are balanced and errors cost the same</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td><strong>Precision</strong></td>
+<td>of my <em>alarms</em>, how many were real?</td>
+<td>false positives are expensive (deleting real mail)</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td><strong>Recall</strong></td>
+<td>of the <em>real</em> cases, how many did I catch?</td>
+<td>false negatives are expensive (missing cancer)</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td><strong>F1</strong></td>
+<td>precision and recall in one number</td>
+<td>imbalance, and you need both to be decent</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td><strong>ROC-AUC / PR-AUC</strong></td>
+<td>ranking quality across every threshold</td>
+<td>comparing models, or choosing a threshold</td>
+</tr>
+<tr>
+<td>Regression</td>
+<td><strong>MAE</strong></td>
+<td>average error size</td>
+<td>every error counts equally</td>
+</tr>
+<tr>
+<td>Regression</td>
+<td><strong>RMSE</strong></td>
+<td>error, penalizing large misses extra</td>
+<td>big misses are disproportionately bad</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>threshold</strong> (where a probability becomes a "yes") is a <strong>business decision</strong> — where the two error
+costs balance — not a statistic. Moving it trades precision against recall. The <strong>confusion matrix</strong> is
+where all of this comes from: true/false positives and negatives, and precision and recall are just two
+ratios read off its cells.</p>
+<h3 id="cross-validation-and-why-it-never-replaces-the-test-set">Cross-validation — and why it never replaces the test set<a class="headerlink" href="#cross-validation-and-why-it-never-replaces-the-test-set" title="Permanent link">&para;</a></h3>
+<p>Under <strong>small data</strong>, a single validation split is noisy — you might get lucky or unlucky. <strong>k-fold
+cross-validation</strong> splits the training data into <code>k</code> parts, trains on <code>k−1</code> and validates on the held-out
+one, rotating through all <code>k</code>, then averages. You get a more stable estimate for <em>choosing</em>.</p>
+<p>But CV is <strong>not</strong> a substitute for the final test set. You <em>tuned</em> on those CV averages — model choice,
+hyperparameters, features were all optimized against them — so the CV number carries <strong>selection optimism</strong>.
+The untouched test set remains the only measurement your decisions never optimized against.</p>
+<h3 id="two-laws-that-keep-you-honest">Two laws that keep you honest<a class="headerlink" href="#two-laws-that-keep-you-honest" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>The baseline law</strong> — never believe (or ship) a model that has not beaten a dumb baseline: majority
+  class, the mean, last-value for time series, logistic regression before any neural net. The baseline is
+  engineering's <em>null hypothesis</em> — it prices what no-learning achieves, so your model's worth is the
+  <em>difference</em>, not the absolute. "87%" means nothing until you know the majority class scores 86%.</li>
+<li><strong>Leakage — the cardinal sin.</strong> Information unavailable at prediction time reaching training: a scaler fit
+  on the <em>full</em> dataset, duplicate rows spanning splits, a target-derived feature, a time series split
+  randomly (the future leaking into the past). The tell is <em>results too good to be true</em>; the audit habit is
+  one question — <strong>"could production know this at prediction time?"</strong> The structural cure is a <code>Pipeline</code>
+  whose transforms are fit on the training fold only.</li>
+</ul>
+<p>And know the toolbox's shape — because <strong>when classical beats deep is a real, common answer:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Rung</th>
+<th>Model</th>
+<th>What it adds</th>
+<th>Overfits?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Linear / Logistic</strong></td>
+<td>fast, interpretable, shockingly strong with good features</td>
+<td>rarely</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Decision tree</strong></td>
+<td>nonlinear, no scaling needed, its logic is inspectable</td>
+<td>eagerly</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Random forest</strong></td>
+<td>many deep trees averaged — variance cancels</td>
+<td>resistant</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Gradient boosting</strong></td>
+<td>shallow trees fitting residuals — the <strong>tabular king</strong></td>
+<td>if unwatched (early-stop)</td>
+</tr>
+</tbody>
+</table>
+<p>Gradient boosting wins most <em>tabular</em> problems; deep nets win <em>perception and language</em>. The reason is
+<strong>inductive bias</strong> — trees assume table-shaped truth (axis-aligned cuts on mixed features), CNNs assume
+locality (nearby pixels relate). Match the model's assumptions to the data's shape.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>Generalization is the only product.</strong> Training-set performance is an accounting fiction.</li>
+<li><strong>The split contract:</strong> train (model sees) · validation (you see, it burns) · <strong>test (touched ONCE)</strong>.
+   Choosing <em>by</em> test performance inflates the number.</li>
+<li><strong>The dragon:</strong> train error → 0 while validation rises = overfitting. Find the sweet spot <strong>empirically</strong>;
+   regularization is deliberately-chosen bias.</li>
+<li><strong>Accuracy lies under imbalance.</strong> Pick the metric that prices the costly error — precision, recall, F1.
+   The threshold is a business decision.</li>
+<li><strong>Leakage is flattery by contamination.</strong> The tell: too good to be true. The audit: <em>could production
+   know this at prediction time?</em> The cure: a <code>Pipeline</code> fit on train only.</li>
+<li><strong>The baseline law:</strong> beat a dumb model or you have nothing. Your worth is the <em>difference</em>.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-your-first-honest-model">Guided Lab: your first honest model<a class="headerlink" href="#guided-lab-your-first-honest-model" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. Everything runs on a plain CPU with scikit-learn's built-in datasets — no downloads,
+no GPU. You will train a real classifier, read a confusion matrix, then cause overfitting on purpose and
+cure it — the module's whole story in miniature.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-27" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-27" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Set up the bench</label><label for="__tabbed_1_2">2 · Load data, split honestly</label><label for="__tabbed_1_3">3 · Train and evaluate</label><label for="__tabbed_1_4">4 · Meet the dragon — overfit, then cure it</label><label for="__tabbed_1_5">5 · Baseline + cross-validation</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Install scikit-learn and numpy, and make a working directory. scikit-learn ships toy datasets
+(iris, digits) <em>inside the package</em> — nothing is downloaded.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip<span class="w"> </span>install<span class="w"> </span>--quiet<span class="w"> </span>scikit-learn<span class="w"> </span>numpy
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/ml-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/ml-lab
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import sklearn, numpy; print(&#39;sklearn&#39;, sklearn.__version__, &#39;· numpy&#39;, numpy.__version__)&quot;</span>
+</code></pre></div>
+You now have the classical toolbox's lingua franca on a CPU. Everything below lives in <code>~/ml-lab/</code>.</p>
+</div>
+<div class="tabbed-block">
+<p>Load the <strong>digits</strong> dataset (1797 hand-written digits, 64 pixel features, labels <code>0–9</code>) and split it
+<strong>before</strong> you do anything else. The split comes FIRST — looking at relationships before splitting
+leaks your choices.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>~/ml-lab
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>explore.py<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">from sklearn.datasets import load_digits</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">from sklearn.model_selection import train_test_split</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">X, y = load_digits(return_X_y=True)          # X = features, y = labels</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">print(&quot;features X:&quot;, X.shape, &quot;· labels y:&quot;, y.shape)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">print(&quot;one example is&quot;, X.shape[1], &quot;pixel values; its label is a digit 0-9&quot;)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s"># Split FIRST. stratify=y keeps the class balance in every split.</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">Xtr, Xte, ytr, yte = train_test_split(</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">    X, y, test_size=0.25, random_state=42, stratify=y)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">print(&quot;train rows:&quot;, len(ytr), &quot;· test rows:&quot;, len(yte))</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s">EOF</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>python3<span class="w"> </span>explore.py
+</code></pre></div>
+<code>train_test_split</code> sealed 25% of the data away as test. The model will never see those rows until the
+single final measurement — that is the split contract, enforced in one line.</p>
+</div>
+<div class="tabbed-block">
+<p>Train a <strong>logistic regression</strong> (rung 1 of the ladder — the honest baseline for a first model), then
+measure it on the held-out test set and read the <strong>confusion matrix</strong>. The script writes <code>metrics.json</code>
+and records that the train and test sets never overlapped.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>~/ml-lab
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>train.py<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">import json</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">from sklearn.datasets import load_digits</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">from sklearn.model_selection import train_test_split</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">from sklearn.linear_model import LogisticRegression</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">from sklearn.metrics import accuracy_score, confusion_matrix</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s">X, y = load_digits(return_X_y=True)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s">idx = np.arange(len(y))</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s">Xtr, Xte, ytr, yte, itr, ite = train_test_split(</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s">    X, y, idx, test_size=0.25, random_state=42, stratify=y)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s">clf = LogisticRegression(max_iter=5000)</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s">clf.fit(Xtr, ytr)                                  # fit on TRAIN only</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="s">train_acc = accuracy_score(ytr, clf.predict(Xtr))</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="s">test_acc  = accuracy_score(yte, clf.predict(Xte))  # the honest number</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="s">cm = confusion_matrix(yte, clf.predict(Xte))</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="s">overlap = len(set(itr.tolist()) &amp; set(ite.tolist()))   # honesty check: must be 0</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="s">metrics = {</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="s">    &quot;model&quot;: &quot;logistic_regression&quot;,</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="s">    &quot;n_train&quot;: int(len(itr)), &quot;n_test&quot;: int(len(ite)),</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="s">    &quot;train_accuracy&quot;: round(float(train_acc), 4),</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="s">    &quot;test_accuracy&quot;:  round(float(test_acc), 4),</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="s">    &quot;train_test_overlap&quot;: int(overlap),</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="s">}</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="s">with open(&quot;metrics.json&quot;, &quot;w&quot;) as f:</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="s">    json.dump(metrics, f, indent=2)</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="s">print(json.dumps(metrics, indent=2))</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="s">print(&quot;Confusion matrix (rows = true, cols = predicted):&quot;)</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a><span class="s">print(cm)</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="s">EOF</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>python3<span class="w"> </span>train.py
+</code></pre></div>
+Test accuracy lands around <strong>0.96</strong>, and <code>train_test_overlap</code> is <strong>0</strong> — the split was honest. Read the
+confusion matrix: the strong diagonal is correct predictions; off-diagonal cells are the specific
+mistakes (which digits get confused for which).</p>
+<p>Click <strong>Check</strong> (in the interactive lab) to verify <code>metrics.json</code> shows honest test accuracy above the bar.</p>
+</div>
+<div class="tabbed-block">
+<p>Now cause overfitting deliberately. An <strong>unbounded decision tree</strong> keeps splitting until it <em>memorizes</em>
+the training set — train accuracy hits 100%, but test accuracy sags. Then cap its depth (regularize)
+and watch the <strong>gap shrink</strong>.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>~/ml-lab
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>overfit.py<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s">import json</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s">from sklearn.datasets import load_digits</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s">from sklearn.model_selection import train_test_split</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s">from sklearn.tree import DecisionTreeClassifier</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s">from sklearn.metrics import accuracy_score</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s">X, y = load_digits(return_X_y=True)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s">Xtr, Xte, ytr, yte = train_test_split(</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s">    X, y, test_size=0.25, random_state=42, stratify=y)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s"># OVERFIT: no depth limit -&gt; the tree memorizes noise (high variance).</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s">deep = DecisionTreeClassifier(random_state=0).fit(Xtr, ytr)</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s">d_tr = accuracy_score(ytr, deep.predict(Xtr))</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s">d_te = accuracy_score(yte, deep.predict(Xte))</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="s"># CURE: cap capacity -&gt; deliberately-chosen bias tames the variance.</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="s">fixed = DecisionTreeClassifier(max_depth=8, random_state=0).fit(Xtr, ytr)</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="s">f_tr = accuracy_score(ytr, fixed.predict(Xtr))</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="s">f_te = accuracy_score(yte, fixed.predict(Xte))</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="s">res = {</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="s">    &quot;overfit_train_accuracy&quot;: round(float(d_tr), 4),</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="s">    &quot;overfit_test_accuracy&quot;:  round(float(d_te), 4),</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="s">    &quot;overfit_gap&quot;:            round(float(d_tr - d_te), 4),</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="s">    &quot;fixed_train_accuracy&quot;:   round(float(f_tr), 4),</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="s">    &quot;fixed_test_accuracy&quot;:    round(float(f_te), 4),</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="s">    &quot;fixed_gap&quot;:              round(float(f_tr - f_te), 4),</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="s">}</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="s">with open(&quot;overfit.json&quot;, &quot;w&quot;) as f:</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="s">    json.dump(res, f, indent=2)</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="s">print(json.dumps(res, indent=2))</span>
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="s">print(&quot;\nThe overfit tree scored ~1.0 on train but far less on test:&quot;,</span>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="s">      &quot;that gap IS the dragon. Capping depth shrank it.&quot;)</span>
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="s">EOF</span>
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>python3<span class="w"> </span>overfit.py
+</code></pre></div>
+The unbounded tree shows train ≈ <strong>1.0</strong> with a large train-minus-test <strong>gap</strong> (~0.18); the depth-capped
+tree gives up a little train accuracy but its gap shrinks (~0.12). You just watched the U-curve happen:
+regularization traded a sliver of flexibility for honesty.</p>
+<p>Click <strong>Check</strong> (in the interactive lab) to verify <code>overfit.json</code> shows a large overfit gap that the cure reduced.</p>
+</div>
+<div class="tabbed-block">
+<p>Two habits that separate engineers from notebook artists. First the <strong>baseline law</strong> — how well does a
+<em>dumb</em> model do? Then <strong>cross-validation</strong> for a stable estimate under the split you already made.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>~/ml-lab
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>baseline_cv.py<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">from sklearn.datasets import load_digits</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">from sklearn.model_selection import train_test_split, cross_val_score</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">from sklearn.dummy import DummyClassifier</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">from sklearn.linear_model import LogisticRegression</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">X, y = load_digits(return_X_y=True)</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s">Xtr, Xte, ytr, yte = train_test_split(</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s">    X, y, test_size=0.25, random_state=42, stratify=y)</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s">dummy = DummyClassifier(strategy=&quot;most_frequent&quot;).fit(Xtr, ytr)</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s">print(&quot;baseline (always the majority class):&quot;, round(dummy.score(Xte, yte), 4))</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="s"># 5-fold CV on the TRAINING data only -&gt; a stable estimate for CHOICES.</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="s">scores = cross_val_score(LogisticRegression(max_iter=5000), Xtr, ytr, cv=5)</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="s">print(&quot;logistic 5-fold CV accuracy:&quot;, np.round(scores, 4))</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="s">print(&quot;CV mean +/- std:&quot;, round(scores.mean(), 4), &quot;+/-&quot;, round(scores.std(), 4))</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="s">print(&quot;\nYour model&#39;s worth is the DIFFERENCE from the ~0.10 baseline,&quot;,</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="s">      &quot;not the absolute number.&quot;)</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="s">EOF</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>python3<span class="w"> </span>baseline_cv.py
+</code></pre></div>
+The majority-class baseline scores about <strong>0.10</strong> (ten roughly-equal classes). Your 0.96 model is worth
+the <em>gap</em> over that floor — that is the baseline law made concrete. The CV scores cluster tightly, so the
+logistic model's quality is a stable finding, not a lucky split.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you split honestly, trained a model, read a confusion matrix, caused overfitting and cured it, and
+beat a baseline with cross-validated evidence — you have run the module's entire workflow on a CPU in
+minutes. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Pipelines and models built </em><em>bare-hands</em><em>; an AI may review a
+pipeline AFTER it runs and its numbers are honest — never write it for you first. Struggle here is the
+point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-the-whole-workflow-cold-contract-keeper">Challenge 1 — The whole workflow, cold (Contract Keeper)<a class="headerlink" href="#challenge-1-the-whole-workflow-cold-contract-keeper" title="Permanent link">&para;</a></h3>
+<p>On a <strong>fresh</strong> built-in dataset (<code>load_wine</code> or <code>load_breast_cancer</code>), run the full workflow in one script:
+split <strong>first</strong>, a dumb baseline, one linear/logistic model, honest metrics, and a two-line "mini-card"
+(what it predicts, on what data, its test number). Recite each stage's named disaster as you go.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Reuse Step 3's skeleton. For the split, <code>train_test_split(..., stratify=y, random_state=...)</code>. For the
+baseline, <code>DummyClassifier</code>. The card is just a docstring or a printed block — provenance, intended use,
+the single test number.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_breast_cancer</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.dummy</span><span class="w"> </span><span class="kn">import</span> <span class="n">DummyClassifier</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">f1_score</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">Xtr</span><span class="p">,</span> <span class="n">Xte</span><span class="p">,</span> <span class="n">ytr</span><span class="p">,</span> <span class="n">yte</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;baseline:&quot;</span><span class="p">,</span> <span class="n">DummyClassifier</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;most_frequent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtr</span><span class="p">,</span> <span class="n">ytr</span><span class="p">)</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Xte</span><span class="p">,</span> <span class="n">yte</span><span class="p">))</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtr</span><span class="p">,</span> <span class="n">ytr</span><span class="p">)</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;test accuracy:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xte</span><span class="p">)),</span> <span class="mi">4</span><span class="p">))</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;test F1:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">f1_score</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xte</span><span class="p">)),</span> <span class="mi">4</span><span class="p">))</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="c1"># MINI-CARD: predicts malignant/benign from 30 cell-nucleus measurements;</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="c1"># data = sklearn&#39;s breast-cancer set; test touched ONCE; number above.</span>
+</code></pre></div>
+The split precedes all exploration (looking first = leaking your choices); the metric is justified by
+cost (in screening, recall matters — a missed malignancy is catastrophic), not by habit.</p>
+</details>
+<h3 id="challenge-2-the-accuracy-trap-felt-the-honest-panel">Challenge 2 — The accuracy trap, felt (the honest panel)<a class="headerlink" href="#challenge-2-the-accuracy-trap-felt-the-honest-panel" title="Permanent link">&para;</a></h3>
+<p>Build (or find) an <strong>imbalanced</strong> problem — e.g. relabel digits as "is it an 8?" (~10% positives). Train a
+classifier, report <strong>accuracy</strong>, then build the honest panel by hand: confusion matrix, precision, recall,
+F1. Show in writing why accuracy flatters and which metric you would actually report.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>y8 = (y == 8).astype(int)</code> makes the imbalanced label. A classifier that never says "8" still scores
+~90% accuracy. <code>from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix</code>.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_digits</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_digits</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">y8</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="n">Xtr</span><span class="p">,</span> <span class="n">Xte</span><span class="p">,</span> <span class="n">ytr</span><span class="p">,</span> <span class="n">yte</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y8</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y8</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="n">p</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtr</span><span class="p">,</span> <span class="n">ytr</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xte</span><span class="p">)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;accuracy:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">((</span><span class="n">p</span> <span class="o">==</span> <span class="n">yte</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">4</span><span class="p">))</span>          <span class="c1"># flatteringly high</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;precision:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">precision_score</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">p</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>      <span class="s2">&quot;recall:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">recall_score</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">p</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;F1:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">f1_score</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">p</span><span class="p">),</span> <span class="mi">4</span><span class="p">))</span>
+</code></pre></div>
+Accuracy is high because ~90% of rows are "not 8" — predicting the majority is free. The honest report is
+precision/recall/F1: the number that actually measures whether the rare class was <em>detected</em>.</p>
+</details>
+<h3 id="challenge-3-plant-a-leak-then-catch-it-leakage-hunter">Challenge 3 — Plant a leak, then catch it (Leakage Hunter)<a class="headerlink" href="#challenge-3-plant-a-leak-then-catch-it-leakage-hunter" title="Permanent link">&para;</a></h3>
+<p>Fit a <strong>scaler on the full dataset</strong> <em>before</em> splitting, train, and record the metric. Then do it the
+<strong>right</strong> way — scale inside a <code>Pipeline</code> fit on train only — and record again. Report the before/after gap.
+Name the door and the mechanism.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The leaky version: <code>StandardScaler().fit_transform(X)</code> on all of <code>X</code>, <em>then</em> split. The cure:
+<code>make_pipeline(StandardScaler(), LogisticRegression())</code> — the pipeline fits the scaler on each training
+fold only. The leak's <em>tell</em> is a validation number that is a touch too good.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_breast_cancer</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">Xleak</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>   <span class="c1"># DOOR: scaler saw the whole set</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">leaky</span>  <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">),</span> <span class="n">Xleak</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="n">honest</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)),</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                         <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>   <span class="c1"># scaler fit per-fold, on train only</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;leaky CV:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">leaky</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;· honest CV:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">honest</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</code></pre></div>
+What leaked: the scaler's mean/std were computed using the validation rows, so every "training" example
+was transformed with knowledge of data the model should never have seen. The structural cure is the
+<code>Pipeline</code> — the fix is a <em>structure</em>, not a patch. The honest number is the real one.</p>
+</details>
+<h3 id="challenge-4-climb-the-classical-ladder-toolbox-journeyman">Challenge 4 — Climb the classical ladder (Toolbox Journeyman)<a class="headerlink" href="#challenge-4-climb-the-classical-ladder-toolbox-journeyman" title="Permanent link">&para;</a></h3>
+<p>On one tabular dataset with one CV protocol, climb the ladder in order: logistic → decision tree → random
+forest → gradient boosting. Report each model's CV score and write a one-paragraph <strong>verdict</strong>: which ships,
+and <em>why</em> — including operability, not just accuracy.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier</code>. Climb in order — no
+skipping to boosting. The winner is often boosting <em>by a hair</em>; the verdict must weigh whether that hair
+is worth the extra complexity to operate.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_breast_cancer</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span><span class="p">,</span> <span class="n">GradientBoostingClassifier</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="p">(</span><span class="s2">&quot;logistic&quot;</span><span class="p">,</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">))),</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>    <span class="p">(</span><span class="s2">&quot;tree&quot;</span><span class="p">,</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="p">(</span><span class="s2">&quot;forest&quot;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>    <span class="p">(</span><span class="s2">&quot;boosting&quot;</span><span class="p">,</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))]:</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">4</span><span class="p">))</span>
+</code></pre></div>
+Verdict template: "Boosting edged the others by ~1 point, but logistic regression is within noise and is
+<em>far</em> cheaper to serve, debug, and explain — so <strong>logistic ships</strong> unless that point is worth money. The
+ladder was climbed in order; complexity had to <em>earn</em> its place and here it did not." (That reasoning —
+not the winning score — is the grade.)</p>
+</details>
+<h3 id="challenge-5-stretch-the-verdict-dont-ship">Challenge 5 (stretch) — The verdict: "don't ship"<a class="headerlink" href="#challenge-5-stretch-the-verdict-dont-ship" title="Permanent link">&para;</a></h3>
+<p>Construct a case where the honest answer is <strong>don't ship any model</strong>: either metrics that are fine in
+aggregate but fail on a <em>slice</em> you compute, or an objective that would only learn a bias baked into
+history. Write the three-sentence professional reply to a stakeholder who says <em>"just get the number up."</em></p>
+<details class="success">
+<summary>Solution</summary>
+<p>Compute per-slice metrics (e.g. accuracy split by a subgroup column) and show the aggregate hiding a
+subgroup failure — then argue that shipping it would encode that failure. Or invoke the Amazon hiring
+case: a model trained on a decade of biased hiring learned the bias; no data-scrubbing fixes an objective
+that <em>is</em> the history. The reply the module trains:</p>
+<blockquote>
+<p>"I can get the number up several ways — some are real and cost time, some are leakage and cost us the
+truth; the number only means anything if it survives untouched-data evaluation. Tell me which error is
+expensive for the business and I'll optimize the metric that prices it, with a baseline so we know what
+we actually bought. What I won't do is tune against the test set — that's not a better model, it's a
+worse thermometer."</p>
+</blockquote>
+<p>"No model" is a legitimate engineering deliverable — the documented verdict plus the alternative (rules,
+a human process, a narrower scope).</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard — is
+what builds the memory.</em></p>
+<details class="question">
+<summary>State the split contract: the three sets, who 'sees' each, and the test set's law.</summary>
+<p><strong>Train:</strong> the model sees it (weights fit on it). <strong>Validation:</strong> <em>you</em> see it — every choice
+(architecture, hyperparameters, features, stopping) is made on its evidence; it is burned by your
+decisions. <strong>Test:</strong> touched <strong>once</strong>, at the end, as the generalization claim's only honest measurement.
+Choosing anything <em>by</em> test performance converts it into a validation set and inflates its number.</p>
+</details>
+<details class="question">
+<summary>Define overfitting via bias–variance, and name three defenses.</summary>
+<p>Overfitting is excess capacity fitting <em>noise</em> (variance): train error keeps falling while unseen-data
+error rises past the sweet spot. Underfitting is the opposite — too rigid (bias), both errors high. Any
+three defenses: more/better data, regularization (L2 / weight decay), early stopping by the validation
+curve, capacity reduction / pruning, dropout, data augmentation.</p>
+</details>
+<details class="question">
+<summary>Why is accuracy a trap under class imbalance? What replaces it, and what is the threshold?</summary>
+<p>With 99:1 classes, predicting the majority scores 99% while detecting <em>nothing</em> — accuracy rewards
+ignoring the minority. The panel that replaces it: confusion matrix, precision (of my alarms, how many
+real?), recall (of the real cases, how many caught?), F1, PR/ROC curves. The threshold is a <strong>business
+decision</strong> — where the two error costs balance — not a statistic; moving it trades precision for recall.</p>
+</details>
+<details class="question">
+<summary>Why doesn't cross-validation exempt you from a final test set?</summary>
+<p>CV averages validation folds — but you <em>tuned</em> on those averages: model choice, hyperparameters, and
+features were all optimized against CV scores, so the CV number carries selection optimism. The untouched
+test set is the only measurement your decisions never optimized against.</p>
+</details>
+<details class="question">
+<summary>Fitting a scaler on the full dataset is leakage. What, exactly, leaks?</summary>
+<p>The scaler's statistics (mean/std, min/max) are computed over <em>all</em> rows, including test — so every
+training-time feature is transformed using knowledge of the test set's distribution (its range, its
+outliers). The model is handed information it must never have at prediction time. Structural cure: a
+<code>Pipeline</code> that fits transforms on the training fold only.</p>
+</details>
+<details class="question">
+<summary>Explain the baseline law: what does a dumb baseline actually purchase?</summary>
+<p>It is the null hypothesis — it prices what structure-free prediction achieves, so your model's number
+becomes a <em>difference</em> (evidence of learned structure) rather than an absolute (which could be noise).
+"87%" means nothing until you know the majority class already scores 86% — then it means almost nothing,
+<em>measured</em>.</p>
+</details>
+<details class="question">
+<summary>Your neural net just ties logistic regression on tabular data after a week of tuning. What does the discipline say?</summary>
+<p>Ship the simpler model. The baseline law's verdict: the net did not earn its complexity. At equal
+accuracy, simpler wins on operability — debuggable, cheap, explainable. Journal the negative result; it
+is a finding, not a failure. (Gradient boosting, not deep nets, is the tabular king anyway — match the
+model's inductive bias to the data's shape.)</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>3 minutes, no notes</strong> — <em>"The drug trial"</em>: the training set is the lab bench, validation
+the animal study (you may iterate), the test set the human trial run <strong>once</strong>. Then land the two images
+that make the module: <strong>leakage</strong> is contaminating the control group — the results <em>glow</em>, and the glow
+is exactly the poison; the <strong>baseline</strong> is the placebo arm — "87% recovered" means nothing without it.
+Close with the three questions to ask of any impressive number: <em>what baseline? what split? whose
+slices?</em> If your listener can retell why "it worked on our data" means nothing, you have it. If you
+can't yet, reread the Key Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress toward M28. This gate certifies the
+methodology has become identity — the final Stage-10 gate waits at M29. A module is only "done" when every
+box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the split contract and the one law it serves — three sets, three roles, "touched once."</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> overfitting via bias–variance, with your own sweep (deep vs depth-capped tree) as evidence.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>List</strong> leakage's doors (full-set preprocessing, cross-split duplicates, target/future features, random time splits) with the structural fix.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> the workflow with each stage's named disaster — split-first, baseline, validate, test once, document.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> the right metric from a problem's error costs (cancer → recall, spam → precision) and defend it in writing.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Use</strong> the honest panel: confusion matrix → precision / recall / F1, and the threshold as a business decision.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> cross-validation and use it for <em>choices</em>, never as the final claim.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> the classical ladder (linear → tree → forest → boosting) and say what each rung adds.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Apply</strong> a <code>Pipeline</code> so preprocessing cannot leak — fit on the training fold only.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> a model by slices and by reading individual errors, not aggregates alone.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> a glowing result with the ordered audit — baseline sanity → split hygiene → the per-feature question → the pipeline's fit boundaries.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compare</strong> classical vs deep as <em>inductive bias</em>, with the rule "match the model's assumptions to the data's shape."</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Assess</strong> when the honest verdict is "don't ship," and deliver the professional reply to "just get the number up."</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back — the drug trial, leakage-as-glow, and the three questions land.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory actually forms. <strong>Interleaving stays active</strong> — every M27 review also
+pulls one item from <strong>Module 26</strong> (the mechanism this module disciplines: the loop you built, the napkin
+math, the overfitting preview now made syllabus). The contract sprint and the U-curve join permanent
+rotation. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M26 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Week-1 close</strong></td>
+<td>Contract + leakage-door sprints · the U-curve blank · self-check on the split and metrics</td>
+<td>The training-loop sprint (forward → loss → backward → step)</td>
+</tr>
+<tr>
+<td><strong>Week-2 close</strong></td>
+<td>The classical-ladder sprint · the confusion-matrix panel derived from cells · the accuracy-trap re-narrated</td>
+<td>The napkin sprint (params × bytes; where compute goes)</td>
+</tr>
+<tr>
+<td><strong>Week-3 close</strong></td>
+<td>The engineered-run checklist recited (seeds, config, curves, checkpoints) · a kill-and-resume drill</td>
+<td>The micrograd → PyTorch bridge (Value → tensor, closures → autograd)</td>
+</tr>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · contract + door sprints · self-check misses re-derived</td>
+<td>M26 misses</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>A 90-minute tabular gauntlet on a <em>fresh</em> dataset, cold — split, baseline, ladder, verdict</td>
+<td>The pipeline sprint (forward/backward as one graph)</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>One leaky pipeline diagnosed cold · the panel derived from a raw confusion matrix</td>
+<td>The overfitting preview plot, drawn from memory</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>The mini-card re-read: still true? · one slice re-evaluated</td>
+<td>The chain-rule derivation, cold</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Self-check retake (target ≥90%) · error analysis on 10 fresh mistakes of your model</td>
+<td>The M26 loss-curve narration</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M28 (AI Infrastructure — the trained model becomes a <em>serving</em> problem: batching,
+quantization, VRAM; the card's intended-use line becomes deployment policy) · M29 (Agentic automation —
+evals <em>are</em> this discipline applied to workflows: held-out tasks, honest metrics, slices by task type) · the
+<strong>capstone</strong>, whose model is selected and fine-tuned by exactly this process — baselines before belief,
+sliced evals before claims, a card before shipping.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M26 taught the mechanism; M27 taught the <em>discipline</em> — a model will happily flatter you with memorized
+answers, on data that leaks, judged by metrics that lie, unless the split contract, the baseline law, and
+the card stand between your enthusiasm and your claims.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-26/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 26 — AI Foundations">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 26 — AI Foundations
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-28/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 28 — AI Infrastructure">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 28 — AI Infrastructure
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

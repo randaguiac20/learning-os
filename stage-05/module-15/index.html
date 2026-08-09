@@ -1,0 +1,3467 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="From "I have scripts" to "I run unattended systems" — idempotence, scheduling done right (cron and systemd timers), the seven organs of a production job, and config management with Ansible. Opens Stage 5.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../../stage-04/module-14/">
+      
+      
+        <link rel="next" href="../module-16/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 15 — Automation - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-15-automation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 15 — Automation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-seven-organs-of-a-production-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the seven organs of a production job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idempotence-the-license-to-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idempotence — the license to schedule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduling-cron-read-fluently-timers-chosen-deliberately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduling — cron read fluently, timers chosen deliberately
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-signal-law-of-unattended-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three-signal law of unattended systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#declare-state-dont-script-steps-config-management-and-ansible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declare state, don't script steps — config management and Ansible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-automation-ladder-climb-one-rung-at-a-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The automation ladder — climb one rung at a time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-unattended-failure-drill-ladder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The unattended-failure drill ladder
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-schedule-a-job-then-converge-with-ansible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: schedule a job, then converge with Ansible
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-make-a-non-idempotent-job-safe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Make a non-idempotent job safe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-a-crash-honest-marker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — A crash-honest marker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-read-a-foreign-crontab-and-translate-one-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Read a foreign crontab and translate one line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-add-a-fourth-idempotent-task-to-your-play" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Add a fourth idempotent task to your play
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-a-one-line-dead-mans-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — A one-line dead-man's switch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-seven-organs-of-a-production-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the seven organs of a production job
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idempotence-the-license-to-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idempotence — the license to schedule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduling-cron-read-fluently-timers-chosen-deliberately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduling — cron read fluently, timers chosen deliberately
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-signal-law-of-unattended-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three-signal law of unattended systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#declare-state-dont-script-steps-config-management-and-ansible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declare state, don't script steps — config management and Ansible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-automation-ladder-climb-one-rung-at-a-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The automation ladder — climb one rung at a time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-unattended-failure-drill-ladder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The unattended-failure drill ladder
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-schedule-a-job-then-converge-with-ansible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: schedule a job, then converge with Ansible
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-make-a-non-idempotent-job-safe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Make a non-idempotent job safe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-a-crash-honest-marker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — A crash-honest marker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-read-a-foreign-crontab-and-translate-one-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Read a foreign crontab and translate one line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-add-a-fourth-idempotent-task-to-your-play" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Add a fourth idempotent task to your play
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-a-one-line-dead-mans-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — A one-line dead-man's switch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-15-automation">Module 15 — Automation<a class="headerlink" href="#module-15-automation" title="Permanent link">&para;</a></h1>
+<p><small>Stage 5 · Production Practices · ~2 weeks at 4 h/day · Prerequisite — Module 14 (Networking — Netscope's timer is the first scheduled network job you productionize here). This module opens Stage 5.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Automation</strong> is making work happen correctly <strong>without you present</strong>: scripts promoted to systems that
+are <em>idempotent</em> (safe to re-run), <em>observable</em> (logged, alerting on silence), <em>defensive</em> (locks,
+timeouts, retries), and <em>tested</em> — scheduled by machinery you trust and treated as production software,
+because that is exactly what it is.</p>
+<p>You already automate — M4's timers, M5's scripts, M14's net-log. This module adds the <strong>engineering</strong>:
+the difference between a script that worked <em>while you watched it</em> and a system that works at <strong>3 a.m.
+unwatched</strong>. It is also the SRE profession's entry door (toil elimination is the discipline's founding
+idea) and Stage 5's opening move — "Ship It" needs build automation before Docker gives it a hull.
+Everything after this module (images, clusters, ML pipelines) is automated or it doesn't exist.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>M16–M18 (Docker) — <code>docker build</code> is a <code>build.sh</code> with layers, run by CI on every tag · M19–M20
+(Kubernetes) — a <strong>CronJob</strong> is your unit-pair and a <strong>controller</strong> is convergence running forever ·
+M24 puts security scans on these same timers · M25 replaces your freshness ledger with Prometheus and
+Grafana — <em>same concepts, new tools</em> · M26–M28 (ML pipelines) are DAGs of exactly these
+seven-organ jobs. Learn the job shape once and every later system is just this shape at a new scale.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 15 — Automation&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+the "mopping under a leaking pipe" picture of toil → the seven organs, each introduced by the failure
+it prevents (overlap → lock; crash → atomic marker; silence → freshness) → idempotence as the <em>license
+to schedule</em>, proven by the run-twice diff → why the default flipped from cron to systemd timers →
+"declare state, don't script steps" with an Ansible play converging twice → the three-signal law
+(success quiet, failure loud, silence alarmed) as the close.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-schedule-a-job-then-converge-with-ansible">Guided Lab</a> in a browser terminal and
+run each command yourself as it appears. You will write a real script, put it on a schedule, and watch
+an Ansible play converge to zero changes on its second run — typing beats watching every time, and it
+is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-the-seven-organs-of-a-production-job">The picture: the seven organs of a production job<a class="headerlink" href="#the-picture-the-seven-organs-of-a-production-job" title="Permanent link">&para;</a></h3>
+<p>Every job this module ships has all seven organs. Miss one and you have a script, not a system —
+each missing organ is a specific 3 a.m. failure waiting to happen.</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph Before["Before it runs"]
+        Trigger["Trigger&lt;br/&gt;when? — cron / timer / push"]
+        Guard["Guard&lt;br/&gt;already running? — flock"]
+    end
+    subgraph During["While it runs"]
+        Action["Action&lt;br/&gt;what it does — bash or Python"]
+        Idem["Idempotency&lt;br/&gt;safe to run twice? — check-then-act"]
+    end
+    subgraph After["After it runs"]
+        Evidence["Evidence&lt;br/&gt;what did it do? — logs / journal"]
+        Failure["Failure path&lt;br/&gt;it broke — exit code / OnFailure"]
+        Silence["Silence alarm&lt;br/&gt;it never ran — freshness check"]
+    end
+    Trigger --&gt; Guard --&gt; Action --&gt; Idem --&gt; Evidence --&gt; Failure --&gt; Silence</code></pre>
+<p>The first four keep a run <em>correct</em>; the last three make an unattended run <em>knowable</em>. The silence alarm
+is the one beginners skip and professionals never do — it catches the failure class the other six can't
+see: the job that <strong>stopped running in March and nobody noticed until July</strong>.</p>
+<h3 id="idempotence-the-license-to-schedule">Idempotence — the license to schedule<a class="headerlink" href="#idempotence-the-license-to-schedule" title="Permanent link">&para;</a></h3>
+<p><strong>Idempotent</strong> means <em>f(f(x)) = f(x)</em>: running twice equals running once. Only re-runnable jobs may be
+scheduled — everything else is a loaded gun on a timer. The standard proof is the <strong>run-twice diff</strong>:
+execute, snapshot the state, execute again, diff — an empty diff is the license. Write jobs by
+<strong>checking state then acting</strong>, not by blindly repeating steps:</p>
+<table>
+<thead>
+<tr>
+<th>Intent</th>
+<th>Naive (breaks on re-run)</th>
+<th>Idempotent pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add a line to a file</td>
+<td><code>echo 'x' &gt;&gt; f</code> (appends every run)</td>
+<td><code>grep -qxF 'x' f \|\| echo 'x' &gt;&gt; f</code></td>
+</tr>
+<tr>
+<td>Create a directory</td>
+<td><code>mkdir d</code> (errors if it exists)</td>
+<td><code>mkdir -p d</code></td>
+</tr>
+<tr>
+<td>Create a symlink</td>
+<td><code>ln -s t l</code> (errors on the 2nd run)</td>
+<td><code>ln -sf t l</code></td>
+</tr>
+<tr>
+<td>Sync a tree</td>
+<td>hand-copy changed files</td>
+<td><code>rsync -a src/ dst/</code> (converges)</td>
+</tr>
+<tr>
+<td>Mark work done</td>
+<td>write the marker first</td>
+<td>do the work, <code>mv</code> the marker into place <strong>last</strong> (atomic)</td>
+</tr>
+</tbody>
+</table>
+<p>The last row is the crash lesson: a marker written <em>before</em> the work lies after a crash. Write it (or
+move the result into place) <strong>last</strong>, via an atomic <code>mv</code> on the same filesystem — then the marker exists
+fully or not at all.</p>
+<h3 id="scheduling-cron-read-fluently-timers-chosen-deliberately">Scheduling — cron read fluently, timers chosen deliberately<a class="headerlink" href="#scheduling-cron-read-fluently-timers-chosen-deliberately" title="Permanent link">&para;</a></h3>
+<p>Two schedulers. <strong>cron</strong> is everywhere and you must read it; <strong>systemd timers</strong> are what you reach for,
+because cron's silences are exactly the failures this module hunts.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>cron</th>
+<th>systemd timer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Define</td>
+<td><code>crontab -e</code>, five fields</td>
+<td>a <code>.timer</code> + <code>.service</code> unit pair</td>
+</tr>
+<tr>
+<td>When</td>
+<td><code>30 3 * * 1-5</code> (min hr dom mon dow)</td>
+<td><code>OnCalendar=Mon..Fri 03:00</code></td>
+</tr>
+<tr>
+<td>Logging</td>
+<td>none by default (mailed or discarded)</td>
+<td><strong>journald</strong> — queryable evidence</td>
+</tr>
+<tr>
+<td>Missed while off</td>
+<td>lost</td>
+<td><strong><code>Persistent=true</code></strong> catches up at wake/boot</td>
+</tr>
+<tr>
+<td>Overlap guard</td>
+<td>none (add your own <code>flock</code>)</td>
+<td>systemd serialization + <code>flock</code></td>
+</tr>
+<tr>
+<td>Herd control</td>
+<td>none</td>
+<td><code>RandomizedDelaySec=</code> spreads identical schedules</td>
+</tr>
+<tr>
+<td>Status you can query</td>
+<td>none</td>
+<td><code>systemctl status</code>, <code>list-timers</code></td>
+</tr>
+<tr>
+<td>Validate the expression</td>
+<td>eyeball it</td>
+<td><code>systemd-analyze calendar "Mon..Fri 03:00"</code></td>
+</tr>
+</tbody>
+</table>
+<p>The five cron fields are <strong>minute · hour · day-of-month · month · day-of-week</strong> — <code>30 3 * * 1-5</code> is
+"03:30 on weekdays." The four OnCalendar workhorses: <code>Mon..Fri 03:00</code> (weekdays), <code>Sun 06:30</code> (weekly),
+<code>*-*-01 12:00</code> (monthly, first at noon), <code>hourly</code>. Always <strong>test the service by hand before arming the
+timer</strong> — <code>systemctl --user start job.service</code> runs it in the <em>exact</em> context the timer will.</p>
+<h3 id="the-three-signal-law-of-unattended-systems">The three-signal law of unattended systems<a class="headerlink" href="#the-three-signal-law-of-unattended-systems" title="Permanent link">&para;</a></h3>
+<p>Success is <strong>quiet</strong>, failure is <strong>loud</strong>, silence is <strong>failure</strong> — and each rule addresses a distinct
+failure class:</p>
+<ul>
+<li><strong>Success quiet</strong> — a job that emails you every night trains you to ignore its mail; then the one
+  broken night is invisible in the noise. Alert fatigue is a real outage cause.</li>
+<li><strong>Failure loud</strong> — a non-zero exit fires <code>OnFailure=</code> / a notification. This catches the runs that
+  <em>ran and broke</em>.</li>
+<li><strong>Silence alarmed</strong> — every job touches a freshness timestamp; a <strong>second</strong> job (the <em>dead-man's
+  switch</em>) alarms when any timestamp ages past its budget. This is the only organ that catches the runs
+  that <strong>never happened</strong> — a disabled timer, a crashed scheduler. <code>cron</code> mailing you errors is <em>not</em>
+  monitoring: the dead timer sends no email.</li>
+</ul>
+<h3 id="declare-state-dont-script-steps-config-management-and-ansible">Declare state, don't script steps — config management and Ansible<a class="headerlink" href="#declare-state-dont-script-steps-config-management-and-ansible" title="Permanent link">&para;</a></h3>
+<p>Where a tool allows it, <strong>describe the end state and let the tool diff</strong> rather than choreographing
+steps. <code>mkdir -p</code>, <code>ln -sf</code>, and <code>rsync</code> already think this way; <strong>Ansible</strong> industrializes it to whole
+machines and fleets. A play is a list of <em>desired states</em> ("this directory exists", "this file has
+exactly this content"); each <strong>module</strong> (<code>file</code>, <code>copy</code>, <code>lineinfile</code>, <code>apt</code>) checks reality and acts
+only on the drift — so the <strong>second run reports <code>changed=0</code></strong>. That is idempotence as a <em>product</em>, not a
+discipline you hand-maintain.</p>
+<table>
+<thead>
+<tr>
+<th>Imperative (a script)</th>
+<th>Declarative (Ansible)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"run <code>mkdir</code>, then <code>cp</code>, then <code>chmod</code>…"</td>
+<td>"the dir exists, the file has this content, mode 0644"</td>
+</tr>
+<tr>
+<td>you handle the "already done" case</td>
+<td>the module handles it — reports <code>ok</code> vs <code>changed</code></td>
+</tr>
+<tr>
+<td>re-run safety is your job to prove</td>
+<td>re-run safety is the tool's contract</td>
+</tr>
+</tbody>
+</table>
+<p>You run a play against your own machine with no SSH via a local connection:
+<code>ansible-playbook -i localhost, -c local play.yml</code> (the trailing comma makes <code>localhost</code> the whole
+inventory; <code>-c local</code> skips SSH). <code>--check</code> is a <strong>dry run</strong> — the blast-radius habit before anything
+destructive. Ansible/Puppet at fleet scale is "idempotence at scale" — the mental model you build here
+transfers wholesale when M19's clusters give it targets.</p>
+<h3 id="the-automation-ladder-climb-one-rung-at-a-time">The automation ladder — climb one rung at a time<a class="headerlink" href="#the-automation-ladder-climb-one-rung-at-a-time" title="Permanent link">&para;</a></h3>
+<p>From SRE ch. 7: automate deliberately, never skipping rungs — self-healing before <em>scripted</em> is how you
+build an outage multiplier.</p>
+<pre class="mermaid"><code>flowchart TB
+    M["Manual&lt;br/&gt;you do it, every time"]
+    D["Documented&lt;br/&gt;a runbook says how"]
+    S["Scripted&lt;br/&gt;one command does it"]
+    Sched["Scheduled&lt;br/&gt;a timer runs the script"]
+    Heal["Self-healing&lt;br/&gt;it detects and repairs"]
+    M --&gt; D --&gt; S --&gt; Sched --&gt; Heal
+    Sched -. "idempotence proven FIRST" .-&gt; Sched
+    Heal -. "power without a kill-switch&lt;br/&gt;= Knight Capital" .-&gt; Heal</code></pre>
+<p>Each rung earns the next: a job is <em>scripted</em> and proven idempotent <strong>before</strong> it is <em>scheduled</em>; nothing
+is made <em>self-healing</em> until it has run scheduled long enough to trust. Automation that acts with power
+but no kill-switch is the worst kind — <strong>Knight Capital</strong> lost \$440M in 45 minutes with humans watching,
+unable to stop it.</p>
+<h3 id="the-unattended-failure-drill-ladder">The unattended-failure drill ladder<a class="headerlink" href="#the-unattended-failure-drill-ladder" title="Permanent link">&para;</a></h3>
+<p>When a job "didn't work," diagnose by evidence in order — <strong>name the failed organ before you fix
+anything</strong>. Read the journal <em>before</em> you read the script.</p>
+<pre class="mermaid"><code>flowchart TB
+    A["Did it RUN?&lt;br/&gt;list-timers · crontab -l"] --&gt;|no| O1["Trigger / silence alarm&lt;br/&gt;disabled or dead timer"]
+    A --&gt;|yes| B["Did it FINISH?&lt;br/&gt;status · journal · exit code"]
+    B --&gt;|no| O2["Action / failure path&lt;br/&gt;crash, non-zero exit"]
+    B --&gt;|yes| C["Did it do the RIGHT thing?&lt;br/&gt;state diff · evidence"]
+    C --&gt;|no| O3["Idempotency / logic&lt;br/&gt;wrong result, silent"]
+    C --&gt;|yes| OK["Healthy"]
+    O2 --&gt; Why["Why? the big three&lt;br/&gt;PATH · cwd · env/secrets"]</code></pre>
+<p>"Works when I run it, fails on the timer" is almost always the <strong>big three</strong>: the unit's <code>PATH</code> is
+minimal, its working directory isn't your home, and your interactive shell's env and secrets are absent.
+The honest reproduction is to run it <em>the way the scheduler does</em> — not from your comfortable shell.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>The seven organs:</strong> trigger · guard · action · idempotency · evidence · failure path · <strong>silence alarm</strong>. The last one catches the job that never ran.</li>
+<li><strong>Idempotence is the license to schedule</strong> — <em>f(f(x)) = f(x)</em>, proven by the <strong>run-twice diff</strong> (empty diff = license). Check-then-act, never blind-repeat.</li>
+<li><strong>cron read fluently, timers chosen</strong> — timers give logging, catch-up (<code>Persistent=</code>), serialization, and a status you can query. Validate with <code>systemd-analyze calendar</code>.</li>
+<li><strong>Test the service before arming the timer</strong> — the timer runs it in a bare context; the <strong>big three</strong> traps are PATH, cwd, and env/secrets.</li>
+<li><strong>Success quiet · failure loud · silence alarmed</strong> — three rules, three distinct failure classes; the silence alarm is the one nobody remembers and everybody needs.</li>
+<li><strong>Declare state, don't script steps</strong> — Ansible converges to <code>changed=0</code> on the second run; <code>--check</code> is your dry-run. Idempotence as a product.</li>
+<li><strong>Climb the ladder one rung at a time</strong> — manual → documented → scripted → scheduled → self-healing. Prove idempotence before scheduling; a backup untested-for-restore is a hope, not a backup.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-schedule-a-job-then-converge-with-ansible">Guided Lab: schedule a job, then converge with Ansible<a class="headerlink" href="#guided-lab-schedule-a-job-then-converge-with-ansible" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You build a sandbox, prove idempotence by hand, put a script on a </em><em>cron</em><em> schedule
+(the container-friendly scheduler), then write and run an </em><em>Ansible</em><em> play against localhost and watch it
+converge to zero changes. Everything happens inside a throwaway <code>~/automation-lab/</code> sandbox — nothing
+outside it is touched.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-15" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-15" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a real Linux terminal in your browser with <code>cron</code> and <code>ansible</code> a single <code>apt-get</code> away.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then install the tools in step 1 and follow along.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Set up the workshop</label><label for="__tabbed_1_2">2 · Idempotence clinic — naive vs check-then-act</label><label for="__tabbed_1_3">3 · Put a job on a schedule (cron)</label><label for="__tabbed_1_4">4 · Converge with Ansible — idempotence as a product</label><label for="__tabbed_1_5">5 · The run-twice license, recapped</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Install the two schedulers/tools and build your sandbox:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>cron<span class="w"> </span>ansible
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sudo<span class="w"> </span>service<span class="w"> </span>cron<span class="w"> </span>start<span class="w">          </span><span class="c1"># start the cron daemon (no systemd in a container)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/automation-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/automation-lab
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">pwd</span><span class="w">                              </span><span class="c1"># confirm: /root/automation-lab (or /home/&lt;you&gt;/…)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>ansible<span class="w"> </span>--version<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w">      </span><span class="c1"># prove Ansible is installed</span>
+</code></pre></div>
+<code>cron</code> is the scheduler; <code>ansible</code> is the config-management tool. In production you would prefer
+<strong>systemd timers</strong> (logging + catch-up) — but a container has no <code>systemd</code> as PID 1, so this lab uses
+cron, which runs anywhere. The concepts are identical.</p>
+</div>
+<div class="tabbed-block">
+<p>Watch a naive job damage itself on re-run, then fix it. First the naive version — run it twice and
+diff:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;role = worker&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>config.txt<span class="w">              </span><span class="c1"># start clean</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;setup ran\n&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>config.txt<span class="w">             </span><span class="c1"># NAIVE: append every run</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>cp<span class="w"> </span>config.txt<span class="w"> </span>/tmp/after-run-1.txt
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;setup ran\n&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>config.txt<span class="w">             </span><span class="c1"># run it AGAIN</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>diff<span class="w"> </span>/tmp/after-run-1.txt<span class="w"> </span>config.txt<span class="w">           </span><span class="c1"># NOT empty — the line doubled</span>
+</code></pre></div>
+Now the idempotent rewrite — check state, then act — and prove the diff is clean:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;role = worker&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>config.txt<span class="w">              </span><span class="c1"># reset</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>grep<span class="w"> </span>-qxF<span class="w"> </span><span class="s1">&#39;setup ran&#39;</span><span class="w"> </span>config.txt<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;setup ran&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>config.txt
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>cp<span class="w"> </span>config.txt<span class="w"> </span>/tmp/after-run-1.txt
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>grep<span class="w"> </span>-qxF<span class="w"> </span><span class="s1">&#39;setup ran&#39;</span><span class="w"> </span>config.txt<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;setup ran&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>config.txt<span class="w">   </span><span class="c1"># run AGAIN</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>diff<span class="w"> </span>/tmp/after-run-1.txt<span class="w"> </span>config.txt<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;IDEMPOTENT: second run changed nothing&quot;</span>
+</code></pre></div>
+The empty diff is the <strong>run-twice proof</strong> — the license to schedule. <code>mkdir -p</code> and <code>ln -sf</code> win the
+same way: they check before they act.</p>
+</div>
+<div class="tabbed-block">
+<p>Write a small script — <code>set -euo pipefail</code> (M5), absolute paths, an idempotent log append — then
+<strong>test it by hand before arming the schedule</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/automation-lab/heartbeat.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="s">#!/usr/bin/env bash</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s">set -euo pipefail</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s">log=&quot;$HOME/automation-lab/heartbeat.log&quot;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s">printf &#39;%s heartbeat ok\n&#39; &quot;$(date -u +%FT%TZ)&quot; &gt;&gt; &quot;$log&quot;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s">EOF</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>chmod<span class="w"> </span>+x<span class="w"> </span>~/automation-lab/heartbeat.sh
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>~/automation-lab/heartbeat.sh<span class="w">          </span><span class="c1"># MANUAL test first — the module&#39;s law</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>cat<span class="w"> </span>~/automation-lab/heartbeat.log<span class="w">     </span><span class="c1"># one line proves the action works</span>
+</code></pre></div>
+Now arm it — append a cron entry (every minute) without an editor, using absolute paths (cron's
+<code>PATH</code> is not your shell's):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="o">(</span><span class="w"> </span>crontab<span class="w"> </span>-l<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;* * * * * </span><span class="nv">$HOME</span><span class="s2">/automation-lab/heartbeat.sh&quot;</span><span class="w"> </span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>crontab<span class="w"> </span>-l<span class="w">                              </span><span class="c1"># confirm the entry is installed</span>
+</code></pre></div>
+Watch it fire (wait ~60 s, optional): <code>sleep 65 &amp;&amp; cat ~/automation-lab/heartbeat.log</code> — the log
+grows on its own. That growth <em>is</em> evidence, the fifth organ.</p>
+<p>Click <strong>Check</strong> to verify a cron entry for the script exists and it produced output.</p>
+</div>
+<div class="tabbed-block">
+<p>Write a play that declares <em>desired state</em> for three independent resources, then run it. First a run
+changes things; the second changes nothing:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/automation-lab/play.yml<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="s">- name: Converge the workshop state</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="s">  hosts: localhost</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s">  connection: local</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s">  gather_facts: no</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="s">  vars:</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s">    base: &quot;{{ lookup(&#39;env&#39;, &#39;HOME&#39;) }}/automation-lab/managed&quot;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s">  tasks:</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s">    - name: Ensure the managed directory exists</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="s">      file:</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s">        path: &quot;{{ base }}&quot;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="s">        state: directory</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="s">        mode: &#39;0755&#39;</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="s">    - name: Ensure app.conf has exactly this content</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="s">      copy:</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="s">        dest: &quot;{{ base }}/app.conf&quot;</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="s">        mode: &#39;0644&#39;</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="s">        content: |</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="s">          # Managed by Ansible — do not edit by hand</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="s">          role = worker</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="s">          retries = 3</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="s">    - name: Ensure a single owner line exists in notes.txt</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="s">      lineinfile:</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="s">        path: &quot;{{ base }}/notes.txt&quot;</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="s">        line: &quot;owner = automation-lab&quot;</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="s">        create: yes</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="s">EOF</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>localhost,<span class="w"> </span>-c<span class="w"> </span><span class="nb">local</span><span class="w"> </span>~/automation-lab/play.yml<span class="w">   </span><span class="c1"># first run: changed&gt;0</span>
+</code></pre></div>
+Read the <strong>PLAY RECAP</strong>: the first run shows <code>changed=3</code>. Now run the <em>exact same command</em> again:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>localhost,<span class="w"> </span>-c<span class="w"> </span><span class="nb">local</span><span class="w"> </span>~/automation-lab/play.yml<span class="w">   </span><span class="c1"># second run: changed=0</span>
+</code></pre></div>
+<code>changed=0</code> on the second run is idempotence <em>proven by the tool</em> — you declared state, Ansible
+diffed reality and did nothing. Try the dry run too: <code>ansible-playbook -i localhost, -c local
+--check --diff ~/automation-lab/play.yml</code> predicts changes without making any.</p>
+<p>Click <strong>Check</strong> to verify the play applied its state and is idempotent (a fresh run reports <code>changed=0</code>).</p>
+</div>
+<div class="tabbed-block">
+<p>Look at what you built through the lens of the seven organs:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>crontab<span class="w"> </span>-l<span class="w">                               </span><span class="c1"># TRIGGER — the schedule</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>cat<span class="w"> </span>~/automation-lab/heartbeat.log<span class="w">       </span><span class="c1"># EVIDENCE — what it did</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>ls<span class="w"> </span>-R<span class="w"> </span>~/automation-lab/managed<span class="w">           </span><span class="c1"># ACTION&#39;s result — converged state</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>localhost,<span class="w"> </span>-c<span class="w"> </span><span class="nb">local</span><span class="w"> </span>~/automation-lab/play.yml<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A1<span class="w"> </span><span class="s1">&#39;PLAY RECAP&#39;</span>
+</code></pre></div>
+You proved idempotence two ways — by hand (the run-twice diff) and by tool (Ansible's <code>changed=0</code>).
+That proof is the <em>license to schedule</em>: only a job that survives its own second run belongs on a
+timer.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can prove a job idempotent with a run-twice diff, put a tested script on a schedule with
+absolute paths, and write an Ansible play that converges to <code>changed=0</code> — the guided lab is done. Now
+make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work inside your <code>~/automation-lab/</code> sandbox. Struggle here
+is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-make-a-non-idempotent-job-safe">Challenge 1 — Make a non-idempotent job safe<a class="headerlink" href="#challenge-1-make-a-non-idempotent-job-safe" title="Permanent link">&para;</a></h3>
+<p>This job appends a PATH export to a profile every run: <code>echo 'export PATH=$PATH:/opt/tool/bin' &gt;&gt;
+~/automation-lab/profile</code>. Rewrite it so a hundred runs leave exactly one line, and prove it.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Check whether the exact line is already present <em>before</em> appending it. <code>grep</code> has a flag for
+whole-line, literal matching; <code>||</code> runs the append only when the check fails.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">line</span><span class="o">=</span><span class="s1">&#39;export PATH=$PATH:/opt/tool/bin&#39;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>grep<span class="w"> </span>-qxF<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="w"> </span>~/automation-lab/profile<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/automation-lab/profile
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># prove it: run the line above a second time, then:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>grep<span class="w"> </span>-cxF<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="w"> </span>~/automation-lab/profile<span class="w">   </span><span class="c1"># → 1, no matter how many runs</span>
+</code></pre></div>
+<code>-q</code> quiet, <code>-x</code> whole line, <code>-F</code> literal string. Check-then-act converts "append blindly" into a
+convergent operation — the file reaches one desired state and stays there.</p>
+</details>
+<h3 id="challenge-2-a-crash-honest-marker">Challenge 2 — A crash-honest marker<a class="headerlink" href="#challenge-2-a-crash-honest-marker" title="Permanent link">&para;</a></h3>
+<p>Write a job that does "expensive" work (a <code>sleep 2</code> then create <code>result.txt</code>) and drops a <code>done.marker</code>
+so it skips the work next time. Make the marker <strong>honest</strong> if the job is killed mid-work.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>A marker written <em>before</em> the work lies after a crash. Do the work to a temporary name, then move it
+into place <strong>last</strong> — an atomic <code>mv</code> on the same filesystem either fully happens or doesn't.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="k">done</span>.marker<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>sleep<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;computed </span><span class="k">$(</span>date<span class="w"> </span>-u<span class="w"> </span>+%FT%TZ<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>result.txt.tmp
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span>mv<span class="w"> </span>result.txt.tmp<span class="w"> </span>result.txt<span class="w">          </span><span class="c1"># atomic — the last thing that happens</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span>:<span class="w"> </span>&gt;<span class="w"> </span><span class="k">done</span>.marker<span class="w">                        </span><span class="c1"># marker written LAST</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="k">fi</span>
+</code></pre></div>
+Kill it during the <code>sleep</code> and neither <code>result.txt</code> nor <code>done.marker</code> exists — a clean "never
+happened," so the re-run does the work correctly. A marker written first would have skipped a job that
+never finished.</p>
+</details>
+<h3 id="challenge-3-read-a-foreign-crontab-and-translate-one-line">Challenge 3 — Read a foreign crontab and translate one line<a class="headerlink" href="#challenge-3-read-a-foreign-crontab-and-translate-one-line" title="Permanent link">&para;</a></h3>
+<p>Given the cron line <code>15 2 * * 6 /opt/backup.sh</code>, state in plain English when it runs, and write the
+equivalent systemd-timer <code>OnCalendar=</code> expression.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Fields are <strong>minute hour day-of-month month day-of-week</strong>, so <code>15 2 * * 6</code> = <strong>02:15 every Saturday</strong>
+(<code>6</code> = Saturday; <code>0</code>/<code>7</code> = Sunday). The timer equivalent:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>OnCalendar=Sat 02:15
+</code></pre></div>
+Validate before trusting it: <code>systemd-analyze calendar "Sat 02:15"</code> prints the next elapses. Cron's
+fields are positional and unforgiving; the OnCalendar form is self-documenting — half the reason the
+default flipped.</p>
+</details>
+<h3 id="challenge-4-add-a-fourth-idempotent-task-to-your-play">Challenge 4 — Add a fourth idempotent task to your play<a class="headerlink" href="#challenge-4-add-a-fourth-idempotent-task-to-your-play" title="Permanent link">&para;</a></h3>
+<p>Extend <code>play.yml</code> so it also guarantees a <code>logs/</code> subdirectory under <code>managed/</code> <strong>and</strong> ensures the
+system has the <code>tree</code> package's binary available — then prove the whole play still reports <code>changed=0</code> on
+a second run.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The <code>file</code> module makes directories; the <code>apt</code> module (with <code>become: yes</code>) manages packages. Both are
+idempotent by design — the second run should be a no-op.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ensure the logs subdirectory exists</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">      </span><span class="nt">file</span><span class="p">:</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">base</span><span class="nv"> </span><span class="s">}}/logs&quot;</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">directory</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0755&#39;</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ensure tree is installed</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">      </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">      </span><span class="nt">apt</span><span class="p">:</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tree</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">        </span><span class="nt">update_cache</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+</code></pre></div>
+First run: <code>changed</code> rises. Second run: <code>changed=0</code> — <code>file</code> sees the dir already there, <code>apt</code> sees
+<code>tree</code> already <code>present</code>. <strong>Declaring state</strong> means the tool, not you, handles the "already done" case
+— which is exactly why the play is safe to schedule.</p>
+</details>
+<h3 id="challenge-5-stretch-a-one-line-dead-mans-switch">Challenge 5 (stretch) — A one-line dead-man's switch<a class="headerlink" href="#challenge-5-stretch-a-one-line-dead-mans-switch" title="Permanent link">&para;</a></h3>
+<p>Your <code>heartbeat.sh</code> writes a timestamp every minute. Write a <em>second</em> check that alarms (prints <code>STALE</code>
+and exits non-zero) if the last heartbeat is more than 3 minutes old — the silence alarm, by hand.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nv">log</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/automation-lab/heartbeat.log&quot;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nv">budget</span><span class="o">=</span><span class="m">180</span><span class="w">                                   </span><span class="c1"># 3 minutes, in seconds</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nv">last</span><span class="o">=</span><span class="k">$(</span>stat<span class="w"> </span>-c<span class="w"> </span>%Y<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$log</span><span class="s2">&quot;</span><span class="k">)</span><span class="w">                    </span><span class="c1"># mtime of the evidence file</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="nv">age</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="k">$(</span>date<span class="w"> </span>+%s<span class="k">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">last</span><span class="w"> </span><span class="k">))</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$age</span><span class="s2">&quot;</span><span class="w"> </span>-gt<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$budget</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;STALE: </span><span class="si">${</span><span class="nv">age</span><span class="si">}</span><span class="s2">s old&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;fresh: </span><span class="si">${</span><span class="nv">age</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+</code></pre></div>
+This is the seventh organ in miniature: a job whose only purpose is to notice <strong>absence</strong>. Disable the
+heartbeat's cron entry (<code>crontab -r</code>), wait past the budget, and this alarms — catching the failure a
+disabled timer would otherwise hide forever. (<code>healthchecks.io</code> is this mechanism, hosted.)</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Name the seven organs of a production job, and the one class of failure only the last one catches.</summary>
+<p><strong>Trigger · guard · action · idempotency · evidence · failure path · silence alarm.</strong> The silence
+alarm (a freshness / dead-man's check) is the only organ that catches the run that <strong>never happened</strong> —
+a disabled timer or crashed scheduler — because there is no error to log when nothing ran.</p>
+</details>
+<details class="question">
+<summary>Define idempotence formally and operationally. What is the standard proof?</summary>
+<p>Formally <em>f(f(x)) = f(x)</em> — a second run changes nothing. Operationally: safe to re-run anytime,
+including after a partial failure. The proof is the <strong>run-twice diff</strong>: execute, snapshot state,
+execute again, diff — an empty diff is the license to schedule.</p>
+</details>
+<details class="question">
+<summary>Give four concrete reasons to prefer systemd timers over cron.</summary>
+<p>Cron has <strong>no logging</strong> by default (output mailed or discarded), <strong>no catch-up</strong> for downtime, <strong>no
+overlap guard</strong>, and a <strong>bare environment</strong> (PATH surprises) with no queryable status. Timers add
+journald evidence, <code>Persistent=</code> catch-up, systemd serialization plus <code>flock</code>, unit-controlled env,
+and <code>systemctl status</code>/<code>list-timers</code> truth.</p>
+</details>
+<details class="question">
+<summary>A job runs fine in your shell but fails on the timer. Name the big three causes and the honest way to reproduce it.</summary>
+<p><strong>PATH</strong> (the unit's is minimal — use absolute paths), <strong>cwd</strong> (not your home unless set), and
+<strong>environment</strong> (no interactive rc files, secrets absent). Reproduce it in the scheduler's <em>exact</em>
+context — <code>systemctl --user start job.service</code> (not from your comfortable shell).</p>
+</details>
+<details class="question">
+<summary>Why is “success quiet, failure loud, silence alarmed” three rules and not one? What does each catch?</summary>
+<p>Quiet success prevents <strong>alert fatigue</strong> (noise trains you to ignore signals); loud failure catches
+the runs that <strong>ran and broke</strong>; the silence alarm catches the runs that <strong>never happened</strong> — the
+failure class the first two are blind to. Cron emailing errors is only the second rule; the dead timer
+sends no email.</p>
+</details>
+<details class="question">
+<summary>What does “declare state, don't script steps” mean, and how does Ansible make idempotence visible?</summary>
+<p>You describe the desired <strong>end state</strong> (this dir exists, this file has this content) and let the tool
+diff reality and act only on drift — instead of choreographing steps and hand-handling the
+"already-done" case. Ansible makes it visible in the <strong>PLAY RECAP</strong>: a converged second run reports
+<code>changed=0</code> (everything <code>ok</code>, nothing changed).</p>
+</details>
+<details class="question">
+<summary>Why is a backup that “succeeds every night” still not safe? Name the case study.</summary>
+<p>A backup untested-for-restore is a <strong>hope, not a backup</strong> — the excludes, permissions, or archive
+readability can be wrong and you only learn it during the disaster. <strong>GitLab, 2017:</strong> five backup
+mechanisms, none restore-tested, none worked cleanly. The restore test <em>is</em> the backup.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong> — <em>"The 3 a.m. test"</em>: put one naive script on screen and add the
+<strong>seven organs</strong> one at a time, each introduced by the concrete failure it prevents (overlap →
+<code>flock</code>; crash → atomic marker; silence → freshness), ending with the <strong>run-twice diff as the license
+to schedule</strong>. Then, in <strong>90 seconds</strong>, teach <em>"why alarm on silence?"</em> with the night-watchman story —
+a missing watchman and a silent one look identical unless he must check in — and show a freshness check
+catching a killed job. If you can't yet, reread the Key Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M15 opens M16 (Docker), whose
+builds ride these rails from day one. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> toil and the seven organs, each motivated by the concrete failure it prevents.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> idempotence formally <em>and</em> operationally, and name the run-twice diff as its proof.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> non-idempotent patterns on sight, and rewrite each with check-then-act.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> a crash-honest job — work to a temp name, atomic <code>mv</code> last — and prove it by killing it mid-run.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compare</strong> cron vs systemd timers as an engineering choice, with four concrete cron deficiencies.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> a complete scheduled job with absolute paths, tested by hand <em>before</em> arming.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> an Ansible play that converges to <code>changed=0</code> on its second run, and read the PLAY RECAP.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Contrast</strong> loud failure vs alarmed silence, and demonstrate a freshness/dead-man check firing.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> works-manually-fails-on-timer by the big three (PATH, cwd, env), reproducing in the scheduler's context.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> an unattended failure by the drill ladder — the failed organ named <em>before</em> the fix.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure</strong> secrets end to end (mode 600 · <code>EnvironmentFile=</code> · never argv · never git) and say why argv leaks.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Narrate</strong> Knight Capital, GitLab 2017, or CrowdStrike 2024 in the module's vocabulary (blast-radius, restore test, kill-switch).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass "The 3 a.m. test" and the night-watchman explanation — organs motivated by failures, not listed as ceremony.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory forms. <strong>Interleaving stays active</strong> — every M15 review also pulls
+one item from Module 14 (the network tools you now put on timers). This module opens Stage 5, so its rails
+carry every later module's work. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M14 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Organ + ladder blanks · the idempotency + OnCalendar sprints · validation A1–A2, C6</td>
+<td>The five-command debugging ladder, run cold</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Rewrite three naive jobs check-then-act, run-twice each · the secrets four-rules sprint</td>
+<td><code>ss -tlnp</code> listener audit from memory</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Stand up a fresh scheduled job with all organs in under an hour · fire-drill one planted fault</td>
+<td>TCP vs UDP: why DNS and HTTP choose differently</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Ansible play from scratch to <code>changed=0</code> · the drill-ladder blank · validation E13–E15, J25</td>
+<td>Refused vs timeout, each with its distinguishing command</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Toil ledger re-measured (hours returned holding?) · full validation retake, target ≥90</td>
+<td>The <code>curl -w</code> timing waterfall re-read vs baseline</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M16–M18 (Docker — image builds are automation; CI pushes images on tags) · M19–M20
+(Kubernetes — CronJobs are your unit-pairs, controllers are convergence loops, declarative state is
+concept 3 as an API) · M24 (security scans on these timers, secrets audited adversarially) · M25
+(observability replaces the freshness ledger with Prometheus/Grafana — concepts named identically) ·
+M26–M28 (ML pipelines are DAGs of seven-organ jobs, experiment tracking the evidence organ at research
+scale).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M15 turns scripts into systems — idempotent, evidenced, alarmed-on-silence — the rails every later
+module's work runs on, from image builds to ML pipelines.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../stage-04/module-14/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 14 — Networking">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 14 — Networking
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-16/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 16 — Docker">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 16 — Docker
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

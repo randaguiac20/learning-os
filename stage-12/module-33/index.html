@@ -1,0 +1,3493 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How data is modeled and stored so it can be queried reliably — the relational model, keys, normalization (1NF–3NF), SQL joins and aggregates, transactions and ACID, indexes, and where NoSQL fits.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../../stage-11/module-32/">
+      
+      
+        <link rel="next" href="../module-34/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 33 — Databases & SQL - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-33-databases-sql" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 33 — Databases & SQL
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-you-declare-what-the-dbms-decides-how" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: you declare WHAT, the DBMS decides HOW
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-relational-model-a-two-table-sketch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The relational model — a two-table sketch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization-structure-that-prevents-corruption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Normalization — structure that prevents corruption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sql-the-query-skeleton-and-its-logical-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQL — the query skeleton and its logical order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#joins-the-heart-of-relational-querying" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JOINs — the heart of relational querying
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transactions-acid-why-we-trust-a-database-with-money" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transactions &amp; ACID — why we trust a database with money
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indexes-m32s-b-tree-applied-to-data-at-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexes — M32's B-tree, applied to data at rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beyond-relational-nosql-and-the-cap-theorem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Beyond relational — NoSQL and the CAP theorem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-model-query-and-guard-a-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: model, query, and guard a database
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-a-many-to-many-relationship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — A many-to-many relationship
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-members-above-the-average-order-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — "Members above the average order count"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-prove-the-index-dont-just-claim-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Prove the index, don't just claim it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-artifact-defend-a-schema-an-index-win" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 (the artifact) — Defend a schema + an index win
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-break-it-then-defend-it-sql-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Break it, then defend it: SQL injection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-you-declare-what-the-dbms-decides-how" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: you declare WHAT, the DBMS decides HOW
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-relational-model-a-two-table-sketch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The relational model — a two-table sketch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization-structure-that-prevents-corruption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Normalization — structure that prevents corruption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sql-the-query-skeleton-and-its-logical-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQL — the query skeleton and its logical order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#joins-the-heart-of-relational-querying" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JOINs — the heart of relational querying
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transactions-acid-why-we-trust-a-database-with-money" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transactions &amp; ACID — why we trust a database with money
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indexes-m32s-b-tree-applied-to-data-at-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexes — M32's B-tree, applied to data at rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beyond-relational-nosql-and-the-cap-theorem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Beyond relational — NoSQL and the CAP theorem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-model-query-and-guard-a-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: model, query, and guard a database
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-a-many-to-many-relationship" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — A many-to-many relationship
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-members-above-the-average-order-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — "Members above the average order count"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-prove-the-index-dont-just-claim-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Prove the index, don't just claim it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-artifact-defend-a-schema-an-index-win" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 (the artifact) — Defend a schema + an index win
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-break-it-then-defend-it-sql-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Break it, then defend it: SQL injection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-33-databases-sql">Module 33 — Databases &amp; SQL<a class="headerlink" href="#module-33-databases-sql" title="Permanent link">&para;</a></h1>
+<p><small>Stage 12 · Data &amp; Software Engineering · ~3 weeks at 4 h/day · Prerequisites — M13 (Python — the client), M30 (sets = relations), M32 (B-trees = indexes), M21 (EXPLAIN = the profiler).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p>A <strong>database</strong> is an organized, persistent, queryable store of data managed by a <strong>DBMS</strong> (Database
+Management System — the program that stores the data and answers queries about it). The dominant design
+is the <strong>relational model</strong>: data lives in <strong>tables</strong> (also called <em>relations</em> — a typed set of rows),
+where a <strong>row</strong> is one record and a <strong>column</strong> is one attribute of it. Tables are connected by <strong>keys</strong>: a
+<strong>primary key</strong> (PK) is the column that uniquely identifies each row, and a <strong>foreign key</strong> (FK) is a
+column that <em>references</em> another table's primary key — that reference is how one fact links to another
+without copying it. You read and change all of this with <strong>SQL</strong> (Structured Query Language — the
+declarative language for defining and querying relational data): you say <strong>what</strong> you want and the DBMS
+decides <strong>how</strong> to fetch it.</p>
+<p>Almost every application is a database with a user interface on top. The curriculum has <em>persisted</em> data
+everywhere — config files (M15/M16), logs (M24–25), model artifacts (M28) — but always as flat files,
+never as a queried, related, transactional store. This module supplies the missing foundation: model a
+domain into tables with the right keys; write SQL that joins and aggregates (the single most transferable
+data skill there is); <strong>normalize</strong> to avoid the redundancy that corrupts data; reason about
+<strong>transactions</strong> and <strong>ACID</strong> when many clients write at once; add the right <strong>index</strong> (a B-tree from M32)
+when a query is slow; and know when a relational database is the wrong tool and a <strong>NoSQL</strong> store is right.
+Data outlives code — the schema is the most important design decision most systems ever make.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>This is the persistence layer under everything downstream. <strong>M34</strong> (Big Data) picks up where one
+PostgreSQL machine stops — warehouses, lakes, streams. <strong>M36</strong> (Backend &amp; API) is a thin layer over
+<em>this</em> database — ORMs, connection pools, the N+1 trap. <strong>M28</strong>'s Redis cache is finally named for what
+it is: a <strong>key-value</strong> NoSQL store. And the <strong>capstone</strong> service is backed by exactly the kind of
+designed, normalized, indexed schema you build here. Model data well now and every later data module is
+a variation on this one.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 33 — Databases &amp; SQL&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Analogy / Misconceptions):
+the relational database as a well-run library (shelves = tables, catalog number = primary key, a loan
+slip = a foreign key) → why we split data into related tables (normalization prevents the update
+anomaly) → SQL declares WHAT, the planner decides HOW → transactions and ACID via the bank transfer →
+an index IS M32's B-tree, proven with EXPLAIN → NoSQL and CAP as a workload choice, not a war.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-model-query-and-guard-a-database">Guided Lab</a> in a browser terminal and run each
+statement yourself. Writing SQL by hand — predicting each result before you run it — is the only way
+joins and aggregates ever become yours.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-you-declare-what-the-dbms-decides-how">The picture: you declare WHAT, the DBMS decides HOW<a class="headerlink" href="#the-picture-you-declare-what-the-dbms-decides-how" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph you["You — declare WHAT"]
+        Q["SQL query&lt;br/&gt;SELECT ... JOIN ... WHERE ... GROUP BY"]
+    end
+    subgraph db["DBMS — decides HOW"]
+        PL["Query planner&lt;br/&gt;chooses an execution plan"]
+        IDX["Index (B-tree — M32)&lt;br/&gt;O(log n) lookup, not O(n) scan"]
+        EX["Execute&lt;br/&gt;scan · join · aggregate"]
+    end
+    Q --&gt; PL
+    PL --&gt; IDX
+    IDX --&gt; EX
+    EX --&gt; R["Rows returned"]</code></pre>
+<p>SQL is <strong>declarative</strong>: you describe the result you want, not the loop that produces it. The DBMS's
+<strong>query planner</strong> figures out the cheapest way to get it — and if there is an <strong>index</strong> on the column you
+filter or join on, it navigates straight to the matching rows (a B-tree walk, <code>O(log n)</code>) instead of
+reading every row (a full scan, <code>O(n)</code>). That last sentence is M32 and M21 fused: the query is the hot
+path, <code>EXPLAIN</code> is the profiler, the index is the fix.</p>
+<h3 id="the-relational-model-a-two-table-sketch">The relational model — a two-table sketch<a class="headerlink" href="#the-relational-model-a-two-table-sketch" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph users["Table: users (parent)"]
+        U["id  (PK)&lt;br/&gt;name&lt;br/&gt;email  (UNIQUE)"]
+    end
+    subgraph orders["Table: orders (child)"]
+        O["id  (PK)&lt;br/&gt;user_id  (FK)&lt;br/&gt;total · created_at"]
+    end
+    O --&gt;|"user_id references users.id"| U</code></pre>
+<p>A table is M30's <strong>relation</strong> made concrete: a typed set of rows. The <strong>primary key</strong> (<code>users.id</code>) gives
+each row a unique identity. The <strong>foreign key</strong> (<code>orders.user_id</code>) stores <em>only</em> the referenced key — so a
+customer's details live in exactly one place (<code>users</code>) and every order points at them. The three
+cardinalities: <strong>one-to-one</strong>, <strong>one-to-many</strong> (one user, many orders — the case above), and
+<strong>many-to-many</strong> (resolved with a <strong>junction table</strong> holding two foreign keys). The database enforces
+<strong>referential integrity</strong>: you cannot insert an order that references a user who does not exist.</p>
+<h3 id="normalization-structure-that-prevents-corruption">Normalization — structure that prevents corruption<a class="headerlink" href="#normalization-structure-that-prevents-corruption" title="Permanent link">&para;</a></h3>
+<p><strong>Normalization</strong> is the discipline of arranging columns so each fact lives in exactly one place,
+eliminating the redundancy that causes <strong>anomalies</strong> (a repeated value that drifts out of sync). You climb
+three normal forms:</p>
+<table>
+<thead>
+<tr>
+<th>Normal form</th>
+<th>Requires</th>
+<th>Removes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1NF</strong> — first normal form</td>
+<td>Every value atomic (no lists/repeating groups in a cell); a key</td>
+<td>Non-atomic / repeating fields</td>
+</tr>
+<tr>
+<td><strong>2NF</strong> — second normal form</td>
+<td>1NF <strong>and</strong> every non-key column depends on the <em>whole</em> primary key</td>
+<td>Partial dependencies on part of a composite key</td>
+</tr>
+<tr>
+<td><strong>3NF</strong> — third normal form</td>
+<td>2NF <strong>and</strong> no non-key column depends on another non-key column</td>
+<td>Transitive dependencies</td>
+</tr>
+</tbody>
+</table>
+<p>The payoff is concrete: put a customer's address on every order row and changing it means finding <em>every</em>
+row or the data lies (an <strong>update anomaly</strong>); you can't record a customer with no order yet (<strong>insert
+anomaly</strong>); deleting their last order loses the address (<strong>delete anomaly</strong>). Splitting <code>customers</code> out and
+referencing it by a foreign key puts the address in one place and all three anomalies vanish.
+<strong>Denormalization</strong> — deliberately duplicating data to avoid joins — is the <em>opposite</em> move, taken only for
+a measured, read-heavy hot path, accepting the redundancy you must now keep in sync.</p>
+<h3 id="sql-the-query-skeleton-and-its-logical-order">SQL — the query skeleton and its logical order<a class="headerlink" href="#sql-the-query-skeleton-and-its-logical-order" title="Permanent link">&para;</a></h3>
+<p>Read a query in this shape; it <strong>executes</strong> in a different order than it reads:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">SELECT</span><span class="w">   </span><span class="n">columns</span><span class="p">,</span><span class="w"> </span><span class="n">aggregates</span><span class="w">      </span><span class="c1">-- 5. what to return</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">FROM</span><span class="w">     </span><span class="k">table</span><span class="w">                    </span><span class="c1">-- 1. the source</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">JOIN</span><span class="w">     </span><span class="n">other</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">keys</span><span class="w"> </span><span class="k">match</span><span class="w">      </span><span class="c1">-- 2. combine on keys</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">WHERE</span><span class="w">    </span><span class="k">row</span><span class="w"> </span><span class="n">filter</span><span class="w">               </span><span class="c1">-- 3. keep rows (before grouping)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">columns</span><span class="w">                  </span><span class="c1">-- 4a. collapse into groups</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">HAVING</span><span class="w">   </span><span class="k">group</span><span class="w"> </span><span class="n">filter</span><span class="w">             </span><span class="c1">-- 4b. keep groups (after aggregating)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">columns</span><span class="w">                  </span><span class="c1">-- 6. sort</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">LIMIT</span><span class="w">    </span><span class="n">n</span><span class="p">;</span><span class="w">                       </span><span class="c1">-- 7. cap the rows</span>
+</code></pre></div>
+<p>Logical execution order: <strong>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</strong>. That order is
+why you can't reference a <code>SELECT</code> alias in <code>WHERE</code> (the alias doesn't exist yet), and why <strong>WHERE filters
+rows before grouping</strong> while <strong>HAVING filters groups after</strong> (it can test aggregates like <code>COUNT(*)</code>).
+<strong>DDL</strong> (Data Definition Language — <code>CREATE</code>/<code>ALTER</code>/<code>DROP</code>) defines the schema; <strong>DML</strong> (Data Manipulation
+Language — <code>SELECT</code>/<code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>) reads and changes the data.</p>
+<h3 id="joins-the-heart-of-relational-querying">JOINs — the heart of relational querying<a class="headerlink" href="#joins-the-heart-of-relational-querying" title="Permanent link">&para;</a></h3>
+<p>A <strong>JOIN</strong> combines rows from two tables where their keys match. The family, drawn as set overlaps (M30):</p>
+<table>
+<thead>
+<tr>
+<th>Join</th>
+<th>Returns</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>INNER JOIN</strong></td>
+<td>Only rows with a match in <em>both</em> tables</td>
+<td>You want matched pairs only</td>
+</tr>
+<tr>
+<td><strong>LEFT (OUTER) JOIN</strong></td>
+<td>All left rows + matches from the right (NULL where none)</td>
+<td>You must keep unmatched left rows (users with zero orders)</td>
+</tr>
+<tr>
+<td><strong>RIGHT (OUTER) JOIN</strong></td>
+<td>All right rows + matches from the left</td>
+<td>Symmetric to LEFT (rarely needed — flip the tables)</td>
+</tr>
+<tr>
+<td><strong>FULL (OUTER) JOIN</strong></td>
+<td>All rows from both, matched where possible</td>
+<td>You need every row from either side</td>
+</tr>
+</tbody>
+</table>
+<p>The classic bug: using <code>INNER</code> where you needed <code>LEFT</code> <strong>silently drops</strong> the unmatched rows (members with
+no loans disappear). The other: a <code>LEFT</code>/<code>INNER</code> on a one-to-many <strong>fans out</strong> — each parent row repeats
+once per child. Fix a fan-out with an aggregate + <code>GROUP BY</code>, <code>DISTINCT</code>, or a subquery — join at the
+right <em>grain</em>.</p>
+<h3 id="transactions-acid-why-we-trust-a-database-with-money">Transactions &amp; ACID — why we trust a database with money<a class="headerlink" href="#transactions-acid-why-we-trust-a-database-with-money" title="Permanent link">&para;</a></h3>
+<p>A <strong>transaction</strong> groups statements into one all-or-nothing unit: <code>BEGIN</code> … <code>COMMIT</code> (make it permanent)
+or <code>ROLLBACK</code> (undo it all). Transactions give the <strong>ACID</strong> guarantees:</p>
+<table>
+<thead>
+<tr>
+<th>Letter</th>
+<th>Property</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td><strong>Atomicity</strong></td>
+<td>The whole transaction happens, or none of it does</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td><strong>Consistency</strong></td>
+<td>It moves the database from one valid state to another (constraints hold)</td>
+</tr>
+<tr>
+<td><strong>I</strong></td>
+<td><strong>Isolation</strong></td>
+<td>Concurrent transactions don't corrupt each other</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td><strong>Durability</strong></td>
+<td>Once committed, it survives a crash</td>
+</tr>
+</tbody>
+</table>
+<p>The canonical example: move \$100 from account A to B is two steps (debit A, credit B). Crash between them
+without a transaction and the money vanishes or duplicates. Wrap it in <code>BEGIN … COMMIT</code> and <strong>atomicity</strong>
+guarantees both or neither. Under concurrency, too-low <strong>isolation</strong> allows anomalies (dirty / non-repeatable
+/ phantom reads, and lost updates); raising the isolation level — or <code>SELECT … FOR UPDATE</code>, or an atomic
+<code>balance = balance - 100</code> — makes the writes serialize.</p>
+<h3 id="indexes-m32s-b-tree-applied-to-data-at-rest">Indexes — M32's B-tree, applied to data at rest<a class="headerlink" href="#indexes-m32s-b-tree-applied-to-data-at-rest" title="Permanent link">&para;</a></h3>
+<p>Without an <strong>index</strong>, finding rows matching a value means reading every row — <code>O(n)</code>. An index is a
+separate data structure (usually a <strong>B-tree</strong> — M32's balanced tree; sometimes a hash) keyed on that
+column, so the database navigates straight to the matches in <code>O(log n)</code>. The workflow, measured: a slow
+query → <code>EXPLAIN</code> shows a <em>sequential scan</em> → <code>CREATE INDEX</code> on the filtered column → <code>EXPLAIN</code> now shows an
+<em>index scan</em> and the time collapses. But an index is <strong>not free speed</strong> — it's a B-tree that must be
+maintained on every write, costing write time and disk space. Index the columns queries <strong>filter, join, or
+sort on</strong>, not every column.</p>
+<h3 id="beyond-relational-nosql-and-the-cap-theorem">Beyond relational — NoSQL and the CAP theorem<a class="headerlink" href="#beyond-relational-nosql-and-the-cap-theorem" title="Permanent link">&para;</a></h3>
+<p><strong>NoSQL</strong> ("not only SQL") is a family of non-relational stores, each trading some relational guarantee for
+scale or flexibility: <strong>document</strong> (MongoDB — flexible JSON records), <strong>key-value</strong> (<strong>Redis</strong> — M28's
+model-serving cache, now named for what it is), <strong>column-family</strong> (Cassandra — write-scale), and <strong>graph</strong>
+(Neo4j — M30/M32's graphs as a database). The <strong>CAP theorem</strong> (Consistency, Availability, Partition
+tolerance) says that under a network <strong>partition</strong> you must choose Consistency <em>or</em> Availability. Choosing a
+store is a <strong>workload</strong> question — strong consistency and complex ad-hoc queries → relational; massive
+scale, flexible schema, or one known access pattern → the matching NoSQL — not a fashion. "SQL vs NoSQL"
+is a trade-off, not a war: relational databases still run the world's transactional data.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>Tables + keys.</strong> A primary key uniquely identifies a row; a foreign key references another table's PK — that's how facts link without copying.</li>
+<li><strong>Normalize so each fact lives once.</strong> 1NF atomic · 2NF no partial-key deps · 3NF no transitive deps — it structurally prevents update/insert/delete anomalies.</li>
+<li><strong>SQL is declarative.</strong> You say WHAT; the planner decides HOW. Logical order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY.</li>
+<li><strong>INNER drops unmatched rows; LEFT keeps them.</strong> WHERE filters rows (pre-group); HAVING filters groups (post-aggregate).</li>
+<li><strong>Transactions = all-or-nothing (ACID).</strong> BEGIN … COMMIT/ROLLBACK is why we trust databases with money under crashes and concurrency.</li>
+<li><strong>An index is a B-tree (M32).</strong> It turns an <code>O(n)</code> scan into an <code>O(log n)</code> lookup — proven with <code>EXPLAIN</code>; it costs writes and space, so index only what you filter/join on.</li>
+<li><strong>NoSQL is a workload choice (CAP), not a successor.</strong> Redis is a key-value store; pick relational for integrity + complex queries.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-model-query-and-guard-a-database">Guided Lab: model, query, and guard a database<a class="headerlink" href="#guided-lab-model-query-and-guard-a-database" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step, in <code>sqlite3</code> (zero setup — it ships with Ubuntu/Python). You build a normalized
+two-table schema, insert data, run a JOIN with a GROUP BY aggregate, prove a transaction is all-or-nothing,
+add an index, and watch a normalization fix. All work lives in a throwaway <code>~/db-lab/</code> directory.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-33" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-33" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser with <code>sqlite3</code> ready.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal with <code>sqlite3</code> installed (<code>apt-get install -y sqlite3</code>), or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · A normalized schema (users + orders, with a foreign key)</label><label for="__tabbed_1_2">2 · Insert data — and watch the foreign key reject a bad row</label><label for="__tabbed_1_3">3 · A JOIN with a GROUP BY aggregate</label><label for="__tabbed_1_4">4 · A transaction (COMMIT and ROLLBACK), then an index</label><label for="__tabbed_1_5">5 · A normalization fix — split the redundant column out</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>sqlite3<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>sqlite3<span class="p">;</span><span class="w"> </span><span class="o">}</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/db-lab
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/db-lab/schema.sql<span class="w"> </span><span class="s">&lt;&lt;&#39;SQL&#39;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">PRAGMA foreign_keys = ON;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">CREATE TABLE users (</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">  id    INTEGER PRIMARY KEY,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">  name  TEXT NOT NULL,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">  email TEXT NOT NULL UNIQUE</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">);</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">CREATE TABLE orders (</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">  id         INTEGER PRIMARY KEY,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">  user_id    INTEGER NOT NULL REFERENCES users(id),</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">  total      REAL    NOT NULL CHECK (total &gt;= 0),</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s">  created_at TEXT    NOT NULL DEFAULT (date(&#39;now&#39;))</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s">);</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s">SQL</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>rm<span class="w"> </span>-f<span class="w"> </span>~/db-lab/shop.db
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span>&lt;<span class="w"> </span>~/db-lab/schema.sql
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;.tables&quot;</span>
+</code></pre></div>
+<code>users.id</code> is the <strong>primary key</strong>; <code>orders.user_id REFERENCES users(id)</code> is the <strong>foreign key</strong> — the
+one-to-many link. <code>UNIQUE</code>, <code>NOT NULL</code>, and <code>CHECK (total &gt;= 0)</code> are constraints — the schema enforcing
+correctness. Journal: which column can <em>never</em> be duplicated, and why?</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s">&lt;&lt;&#39;SQL&#39;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s">PRAGMA foreign_keys = ON;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">INSERT INTO users (id, name, email) VALUES</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">  (1, &#39;Ada&#39;,   &#39;ada@example.com&#39;),</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">  (2, &#39;Linus&#39;, &#39;linus@example.com&#39;),</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">  (3, &#39;Grace&#39;, &#39;grace@example.com&#39;);</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">INSERT INTO orders (user_id, total) VALUES</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">  (1, 20.00), (1, 35.50), (2, 12.00);</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">SQL</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>sqlite3<span class="w"> </span>-header<span class="w"> </span>-column<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;SELECT * FROM orders;&quot;</span>
+</code></pre></div>
+Now try to insert an order for a user who does not exist — referential integrity should reject it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;PRAGMA foreign_keys = ON; INSERT INTO orders (user_id, total) VALUES (999, 5.00);&quot;</span>
+</code></pre></div>
+You should see <code>FOREIGN KEY constraint failed</code> — the database refusing to store a reference to nothing.
+That rejection is the schema doing its job.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sqlite3<span class="w"> </span>-header<span class="w"> </span>-column<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s2">SELECT u.name, COUNT(o.id) AS orders, IFNULL(SUM(o.total), 0) AS spent</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s2">FROM users u</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s2">LEFT JOIN orders o ON o.user_id = u.id</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s2">GROUP BY u.id, u.name</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s2">ORDER BY orders DESC;&quot;</span>
+</code></pre></div>
+Predict before you read: Ada has <strong>2</strong> orders (55.50), Linus <strong>1</strong> (12.00), Grace <strong>0</strong>. The <strong>LEFT
+JOIN</strong> is deliberate — Grace has no orders, and an <code>INNER JOIN</code> would drop her entirely. <code>GROUP BY</code>
+collapses rows per user; <code>COUNT</code>/<code>SUM</code> aggregate within each group.</p>
+<p>Click <strong>Check</strong> to verify the aggregate is correct.</p>
+</div>
+<div class="tabbed-block">
+<p>A committed transaction is permanent:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s">&lt;&lt;&#39;SQL&#39;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="s">BEGIN;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="s">INSERT INTO orders (user_id, total) VALUES (3, 8.75);</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s">COMMIT;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s">SQL</span>
+</code></pre></div>
+A rolled-back transaction leaves <strong>no trace</strong> — all-or-nothing:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s">&lt;&lt;&#39;SQL&#39;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="s">BEGIN;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s">DELETE FROM orders;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">SELECT COUNT(*) AS during_txn FROM orders;   -- 0: gone inside the txn</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">ROLLBACK;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">SELECT COUNT(*) AS after_rollback FROM orders; -- back to 4: undone</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s">SQL</span>
+</code></pre></div>
+Now add an index on the column joins and filters use, and see the planner pick it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id);&quot;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;EXPLAIN QUERY PLAN SELECT * FROM orders WHERE user_id = 1;&quot;</span>
+</code></pre></div>
+The plan now says <code>SEARCH orders USING INDEX idx_orders_user</code> — a B-tree lookup, not a full scan.
+Click <strong>Check</strong> to verify the tables, the foreign key, and the index.</p>
+</div>
+<div class="tabbed-block">
+<p>First, a deliberately bad wide table that repeats the customer's city on every row:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s">&lt;&lt;&#39;SQL&#39;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="s">CREATE TABLE orders_wide (</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="s">  id INTEGER PRIMARY KEY, customer_name TEXT, customer_city TEXT, total REAL</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="s">);</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="s">INSERT INTO orders_wide (customer_name, customer_city, total) VALUES</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="s">  (&#39;Ada&#39;, &#39;London&#39;, 20.00), (&#39;Ada&#39;, &#39;London&#39;, 35.50);</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="s">SQL</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;UPDATE orders_wide SET customer_city = &#39;Cambridge&#39; WHERE id = 1;&quot;</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>sqlite3<span class="w"> </span>-header<span class="w"> </span>-column<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;SELECT * FROM orders_wide;&quot;</span>
+</code></pre></div>
+Ada's two rows now <strong>disagree</strong> on her city — the update anomaly, live. Fix it by moving the repeated
+column into <code>users</code> so the city lives <strong>once</strong>, referenced by every order via <code>user_id</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sqlite3<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s">&lt;&lt;&#39;SQL&#39;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="s">ALTER TABLE users ADD COLUMN city TEXT;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="s">UPDATE users SET city = &#39;London&#39; WHERE name = &#39;Ada&#39;;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="s">DROP TABLE orders_wide;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="s">SQL</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>sqlite3<span class="w"> </span>-header<span class="w"> </span>-column<span class="w"> </span>~/db-lab/shop.db<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="s2">SELECT u.name, u.city, COUNT(o.id) AS orders</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="s2">FROM users u LEFT JOIN orders o ON o.user_id = u.id</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="s2">GROUP BY u.id;&quot;</span>
+</code></pre></div>
+The city is stored in exactly one row of <code>users</code>; change it there and every order reflects it through
+the join. That is 3NF's promise — each fact in one place, no anomaly possible.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can design a keyed schema, insert data, run a JOIN with an aggregate, prove a transaction is
+all-or-nothing, add an index the planner uses, and split a redundant column out — the guided lab is
+done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work against your <code>~/db-lab/shop.db</code> (or a fresh one). Model on
+paper first, write the SQL by hand, and predict every result before you run it. Reveal a hint only after
+you've tried.</em></p>
+<h3 id="challenge-1-a-many-to-many-relationship">Challenge 1 — A many-to-many relationship<a class="headerlink" href="#challenge-1-a-many-to-many-relationship" title="Permanent link">&para;</a></h3>
+<p>Extend the schema so a <strong>product</strong> can appear on many <strong>orders</strong> and an order can contain many products.
+Name every key.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>A one-to-many needs one foreign key; a <strong>many-to-many</strong> needs a third table — a <em>junction</em> table —
+holding two foreign keys, one to each side.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="nb">REAL</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">);</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">order_items</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="n">order_id</span><span class="w">   </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">orders</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span><span class="n">product_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">products</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="n">qty</span><span class="w">        </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">qty</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">)</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="p">);</span>
+</code></pre></div>
+<code>order_items</code> is the junction table: its composite primary key <code>(order_id, product_id)</code> is also two
+foreign keys. That resolves the many-to-many — the same shape as <code>post_tags</code> for a blog.</p>
+</details>
+<h3 id="challenge-2-members-above-the-average-order-count">Challenge 2 — "Members above the average order count"<a class="headerlink" href="#challenge-2-members-above-the-average-order-count" title="Permanent link">&para;</a></h3>
+<p>Write one query returning each user whose order count is <strong>strictly greater than the average</strong> order count
+across all users.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>You need a per-user count (GROUP BY), then compare it to a single number — the average count — computed
+in a subquery or a CTE (<code>WITH</code>). Remember HAVING filters groups.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">WITH</span><span class="w"> </span><span class="n">per_user</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">n</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">name</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">)</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">per_user</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="k">WHERE</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">per_user</span><span class="p">)</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+</code></pre></div>
+The CTE computes each user's count once; the outer <code>WHERE</code> compares it to the scalar subquery
+<code>AVG(n)</code>. (You could inline it, but the CTE reads far cleaner — and avoids recomputing the average.)</p>
+</details>
+<h3 id="challenge-3-prove-the-index-dont-just-claim-it">Challenge 3 — Prove the index, don't just claim it<a class="headerlink" href="#challenge-3-prove-the-index-dont-just-claim-it" title="Permanent link">&para;</a></h3>
+<p>Load enough rows that a full scan is visibly the default, then show <code>EXPLAIN QUERY PLAN</code> changing from a
+scan to an index search after you add an index.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>A recursive CTE can generate thousands of rows fast. Run <code>EXPLAIN QUERY PLAN</code> on a filtered query
+<strong>before</strong> creating the index (expect <code>SCAN</code>), then create it and re-run (expect <code>SEARCH ... USING
+INDEX</code>).</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">big</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">);</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">WITH</span><span class="w"> </span><span class="k">RECURSIVE</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">50000</span><span class="p">)</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">big</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;x&#39;</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="k">EXPLAIN</span><span class="w"> </span><span class="n">QUERY</span><span class="w"> </span><span class="n">PLAN</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">big</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">   </span><span class="c1">-- SCAN big</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_big_k</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">big</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="k">EXPLAIN</span><span class="w"> </span><span class="n">QUERY</span><span class="w"> </span><span class="n">PLAN</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">big</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">   </span><span class="c1">-- SEARCH big USING INDEX idx_big_k</span>
+</code></pre></div>
+That plan change from <code>SCAN</code> to <code>SEARCH ... USING INDEX</code> is the <code>O(n) → O(log n)</code> win made visible —
+M32's B-tree solving M21's "measure, then fix the hot path." In PostgreSQL you'd use <code>EXPLAIN ANALYZE</code>
+to see the <em>timing</em> collapse too.</p>
+</details>
+<h3 id="challenge-4-the-artifact-defend-a-schema-an-index-win">Challenge 4 (the artifact) — Defend a schema + an index win<a class="headerlink" href="#challenge-4-the-artifact-defend-a-schema-an-index-win" title="Permanent link">&para;</a></h3>
+<p>Design a normalized (3NF) schema for a small domain of your choice (library / blog / store), seed it, and
+build a short <strong>query portfolio</strong>: a three-table join, a GROUP BY with HAVING, a subquery or CTE, a
+transaction, and the before/after <code>EXPLAIN</code> from Challenge 3. Be ready to defend <em>why these tables and
+keys</em> and <em>why this index</em> (which column, the write-cost trade).</p>
+<details class="success">
+<summary>What 'defensible' means</summary>
+<p>The schema is in 3NF and you can name the anomaly each split prevents; every join is at the right grain
+(no fan-out duplicates); the index sits on a column queries actually filter/join on and you can state
+its write cost; and the <code>EXPLAIN</code> — not your intuition — is what proves the speedup. This is Level 4 of
+the practice ladder and one half of the module's two artifacts.</p>
+</details>
+<h3 id="challenge-5-stretch-break-it-then-defend-it-sql-injection">Challenge 5 (stretch) — Break it, then defend it: SQL injection<a class="headerlink" href="#challenge-5-stretch-break-it-then-defend-it-sql-injection" title="Permanent link">&para;</a></h3>
+<p>Show how a query built by string-concatenating user input can be subverted, then give the one correct fix.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>A query built as <code>"SELECT * FROM users WHERE name = '" + input + "'"</code> lets an attacker pass
+<code>' OR 1=1 --</code>, producing <code>WHERE name = '' OR 1=1 --'</code> — which matches <strong>every</strong> row (or worse,
+<code>; DROP TABLE</code>). The one correct defense is a <strong>parameterized (prepared) query</strong>: pass the input as a
+bound parameter (<code>WHERE name = ?</code>, <code>(input,)</code>) so the driver sends it as <em>data</em>, never as SQL — it can
+never change the query's structure. Escaping by hand is not a substitute; parameterize, always.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard — is
+what builds the memory.</em></p>
+<details class="question">
+<summary>Define relation, primary key, foreign key, and SQL — one line each.</summary>
+<p><strong>Relation/table:</strong> a typed set of rows (tuples), each a record with the same columns (M30's relation).
+<strong>Primary key:</strong> a column (or set) that uniquely identifies each row. <strong>Foreign key:</strong> a column
+referencing another table's primary key, encoding a relationship. <strong>SQL:</strong> the declarative language for
+defining and querying relational data.</p>
+</details>
+<details class="question">
+<summary>What does ACID stand for, one line per letter?</summary>
+<p><strong>Atomicity</strong> — a transaction happens fully or not at all. <strong>Consistency</strong> — it moves the database from
+one valid state to another (constraints hold). <strong>Isolation</strong> — concurrent transactions don't corrupt
+each other. <strong>Durability</strong> — once committed, it survives a crash.</p>
+</details>
+<details class="question">
+<summary>What do 1NF, 2NF, and 3NF each remove?</summary>
+<p><strong>1NF</strong> removes non-atomic (repeating/multi-valued) fields. <strong>2NF</strong> removes partial dependencies on
+<em>part</em> of a composite key. <strong>3NF</strong> removes transitive dependencies (a non-key column depending on
+another non-key column). The point of all three: eliminate redundancy so each fact lives once.</p>
+</details>
+<details class="question">
+<summary>How does an index make a query faster, in M32's terms?</summary>
+<p>Without one, matching a value means scanning every row — <code>O(n)</code>. An index is a separate data structure
+(usually a <strong>B-tree</strong> — M32's balanced tree, sometimes a hash) keyed on that column, so the database
+navigates directly to matching rows in <code>O(log n)</code>. It's M32's structure applied to data at rest, and
+<code>EXPLAIN</code> proves it changed the plan.</p>
+</details>
+<details class="question">
+<summary>WHERE vs HAVING — what's the difference?</summary>
+<p><strong>WHERE</strong> filters individual rows <em>before</em> grouping. <strong>HAVING</strong> filters <em>groups</em> after <code>GROUP BY</code>, and
+can reference aggregates. "WHERE age &gt; 18" filters people; "HAVING COUNT(*) &gt; 5" keeps only groups with
+more than five members.</p>
+</details>
+<details class="question">
+<summary>You have members(id, name) and loans(id, member_id, book_id). Write 'each member and their loan count, most first.'</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">loan_count</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">FROM</span><span class="w"> </span><span class="n">members</span><span class="w"> </span><span class="n">m</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">loans</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">member_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">name</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">loan_count</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+</code></pre></div>
+<strong>LEFT JOIN</strong> so members with zero loans still appear (with count 0); an <code>INNER JOIN</code> would drop them.</p>
+</details>
+<details class="question">
+<summary>A query on a million-row table filtering on <code>email</code> takes 40 seconds. What do you do, and what proves it worked?</summary>
+<p>Run <code>EXPLAIN</code> (or <code>EXPLAIN ANALYZE</code>) — it shows a sequential (full) scan. <code>CREATE INDEX ON &lt;table&gt;(email);</code>
+then re-run <code>EXPLAIN</code> — it now shows an index scan and the time drops from seconds to milliseconds
+(<code>O(n) → O(log n)</code>). <code>EXPLAIN</code> is the proof, not intuition (M32/M21).</p>
+</details>
+<details class="question">
+<summary>A join returns duplicate rows. What's the likely cause?</summary>
+<p>A <strong>fan-out</strong>: joining on a one-to-many (or many-to-many) multiplies rows — each parent appears once per
+matching child. If you only wanted parent rows you're joining at the wrong grain; fix with an aggregate
++ <code>GROUP BY</code>, <code>DISTINCT</code>, or a subquery.</p>
+</details>
+<details class="question">
+<summary>Why is 'SQL vs NoSQL' a workload question, not a war?</summary>
+<p>Relational databases run the world's transactional data with ACID and powerful ad-hoc queries; NoSQL
+stores trade some of that for scale or flexible schemas on a <em>specific</em> access pattern. Under the CAP
+theorem you weigh consistency vs availability for <em>your</em> workload. You choose the store to fit the job —
+relational for integrity + complex queries, the matching NoSQL for scale/flexibility — not by fashion.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>, to someone who has only ever used spreadsheets: <em>"What is a
+relational database, and why is it more than a spreadsheet?"</em> You must use the <strong>library analogy first</strong>
+(shelves = tables, catalog number = primary key, loan slip = foreign key), then explain <strong>normalization</strong>
+with the update-anomaly example, and name <strong>≥2 curriculum bridges</strong> (an index IS M32's B-tree; Redis IS
+a key-value store). Then, in <strong>90 seconds</strong>, walk the bank transfer to justify <strong>transactions/ACID</strong>. If
+you can't yet, that's your signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — a module is only "done" when every box is
+true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> relation, primary key, foreign key, and SQL — one line each, cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> an ER (entity-relationship) model with the right cardinalities (1:1, 1:many, many:many via a junction table).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Write</strong> DDL: <code>CREATE</code> tables with primary/foreign keys and constraints (NOT NULL, UNIQUE, CHECK).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Query</strong> with SELECT/WHERE/ORDER BY and modify with UPDATE/DELETE <strong>safely</strong> (SELECT first, WHERE always).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Write</strong> INNER and OUTER joins and say when each is needed (and why INNER silently drops rows).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Aggregate</strong> with GROUP BY/HAVING and distinguish HAVING (groups) from WHERE (rows).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Write</strong> a subquery/CTE and reason about the logical execution order.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain and apply</strong> normalization 1NF→3NF, and name the anomaly each split prevents.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Denormalize</strong> deliberately for a measured read-heavy path and justify the trade.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Write</strong> a transaction and explain each ACID letter on the bank-transfer example.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Add</strong> an index, explain it as a B-tree (M32), and use <code>EXPLAIN</code> to prove the <code>O(n)→O(log n)</code> win.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the read-speed vs write-cost/space index trade — why you don't index every column.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> the NoSQL families, state the CAP theorem, and choose a store for a given workload.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Recognize</strong> Redis as a key-value store (M28's cache) and diagnose the N+1 query problem.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> SQL injection and fix it with a parameterized query.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach</strong> relational modeling, SQL, and the store decision (pass the teach-back above).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active — every
+M33 review also pulls one item from an earlier module (its structures ARE this module's machinery).
+Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards 1–20 · write the "user + order count" query cold · design a fresh 3-table schema with keys</td>
+<td>M32: a B-tree keeps lookups <code>O(log n)</code> — draw one and trace a search</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Normalize a fresh redundant table to 3NF, naming each anomaly · the JOIN family as set diagrams</td>
+<td>M30: a relation is a set of tuples — narrate UNION / INTERSECT / EXCEPT</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>A three-table join + a GROUP BY/HAVING + a subquery from memory · a money-transfer transaction</td>
+<td>M32: <code>O(n)</code> full scan vs <code>O(1)</code> hash lookup — when each applies</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Add an index and read <code>EXPLAIN</code> before/after · explain each ACID letter on the bank transfer</td>
+<td>M21: predict → measure → reconcile, applied to a slow query</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Reproduce both artifacts (schema + query portfolio) from scratch · justify one store choice via CAP</td>
+<td>M28: Redis named as a key-value store — where the cache sat in serving</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> Big Data &amp; Data Architecture (M34 — this OLTP database becomes one end of a
+spectrum with warehouses, lakes, and streams) · Backend &amp; API Engineering (M36 — the API is a thin layer
+over this database; ORMs, pooling, the N+1 trap) · AI Infrastructure (M28 — Redis, now recognized as a
+key-value database) · the Capstone, whose service is backed by a designed, normalized, EXPLAIN-justified
+schema (M21 + M32 + M33 together).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>A relational database stores facts as related tables of keyed rows; SQL declares WHAT you want and the
+planner uses an index (M32's B-tree) to fetch it fast; normalization keeps it honest and transactions
+keep it trustworthy — the persistence foundation every later service stands on.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../stage-11/module-32/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 32 — Data Structures &amp; Algorithms">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 32 — Data Structures & Algorithms
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-34/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 34 — Big Data &amp; Data Architecture">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 34 — Big Data & Data Architecture
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

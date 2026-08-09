@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The terminal and the shell — the interface you will operate every later topic from. Navigate, manipulate files, read man pages, and build the safety habits that prevent production accidents.">
+        <meta name="description" content="How machines represent and process human text — tokenization, embeddings, the transformer and self-attention, the core tasks (classification, NER, QA), and the task-appropriate evaluation where "fluent" is not "correct."">
       
       
         <meta name="author" content="Learning OS">
       
       
       
-        <link rel="prev" href="../module-01/">
+        <link rel="prev" href="../module-37/">
       
       
-        <link rel="next" href="../../stage-02/module-03/">
+        <link rel="next" href="../module-39/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Module 02 — First Contact with the Terminal - Learning OS</title>
+        <title>Module 38 — Natural Language Processing - Learning OS</title>
       
     
     
@@ -97,7 +97,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#module-02-first-contact-with-the-terminal" class="md-skip">
+        <a href="#module-38-natural-language-processing" class="md-skip">
           Skip to content
         </a>
       
@@ -133,7 +133,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Module 02 — First Contact with the Terminal
+              Module 38 — Natural Language Processing
             
           </span>
         </div>
@@ -308,8 +308,6 @@
       
   
   
-    
-  
   
   
     
@@ -322,11 +320,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -347,7 +345,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -365,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../module-01/" class="md-nav__link">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
         
   
   
@@ -390,37 +388,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Module 02 — First Contact with the Terminal
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
         
   
   
@@ -436,247 +407,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#why-this-matters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why this matters
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#watch" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Watch
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#key-notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key Notes
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Key Notes">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-picture-keystroke-to-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The picture: keystroke to output
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#command-line-anatomy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Command line anatomy
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paths-the-address-system" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Paths — the address system
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prompt-anatomy-read-it-before-you-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prompt anatomy — read it before you type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#six-mechanisms-that-explain-the-rest" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Six mechanisms that explain the rest
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#the-safety-model-because-rm-has-no-undo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The safety model — because rm has no undo
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#guided-lab-your-first-working-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Guided Lab: your first working session
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#solo-lab-figure-it-out" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solo Lab: figure it out
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Solo Lab: figure it out">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#challenge-1-one-command-whole-tree" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 1 — One command, whole tree
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#challenge-2-count-without-counting-by-eye" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 2 — Count without counting by eye
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 3 — Prove the shell expands the glob, not the program
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#challenge-4-learn-an-unseen-option-from-man-only" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 4 — Learn an unseen option from man only
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#challenge-5-stretch-type-vs-which-disagree" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Challenge 5 (stretch) — type vs which disagree
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#self-check" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Self-Check
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mastery-checklist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Mastery checklist
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#review-lock-it-in" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Review — lock it in
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2294,8 +2024,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -2306,11 +2038,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
         
           
           <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
@@ -2331,7 +2063,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_15">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2349,7 +2081,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-13/module-37/" class="md-nav__link">
+      <a href="../module-37/" class="md-nav__link">
         
   
   
@@ -2374,10 +2106,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../stage-13/module-38/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -2393,6 +2152,225 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-text-meaning-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: text → meaning → task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text-to-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Text to vectors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-model-from-bag-of-words-to-the-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model — from bag-of-words to the transformer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tasks-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tasks &amp; evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-text-to-a-trained-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: text to a trained classifier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-prove-accuracy-lies-on-imbalanced-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Prove accuracy lies on imbalanced text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-analogy-arithmetic-by-hand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Analogy arithmetic by hand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-a-tokenizer-mismatch-breaks-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — A tokenizer mismatch breaks everything
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-add-a-third-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Add a third class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-sketch-the-rag-guardrail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Sketch the RAG guardrail
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2405,7 +2383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stage-13/module-39/" class="md-nav__link">
+      <a href="../module-39/" class="md-nav__link">
         
   
   
@@ -2494,10 +2472,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-picture-keystroke-to-output" class="md-nav__link">
+  <a href="#the-picture-text-meaning-task" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The picture: keystroke to output
+        The picture: text → meaning → task
       
     </span>
   </a>
@@ -2505,10 +2483,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#command-line-anatomy" class="md-nav__link">
+  <a href="#text-to-vectors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Command line anatomy
+        Text to vectors
       
     </span>
   </a>
@@ -2516,10 +2494,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#paths-the-address-system" class="md-nav__link">
+  <a href="#the-model-from-bag-of-words-to-the-transformer" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paths — the address system
+        The model — from bag-of-words to the transformer
       
     </span>
   </a>
@@ -2527,32 +2505,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#prompt-anatomy-read-it-before-you-type" class="md-nav__link">
+  <a href="#tasks-evaluation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prompt anatomy — read it before you type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#six-mechanisms-that-explain-the-rest" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Six mechanisms that explain the rest
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#the-safety-model-because-rm-has-no-undo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The safety model — because rm has no undo
+        Tasks &amp; evaluation
       
     </span>
   </a>
@@ -2565,10 +2521,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#guided-lab-your-first-working-session" class="md-nav__link">
+  <a href="#guided-lab-text-to-a-trained-classifier" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Guided Lab: your first working session
+        Guided Lab: text to a trained classifier
       
     </span>
   </a>
@@ -2588,10 +2544,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#challenge-1-one-command-whole-tree" class="md-nav__link">
+  <a href="#challenge-1-prove-accuracy-lies-on-imbalanced-text" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 1 — One command, whole tree
+        Challenge 1 — Prove accuracy lies on imbalanced text
       
     </span>
   </a>
@@ -2599,10 +2555,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-2-count-without-counting-by-eye" class="md-nav__link">
+  <a href="#challenge-2-analogy-arithmetic-by-hand" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 2 — Count without counting by eye
+        Challenge 2 — Analogy arithmetic by hand
       
     </span>
   </a>
@@ -2610,10 +2566,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" class="md-nav__link">
+  <a href="#challenge-3-a-tokenizer-mismatch-breaks-everything" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 3 — Prove the shell expands the glob, not the program
+        Challenge 3 — A tokenizer mismatch breaks everything
       
     </span>
   </a>
@@ -2621,10 +2577,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-4-learn-an-unseen-option-from-man-only" class="md-nav__link">
+  <a href="#challenge-4-add-a-third-class" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 4 — Learn an unseen option from man only
+        Challenge 4 — Add a third class
       
     </span>
   </a>
@@ -2632,10 +2588,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#challenge-5-stretch-type-vs-which-disagree" class="md-nav__link">
+  <a href="#challenge-5-stretch-sketch-the-rag-guardrail" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Challenge 5 (stretch) — type vs which disagree
+        Challenge 5 (stretch) — Sketch the RAG guardrail
       
     </span>
   </a>
@@ -2697,22 +2653,26 @@
 
 
 
-<h1 id="module-02-first-contact-with-the-terminal">Module 02 — First Contact with the Terminal<a class="headerlink" href="#module-02-first-contact-with-the-terminal" title="Permanent link">&para;</a></h1>
-<p><small>Stage 1 · Foundations · ~1 week at 4 h/day · Prerequisite — Module 01 (the machine model you now talk to).</small></p>
+<h1 id="module-38-natural-language-processing">Module 38 — Natural Language Processing<a class="headerlink" href="#module-38-natural-language-processing" title="Permanent link">&para;</a></h1>
+<p><small>Stage 13 · Cloud &amp; AI Domains · ~3 weeks at 4 h/day · Prerequisites — M26–27 (AI/ML fundamentals: training, backprop, evaluation) · M30 (linear algebra — vectors) · M31 (probability — distributions) · M32 (complexity — O(n²)).</small></p>
 <h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
-<p>A <strong>terminal</strong> (terminal emulator) is a program that displays text and forwards your keystrokes to a
-<strong>shell</strong>. The <strong>shell</strong> (Bash here) reads your command lines, runs programs for you, and prints their
-output. Terminal = the window; shell = the interpreter inside it.</p>
-<p>Module 01 gave you the model of the machine; this module gives you your <strong>hands</strong>. Every topic in this
-curriculum — Linux, Docker, Kubernetes, Git, Python, remote GPU boxes — is operated from a shell. This
-is the last module that "teaches the terminal": afterwards the terminal is simply the medium everything
-else lives in. By the end of the week the prompt is a place you <em>work</em>, not a hazard you avoid.</p>
+<p><strong>NLP</strong> (Natural Language Processing) is the field of making computers represent, understand, and
+generate human language. Language is discrete symbols but machine learning needs numbers, so NLP's
+whole foundation is one bridge: <strong>turn text into vectors, run a model, turn the result back into an
+answer.</strong> Every chatbot, search box, spam filter, translator, and RAG assistant you have ever used is
+that bridge, built well.</p>
+<p>Modules 26–28 gave you the LLM (Large Language Model — a transformer trained on massive text)
+through-line: you built a tiny network's guts (backprop), met tokens and embeddings gently, and served
+a model. This module makes that through-line a genuine <strong>specialty</strong> — it goes deep on how text
+becomes vectors, how <strong>self-attention</strong> actually works, how the classic tasks function, and — hardest
+of all — how to <em>evaluate</em> them, because "it generates fluent text" is not "it is correct."</p>
 <div class="admonition info">
 <p class="admonition-title">What this unlocks</p>
-<p>M3–M4 administer Linux <em>through</em> this prompt · M5 turns today's command lines into scripts · M6 (Vim)
-and M7 (Tmux) live inside the terminal · M9 (SSH) is this exact interface over the network · a
-<code>docker exec -it … bash</code> (M16) drops you into a container's shell — <strong>this module, inside a box.</strong>
-Learn it as reflexes now and every later tool is just new vocabulary in the same conversation.</p>
+<p>This is the language half of applied AI. M39 (Computer Vision) reuses the <em>same</em> transfer-learning
+workflow on images · the capstone, if language-based, is a fine-tuned or RAG-backed service built
+exactly like here · and the whole current AI-product wave — assistants, semantic search, RAG over
+company docs, moderation, translation — is this module at scale. NLP is where most applied AI
+engineering lives today.</p>
 </div>
 <hr />
 <h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
@@ -2727,161 +2687,188 @@ Learn it as reflexes now and every later tool is just new vocabulary in the same
 <p>Once the explainer is on YouTube, replace the placeholder card above with:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 02 — First Contact with the Terminal&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 38 — Natural Language Processing&quot;</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div>
-Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
-terminal vs shell (the window vs the person answering the phone) → prompt anatomy →
-the keystroke→output loop (fork/exec back to M1) → globbing happens in the shell, not the program →
-the three safety habits that stand in for <code>rm</code>'s missing undo.</p>
+Video script beats (from the blueprint's Definition / Analogy / Misconceptions):
+words as points on a map of meaning → tokenization (whole words vs subwords) → embeddings
+(king − man + woman ≈ queen) → the traveler who predicts the next stop (the language model) →
+self-attention: look at the whole journey at once (and why that is O(n²)) → fine-tuning as a short
+local tour → and the hard part: fluent ≠ correct, so the metric must match the task.</p>
 </details>
 <p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
 <div class="admonition tip">
 <p class="admonition-title">Follow along, don't just watch</p>
-<p>Open the <a href="#guided-lab-your-first-working-session">Guided Lab</a> in a browser terminal and run each
-command yourself as it appears. Typing beats watching every time — and it is part of how the memory
-forms.</p>
+<p>Open the <a href="#guided-lab-text-to-a-trained-classifier">Guided Lab</a> in a browser terminal and run each
+command yourself as it appears. You will tokenize by hand, build a <strong>TF-IDF</strong> vectorizer, train a
+classifier, and measure it — typing beats watching every time, and it is part of how the memory forms.</p>
 </div>
 <hr />
 <h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
 <p><em>Standalone. This is the reference you keep.</em></p>
-<h3 id="the-picture-keystroke-to-output">The picture: keystroke to output<a class="headerlink" href="#the-picture-keystroke-to-output" title="Permanent link">&para;</a></h3>
+<h3 id="the-picture-text-meaning-task">The picture: text → meaning → task<a class="headerlink" href="#the-picture-text-meaning-task" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TB
-    K["You — keyboard"] --&gt; T["Terminal emulator&lt;br/&gt;draws text, sends keys"]
-    T --&gt; Sh["Shell (bash)&lt;br/&gt;parse · expand globs and vars"]
-    Sh --&gt; P["PATH search&lt;br/&gt;find the program"]
-    P --&gt; FE["fork + exec&lt;br/&gt;(M1's workflow)"]
-    FE --&gt; Pr["Program — ls, cat, cp"]
-    Pr --&gt; Sy["syscalls to the kernel"]
-    Sy --&gt; Out["Text output"]
-    Out --&gt; T</code></pre>
-<p>The shell is just a program (M1: a <strong>process</strong>) that starts <em>other</em> processes and wires their text
-input/output back to your terminal. When you type <code>ls</code>, the shell searches the directories in <code>$PATH</code>
-for a program named <code>ls</code>, then <code>fork</code>+<code>exec</code>s it — the exact workflow you traced in Module 01, now
-under your fingers.</p>
-<h3 id="command-line-anatomy">Command line anatomy<a class="headerlink" href="#command-line-anatomy" title="Permanent link">&para;</a></h3>
-<p>Read a command left to right — <code>command -options arguments</code>:</p>
+    subgraph ingest["Text to vectors"]
+        Raw["Raw text&lt;br/&gt;unhappiness"] --&gt; Tok["Tokenize&lt;br/&gt;un · happi · ness"]
+        Tok --&gt; Emb["Embed&lt;br/&gt;dense vectors — M30"]
+    end
+    subgraph model["The model"]
+        Emb --&gt; Attn["Transformer&lt;br/&gt;self-attention: each token&lt;br/&gt;attends to every other — O(n²)"]
+    end
+    subgraph task["Task"]
+        Attn --&gt; Head["Task head"]
+        Head --&gt; Out["Output&lt;br/&gt;label · tag · answer · text"]
+    end</code></pre>
+<p>Read it left-of-the-arrows as a pipeline: <strong>tokenize → embed → model → task head → decode/evaluate.</strong>
+Everything in this module is one stage of that pipeline made deep.</p>
+<h3 id="text-to-vectors">Text to vectors<a class="headerlink" href="#text-to-vectors" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Token</strong> — the atomic input unit the model consumes. <strong>Tokenization</strong> is splitting text into tokens.
+  The <strong>vocabulary</strong> is the fixed set of tokens the model knows (each with an integer id).</li>
+<li><strong>Subword tokenization</strong> — schemes like <strong>BPE</strong> (Byte-Pair Encoding) and <strong>WordPiece</strong> that split
+  rare words into reusable pieces (<code>unhappiness → un · happi · ness</code>), so even a never-seen word still
+  gets tokens. This is <em>not</em> trivial: token boundaries affect cost, context length, and even arithmetic
+  and spelling behavior.</li>
+<li><strong>Embedding</strong> — a dense vector representing a token (or a whole document) in a space <em>learned</em> so that
+  semantic similarity is geometric proximity (M30's vectors). Words that appear in similar contexts sit
+  near each other (the distributional hypothesis).</li>
+<li><strong>Cosine similarity</strong> — the standard nearness measure: the <strong>dot product</strong> (M30) of two vectors
+  divided by their lengths (normalized), so it reads pure <em>direction</em>. High cosine = same meaning.
+  This is why analogies are arithmetic: <code>king − man + woman ≈ queen</code>.</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th>Piece of <code>ls -l /home</code></th>
-<th>Kind</th>
-<th>Role</th>
+<th>Tokenization scheme</th>
+<th>Unit</th>
+<th>Trade-off</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>ls</code></td>
-<td>command</td>
-<td>the program to run</td>
+<td><strong>Word</strong></td>
+<td>whole words</td>
+<td>small sequences, but a huge vocabulary and no way to handle unseen words</td>
 </tr>
 <tr>
-<td><code>-l</code></td>
-<td>option / flag</td>
-<td><strong>HOW</strong> it behaves (here: long listing)</td>
+<td><strong>Character</strong></td>
+<td>single characters</td>
+<td>tiny vocabulary, handles anything, but very long sequences and weak units</td>
 </tr>
 <tr>
-<td><code>/home</code></td>
-<td>argument</td>
-<td><strong>WHAT</strong> it operates on</td>
+<td><strong>Subword (BPE / WordPiece)</strong></td>
+<td>word pieces</td>
+<td>the modern default — bounded vocabulary <em>and</em> any word is representable</td>
 </tr>
 </tbody>
 </table>
-<p>Options modify behaviour; arguments say what to act on; <code>man &lt;command&gt;</code> documents every option there is.</p>
-<h3 id="paths-the-address-system">Paths — the address system<a class="headerlink" href="#paths-the-address-system" title="Permanent link">&para;</a></h3>
+<h3 id="the-model-from-bag-of-words-to-the-transformer">The model — from bag-of-words to the transformer<a class="headerlink" href="#the-model-from-bag-of-words-to-the-transformer" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Absolute</strong> starts at root <code>/</code> — <code>/home/you/notes.md</code> — same location from anywhere.</li>
-<li><strong>Relative</strong> starts at your <strong>working directory</strong> — <code>notes.md</code> — depends on where you are.</li>
-<li><code>.</code> = here · <code>..</code> = parent · <code>~</code> = your home · <code>-</code> (with <code>cd</code>) = the previous directory.</li>
-<li><code>pwd</code> + <code>ls</code> are your <strong>eyes</strong>: where am I, and what's here?</li>
+<li><strong>Bag-of-words / TF-IDF</strong> — the simplest text vector: count the words, ignore order. <strong>TF-IDF</strong>
+  (Term Frequency–Inverse Document Frequency) weights each word by how <em>informative</em> it is — frequent in
+  this document but rare across the corpus — so "the" counts for little and "refund" counts for a lot. A
+  strong, cheap baseline for classification (what you build in the lab), but it <em>loses word order</em>.</li>
+<li><strong>Language model</strong> — a model that assigns probabilities to sequences: <code>P(next token | context)</code>
+  (M31's distributions). <strong>Autoregressive</strong> generation produces one token at a time, feeding each back
+  as context (the GPT objective). <strong>Perplexity</strong> is its intrinsic metric — lower = less "surprised."</li>
+<li><strong>n-gram</strong> — a language model that conditions only on the last <em>n−1</em> tokens; it generates
+  locally-plausible but globally-incoherent text because it <em>cannot remember far back</em>. That failure
+  motivates attention.</li>
+<li><strong>RNN / LSTM</strong> — Recurrent Neural Network / Long Short-Term Memory: process a sequence step by step
+  with a fading memory; they struggle with long-range dependencies (vanishing gradients, M26).</li>
+<li><strong>Self-attention</strong> — the transformer's core: each token forms a <strong>query</strong> and compares it (dot
+  product) against every token's <strong>key</strong> to get relevance scores, softmaxes them into weights, and takes
+  the weighted sum of every token's <strong>value</strong> (Q · Kᵀ → softmax → Σ V — M30's weighted average). So
+  every token's new representation blends information from <em>every other token</em>, weighted by learned
+  relevance — directly connecting distant tokens (unlike an RNN's fading memory). <strong>Attention is not
+  magic; it is a weighted average.</strong></li>
+<li><strong>The transformer</strong> — stacks self-attention with <strong>multi-head</strong> attention (several attention patterns
+  at once) and <strong>positional encoding</strong> (order re-injected, since attention itself is order-blind); the
+  2017 paper is <em>"Attention Is All You Need."</em> <strong>BERT</strong> (Bidirectional Encoder Representations from
+  Transformers) attends both directions → good at <em>understanding</em> (classification, NER, QA); <strong>GPT</strong>
+  (Generative Pre-trained Transformer) attends only leftward → good at <em>generation</em>.</li>
+<li><strong>O(n²)</strong> — self-attention compares every token with every other, so <em>n</em> tokens → <em>n²</em> interactions.
+  Doubling the context roughly quadruples the cost (M32). This is exactly why long context is expensive
+  and why retrieval (RAG) is often preferred over stuffing everything in.</li>
+<li><strong>Fine-tuning</strong> — take a <strong>pretrained</strong> transformer (trained self-supervised on massive text) and
+  adapt it to your task on a <em>small</em> labeled dataset. This is <strong>transfer learning</strong> — the practical
+  modern workflow. You almost never train from scratch.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── home/
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   └── you/            ← ~  (your home)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│       └── terminal-lab/
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>├── etc/
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├── usr/bin/
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>└── proc/
-</code></pre></div>
-<p>Same folder, named two ways: <code>terminal-lab</code> from your home (<strong>relative</strong>), or
-<code>/home/you/terminal-lab</code> from anywhere (<strong>absolute</strong>).</p>
-<h3 id="prompt-anatomy-read-it-before-you-type">Prompt anatomy — read it before you type<a class="headerlink" href="#prompt-anatomy-read-it-before-you-type" title="Permanent link">&para;</a></h3>
-<p>Read the prompt before you type. In <code>you@machine:~/notes$</code>:</p>
+<h3 id="tasks-evaluation">Tasks &amp; evaluation<a class="headerlink" href="#tasks-evaluation" title="Permanent link">&para;</a></h3>
+<p>Different tasks reuse the <em>same</em> transformer backbone with a different <strong>task head</strong> — and each demands
+its <em>own</em> correct metric.</p>
 <table>
 <thead>
 <tr>
-<th>Part</th>
-<th>Meaning</th>
+<th>Task</th>
+<th>What it does</th>
+<th>Metric</th>
+<th>Blind spot to know</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>you</code></td>
-<td>your username</td>
+<td><strong>Classification</strong></td>
+<td>label text (sentiment, spam, topic)</td>
+<td><strong>F1</strong> (not just accuracy)</td>
+<td>accuracy hides failure on imbalanced classes (M27/M31)</td>
 </tr>
 <tr>
-<td><code>machine</code></td>
-<td>which host you're on</td>
+<td><strong>NER</strong> (Named Entity Recognition)</td>
+<td>tag people / places / orgs (sequence labeling)</td>
+<td>span <strong>F1</strong></td>
+<td>partial-span matches</td>
 </tr>
 <tr>
-<td><code>~/notes</code></td>
-<td>your current directory (<code>~</code> = home)</td>
+<td><strong>QA</strong> (Question Answering)</td>
+<td>find the answer span (extractive)</td>
+<td><strong>exact-match / F1</strong></td>
+<td>correct answer phrased differently</td>
 </tr>
 <tr>
-<td><code>$</code></td>
-<td>ready for input — <strong>warning:</strong> a <code>#</code> here instead means you are <strong>root</strong></td>
+<td><strong>Translation / Summarization</strong></td>
+<td>rewrite / condense text</td>
+<td><strong>BLEU / ROUGE</strong> (+ human)</td>
+<td>reward surface n-gram overlap, blind to meaning and truth</td>
+</tr>
+<tr>
+<td><strong>Language modeling</strong></td>
+<td>predict the next token</td>
+<td><strong>perplexity</strong></td>
+<td>says nothing about factual correctness</td>
 </tr>
 </tbody>
 </table>
-<p>A <code>$</code> prompt is a normal user (you own your home, mistakes are cheap). A <code>#</code> prompt is <strong>root</strong> — every
-keystroke has full-system power. This module never needs <code>#</code>, and never uses <code>sudo</code>.</p>
-<h3 id="six-mechanisms-that-explain-the-rest">Six mechanisms that explain the rest<a class="headerlink" href="#six-mechanisms-that-explain-the-rest" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>The PATH search.</strong> Typing <code>ls</code> makes the shell scan <code>$PATH</code>'s directories for a program named
-   <code>ls</code>, then fork/exec it. <code>command not found</code> means: typo, not installed, or not in PATH.</li>
-<li><strong>Globbing is the shell's job.</strong> <code>*.md</code> is expanded by the <strong>shell</strong> into matching filenames
-   <em>before</em> the program runs. The program never sees the <code>*</code>. Prove it: <code>echo *.md</code>.</li>
-<li><strong>Built-in vs program.</strong> <code>cd</code> must be a shell <strong>built-in</strong> — a child process couldn't change its
-   parent's directory. <code>ls</code> is a real program in <code>/usr/bin</code>. <code>type &lt;cmd&gt;</code> tells you which.</li>
-<li><strong>Everything is a file.</strong> Directories, devices, even kernel state (<code>/proc</code>) — one namespace, one set
-   of tools.</li>
-<li><strong>Exit status.</strong> Commands succeed (status <code>0</code>) or fail (non-zero) and <em>say so</em>. <code>echo $?</code> shows the
-   last one — your first taste of programmatic error handling (M5 builds on it).</li>
-<li><strong>Tab &amp; history are accuracy tools, not conveniences.</strong> Tab completion can't typo a path; <code>↑</code> and
-   <code>Ctrl-R</code> recall exactly what you ran. At scale that's minutes saved and near-zero path errors.</li>
-</ol>
-<h3 id="the-safety-model-because-rm-has-no-undo">The safety model — because <code>rm</code> has no undo<a class="headerlink" href="#the-safety-model-because-rm-has-no-undo" title="Permanent link">&para;</a></h3>
-<p>There is <strong>no trash can</strong> in the terminal: <code>rm</code> deletes forever. The three habits that stand in for the
-missing undo:</p>
-<ul>
-<li><strong>Sandbox discipline</strong> — do destructive work only where mistakes are cheap (<code>~/terminal-lab/</code>).</li>
-<li><strong><code>ls</code> before <code>rm</code>/<code>mv</code></strong> — look at what exists before you change it.</li>
-<li><strong><code>echo</code> the glob</strong> — see what <code>*.md</code> expands to <em>before</em> a destructive command uses it.</li>
-</ul>
-<p>Plus: never paste an unread multi-line command (its newlines <strong>execute</strong> as they arrive), and never run
-what you can't explain — <em>especially</em> with <code>sudo</code>.</p>
+<p><strong>F1</strong> is the harmonic mean of <strong>precision</strong> (of what you flagged, how much was right) and <strong>recall</strong> (of
+what should have been flagged, how much you caught) — it exposes the failure a lone <strong>accuracy</strong> number
+hides, because a model can score 95% accuracy on imbalanced text by always guessing the majority class.
+<strong>BLEU</strong> (Bilingual Evaluation Understudy) and <strong>ROUGE</strong> (Recall-Oriented Understudy for Gisting
+Evaluation) both measure n-gram overlap with a reference — cheap and automatic, but they cannot tell a
+fluent <em>wrong</em> answer from a right one.</p>
 <div class="lo-remember">
 <p><strong>Must remember (if you keep only six things):</strong></p>
 <ol>
-<li><strong>Terminal = the window; shell (bash) = the interpreter inside it.</strong> Different things.</li>
-<li><strong>The shell expands</strong> <code>*</code>, <code>~</code>, <code>$VAR</code> <em>before</em> the program sees anything — <code>echo</code> shows you what.</li>
-<li><strong>Paths:</strong> absolute starts at <code>/</code>; relative starts at your working directory. <code>pwd</code> + <code>ls</code> are your eyes.</li>
-<li><strong><code>cd</code> is a built-in, <code>ls</code> is a program</strong> — <code>type &lt;cmd&gt;</code> tells you which; <code>$PATH</code> is where programs are found.</li>
-<li><strong><code>rm</code> is forever.</strong> Sandbox · <code>ls</code>-before-<code>rm</code> · <code>echo</code>-the-glob — the three habits that replace undo.</li>
-<li><strong>Learn commands from <code>man</code></strong> (start at SYNOPSIS, search with <code>/</code>, quit with <code>q</code>) — not from guessing.</li>
+<li><strong>The pipeline:</strong> tokenize → embed → model → task head → decode/evaluate. Everything is one stage of it.</li>
+<li><strong>Meaning is geometry.</strong> Embeddings place tokens as vectors; <strong>cosine similarity</strong> (normalized dot product, M30) is nearness; analogies are arithmetic (king − man + woman ≈ queen).</li>
+<li><strong>Attention is a weighted average, not magic</strong> — each token weights every other by learned relevance (Q · Kᵀ → softmax → Σ V), which is why it captures long range <strong>and</strong> why it is <strong>O(n²)</strong> (M32).</li>
+<li><strong>Fine-tuning ≠ training from scratch</strong> — you adapt a pretrained model on little data (transfer learning). You rarely train an LLM yourself.</li>
+<li><strong>The metric must match the task:</strong> F1 for classification, exact-match/F1 for QA, BLEU/ROUGE for translation/summary, perplexity for LMs.</li>
+<li><strong>Fluent ≠ correct.</strong> A model produces <em>plausible</em> text, not <em>true</em> text — hallucination is the proof. Verify factual output; RAG grounds it.</li>
 </ol>
 </div>
 <hr />
-<h2 id="guided-lab-your-first-working-session">Guided Lab: your first working session<a class="headerlink" href="#guided-lab-your-first-working-session" title="Permanent link">&para;</a></h2>
-<p><em>Basic, step-by-step. Read-only commands inspect; the create/copy/delete steps happen ONLY inside a
-throwaway <code>~/terminal-lab/</code> sandbox you build first — nothing outside it is ever touched.</em></p>
+<h2 id="guided-lab-text-to-a-trained-classifier">Guided Lab: text to a trained classifier<a class="headerlink" href="#guided-lab-text-to-a-trained-classifier" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You will tokenize a corpus by hand, build a </em><em>TF-IDF</em><em> vectorizer over a small
+inline labeled corpus (defined in the lab — no downloads), train a classifier, evaluate it on held-out
+sentences, and inspect the most informative words. Everything runs on CPU in a throwaway
+<code>~/nlp-lab/</code> directory.</em></p>
 <div class="lo-lab-actions">
-<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-02" target="_blank">▶ Open interactive lab</a>
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-38" target="_blank">▶ Open interactive lab</a>
 <a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
 <a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
-<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-02" target="_blank">View lab source</a></p>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-38" target="_blank">View lab source</a></p>
 </div>
 <p><span id="run-locally"></span></p>
 <div class="admonition tip">
@@ -2889,259 +2876,289 @@ throwaway <code>~/terminal-lab/</code> sandbox you build first — nothing outsi
 <ul>
 <li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
 <li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
-<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below (Step 1 installs Python + scikit-learn).</li>
 </ul>
-<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size. The lab uses only scikit-learn and numpy on CPU — <strong>no model downloads.</strong></p>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Read the prompt, get your bearings</label><label for="__tabbed_1_2">2 · Navigate</label><label for="__tabbed_1_3">3 · Build a sandbox and a tree</label><label for="__tabbed_1_4">4 · Copy, move, rename — verify each time</label><label for="__tabbed_1_5">5 · Delete, safely</label><label for="__tabbed_1_6">6 · Look inside files, then get help</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Set up the bench</label><label for="__tabbed_1_2">2 · Tokenize by hand</label><label for="__tabbed_1_3">3 · Build the vocabulary</label><label for="__tabbed_1_4">4 · TF-IDF + train + evaluate</label><label for="__tabbed_1_5">5 · Cosine similarity + informative words</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">pwd</span><span class="w">            </span><span class="c1"># where am I?</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ls<span class="w">             </span><span class="c1"># what&#39;s here?</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ls<span class="w"> </span>-l<span class="w">          </span><span class="c1"># long form: is each line a file or a directory?</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>ls<span class="w"> </span>-la<span class="w"> </span>~<span class="w">       </span><span class="c1"># -a reveals hidden dotfiles like .bashrc</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span>-y<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip<span class="w"> </span>install<span class="w"> </span>--break-system-packages<span class="w"> </span>scikit-learn<span class="w"> </span>numpy
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/nlp-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/nlp-lab
 </code></pre></div>
-In <em>your</em> prompt, identify the four parts: user, host, current directory, the <code>$</code>. Journal: what did
-<code>-a</code> reveal, and what is the first character of each <code>ls -l</code> line?</p>
+<code>scikit-learn</code> gives you <code>TfidfVectorizer</code> and <code>LogisticRegression</code>; <code>numpy</code> is the vector math.
+Everything lives in <code>~/nlp-lab/</code>. Confirm with <code>python3 -c "import sklearn, numpy; print('ok')"</code>.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>/<span class="w">            </span><span class="c1"># to root — recognise M1&#39;s filesystem tour</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">cd</span><span class="w"> </span>/usr/bin<span class="w">     </span><span class="c1"># where the programs live</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">      </span><span class="c1"># how many programs? (two programs composed!)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">cd</span><span class="w">              </span><span class="c1"># bare cd = home</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">cd</span><span class="w"> </span>-<span class="w">            </span><span class="c1"># back to where you just were</span>
+<p>Before any library, <em>feel</em> what tokenization is: lowercase, strip punctuation, split on whitespace.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">text = &quot;I LOVE this movie -- it was fantastic!&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">norm = &quot;&quot;.join(c.lower() if c.isalnum() or c.isspace() else &quot; &quot; for c in text)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">tokens = norm.split()</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">print(&quot;tokens:&quot;, tokens)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">print(&quot;count :&quot;, len(tokens))</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">PY</span>
 </code></pre></div>
-Practice until <code>cd</code>, <code>pwd</code>, <code>ls</code> need zero thought. Reach <code>/etc</code> two ways: absolute (<code>cd /etc</code>) and
-relative (<code>cd ../../etc</code> — adjust for where you are).</p>
+Splitting on spaces is the naive scheme — it explodes the vocabulary and can't handle unseen words,
+which is exactly why real models use <strong>subword</strong> tokenization. You just did the first pipeline stage.</p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>~/terminal-lab<span class="w">            </span><span class="c1"># your sandbox — all destructive work lives here</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">cd</span><span class="w"> </span>~/terminal-lab
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">pwd</span><span class="w">                             </span><span class="c1"># confirm: /home/&lt;you&gt;/terminal-lab</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>projects/<span class="o">{</span>alpha,beta<span class="o">}</span>/notes<span class="w">   </span><span class="c1"># one command builds a tree (brace expansion)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># see the whole structure</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>touch<span class="w"> </span>projects/alpha/notes/day1.md
+<p>Turn a whole corpus into a <strong>vocabulary</strong> (sorted unique tokens) and a <strong>token → id</strong> map — the
+integer ids a model actually consumes. This writes <code>vocab.json</code>; the <strong>Check</strong> verifies it.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>~/nlp-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python3<span class="w"> </span>tokenizer.py
 </code></pre></div>
-Journal: what does <code>-p</code> do? (Check <code>man mkdir</code>.) Verify after every step — that rhythm <em>is</em> the lab.</p>
+(The lab drops <code>tokenizer.py</code> in for you.) Inspect the result — how many tokens, and which id did
+"movie" get?
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import json;v=json.load(open(&#39;vocab.json&#39;));print(&#39;vocab_size:&#39;,v[&#39;vocab_size&#39;]);print(&#39;movie -&gt;&#39;,v[&#39;token_to_id&#39;].get(&#39;movie&#39;))&quot;</span>
+</code></pre></div></p>
 </div>
 <div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cp<span class="w"> </span>projects/alpha/notes/day1.md<span class="w"> </span>day1-backup.md
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify the copy exists</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>mv<span class="w"> </span>day1-backup.md<span class="w"> </span>projects/beta/<span class="w">            </span><span class="c1"># move it</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>mv<span class="w"> </span>projects/beta/day1-backup.md<span class="w"> </span>projects/beta/day1-copy.md<span class="w">   </span><span class="c1"># mv also renames</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>ls<span class="w"> </span>-R<span class="w">                           </span><span class="c1"># verify after EVERY mutation</span>
+<p>Build a <strong>TF-IDF</strong> matrix over the 12-sentence labeled corpus, train a <code>LogisticRegression</code>
+classifier, and evaluate it on held-out sentences it never saw. This writes <code>metrics.json</code>; the
+<strong>Check</strong> requires the held-out <strong>accuracy</strong> to clear the bar.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>~/nlp-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python3<span class="w"> </span>classify.py
 </code></pre></div>
-<code>mv</code> both moves and renames. The verification rhythm (<code>ls -R</code> between mutations) is the real content.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cat<span class="w"> </span>metrics.json
+</code></pre></div>
+Note the lab reports <strong>F1</strong> alongside accuracy — on real, imbalanced text F1 is the number that
+matters (M27), because accuracy can look high while the minority class is missed entirely.</p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>touch<span class="w"> </span>trash1<span class="w"> </span>trash2<span class="w"> </span>trash3
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>ls<span class="w">                              </span><span class="c1"># look before you delete</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>rm<span class="w"> </span>-i<span class="w"> </span>trash1<span class="w">                    </span><span class="c1"># -i prompts before removing — answer it</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>rm<span class="w"> </span>trash2<span class="w"> </span>trash3
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w">                              </span><span class="c1"># confirm they&#39;re gone</span>
+<p>Two more pipeline reflexes. First, <strong>cosine similarity</strong> (M30) between two documents' TF-IDF vectors
+— near 1 = same topic, near 0 = unrelated:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">cd</span><span class="w"> </span>~/nlp-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python3<span class="w"> </span>similarity.py
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Only inside the sandbox</p>
-<p>Every <code>rm</code> here targets scratch files you just created in <code>~/terminal-lab/</code>. Never run <code>rm</code> (and
-never <code>rm -rf</code> at all this month) outside a directory you built for throwaway practice. <code>ls</code>
-first, always.</p>
-</div>
-</div>
-<div class="tabbed-block">
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cat<span class="w"> </span>/etc/hostname<span class="w">               </span><span class="c1"># whole (small) file</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>less<span class="w"> </span>/etc/profile<span class="w">               </span><span class="c1"># page it: space, b, /word to search, q to quit</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>head<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># first lines</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>tail<span class="w"> </span>-5<span class="w"> </span>/etc/passwd<span class="w">             </span><span class="c1"># last lines</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>wc<span class="w"> </span>-l<span class="w"> </span>/etc/passwd<span class="w">               </span><span class="c1"># count lines</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>man<span class="w"> </span>ls<span class="w">                          </span><span class="c1"># the reference: find what -h, -t, -r do — q to quit</span>
+Then inspect the classifier's <strong>most informative words</strong> — the features it leaned on hardest:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>python3<span class="w"> </span>informative.py
 </code></pre></div>
-A pager is not "frozen" — it's <em>waiting</em>. <code>q</code> gets you out of <code>less</code> and <code>man</code>. In <code>man</code>, read the
-<strong>SYNOPSIS</strong> first and search with <code>/</code>.</p>
+The top positive and negative words should read like the sentiment they signal. That is the model
+made legible: it learned which words carry the label.</p>
 </div>
 </div>
 </div>
 <div class="admonition success">
 <p class="admonition-title">You can stop here and have learned something real</p>
-<p>If you can read your prompt, navigate anywhere, build and reorganise a tree, delete safely, and
-learn an option from <code>man</code> — the guided lab is done. Now make it harder.</p>
+<p>If you tokenized text by hand, built a vocabulary, trained a TF-IDF classifier that beats the bar on
+held-out data, and can read a cosine similarity and the top features — the guided lab is done. Now
+make it harder.</p>
 </div>
 <hr />
 <h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
-<p><em>Harder. Goals only — minimal hand-holding. Work in your <code>~/terminal-lab/</code> sandbox. Struggle here is
-the point; reveal a hint only after you've tried.</em></p>
-<h3 id="challenge-1-one-command-whole-tree">Challenge 1 — One command, whole tree<a class="headerlink" href="#challenge-1-one-command-whole-tree" title="Permanent link">&para;</a></h3>
-<p>Create, in a <strong>single</strong> command, the tree <code>journal/2026/aug/{week1,week2}</code> inside the sandbox.</p>
+<p><em>Harder. Goals only — minimal hand-holding. Work in <code>~/nlp-lab/</code>. Struggle here is the point; reveal a
+hint only after you've tried.</em></p>
+<h3 id="challenge-1-prove-accuracy-lies-on-imbalanced-text">Challenge 1 — Prove accuracy lies on imbalanced text<a class="headerlink" href="#challenge-1-prove-accuracy-lies-on-imbalanced-text" title="Permanent link">&para;</a></h3>
+<p>Build a corpus that is 90% one class, train the classifier, and show a case where <strong>accuracy</strong> looks
+great but <strong>F1</strong> exposes the failure.</p>
 <details class="tip">
 <summary>Hint</summary>
-<p><code>mkdir</code> has a flag that creates parent directories as needed, and the shell can expand <code>{a,b}</code> into
-two names in one go.</p>
+<p>Duplicate the majority-class sentences until they dominate, then compare <code>accuracy_score</code> with
+<code>f1_score(..., average='macro')</code> on a held-out set that contains the minority class.</p>
 </details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>journal/2026/aug/<span class="o">{</span>week1,week2<span class="o">}</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ls<span class="w"> </span>-R<span class="w"> </span>journal
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">f1_score</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># a model that always predicts the majority class scores ~0.9 accuracy...</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># ...but macro-F1 collapses because the minority class recall is ~0.</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;accuracy:&quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;macro-F1:&quot;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">))</span>
 </code></pre></div>
-<code>-p</code> makes the intermediate dirs (<code>2026</code>, <code>aug</code>); brace expansion <code>{week1,week2}</code> is the shell
-writing out both leaf names before <code>mkdir</code> runs.</p>
+Accuracy rewards guessing the majority; <strong>macro-F1</strong> averages per-class F1, so a class the model
+never gets right drags it down. This is M27's accuracy trap = M31's base-rate problem, in text.</p>
 </details>
-<h3 id="challenge-2-count-without-counting-by-eye">Challenge 2 — Count without counting by eye<a class="headerlink" href="#challenge-2-count-without-counting-by-eye" title="Permanent link">&para;</a></h3>
-<p>Find out how many files in <code>/etc</code> end in <code>.conf</code> — without counting them yourself.</p>
+<h3 id="challenge-2-analogy-arithmetic-by-hand">Challenge 2 — Analogy arithmetic by hand<a class="headerlink" href="#challenge-2-analogy-arithmetic-by-hand" title="Permanent link">&para;</a></h3>
+<p>Using any small set of word vectors, compute <code>king − man + woman</code> and show its nearest word is <code>queen</code>,
+using <strong>cosine similarity</strong> you compute yourself (dot product / norms — no library helper).</p>
 <details class="tip">
 <summary>Hint</summary>
-<p>List them, then pipe into a line-counter. Beware: some names may hide in subdirectories.</p>
+<p>Normalize each vector (divide by its L2 norm), then cosine is just the dot product of the normalized
+vectors. Rank all candidate words by cosine to the result vector.</p>
 </details>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ls<span class="w"> </span>/etc/*.conf<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">cos</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span> <span class="k">return</span> <span class="n">a</span> <span class="o">@</span> <span class="n">b</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">result</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[</span><span class="s2">&quot;king&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">vec</span><span class="p">[</span><span class="s2">&quot;man&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="s2">&quot;woman&quot;</span><span class="p">]</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">ranked</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vocab</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">vec</span><span class="p">[</span><span class="n">w</span><span class="p">]))</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">ranked</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>   <span class="c1"># expect &#39;queen&#39; near the top</span>
 </code></pre></div>
-The shell expands <code>/etc/*.conf</code> to the matching paths; <code>wc -l</code> counts the lines <code>ls</code> prints. (This
-counts the top level of <code>/etc</code> only — a fair reading of the task.)</p>
+Meaning became geometry (M30): the <em>displacement</em> man→woman is roughly king→queen, so vector
+arithmetic lands on the analogy. The dark side (M25): the same math gives <code>doctor − man + woman ≈
+nurse</code> — the bias the model learned from the text.</p>
 </details>
-<h3 id="challenge-3-prove-the-shell-expands-the-glob-not-the-program">Challenge 3 — Prove the shell expands the glob, not the program<a class="headerlink" href="#challenge-3-prove-the-shell-expands-the-glob-not-the-program" title="Permanent link">&para;</a></h3>
-<p>Show, with one command, exactly what <code>*.md</code> becomes <em>before</em> any program acts on it.</p>
+<h3 id="challenge-3-a-tokenizer-mismatch-breaks-everything">Challenge 3 — A tokenizer mismatch breaks everything<a class="headerlink" href="#challenge-3-a-tokenizer-mismatch-breaks-everything" title="Permanent link">&para;</a></h3>
+<p>Deliberately tokenize your held-out sentences with a <em>different</em> normalization than the training corpus
+(e.g. keep punctuation, or don't lowercase) and show the classifier's quality collapses.</p>
 <details class="success">
 <summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nb">echo</span><span class="w"> </span>*.md
+<p>Feed raw, unnormalized strings to a vectorizer fit on normalized text: shared words no longer match
+(<code>"Movie!"</code> ≠ <code>"movie"</code>), so the TF-IDF vectors barely overlap and accuracy drops toward chance.
+<strong>Lesson:</strong> always use the <em>same</em> tokenizer for training and inference — a mismatch produces garbage
+vectors and garbage predictions (a planted failure in the module's troubleshooting drills).</p>
+</details>
+<h3 id="challenge-4-add-a-third-class">Challenge 4 — Add a third class<a class="headerlink" href="#challenge-4-add-a-third-class" title="Permanent link">&para;</a></h3>
+<p>Extend the corpus to three sentiment classes (positive / neutral / negative) and re-evaluate. Which
+metric averaging (<code>micro</code> / <code>macro</code> / <code>weighted</code>) tells the honest story, and why?</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Use <strong>macro-F1</strong>: it averages each class's F1 equally, so a weak middle ("neutral") class can't hide
+behind two strong ones. <code>micro</code>/<code>weighted</code> let the majority classes mask a failing minority — the
+same imbalance lesson, now with three classes.</p>
+</details>
+<h3 id="challenge-5-stretch-sketch-the-rag-guardrail">Challenge 5 (stretch) — Sketch the RAG guardrail<a class="headerlink" href="#challenge-5-stretch-sketch-the-rag-guardrail" title="Permanent link">&para;</a></h3>
+<p>Without building it fully, describe in code comments the <strong>RAG</strong> (Retrieval-Augmented Generation)
+pipeline and the <em>one</em> guardrail that stops it hallucinating on a retrieval miss.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>corpus -&gt; embed -&gt; vector store        # index once
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>query  -&gt; embed -&gt; top-k by cosine     # retrieve (M30/M32)
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>if top score &lt; threshold: refuse / &quot;I don&#39;t know&quot;   # THE guardrail
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>else: feed retrieved chunks as context -&gt; generate grounded answer, cite sources
 </code></pre></div>
-<code>echo</code> just prints its arguments — so it prints the filenames the <strong>shell</strong> already substituted for
-<code>*.md</code>. The program never sees the <code>*</code>. In an <em>empty</em> directory <code>echo *.md</code> prints the literal
-<code>*.md</code> (no match, so bash leaves the pattern alone) — a preview of M5's <code>nullglob</code>.</p>
-</details>
-<h3 id="challenge-4-learn-an-unseen-option-from-man-only">Challenge 4 — Learn an unseen option from <code>man</code> only<a class="headerlink" href="#challenge-4-learn-an-unseen-option-from-man-only" title="Permanent link">&para;</a></h3>
-<p>Using <strong>only</strong> <code>man ls</code> (no web), make <code>ls</code> sort by size, largest last, in human-readable units. State
-the SYNOPSIS notation you relied on.</p>
-<details class="success">
-<summary>Solution</summary>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ls<span class="w"> </span>-lShr<span class="w">        </span><span class="c1"># -S sort by size, -r reverse (largest last), -h human units, -l long</span>
-</code></pre></div>
-Found by searching the OPTIONS section (<code>/size</code>, <code>/reverse</code>, <code>/human</code>). SYNOPSIS shows <code>ls [OPTION]…
-[FILE]…</code> — options are optional and combinable, which is why <code>-lShr</code> bundles four.</p>
-</details>
-<h3 id="challenge-5-stretch-type-vs-which-disagree">Challenge 5 (stretch) — <code>type</code> vs <code>which</code> disagree<a class="headerlink" href="#challenge-5-stretch-type-vs-which-disagree" title="Permanent link">&para;</a></h3>
-<p><code>type cd</code> says "shell builtin"; <code>which cd</code> may print nothing. Explain the discrepancy precisely.</p>
-<details class="success">
-<summary>Solution</summary>
-<p><code>type</code> reports how <strong>bash</strong> will interpret the word, and a built-in wins over any file — so it names
-<code>cd</code> a builtin. <code>which</code> only searches <code>$PATH</code> for executable <strong>files</strong>; it knows nothing about
-builtins, so for <code>cd</code> it finds nothing (or an unrelated file that would never actually run).</p>
+The generator will answer <em>regardless</em> of whether relevant context was retrieved — so on a miss it
+hallucinates from parametric memory. Thresholding retrieval relevance and refusing (or citing) is
+what turns fluent-but-ungrounded into honest (M27's calibrated skepticism).</p>
 </details>
 <hr />
 <h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
 <p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
 is what builds the memory.</em></p>
 <details class="question">
-<summary>Terminal vs shell — what is each, and which one is Bash?</summary>
-<p>The <strong>terminal</strong> is the window program that draws text and forwards your keystrokes; the <strong>shell</strong>
-is the command interpreter running inside it. <strong>Bash is the shell.</strong> (Phone line vs the person
-answering: the terminal carries the conversation; bash is who answers.)</p>
+<summary>Define, one line each: tokenization, embedding, self-attention, fine-tuning.</summary>
+<p><strong>Tokenization</strong> — splitting text into tokens (words/subwords) the model consumes. <strong>Embedding</strong> — a
+dense vector for a token/text where semantic similarity is geometric proximity. <strong>Self-attention</strong> —
+each token's new representation is a weighted sum of all tokens, weighted by learned relevance
+(Q · Kᵀ). <strong>Fine-tuning</strong> — adapting a pretrained model to a task on a small dataset (transfer
+learning).</p>
 </details>
 <details class="question">
-<summary>In <code>ls -l /home</code>, which part is the option and which the argument?</summary>
-<p><code>-l</code> is the <strong>option</strong> (modifies <em>how</em> <code>ls</code> behaves — long format); <code>/home</code> is the <strong>argument</strong>
-(<em>what</em> it operates on).</p>
+<summary>Why do embeddings make meaning 'geometric'? Reference dot-product similarity (M30).</summary>
+<p>Embeddings place tokens as vectors in a space learned so that words used in similar contexts sit near
+each other (the distributional hypothesis). "Nearness" is <strong>cosine similarity</strong> — the normalized
+<strong>dot product</strong> (M30): a high dot product means the vectors point the same way, i.e. similar meaning.
+So relationships become geometry and analogies (king − man + woman ≈ queen) become vector arithmetic.</p>
 </details>
 <details class="question">
-<summary>Who expands <code>*.md</code> — the shell or <code>ls</code>? How would you prove it?</summary>
-<p>The <strong>shell</strong>, before the program runs. Prove it with <code>echo *.md</code>: <code>echo</code> only prints its
-arguments, so what you see is the filenames the shell already substituted — <code>ls</code> never sees the <code>*</code>.</p>
+<summary>Explain self-attention in one breath — and why it is O(n²).</summary>
+<p>Each token forms a query and dot-products it against every token's key to get relevance scores,
+softmaxes them to weights, and takes the weighted sum of every token's value — so each token blends
+information from all others by learned relevance. Comparing every token with every other means <em>n</em>
+tokens → <em>n²</em> interactions, so cost grows quadratically with sequence length (M32) — which is why
+long context is expensive.</p>
 </details>
 <details class="question">
-<summary>Why is <code>cd</code> a shell built-in while <code>ls</code> is a separate program?</summary>
-<p><code>cd</code> changes the shell's <em>own</em> working directory; a child process can't change its parent's
-directory, so it must run inside the shell. <code>ls</code> only reads and prints — fine as an external
-program in <code>/usr/bin</code>.</p>
+<summary>Why fine-tune instead of training from scratch?</summary>
+<p>A pretrained model already encodes broad language structure from massive text and compute you don't
+have. <strong>Fine-tuning</strong> reuses that and only adapts it to your task on a small dataset — far cheaper,
+faster, and more effective than training from scratch, which would need enormous data. It's transfer
+learning: stand on the pretrained model's shoulders.</p>
 </details>
 <details class="question">
-<summary><code>rm</code> has no undo. Name the three habits that stand in for one.</summary>
-<p><strong>Sandbox discipline</strong> (act where mistakes are cheap), <strong><code>ls</code>-before-<code>rm</code>/<code>mv</code></strong> (look before you
-change), and <strong><code>echo</code>-the-glob</strong> (see the expansion before a destructive command uses it). Backups
-come later (M15).</p>
+<summary>Give the correct metric for classification, extractive QA, translation, and a language model.</summary>
+<p>Classification → <strong>F1</strong> (not just accuracy — accuracy misleads on imbalance). Extractive QA →
+<strong>exact-match / span F1</strong>. Translation → <strong>BLEU</strong> (plus human eval). Language model → <strong>perplexity</strong>.</p>
 </details>
 <details class="question">
-<summary><code>bash: lls: command not found</code> — the three likely causes, in order?</summary>
-<p>(1) <strong>Typo</strong> of a real command (most likely — retype or Tab-complete); (2) the program <strong>isn't
-installed</strong> (<code>type lls</code>, <code>man lls</code>); (3) it's installed but <strong>not in <code>$PATH</code></strong> (<code>echo $PATH</code>).</p>
+<summary>Why is a 'fluent and confident' generation not necessarily 'correct'?</summary>
+<p>A language model is trained to produce <em>plausible</em> continuations, not <em>true</em> ones — it models the
+statistics of text. So it can generate fluent, well-formed, confident output that is factually wrong
+(a <strong>hallucination</strong>). Fluency measures how language-like the text is; correctness measures whether it
+matches reality — different properties. That's why BLEU/ROUGE can score a wrong answer well, and why
+generation needs task-appropriate and often human evaluation (M27).</p>
 </details>
 <details class="question">
-<summary><code>less</code> shows <code>(END)</code> and won't let you out. What happened, and the key?</summary>
-<p>You're in the <strong>pager</strong> at the end of the file — not frozen, just waiting. Press <strong><code>q</code></strong> to quit.</p>
+<summary>A classifier scores 95% accuracy on product reviews but is useless. What happened, and the fix?</summary>
+<p>The data is <strong>imbalanced</strong> — most reviews are one class, so a model that always predicts the majority
+scores 95% accuracy while failing the minority entirely (M27's accuracy trap = M31's base rate).
+Report <strong>F1</strong> (per-class precision/recall), which exposes the failure, and evaluate on a set that
+actually contains the minority class.</p>
+</details>
+<details class="question">
+<summary>A stakeholder says the demo 'understands our documents.' Respond as an engineer.</summary>
+<p>Gently correct the framing: the model doesn't <em>understand</em> — it retrieves and generates plausible
+text conditioned on the documents, and can produce fluent, confident answers that are wrong
+(hallucination). It's a powerful tool for drafting/search/QA, but factual output must be <strong>grounded</strong>
+(RAG with citations), <strong>verified</strong>, and <strong>evaluated for correctness</strong> — not trusted because it sounds
+authoritative (M27's calibrated skepticism).</p>
 </details>
 <div class="admonition example">
 <p class="admonition-title">Teach it back (the real test)</p>
-<p>Out loud, in <strong>3 minutes, no notes</strong>: <em>"What is the terminal, what is the shell, and why do
-professionals still use them?"</em> You must distinguish terminal from shell and give <strong>≥2 engineering
-reasons</strong> (scriptable, remote/SSH, identical everywhere). Then, in <strong>90 seconds</strong>, teach <em>"what is a
-path?"</em> to a 10-year-old — postal-address analogy required, then show <code>pwd</code>/<code>cd</code> making it real. If
-you can't yet, that's your signal to reread the Key Notes, not to move on.</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong>: teach <em>"how does a machine read?"</em> — the map-of-meaning analogy
+first (tokenize → embed → transformer → task), then hand-trace <strong>one</strong> self-attention step
+(Q · Kᵀ → softmax → Σ V) and name the <strong>O(n²)</strong> cost. Then, in <strong>90 seconds</strong>, dismantle two
+misconceptions: <em>"the model understands"</em> and <em>"a fluent answer is a correct answer."</em> You must ground
+embeddings in M30's dot product and match each task to its metric. If you can't yet, that's your
+signal to reread the Key Notes, not to move on.</p>
 </div>
 <hr />
 <h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
-<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M2 also closes </em><em>Stage 1</em><em>. A
-module is only "done" when every box is true.</em></p>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — a module is only "done" when every box
+is true.</em></p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> terminal vs shell vs prompt vs command precisely, with the process model underneath.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all three from memory: the keystroke→output loop, the path tree, and prompt anatomy.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Navigate</strong> to any of <code>/etc</code>, <code>/var/log</code>, <code>/usr/bin</code>, <code>~</code>, the sandbox, <code>/proc</code> and prove arrival with <code>pwd</code> — Tab-completing, no wrong turns.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> the Level-2 sequence (tree, files, copy, rename, safe delete) in under 3 minutes, zero errors, a verify between every mutation.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Develop</strong> a novel two-command pipe (e.g. count matching files) and explain each part.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> state <em>and</em> demonstrate the safety habits — sandbox, <code>ls</code>-before-<code>rm</code>, <code>echo</code>-the-glob, read-before-paste, no-sudo.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> one unseen planted failure (typo / wrong dir / stuck pager / empty glob) with a stated method: hypothesis → check → fix.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a misbehaving glob with <code>echo</code> and interpret both possible findings (no match vs wrong directory).</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> show Tab / <code>Ctrl-R</code> / <code>Ctrl-A</code> / <code>Ctrl-E</code> / <code>Ctrl-C</code> fluency live, and say why keystrokes matter at scale.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure:</strong> show and explain 3 lines of your own <code>~/.bashrc</code> (read-only understanding).</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Self-serve:</strong> solve ≥3 unseen tasks using only <code>man</code> (start at SYNOPSIS), and score ≥80% on the validation bank.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (terminal-vs-shell explanation mandatory).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> tokenization, embedding, self-attention, and fine-tuning — one line each, cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Apply</strong> subword tokenization and explain why it beats splitting on spaces (unseen words, vocab size).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compute</strong> embedding <strong>cosine similarity</strong> by hand (dot product / norms — M30), and do the analogy arithmetic.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> a language model as a distribution <code>P(next | context)</code> and what autoregressive generation is (M31).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> a bag-of-words / <strong>TF-IDF</strong> classifier and read its most informative words.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Hand-trace</strong> one self-attention step (Q · Kᵀ → softmax → Σ V) and <strong>state</strong> the O(n²) cost and its implication (M32).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Contrast</strong> BERT (bidirectional → understanding) and GPT (autoregressive → generation).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Choose</strong> the task-appropriate metric (F1 / exact-match / BLEU / ROUGE / perplexity) and justify it.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> why accuracy misleads on imbalanced text and why F1 exposes it (M27/M31).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> that fluent ≠ correct — a metric's blind spot and a hallucination.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Sketch</strong> an embeddings-based <strong>RAG</strong> pipeline and the guardrail that stops it hallucinating on a retrieval miss.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Reason</strong> about NLP bias/ethics and the engineer's responsibility (M25).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Connect</strong> NLP to the curriculum (M30 vectors · M31 distributions · M32 O(n²) · M26–28 LLM guts · M27 evaluation).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach</strong> the pipeline and why evaluation is the hard part — passing the teach-back above.</li>
 </ul>
 <hr />
 <h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
-<p>Spaced repetition is not optional; it's where the memory actually forms. From this module on
-<strong>interleaving is active</strong> — every M2 review also pulls in one Module 01 item. Schedule these and
-<em>keep</em> them:</p>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active —
+every M38 review also pulls in one prior-module item. Schedule these and <em>keep</em> them:</p>
 <table>
 <thead>
 <tr>
 <th>When</th>
 <th>Do</th>
-<th>Interleaved M1 item</th>
+<th>Interleaved prior-module item</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Day 1</strong></td>
-<td>Command sprint cold (dir → file → copy → rename → verify → safe delete) · all flashcards</td>
-<td>One 1-minute "what is an OS" explanation</td>
+<td>Flashcards 1–20 · say the pipeline fast (tokenize → embed → attention → head → eval)</td>
+<td>M30: compute a <strong>dot product</strong> of two vectors by hand</td>
 </tr>
 <tr>
 <td><strong>Day 3</strong></td>
-<td>Redraw the keystroke loop · glob-prediction sprint · debug an empty-glob scenario</td>
-<td><code>free -h</code> interpretation cold</td>
+<td>The three cases · the metric map · hand-trace one self-attention step</td>
+<td>M31: state <code>P(next \| context)</code> — what a distribution is</td>
 </tr>
 <tr>
 <td><strong>Day 7</strong></td>
-<td>Rebuild the sandbox tree from nothing, unaided · the safety-habit questions</td>
-<td>Memory-hierarchy diagram from memory</td>
+<td>Reproduce the full Visual Model blank · rebuild the TF-IDF classifier and read F1</td>
+<td>M27: why <strong>F1</strong>, not accuracy, on imbalanced data</td>
 </tr>
 <tr>
 <td><strong>Day 14</strong></td>
-<td>Learn one unseen command via <code>man</code>/SYNOPSIS only · "press Enter" walkthrough, timed</td>
-<td>Boot-sequence narration</td>
+<td>Attention <strong>O(n²)</strong> · a demonstrated hallucination · sketch a RAG pipeline</td>
+<td>M32: what <strong>O(n²)</strong> means and why doubling <em>n</em> quadruples cost</td>
 </tr>
 <tr>
 <td><strong>Day 30</strong></td>
-<td>Recreate the Terminal Home structure in ≤10 min · the two stretch challenges</td>
-<td>M1 machine-inspection diagnosis</td>
+<td>Whole module in five-minute-review form · reproduce the classifier + a RAG sketch cold</td>
+<td>M26: one self-attention step tied back to backprop/gradient descent</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Connects forward to:</strong> Bash scripting (M5 — today's command lines, written to a file) · Vim (M6) and
-Tmux (M7), which live inside the terminal · SSH (M9 — this interface over the network) · Git (M8) and
-Claude Code (M11), commands obeying today's anatomy · Docker (M16), where <code>docker exec -it … bash</code> is
-this module inside a container.</p>
+<p><strong>Connects forward to:</strong> M39 (Computer Vision — the <em>same</em> transfer-learning workflow and the transformer,
+now on images via ViT) · the capstone (a language-based AI service — fine-tuned or RAG-backed, evaluated
+with the correct metric, served behind the M36 API on M37's cloud) · and LLM engineering / RAG systems /
+agents — the applied AI-engineering frontier where this module is load-bearing.</p>
 <div class="admonition quote">
 <p class="admonition-title">The one-sentence takeaway</p>
-<p>M1 taught what the machine is; M2 taught how to talk to it — every remaining module is just new
-vocabulary in this same conversation.</p>
+<p>M38 turns the curriculum's LLM through-line into a specialty — tokenization and embeddings (meaning as
+geometry, M30), the transformer and self-attention (with M32's O(n²) cost), fine-tuning (transfer
+learning), and task-appropriate evaluation (M27 at its hardest, where <strong>fluent ≠ correct</strong>).</p>
 </div>
 
 
@@ -3183,7 +3200,7 @@ vocabulary in this same conversation.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../module-01/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 01 — Computer &amp; OS Fundamentals">
+          <a href="../module-37/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 37 — Cloud Platforms &amp; Certification">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3193,20 +3210,20 @@ vocabulary in this same conversation.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Module 01 — Computer & OS Fundamentals
+                Module 37 — Cloud Platforms & Certification
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../stage-02/module-03/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 03 — Linux Essentials">
+          <a href="../module-39/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 39 — Computer Vision">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Module 03 — Linux Essentials
+                Module 39 — Computer Vision
               </div>
             </div>
             <div class="md-footer__button md-icon">

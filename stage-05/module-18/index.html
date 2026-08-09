@@ -1,0 +1,3487 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The development environment as code — devcontainer.json, base images and Features, lifecycle hooks, the devcontainer CLI, and how Codespaces and DevPod materialize the same spec anywhere. Closes Stage 5.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-17/">
+      
+      
+        <link rel="next" href="../../stage-06/module-19/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 18 — devcontainers - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-18-devcontainers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 18 — devcontainers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-what-one-up-command-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: what one up command does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-base-options-pick-exactly-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three base options — pick exactly one
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devcontainerjson-anatomy-the-fields-that-carry-the-weight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        devcontainer.json anatomy — the fields that carry the weight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features-declarative-versioned-tool-installs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features — declarative, versioned tool installs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle-hooks-four-stations-one-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle hooks — four stations, one law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-devcontainer-cli-and-codespaces-the-same-spec-different-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The devcontainer CLI and Codespaces — the same spec, different clients
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dev-ci-and-prod-are-one-family-with-a-strictness-gradient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dev, CI, and prod are one family with a strictness gradient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dev-container-troubleshooting-ladder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dev-container troubleshooting ladder
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-author-a-bench-from-a-blank-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: author a bench from a blank file
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-feature-vs-dockerfile-line-decided-on-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Feature vs Dockerfile line, decided on purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-map-the-four-hook-stations-by-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Map the four hook stations by prediction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-files-created-inside-show-up-root-owned-on-the-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Files created inside show up root-owned on the host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-prove-why-a-secret-in-the-spec-is-categorically-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Prove why a secret in the spec is categorically wrong
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-attribute-the-kpi-gaps-to-their-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Attribute the KPI gaps to their mechanism
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-what-one-up-command-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: what one up command does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-three-base-options-pick-exactly-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three base options — pick exactly one
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devcontainerjson-anatomy-the-fields-that-carry-the-weight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        devcontainer.json anatomy — the fields that carry the weight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features-declarative-versioned-tool-installs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features — declarative, versioned tool installs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle-hooks-four-stations-one-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle hooks — four stations, one law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-devcontainer-cli-and-codespaces-the-same-spec-different-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The devcontainer CLI and Codespaces — the same spec, different clients
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dev-ci-and-prod-are-one-family-with-a-strictness-gradient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dev, CI, and prod are one family with a strictness gradient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dev-container-troubleshooting-ladder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dev-container troubleshooting ladder
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-author-a-bench-from-a-blank-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: author a bench from a blank file
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-feature-vs-dockerfile-line-decided-on-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Feature vs Dockerfile line, decided on purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-map-the-four-hook-stations-by-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Map the four hook stations by prediction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-files-created-inside-show-up-root-owned-on-the-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Files created inside show up root-owned on the host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-prove-why-a-secret-in-the-spec-is-categorically-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Prove why a secret in the spec is categorically wrong
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-attribute-the-kpi-gaps-to-their-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Attribute the KPI gaps to their mechanism
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-18-devcontainers">Module 18 — devcontainers<a class="headerlink" href="#module-18-devcontainers" title="Permanent link">&para;</a></h1>
+<p><small>Stage 5 · Production Practices · ~1 week at 4 h/day · Prerequisite — Module 17 (what is <em>really</em> happening inside a container: uid remaps, Features as OCI artifacts, the dissection habit). Builds directly on Module 16 (images, Dockerfiles, compose, volumes). This module closes Stage 5.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p>A <strong>dev container</strong> is a development environment defined as code: a <code>devcontainer.json</code> — an open
+specification (containers.dev) describing the image, tools, lifecycle hooks, and editor settings a repo
+needs — so <em>"set up to hack on this"</em> collapses into <strong>one command</strong>. The file is the contract; a
+client (VS Code, GitHub Codespaces, the devcontainer CLI, or DevPod) reads it and <strong>materializes</strong> the
+bench: build or pull the image, mount your source, run the setup hooks, and open a door you work
+through.</p>
+<p>This is the final form of a drill you have run all curriculum long. A <strong>venv</strong> (M13) caged one Python
+project's dependencies; <strong>chezmoi</strong> (M10) made your shell and editor rebuildable; a <strong>Dockerfile</strong> (M16)
+made a runtime rebuildable. This week rebuilds your entire <strong>workbench</strong> from a JSON file. Two payoffs:
+<strong>onboarding</strong> (any repo, any machine, in minutes — measured this week as <em>clone-to-productive</em>) and
+<strong>isolation</strong> (each project's toolchain caged in its container; the host stays clean forever — the venv
+law promoted to everything). And it closes the stage: Ship It gains its <strong>bench</strong> tier, and the Stage 5
+gate shuts on Production Practices.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>The spec is per-<strong>repo</strong>, so from now on <em>every</em> repo you touch carries its own bench. <strong>M19–M20</strong>
+(Kubernetes) get a cluster-dev loop that runs inside a devcontainer (DevPod's k8s provider); <strong>M21</strong>
+profiles <em>inside</em> benches (the cgroup layer from M17 already understood indoors); <strong>M24</strong> formalizes
+the trust surface (Feature audits, secrets brokering as an attack path); <strong>M26–M28</strong> make the CUDA
+bench — a GPU devcontainer is this week's spec plus a runtime hook, and the capstone's daily driver.
+Learn the spec by hand now and every future environment is one <code>up</code> command away.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 18 — devcontainers&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+the wiki-archaeology onboarding pain → the spec as the contract (walk one real <code>devcontainer.json</code>
+block by block) → the <code>up</code> sequence as one composed machine (spec → Features → build → create → hooks
+→ dotfiles → door, each stage owned by an earlier module) → the bake-vs-personalize hook split that
+IS prebuild economics → <em>disposable beats precious</em> (recreate beats debugging a pet bench) → close on
+the before/after clone-to-productive numbers.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-author-a-bench-from-a-blank-file">Guided Lab</a> and <strong>write the spec yourself</strong> —
+a <code>Dockerfile</code>, a valid <code>devcontainer.json</code>, and then materialize it with a real <code>docker build</code>.
+Devcontainers are learned in the writing, not the reading; a template you paste teaches nothing.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-what-one-up-command-does">The picture: what one <code>up</code> command does<a class="headerlink" href="#the-picture-what-one-up-command-does" title="Permanent link">&para;</a></h3>
+<p><code>devpod up .</code> (or Codespaces "Create", or <code>devcontainer up</code>) runs the same sequence — and <strong>every stage
+maps to a module you have already done</strong>:</p>
+<pre class="mermaid"><code>flowchart TB
+    Spec["devcontainer.json&lt;br/&gt;read + validate the contract"] --&gt; Feat["Resolve Features&lt;br/&gt;fetch OCI artifacts, merge install.sh (M17)"]
+    Feat --&gt; Build["Build or pull the image&lt;br/&gt;it IS a docker build (M16)"]
+    Build --&gt; Create["Create the container&lt;br/&gt;workspace mount · remoteUser · uid remap · env"]
+    Create --&gt; Hooks["Run lifecycle hooks in order&lt;br/&gt;onCreate → postCreate → postStart (M15)"]
+    Hooks --&gt; Dots["Inject dotfiles&lt;br/&gt;your chezmoi repo, per-workspace (M10)"]
+    Dots --&gt; Door["Open the door&lt;br/&gt;ssh server / editor attach (M9)"]</code></pre>
+<p>There is no magic here — it is your last five modules composed into one machine whose action is <em>prepare
+my bench</em>. When a bench breaks, you debug it <strong>stage by stage</strong>, handing off to the ladder that owns each
+one.</p>
+<h3 id="the-three-base-options-pick-exactly-one">The three base options — pick exactly one<a class="headerlink" href="#the-three-base-options-pick-exactly-one" title="Permanent link">&para;</a></h3>
+<p>The first decision in any spec is where the environment starts from:</p>
+<table>
+<thead>
+<tr>
+<th>Base key</th>
+<th>What it is</th>
+<th>When it fits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"image"</code></td>
+<td>pull a prebuilt image</td>
+<td><strong>fastest</strong> — a family/prebuilt base already carries your tools</td>
+</tr>
+<tr>
+<td><code>"build": { "dockerfile": … }</code></td>
+<td>build from an in-repo Dockerfile</td>
+<td><strong>repo-specific</strong> env code you own and review</td>
+</tr>
+<tr>
+<td><code>"dockerComposeFile"</code></td>
+<td>attach to a compose service</td>
+<td>the app's <strong>multi-service rig IS the dev env</strong> — develop against live dependencies (M16's compose reused)</td>
+</tr>
+</tbody>
+</table>
+<p><code>image</code> is to your bench what a base image is to a runtime; <code>build</code> is the third leg of the
+environment-as-code tripod alongside <code>pyproject.toml</code> (a package) and a <code>Dockerfile</code> (a runtime).</p>
+<h3 id="devcontainerjson-anatomy-the-fields-that-carry-the-weight">devcontainer.json anatomy — the fields that carry the weight<a class="headerlink" href="#devcontainerjson-anatomy-the-fields-that-carry-the-weight" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it declares</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>a human label for the workspace</td>
+</tr>
+<tr>
+<td><code>image</code> / <code>build</code> / <code>dockerComposeFile</code></td>
+<td>the base (above) — <strong>exactly one</strong></td>
+</tr>
+<tr>
+<td><code>features</code></td>
+<td>reusable installable units, <strong>pinned</strong> (next-but-one section)</td>
+</tr>
+<tr>
+<td><code>forwardPorts</code></td>
+<td>ports to surface from the container back to you</td>
+</tr>
+<tr>
+<td><code>remoteUser</code></td>
+<td>who you are inside — <strong>non-root</strong> (M16's habit does not stop at the door)</td>
+</tr>
+<tr>
+<td><code>containerEnv</code></td>
+<td>environment variables set inside the container</td>
+</tr>
+<tr>
+<td><code>mounts</code></td>
+<td>extra bind/volume mounts (e.g. a <strong>gitignored</strong> env-file for secrets)</td>
+</tr>
+<tr>
+<td><code>customizations</code></td>
+<td>editor settings &amp; extensions (<code>customizations.vscode</code>) — a courtesy to teammates even if <em>you</em> live in the terminal</td>
+</tr>
+<tr>
+<td><code>postCreateCommand</code> (and siblings)</td>
+<td>the lifecycle hooks (two sections down)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">jsonc is not JSON</p>
+<p>The spec's parser allows <code>// comments</code> and trailing commas (<strong>jsonc</strong>); strict tools (<code>python3 -m
+json.tool</code>, most linters) do <strong>not</strong>. Keep your file valid <em>strict</em> JSON and any tool reads it — the
+trailing-comma surprise is this module's most common Monday-morning break.</p>
+</div>
+<h3 id="features-declarative-versioned-tool-installs">Features — declarative, versioned tool installs<a class="headerlink" href="#features-declarative-versioned-tool-installs" title="Permanent link">&para;</a></h3>
+<p>A <strong>Feature</strong> is a reusable install unit referenced by an OCI address
+(<code>ghcr.io/devcontainers/features/python:1</code>). Mechanically it is a <strong>versioned OCI artifact</strong> — a tarball
+of metadata plus an <code>install.sh</code> — that the tooling fetches and <strong>merges into the image build</strong>. No
+magic: pull one, read its script (M17's dissection habit), and you see exactly what you are trusting.
+The judgment call, written down each time:</p>
+<ul>
+<li><strong>Feature</strong> — composable, shared across repos, maintained upstream, <em>convenient</em>.</li>
+<li><strong>Dockerfile line</strong> — deterministic, reviewed in-repo, no third-party trust or resolution cost.</li>
+</ul>
+<p>Policy: core toolchain in the Dockerfile/family base (determinism where it matters); convenience tooling
+via <strong>pinned</strong> Features. A Feature is a <strong>dependency</strong> (M13's audit reflex) <em>and</em> a build cost — read its
+<code>install.sh</code> once, pin the exact version, keep the count minimal.</p>
+<h3 id="lifecycle-hooks-four-stations-one-law">Lifecycle hooks — four stations, one law<a class="headerlink" href="#lifecycle-hooks-four-stations-one-law" title="Permanent link">&para;</a></h3>
+<p>The hooks are the setup script's stations. The whole art is putting each step on the <strong>right side of the
+bake/personalize line</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Fires</th>
+<th>Belongs here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onCreateCommand</code></td>
+<td>once, at creation, before your checkout's personality</td>
+<td><strong>bakeable</strong>, generic steps — prebuild-able</td>
+</tr>
+<tr>
+<td><code>postCreateCommand</code></td>
+<td>after the workspace is mounted</td>
+<td><strong>per-clone</strong> setup: <code>pip install -e ".[dev]"</code>, <code>pre-commit install</code></td>
+</tr>
+<tr>
+<td><code>postStartCommand</code></td>
+<td>every container <strong>start</strong></td>
+<td>daemons, refreshes</td>
+</tr>
+<tr>
+<td><code>postAttachCommand</code></td>
+<td>every <strong>attach</strong> / session</td>
+<td>light session niceties</td>
+</tr>
+</tbody>
+</table>
+<div class="lo-remember">
+<p><strong>The idempotency law (M15, indoors):</strong> hooks <strong>re-run on every recreate</strong>, and recreation is the
+reliability strategy — so a non-idempotent <code>postCreate</code> makes recreation destructive and kills the whole
+reflex. <strong>Run-twice test</strong> every hook: create, then recreate immediately, and verify it still works.</p>
+</div>
+<h3 id="the-devcontainer-cli-and-codespaces-the-same-spec-different-clients">The devcontainer CLI and Codespaces — the same spec, different clients<a class="headerlink" href="#the-devcontainer-cli-and-codespaces-the-same-spec-different-clients" title="Permanent link">&para;</a></h3>
+<p>The <code>devcontainer.json</code> is a <strong>seam</strong>: nothing above it is welded to a vendor.</p>
+<ul>
+<li><strong>devcontainer CLI</strong> — the spec org's reference implementation; a Node tool that builds/runs the spec
+  <strong>headlessly</strong>. This is what a <strong>prebuild</strong> job on the M15 rails uses: <code>devcontainer build</code> bakes the
+  dev image in CI and pushes it to GHCR, so cold minutes become warm seconds. (Run it via its container
+  image or <code>npx</code> in CI — never installed into system Node; install-minimalism holds.)</li>
+<li><strong>GitHub Codespaces</strong> — reads the exact same file and runs the same sequence as a <strong>cloud product</strong>:
+  aggressive prebuilds turn setup into cheap build-time, the laptop demoted to a thin client. The spec
+  knowledge transfers <em>to</em> Codespaces; you never learn it <em>from</em> the hosted UX.</li>
+<li><strong>DevPod</strong> — a client-only, <strong>provider-agnostic</strong> driver: the same spec materialized on your Docker
+  daemon today, an ssh box or cloud VM tomorrow. The provider abstracts <em>where</em>:</li>
+</ul>
+<pre class="mermaid"><code>flowchart TB
+    Spec["One devcontainer.json"]
+    subgraph Providers["DevPod providers — WHERE it runs"]
+        D["docker&lt;br/&gt;local daemon (this week)"]
+        S["ssh&lt;br/&gt;any reachable box (M9)"]
+        K["kubernetes&lt;br/&gt;a cluster (M19)"]
+        C["cloud VM&lt;br/&gt;rented iron (M28)"]
+    end
+    Spec --&gt; D
+    Spec --&gt; S
+    Spec --&gt; K
+    Spec --&gt; C</code></pre>
+<p>Because the spec is the seam, the <em>client</em> choice is reversible — the OCI lesson (M17) and the
+CI-concepts lesson (M15) completing their trilogy: <strong>invest in the open standard, not the vendor</strong>.</p>
+<h3 id="dev-ci-and-prod-are-one-family-with-a-strictness-gradient">Dev, CI, and prod are one family with a strictness gradient<a class="headerlink" href="#dev-ci-and-prod-are-one-family-with-a-strictness-gradient" title="Permanent link">&para;</a></h3>
+<p>The dev image is not a snowflake — it is the loose end of a family whose strictness rises as you move
+toward production:</p>
+<pre class="mermaid"><code>flowchart TB
+    Base["Shared dev base&lt;br/&gt;python-slim + common tools"]
+    subgraph Dev["Dev — convenient, muted"]
+        N["netscope-dev"]
+        R["recall-dev"]
+        Cu["curriculum-dev"]
+    end
+    subgraph CI["CI — clean, gating"]
+        CIimg["ci image&lt;br/&gt;no editor niceties"]
+    end
+    subgraph Prod["Prod — hardened, minimal"]
+        P["runtime image&lt;br/&gt;non-root, minimal surface"]
+    end
+    Base --&gt; N
+    Base --&gt; R
+    Base --&gt; Cu
+    Base --&gt; CIimg
+    CIimg --&gt; P</code></pre>
+<p>One base family, thin per-repo layers (M16's layer economy): the shared base is stored and pulled once;
+bumping one repo's layer does not rebuild every repo's world. The same knowledge, three strictnesses —
+dev <em>allows</em> what CI <em>forbids</em> what prod <em>forbids harder</em>.</p>
+<h3 id="the-dev-container-troubleshooting-ladder">The dev-container troubleshooting ladder<a class="headerlink" href="#the-dev-container-troubleshooting-ladder" title="Permanent link">&para;</a></h3>
+<p>When a bench misbehaves, name the rung <strong>before</strong> you produce evidence — each rung hands off to a ladder
+you already own:</p>
+<pre class="mermaid"><code>flowchart TB
+    A["Spec valid?&lt;br/&gt;jsonc / schema"] --&gt;|no| F1["Fix the JSON&lt;br/&gt;trailing comma / comment"]
+    A --&gt;|yes| B["Build succeeds?"] 
+    B --&gt;|no| F2["It's a docker build&lt;br/&gt;M16's ladder owns it"]
+    B --&gt;|yes| C["Hooks succeeded?&lt;br/&gt;read THEIR output"]
+    C --&gt;|no| F3["Idempotency / loud-failure&lt;br/&gt;M15's laws"]
+    C --&gt;|yes| D["Mount + permissions right?&lt;br/&gt;ls -ln the workspace"]
+    D --&gt;|no| F4["The uid dance&lt;br/&gt;remoteUser + updateRemoteUserUID (M17)"]
+    D --&gt;|yes| E["Door works?&lt;br/&gt;ssh / attach"]
+    E --&gt;|no| F5["ssh / agent / attach&lt;br/&gt;M9's ladder"]
+    E --&gt;|yes| OK["The bench is up"]</code></pre>
+<p>The standing reflex above all rungs: <strong>bench weird for more than 10 minutes = recreate first</strong>, then
+investigate the <em>spec</em> — never perform surgery on a disposable container (the cattle law, applied to your
+own desk).</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>The workbench is code</strong> — <code>devcontainer.json</code> on an open spec (containers.dev); reviewed, versioned, recreated. Laptop loss becomes a non-event.</li>
+<li><strong>Three bases, pick one:</strong> <code>image</code> (fastest) · <code>build.dockerfile</code> (repo env-code) · <code>dockerComposeFile</code> (the rig is the bench).</li>
+<li><strong>Features are pinned OCI artifacts</strong> running <code>install.sh</code> at build time — read one, pin it; they are dependencies <em>and</em> build cost.</li>
+<li><strong>Four hook stations:</strong> onCreate (bake) → postCreate (personalize the checkout) → postStart (every start) → postAttach (every attach). Hooks <strong>must be idempotent</strong> — run-twice test them.</li>
+<li><strong>The spec is the seam</strong> — devcontainer CLI, Codespaces, and DevPod all read it. The client is reversible; the standard is the investment.</li>
+<li><strong>Non-root indoors, secrets never in the file</strong> — it's committed. Use gitignored env-file mounts + <strong>ssh-agent forwarding</strong> (the key never enters the container, M9).</li>
+<li><strong>The ladder:</strong> spec → build (M16) → hooks (M15) → mount/uid (M17) → door (M9). Weird &gt;10 min? <strong>Recreate, don't operate.</strong></li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-author-a-bench-from-a-blank-file">Guided Lab: author a bench from a blank file<a class="headerlink" href="#guided-lab-author-a-bench-from-a-blank-file" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You hand-write a <code>Dockerfile</code> and a valid <code>devcontainer.json</code> for a tiny repo,
+then — because the lab VM has Docker — </em><em>build the image the spec references and run its setup by hand</em><em>,
+proving the bench materializes. No editor required: this is the spec, dissected. Everything lives in a
+throwaway <code>~/hello-bench/</code> repo.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-18" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-18" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>The live editor bench (best for this module)</strong> — click <strong>Open in Codespaces</strong>: it reads a
+  <code>devcontainer.json</code> and opens the exact thing you are learning, in a real editor. This module <em>is</em>
+  what powers that button — running it here is the lesson materialized. Free tier: 120 core-hrs/mo.</li>
+<li><strong>Author + build by hand, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux VM
+  <strong>with Docker</strong>, where you write the spec and a Dockerfile and actually <code>docker build</code> the bench —
+  the mechanics under the editor button, no VS Code needed.</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL box with Docker: write <code>.devcontainer/</code>, then
+  <code>devcontainer up</code> (the CLI) or <code>devpod up .</code> — the same spec, your own iron.</li>
+</ul>
+<p>Codespaces is the zero-setup <em>editor</em> on-ramp; Killercoda and local let you see the machinery the
+button hides — write the spec, then watch Docker materialize it.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · A repo that sets itself up</label><label for="__tabbed_1_2">2 · Write the Dockerfile — non-root by default</label><label for="__tabbed_1_3">3 · Write devcontainer.json — the contract</label><label for="__tabbed_1_4">4 · Materialize it — build, then run the hook by hand</label><label for="__tabbed_1_5">5 · Hooks, recreate, and the secrets boundary</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Make a tiny Python repo and note, honestly, the manual setup it would need on a bare machine:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/hello-bench<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/hello-bench
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>init<span class="w"> </span>-q
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;print(&quot;hello from the bench&quot;)\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>app.py
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;ruff\npytest\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>requirements-dev.txt
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>.devcontainer
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>ls<span class="w"> </span>-la
+</code></pre></div>
+On a bare box you'd install Python, make a venv, <code>pip install</code> the dev tools, wire pre-commit, set up
+the editor — the <em>"before"</em> number. Journal those steps: <strong>they are the spec's TODO list.</strong> The
+<code>devcontainer.json</code> you write next turns that archaeology into one file.</p>
+</div>
+<div class="tabbed-block">
+<p>The <code>build</code> base is env-code you own. Create a Dockerfile with a <strong>non-root</strong> user so bind-mounted
+files aren't root-owned wreckage (M16's habit, indoors):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>.devcontainer/Dockerfile<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">FROM python:3.12-slim</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s"># a non-root user so workspace files you create aren&#39;t root-owned on the host (M17&#39;s uid story)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">ARG USERNAME=dev</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">RUN useradd --create-home &quot;$USERNAME&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">USER $USERNAME</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">EOF</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>cat<span class="w"> </span>.devcontainer/Dockerfile
+</code></pre></div>
+<code>python:3.12-slim</code> is <strong>pinned</strong> (not <code>latest</code> — M16's tags-lie lesson). The <code>USER dev</code> line is the
+whole reason your workspace won't fill with root-owned files.</p>
+</div>
+<div class="tabbed-block">
+<p>Now the spec itself: a base (<code>build</code> → the Dockerfile), a pinned Feature, a non-root <code>remoteUser</code>, a
+forwarded port, and a <code>postCreateCommand</code> — as <strong>strict JSON</strong> so every tool reads it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>.devcontainer/devcontainer.json<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">  &quot;name&quot;: &quot;hello-bench&quot;,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">  &quot;build&quot;: { &quot;dockerfile&quot;: &quot;Dockerfile&quot; },</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">  &quot;features&quot;: {</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">    &quot;ghcr.io/devcontainers/features/common-utils:2&quot;: {}</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">  },</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">  &quot;remoteUser&quot;: &quot;dev&quot;,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">  &quot;forwardPorts&quot;: [8000],</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s">  &quot;postCreateCommand&quot;: &quot;pip install --user -r requirements-dev.txt&quot;</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s">}</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s">EOF</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>python3<span class="w"> </span>-m<span class="w"> </span>json.tool<span class="w"> </span>.devcontainer/devcontainer.json
+</code></pre></div>
+<code>json.tool</code> pretty-printing it <strong>proves it parses</strong> — no trailing commas, no comments. The real spec
+permits jsonc, but strict-clean means <em>any</em> client (Codespaces, DevPod, the CLI) accepts it.</p>
+<p>Click <strong>Check</strong> to verify the spec is valid JSON with the required keys and a non-root user.</p>
+</div>
+<div class="tabbed-block">
+<p>The lab VM has Docker, so you can <em>be</em> the devcontainer client. Install Docker, build the image the
+spec's <code>build</code> points at, then run the container the way the spec would — workspace mounted, as
+<code>dev</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker.io<span class="w"> </span>&gt;/dev/null
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>service<span class="w"> </span>docker<span class="w"> </span>start
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>hello-bench-dev<span class="w"> </span>-f<span class="w"> </span>.devcontainer/Dockerfile<span class="w"> </span>.devcontainer
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">&quot;</span>:/workspace<span class="w"> </span>-w<span class="w"> </span>/workspace<span class="w"> </span>-u<span class="w"> </span>dev<span class="w"> </span>hello-bench-dev<span class="w"> </span>python<span class="w"> </span>app.py
+</code></pre></div>
+That <code>docker run</code> is the middle of the <code>up</code> sequence: <strong>create the container, mount the workspace, be
+the remoteUser.</strong> The <code>postCreateCommand</code> (<code>pip install …</code>) is what a client runs <em>for</em> you right
+after the mount — run it yourself to see the environment finish assembling.</p>
+<p>Click <strong>Check</strong> to verify the dev image the spec references was built.</p>
+</div>
+<div class="tabbed-block">
+<p>Reason about <strong>where each command belongs</strong>, then handle secrets the right way. Prove the negative
+first — a secret in the committed spec would ship to every clone:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">&#39;TOKEN&#39;</span><span class="w"> </span>.devcontainer/devcontainer.json<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;SECRET in spec — wrong!&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;no secret in the committed spec (good)&quot;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># the RIGHT channel: a gitignored env-file mount for project secrets</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;.devcontainer/devcontainer.env&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>.gitignore
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;API_TOKEN=dev-only-never-committed\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>.devcontainer/devcontainer.env
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>git<span class="w"> </span>status<span class="w"> </span>--short
+</code></pre></div>
+<code>git status</code> shows the spec tracked and the env-file <strong>ignored</strong> — that is the boundary. The
+bake/personalize split: <code>onCreate</code> bakes generic tool installs (prebuild-able); <code>postCreate</code> does
+<em>this checkout's</em> work (<code>pip install -e .</code>). And the law: <strong>run-twice</strong> every hook — a <code>postCreate</code>
+that breaks on the second run breaks every recreate.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you wrote a valid <code>devcontainer.json</code> and a non-root Dockerfile, built the image, ran the setup as
+the remote user, and put a secret behind a gitignored mount instead of in the committed file — the
+guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work in <code>~/hello-bench/</code> (or a fresh scratch repo). Struggle
+here is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-feature-vs-dockerfile-line-decided-on-purpose">Challenge 1 — Feature vs Dockerfile line, decided on purpose<a class="headerlink" href="#challenge-1-feature-vs-dockerfile-line-decided-on-purpose" title="Permanent link">&para;</a></h3>
+<p>Your bench needs <code>git</code> niceties and a Python toolchain. Install <strong>one</strong> via a Feature and <strong>one</strong> via a
+Dockerfile line — then state, in a sentence, the policy that decided which went where.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Two axes: how <strong>load-bearing</strong> is the component, and how much does it <strong>churn</strong>? Determinism argues
+for the Dockerfile; convenience and sharing argue for a pinned Feature.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>Core toolchain (the thing your gate depends on) → a <strong>Dockerfile line</strong> (deterministic, reviewed
+in-repo, no third-party trust or resolution cost). Convenience tooling → a <strong>pinned Feature</strong>
+(<code>…/features/common-utils:2</code> — composable, shared, maintained upstream). Policy: <em>core in the
+Dockerfile, convenience in pinned Features; the more load-bearing and the more it churns, the more it
+belongs in code you own.</em> Every Feature is a dependency <strong>and</strong> a build cost — pin the exact version
+and read its <code>install.sh</code> once.</p>
+</details>
+<h3 id="challenge-2-map-the-four-hook-stations-by-prediction">Challenge 2 — Map the four hook stations by prediction<a class="headerlink" href="#challenge-2-map-the-four-hook-stations-by-prediction" title="Permanent link">&para;</a></h3>
+<p>Without running a client, say which station each of these belongs at, and why:
+<code>apt-get install build tools</code> · <code>pip install -e ".[dev]"</code> · <code>start a background dev daemon</code> ·
+<code>print a welcome banner</code>.</p>
+<details class="success">
+<summary>Solution</summary>
+<ul>
+<li><code>apt-get install build tools</code> → <strong>onCreate</strong> — generic, bakeable, independent of your checkout (a
+  prebuild can cache it).</li>
+<li><code>pip install -e ".[dev]"</code> → <strong>postCreate</strong> — bound to <em>this</em> mounted checkout; can't be baked into a
+  shared image.</li>
+<li><code>start a background dev daemon</code> → <strong>postStart</strong> — must run on every container start, not just
+  creation.</li>
+<li><code>print a welcome banner</code> → <strong>postAttach</strong> — a per-session nicety, runs on every attach.</li>
+</ul>
+<p>The bake/personalize line falls <strong>between onCreate and postCreate</strong> — and it is exactly the split
+that lets a prebuild turn cold minutes into warm seconds.</p>
+</details>
+<h3 id="challenge-3-files-created-inside-show-up-root-owned-on-the-host">Challenge 3 — Files created inside show up root-owned on the host<a class="headerlink" href="#challenge-3-files-created-inside-show-up-root-owned-on-the-host" title="Permanent link">&para;</a></h3>
+<p>You <code>touch</code> a file inside a bench and, back on the host, it's owned by <code>root</code>. Name the failure and the
+setting that fixes it.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>It is the <strong>uid dance</strong> — the container user's uid vs your host uid across a bind mount. M17's
+user-namespace knowledge is cashing in.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>The container user's uid ≠ your host uid on the bind mount (usually <code>remoteUser: root</code>, or uid
+remapping disabled). Fix: a <strong>non-root <code>remoteUser</code></strong> plus <strong><code>updateRemoteUserUID</code></strong> (the default),
+which rewrites the container user's uid to match yours. Verify with <code>ls -ln</code> on both sides — the
+numeric owner should match. Root files on a bind mount are a <em>config</em> bug, not "Docker is broken."</p>
+</details>
+<h3 id="challenge-4-prove-why-a-secret-in-the-spec-is-categorically-wrong">Challenge 4 — Prove why a secret in the spec is categorically wrong<a class="headerlink" href="#challenge-4-prove-why-a-secret-in-the-spec-is-categorically-wrong" title="Permanent link">&para;</a></h3>
+<p>Put a fake token in <code>devcontainer.json</code>, show it heading into the repo, then remove it and implement the
+right channel.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># WRONG — the file is committed:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;{ &quot;name&quot;: &quot;x&quot;, &quot;containerEnv&quot;: { &quot;API_TOKEN&quot;: &quot;s3cret&quot; } }\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/bad.json
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>git<span class="w"> </span>-C<span class="w"> </span>~/hello-bench<span class="w"> </span>add<span class="w"> </span>-n<span class="w"> </span>.devcontainer/devcontainer.json<span class="w">   </span><span class="c1"># a real secret here would be staged → history forever</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># RIGHT — gitignored env-file mount + agent forwarding for auth</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;.devcontainer/devcontainer.env&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/hello-bench/.gitignore
+</code></pre></div>
+<code>devcontainer.json</code> is <strong>committed</strong> — a secret in it ships to every clone and lives in history
+forever (git-history purge is a fire drill, not a plan). Right channels: <strong>gitignored env-file
+mounts</strong> for project secrets, and <strong>ssh-agent forwarding</strong> for auth — the private key never enters the
+container (M9), signatures happen host-side.</p>
+</details>
+<h3 id="challenge-5-stretch-attribute-the-kpi-gaps-to-their-mechanism">Challenge 5 (stretch) — Attribute the KPI gaps to their mechanism<a class="headerlink" href="#challenge-5-stretch-attribute-the-kpi-gaps-to-their-mechanism" title="Permanent link">&para;</a></h3>
+<p>The week's headline metric is <em>clone-to-productive</em>, measured three ways: <strong>before = 90 min</strong>,
+<strong>cold = 8 min</strong>, <strong>prebuilt = 45 s</strong>. Explain each gap by its mechanism.</p>
+<details class="success">
+<summary>Solution</summary>
+<ul>
+<li><strong>90 min → 8 min (env-as-code):</strong> the spec <em>executes</em> the setup the wiki only <em>described</em> — no human
+  archaeology. Documentation drifts; a spec is tested (the run-twice test doesn't work on prose).</li>
+<li><strong>8 min → 45 s (the prebuild split):</strong> everything bakeable (image + Features + <code>onCreate</code>) is built
+  <strong>once in CI</strong> and <em>pulled</em>, not rebuilt; only <code>postCreate</code>'s checkout-bound work remains at
+  up-time. Put a bakeable step in <code>postCreate</code> by mistake and the warm number betrays the leak.</li>
+</ul>
+<p>The bake/personalize split <em>is</em> Codespaces' whole product insight — "sell the seconds" — at n=1. That
+same split is the difference between a bench that feels instant and one that doesn't.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>What is a dev container, what file defines it, and what makes the definition portable across tools?</summary>
+<p>A development environment defined as code and run as a container — image/build + tools + hooks +
+editor settings — defined by <code>.devcontainer/devcontainer.json</code>. Portable because the file implements
+an <strong>open spec</strong> (containers.dev) that VS Code, Codespaces, DevPod, and the devcontainer CLI all read.</p>
+</details>
+<details class="question">
+<summary>Name the three base options and when each fits.</summary>
+<p><code>image</code> (fastest — a prebuilt/family base already carries your tools); <code>build.dockerfile</code>
+(repo-specific env code you own and review); <code>dockerComposeFile</code> (the dev env includes a multi-service
+rig — develop against live dependencies).</p>
+</details>
+<details class="question">
+<summary>Walk the <code>up</code> sequence from spec to 'door open', and name a module that owns each stage.</summary>
+<p>Read/validate the spec → resolve <strong>Features</strong> (fetch OCI artifacts, merge install steps — M17) →
+<strong>build or pull</strong> the image (a docker build — M16) → <strong>create</strong> the container (workspace mount,
+remoteUser/uid remap, env) → run <strong>hooks</strong> in station order (M15) + inject <strong>dotfiles</strong> (M10) → open
+the <strong>door</strong> (ssh/attach — M9). It's your last five modules composed.</p>
+</details>
+<details class="question">
+<summary>The four hook stations — when does each fire, and what belongs where?</summary>
+<p><strong>onCreate</strong>: once at creation, before your checkout's personality — bakeable/generic. <strong>postCreate</strong>:
+after the workspace mounts — per-clone (editable installs, pre-commit). <strong>postStart</strong>: every container
+start — daemons, refreshes. <strong>postAttach</strong>: every attach — session niceties. Bake the heavy/generic;
+personalize the checkout-bound; keep start/attach light.</p>
+</details>
+<details class="question">
+<summary>Why must lifecycle hooks be idempotent, and what test enforces it?</summary>
+<p>Recreation is the reliability strategy (disposable benches), and hooks <strong>re-run on every recreate</strong> —
+so a non-idempotent hook makes recreation destructive and kills the reflex. It inherits M15's
+idempotency law; the <strong>run-twice test</strong> (create, recreate immediately, verify) enforces it.</p>
+</details>
+<details class="question">
+<summary>Your bench files show up root-owned on the host. What went wrong, and what fixes it?</summary>
+<p>The <strong>uid dance</strong> failed: the container user's uid ≠ your host uid across the bind mount (remoteUser
+root, or remapping off). Fix with a <strong>non-root <code>remoteUser</code></strong> + <strong><code>updateRemoteUserUID</code></strong>, which
+rewrites the container uid to match yours; verify with <code>ls -ln</code> on both sides.</p>
+</details>
+<details class="question">
+<summary>Why are secrets in devcontainer.json categorically wrong, and what are the two right channels?</summary>
+<p>The file is <strong>committed</strong> — a secret ships to every clone and lives in history forever; visibility
+changes and clones multiply. Right channels: <strong>gitignored env-file mounts</strong> for project secrets, and
+<strong>ssh-agent forwarding</strong> for auth (the key never enters the container — M9).</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>: <em>"Your environment is code now."</em> Name the wiki-archaeology pain,
+walk a real <code>devcontainer.json</code> block by block, then land the disposability payoff — <strong>recreate beats
+debug</strong> — and close on before/after numbers. The pitch must land on <strong>value, not tooling fashion</strong>.
+Then, in <strong>90 seconds</strong>, teach a 12-year-old <em>why disposable beats precious</em> with the LEGO story
+(instructions vs a glued model; the cat knocks it over — you rebuild from instructions, and <em>the
+instructions are what you keep safe</em> = git). If you can't yet, reread the Key Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M18 also closes </em><em>Stage 5</em><em> and
+opens Enterprise Architecture (M19, Kubernetes). A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> env-as-code and its two payoffs (onboarding, isolation) — the pitch lands on value, not fashion.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> the <code>up</code> sequence cold (spec → Features → build → create → hooks → dotfiles → door) with each stage's owning module.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the four hook stations and place any command on the right side of the bake/personalize line.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> a correct <code>devcontainer.json</code> from memory in ≤30 min: non-root, pinned base, one justified Feature, a gate-installing postCreate — opens/builds first try.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Choose</strong> Feature vs Dockerfile line for a given tool and state the criterion (load-bearing × churn).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> the uid/permissions story for bind-mounted work — root-owned-files diagnosed and fixed (<code>remoteUser</code> + <code>updateRemoteUserUID</code>).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Test</strong> a hook with the run-twice proof — recreation stays safe.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure</strong> the boundary: no secret in the committed spec, env-file mount + agent forwarding demonstrated, docker-in-docker not on by reflex.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> a bench by the five-rung ladder, naming the rung before the evidence, recreate-first past 10 minutes.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Contrast</strong> dev / CI / prod as one image family with a rising strictness gradient — name what dev allows that CI forbids.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Evaluate</strong> a community Feature before adopting it (read its <code>install.sh</code>, pin the exact version).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Narrate</strong> the open-spec trilogy (OCI → CI concepts → devcontainer.json) as one lesson: invest in the standard, not the vendor.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back — the "environment is code" pitch and the LEGO analogy, bounded, plus a live recreate without flinching.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory forms. <strong>Interleaving stays active</strong> — every M18 review also pulls
+one item from <strong>Module 17</strong> (the mechanisms this bench sits on: uid remaps, Features as OCI artifacts,
+the stack). This module closes Stage 5, so the <strong>stage</strong> review rides alongside the module reviews.
+Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M17 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 4 (midpoint)</strong></td>
+<td>Anatomy + up-sequence blanks · spec &amp; station sprints · validation A1–B5</td>
+<td>Docker → containerd → runc stack sprint</td>
+</tr>
+<tr>
+<td><strong>Day 7 (gate)</strong></td>
+<td>All the diagrams cold · every sprint · validation E13–E15, G19, K27 · <strong>STAGE 5 GATE</strong></td>
+<td>Image forensics sprint (layer-walk a pulled image)</td>
+</tr>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · validation misses re-derived at the terminal</td>
+<td>uid-remap mechanism recited</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>A fresh tiny repo given a devcontainer from memory in ≤15 min</td>
+<td>The <code>unshare</code> namespace demo, cold</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>The drills re-planted (uid wreckage · non-idempotent hook · floated Feature pin)</td>
+<td><code>memory.max</code> cgroup demo interpreted</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>The prebuild pipeline's week reviewed — did the family rebuild? was drift caught?</td>
+<td>The bare-<code>runc</code> bundle run once</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Validation retake (target ≥90) · one spec refactored with a month's hindsight</td>
+<td>Stage-5 sampler across all four modules</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M19–M20 (the cluster bench — kind/k3d inside or beside the devcontainer;
+DevPod's k8s provider; dev loops against clusters) · M21 (profiling <em>inside</em> benches, the cgroup layer
+already understood) · M24 (the trust surface formalized — Feature audits, secrets brokering as an attack
+path) · M26–M28 (the CUDA bench — GPU devcontainers for training/serving; remote providers pointed at
+GPU boxes; the capstone's daily driver) · every future repo (a <code>.devcontainer/</code> is the default from now
+on).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M18 completes the environment-as-code arc — venv → dotfiles → image → <strong>bench</strong> — closing Stage 5 with
+Ship It whole (rail, hull, understanding, bench) and a host that will never again accumulate a
+project's debris.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-17/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 17 — containerd &amp; OCI">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 17 — containerd & OCI
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../stage-06/module-19/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 19 — Kubernetes Core">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 19 — Kubernetes Core
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

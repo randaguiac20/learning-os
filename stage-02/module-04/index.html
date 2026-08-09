@@ -1,0 +1,3453 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="From resident to operator — supervise long-running programs with systemd, query the journal, manage storage from disk to fstab, schedule work, and take backups that actually restore.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-03/">
+      
+      
+        <link rel="next" href="../module-05/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 04 — Linux Administration - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-04-linux-administration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 04 — Linux Administration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-supervision-and-the-journal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: supervision and the journal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unit-anatomy-read-it-before-you-write-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unit anatomy — read it before you write it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enable-start-the-1-beginner-confusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enable ≠ start — the #1 beginner confusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-operators-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The operator's loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-storage-stack-device-to-persistent-mount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The storage stack — device to persistent mount
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedules-and-backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedules and backups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#six-mechanisms-that-explain-the-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Six mechanisms that explain the rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-services-the-journal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: services &amp; the journal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-run-something-30-s-after-every-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Run something 30 s after every boot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-decode-a-203exec-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Decode a 203/EXEC failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-timer-that-never-fires" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The timer that never fires
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-storage-stack-end-to-end-vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Storage stack, end to end (VM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-mask-vs-disable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — mask vs disable
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-supervision-and-the-journal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: supervision and the journal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unit-anatomy-read-it-before-you-write-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unit anatomy — read it before you write it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enable-start-the-1-beginner-confusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enable ≠ start — the #1 beginner confusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-operators-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The operator's loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-storage-stack-device-to-persistent-mount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The storage stack — device to persistent mount
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedules-and-backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schedules and backups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#six-mechanisms-that-explain-the-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Six mechanisms that explain the rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-services-the-journal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: services &amp; the journal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-run-something-30-s-after-every-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Run something 30 s after every boot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-decode-a-203exec-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Decode a 203/EXEC failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-timer-that-never-fires" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The timer that never fires
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-storage-stack-end-to-end-vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Storage stack, end to end (VM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-mask-vs-disable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — mask vs disable
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-04-linux-administration">Module 04 — Linux Administration<a class="headerlink" href="#module-04-linux-administration" title="Permanent link">&para;</a></h1>
+<p><small>Stage 2 · Core Concepts · ~3 weeks at 4 h/day · Prerequisite — Module 03 (the Linux pillars you now make run <em>unattended</em>).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Linux administration</strong> is operating the system as a deliberate machine: supervised long-running
+programs (<strong>services</strong>), durable records of what happened (<strong>logs</strong>), managed places for data to live
+(<strong>storage</strong>), work that runs without you (<strong>schedules</strong>), and insurance against loss (<strong>backups</strong>).</p>
+<p>Module 03 gave you the pillars — users, permissions, packages, processes. This module makes them run
+<em>unattended</em>. Every production system is exactly this module at scale: services that restart
+themselves, logs that answer "what happened at 3 AM", disks that don't fill silently, jobs that fire on
+time, and backups that actually restore. This is also where the <strong>VM habit</strong> begins — destructive
+practice belongs in disposable machines with snapshots, never on a box you care about.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>M5 turns today's command lines into <strong>scripts that become services and timers</strong> · M15 (automation) is
+these exact mechanisms driven by code across a fleet · M16 (Docker) largely <strong>replaces unit files
+per-app</strong> — <code>docker run --restart=on-failure</code> <em>is</em> supervision, and you'll compare them head-on · M19
+(Kubernetes) rhymes with everything here — desired state, supervision, dependencies, timers, mounts —
+it is <strong>M4 at cluster scale</strong> · M25 ships journald off-box to central logging. Learn the reconciliation
+instinct now, where the whole system still fits in your head.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 04 — Linux Administration&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Analogy / Visual Model / Misconceptions):
+the babysitter analogy for supervision (PID 1 is every service's parent) → enable-vs-start (setting the
+alarm vs waking up) → the journal as flight recorder, not diary → the bookshelf-on-wheels for a mount
+(fstab is the note to wheel it back every morning) → the spare-tire-never-inflated for untested backups
+(the GitLab 2017 case: five mechanisms, zero restores).</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-services-the-journal">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. Typing beats watching every time — and it is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-supervision-and-the-journal">The picture: supervision and the journal<a class="headerlink" href="#the-picture-supervision-and-the-journal" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph SD["systemd — PID 1"]
+        U1[".service&lt;br/&gt;nginx · sshd"]
+        U2[".timer&lt;br/&gt;schedules"]
+        U3[".mount&lt;br/&gt;/srv/data"]
+        U4[".target&lt;br/&gt;milestones"]
+    end
+    U2 --&gt;|"pulls"| U1
+    U4 --&gt;|"wants"| U1
+    SD --&gt;|"captures stdout/stderr"| J["journald&lt;br/&gt;binary · indexed"]
+    J --&gt; Q["journalctl&lt;br/&gt;-u · -b · -p · -f"]</code></pre>
+<p><strong>systemd</strong> is PID 1 — the parent of every service (Module 01's process tree, at the top). It reads
+declarative <strong>unit</strong> files, starts everything that <em>can</em> run in parallel by resolving a dependency
+graph, and <strong>supervises</strong>: when a service exits, it applies policy (<code>Restart=on-failure</code>, backoff). It
+also wires each service's stdout/stderr into <strong>journald</strong>, which stamps every line with metadata (unit,
+PID, boot ID, priority) and indexes it so <code>journalctl</code> can answer questions a flat text log cannot.</p>
+<h3 id="unit-anatomy-read-it-before-you-write-it">Unit anatomy — read it before you write it<a class="headerlink" href="#unit-anatomy-read-it-before-you-write-it" title="Permanent link">&para;</a></h3>
+<p>A unit file is INI-style, in three sections. This is a hardened oneshot health reporter:</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Section</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Description=Health reporter</code></td>
+<td><code>[Unit]</code></td>
+<td>identity</td>
+</tr>
+<tr>
+<td><code>After=network.target</code></td>
+<td><code>[Unit]</code></td>
+<td><strong>ordering</strong> — start after the network is up</td>
+</tr>
+<tr>
+<td><code>ExecStart=/usr/local/bin/health.sh</code></td>
+<td><code>[Service]</code></td>
+<td><strong>what</strong> to run (absolute path — always)</td>
+</tr>
+<tr>
+<td><code>Type=oneshot</code></td>
+<td><code>[Service]</code></td>
+<td>runs and exits (vs <code>simple</code> for a long-running daemon)</td>
+</tr>
+<tr>
+<td><code>User=caretaker</code></td>
+<td><code>[Service]</code></td>
+<td><strong>who</strong> it runs as — M3 least-privilege identity</td>
+</tr>
+<tr>
+<td><code>Restart=on-failure</code></td>
+<td><code>[Service]</code></td>
+<td>supervision policy — restart on crash only</td>
+</tr>
+<tr>
+<td><code>WantedBy=multi-user.target</code></td>
+<td><code>[Install]</code></td>
+<td><strong>boot wiring</strong> — who "wants" me at boot</td>
+</tr>
+</tbody>
+</table>
+<p>Vendor units live in <code>/usr/lib/systemd/system/</code> — <strong>never edit them</strong> (lost on upgrade). Your units and
+overrides go in <code>/etc/systemd/system/</code>; use <code>systemctl edit</code> for drop-ins that keep the vendor file
+pristine.</p>
+<h3 id="enable-start-the-1-beginner-confusion"><code>enable</code> ≠ <code>start</code> — the #1 beginner confusion<a class="headerlink" href="#enable-start-the-1-beginner-confusion" title="Permanent link">&para;</a></h3>
+<p>These are independent axes — boot-wiring versus now — and conflating them (both directions) is the
+classic mistake. "It worked until I rebooted" means you <code>start</code>ed but never <code>enable</code>d.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>start</code> / <code>stop</code></th>
+<th><code>enable</code> / <code>disable</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>What it does</strong></td>
+<td>asks PID 1 to launch/kill the unit <strong>now</strong></td>
+<td>creates/removes a symlink in the target's <code>.wants/</code> dir</td>
+</tr>
+<tr>
+<td><strong>Mechanism</strong></td>
+<td>acts on <code>[Service]</code></td>
+<td>acts on <code>[Install]</code></td>
+</tr>
+<tr>
+<td><strong>Survives reboot?</strong></td>
+<td>no</td>
+<td>yes (that's the whole point)</td>
+</tr>
+<tr>
+<td><strong>Both at once</strong></td>
+<td>—</td>
+<td><code>systemctl enable --now &lt;unit&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>After editing any unit file you must <code>sudo systemctl daemon-reload</code> — systemd caches parsed units in
+memory, so editing the file on disk changes nothing until PID 1 re-reads it. <code>systemctl cat &lt;unit&gt;</code>
+shows what's <strong>really</strong> loaded, drop-ins included.</p>
+<h3 id="the-operators-loop">The operator's loop<a class="headerlink" href="#the-operators-loop" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    A["Write unit file&lt;br/&gt;/etc/systemd/system"] --&gt; B["daemon-reload&lt;br/&gt;PID 1 re-reads"]
+    B --&gt; C["start&lt;br/&gt;launch now"]
+    C --&gt; D["status + journalctl -u&lt;br/&gt;verify"]
+    D --&gt; E["enable&lt;br/&gt;wire for boot"]
+    E --&gt; F["journalctl -f&lt;br/&gt;watch"]
+    F --&gt;|"on failure"| G["journal FIRST →&lt;br/&gt;hypothesis → fix → restart"]
+    G --&gt; B</code></pre>
+<p><strong>Journal first, always.</strong> For every "why did it fail?" the answer is nearly always already printed:
+<code>journalctl -u &lt;unit&gt; -b</code> before you theorize. <code>status=203/EXEC</code> = bad <code>ExecStart</code> path, missing execute
+bit, or a broken interpreter. A unit that <code>activating (auto-restart)</code> in a loop is crash-looping under
+<code>Restart=</code> — read the journal for the cause; do not just remove <code>Restart=</code> (that hides the disease, keeps
+the corpse down).</p>
+<h3 id="the-storage-stack-device-to-persistent-mount">The storage stack — device to persistent mount<a class="headerlink" href="#the-storage-stack-device-to-persistent-mount" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    D["Disk&lt;br/&gt;/dev/sdb — lsblk"] --&gt; P["Partition&lt;br/&gt;sdb1 — fdisk · GPT"]
+    P --&gt; F["Filesystem&lt;br/&gt;ext4 — mkfs"]
+    F --&gt; M["Mount&lt;br/&gt;/srv/data — mount"]
+    M --&gt; FS["Persist&lt;br/&gt;/etc/fstab — by UUID"]</code></pre>
+<p>Each layer has its own tool and its own failure mode. Persistence is an fstab line of <strong>six fields</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Example</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>device</td>
+<td><code>UUID=1234-…</code></td>
+<td><strong>by UUID, never <code>/dev/sdb1</code></strong> — device names reorder</td>
+</tr>
+<tr>
+<td>mount point</td>
+<td><code>/srv/data</code></td>
+<td>must already exist (<code>mkdir</code>)</td>
+</tr>
+<tr>
+<td>type</td>
+<td><code>ext4</code></td>
+<td>filesystem</td>
+</tr>
+<tr>
+<td>options</td>
+<td><code>defaults,nofail</code></td>
+<td><code>nofail</code> = a missing disk won't block boot</td>
+</tr>
+<tr>
+<td>dump</td>
+<td><code>0</code></td>
+<td>legacy backup flag</td>
+</tr>
+<tr>
+<td>pass</td>
+<td><code>2</code></td>
+<td>fsck order (<code>1</code> for root, <code>2</code> for others)</td>
+</tr>
+</tbody>
+</table>
+<p>The professional test is <strong><code>sudo mount -a</code> before you reboot</strong> — it applies fstab now, so a typo
+surfaces while you're logged in, not as <strong>emergency mode</strong> at boot. (An fstab typo dropping you to an
+emergency shell is a rite of passage — do it <em>on purpose in a VM</em> so it becomes competence, not fear.)</p>
+<h3 id="schedules-and-backups">Schedules and backups<a class="headerlink" href="#schedules-and-backups" title="Permanent link">&para;</a></h3>
+<p>Two schedulers; prefer <strong>timers</strong> for system jobs:</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>cron (<code>crontab -e</code>)</th>
+<th>systemd timer (<code>.timer</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logging</td>
+<td>you wire it up (or lose output)</td>
+<td>automatic, in the journal</td>
+</tr>
+<tr>
+<td>Missed while powered off</td>
+<td>run is <strong>lost</strong></td>
+<td><code>Persistent=true</code> runs it at next boot (catch-up)</td>
+</tr>
+<tr>
+<td>Depends on network-up</td>
+<td>awkward</td>
+<td><code>After=network-online.target</code> on the paired service</td>
+</tr>
+<tr>
+<td>Per-user jobs</td>
+<td>native (user crontab)</td>
+<td>possible, heavier</td>
+</tr>
+<tr>
+<td>Every 15 min</td>
+<td><code>*/15 * * * *</code></td>
+<td><code>OnCalendar=*:0/15</code></td>
+</tr>
+</tbody>
+</table>
+<p>A timer is a <strong>two-part machine</strong>: the <code>.timer</code> pulls, the paired <code>.service</code> does the work — and the
+<code>[Install]</code> belongs to the <strong>timer</strong> (<code>WantedBy=timers.target</code>), not the service. Backups rest on two
+primitives: <strong><code>tar</code></strong> archives-and-compresses (cold archives; inspect with <code>tar -tvf</code> <em>before</em>
+extracting), <strong><code>rsync</code></strong> synchronizes efficiently (its second run is near-instant because it moves only
+changed blocks — Tridgell's delta algorithm; rehearse with <code>--dry-run</code>/<code>-n</code> <em>always</em>).</p>
+<h3 id="six-mechanisms-that-explain-the-rest">Six mechanisms that explain the rest<a class="headerlink" href="#six-mechanisms-that-explain-the-rest" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Units are declared, not scripted.</strong> You describe <em>what</em>; systemd handles <em>when/how/again</em>. The
+   dependency graph (<code>After=</code>/<code>Requires=</code>/<code>WantedBy=</code>) lets it start everything that can run in parallel.</li>
+<li><strong>Supervision loop.</strong> systemd is every service's parent; it sees exits and applies policy —
+   crash-restart with no human. <code>systemctl stop</code> sends TERM then KILL (graceful); <code>kill -9</code> skips the
+   cleanup and leaves a mess.</li>
+<li><strong>The journal is structured.</strong> stdout/stderr are captured automatically (no log files to configure),
+   stamped and indexed; <code>-b -1</code> answers "what happened <em>before</em> the reboot" — a thing <code>tail</code> cannot.</li>
+<li><strong>The storage stack persists by UUID.</strong> <code>mkfs</code> writes filesystem structures (superblocks, inode
+   tables — M3's inodes live <em>here</em>); <code>mount</code> grafts it on; fstab replays it by UUID at boot.</li>
+<li><strong>Timers catch up.</strong> <code>Persistent=true</code> fires a missed job at next boot; cron just misses it — one of
+   several reasons timers are displacing cron for system work.</li>
+<li><strong>A backup is a restore that hasn't been needed yet.</strong> Untested backups don't exist. The project
+   <em>requires</em> a restore drill — because five backup mechanisms that don't restore is the GitLab lesson.</li>
+</ol>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong><code>enable</code> ≠ <code>start</code>.</strong> enable = boot wiring (a symlink); start = launch now. <code>enable --now</code> does both.</li>
+<li><strong>After editing a unit → <code>daemon-reload</code>; after editing fstab → <code>mount -a</code>.</strong> PID 1 and the kernel both cache.</li>
+<li><strong>Journal first.</strong> <code>journalctl -u &lt;unit&gt; -b</code> before you theorize — the failure is almost always printed.</li>
+<li><strong>Storage stack:</strong> disk → partition → filesystem → mount → <strong>fstab by UUID</strong> (never device name; add <code>nofail</code>).</li>
+<li><strong>Timers beat cron for system jobs</strong> — logging, catch-up (<code>Persistent=true</code>), and dependencies.</li>
+<li><strong>A backup that hasn't been restored is a hope.</strong> Do the restore drill. Do destructive labs in a VM.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-services-the-journal">Guided Lab: services &amp; the journal<a class="headerlink" href="#guided-lab-services-the-journal" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. Week-1 material — services, units, timers, and the journal — is safe to run on any
+Linux box. It creates a dedicated <code>caretaker</code> user and units under <code>/etc/systemd/system/</code>; </em><em>this module
+uses <code>sudo</code></em><em> for real admin work, so read every command before you run it.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-04" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-04" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a full Linux VM (systemd + root) in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux box or throwaway VM with systemd: <code>multipass launch --name m4</code> or <code>docker run -it --privileged ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size. For the storage steps, prefer a <strong>disposable VM with a snapshot</strong> — that is the professional's sandbox.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Survey the running system</label><label for="__tabbed_1_2">2 · Lifecycle — see enable vs start</label><label for="__tabbed_1_3">3 · Your echo is in the journal</label><label for="__tabbed_1_4">4 · A health service on a timer</label><label for="__tabbed_1_5">5 · Prove it, then read what it did</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>systemctl<span class="w"> </span>list-units<span class="w"> </span>--type<span class="o">=</span>service<span class="w"> </span>--state<span class="o">=</span>running<span class="w">   </span><span class="c1"># what&#39;s alive?</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>systemctl<span class="w"> </span>--failed<span class="w">                                    </span><span class="c1"># anything broken? (morning ritual)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>systemctl<span class="w"> </span>list-timers<span class="w">                                 </span><span class="c1"># what&#39;s scheduled already?</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>journalctl<span class="w"> </span>-b<span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-20<span class="w">                   </span><span class="c1"># this boot&#39;s log tail</span>
+</code></pre></div>
+Pick three services and <code>systemctl status &lt;name&gt;</code> each — read <strong>every</strong> line: <em>loaded? enabled?
+active?</em> and the recent log lines fused in. Journal: which are <code>enabled</code> but not <code>active</code>, and vice
+versa?</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>useradd<span class="w"> </span>-r<span class="w"> </span>-s<span class="w"> </span>/usr/sbin/nologin<span class="w"> </span>caretaker<span class="w">        </span><span class="c1"># M3: a dedicated system user</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/systemd/system/hello-care.service<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">[Unit]</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">Description=Caretaker heartbeat</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">[Service]</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">Type=oneshot</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">ExecStart=/bin/echo &quot;Caretaker alive&quot;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">User=caretaker</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">EOF</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload<span class="w">                          </span><span class="c1"># PID 1 re-reads units</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>hello-care<span class="w">                       </span><span class="c1"># run it now</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>systemctl<span class="w"> </span>status<span class="w"> </span>hello-care<span class="w">                           </span><span class="c1"># see it ran; note &quot;loaded/inactive(dead)&quot;</span>
+</code></pre></div>
+Now inspect the two independent axes: <code>systemctl is-enabled hello-care</code> vs <code>is-active hello-care</code>, and
+read the real loaded content with <code>systemctl cat hello-care</code>. Say aloud what <code>enable</code> would add that
+<code>start</code> did not.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>hello-care<span class="w">                              </span><span class="c1"># your echo, stamped with metadata</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>hello-care<span class="w"> </span>-b<span class="w">                           </span><span class="c1"># only this boot</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>journalctl<span class="w"> </span>-p<span class="w"> </span>err<span class="w"> </span>-b<span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w">               </span><span class="c1"># all errors this boot</span>
+</code></pre></div>
+Now <strong>break it on purpose</strong> — typo the path — then read the failure:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s#/bin/echo#/bin/ecoh#&#39;</span><span class="w"> </span>/etc/systemd/system/hello-care.service
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>hello-care<span class="w">   </span><span class="c1"># fails</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>systemctl<span class="w"> </span>status<span class="w"> </span>hello-care<span class="w">                           </span><span class="c1"># status=203/EXEC — the journal names the cause</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s#/bin/ecoh#/bin/echo#&#39;</span><span class="w"> </span>/etc/systemd/system/hello-care.service
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload<span class="w">                          </span><span class="c1"># fix it back</span>
+</code></pre></div>
+That symptom → journal → hypothesis → fix loop <strong>is the job</strong>.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>tee<span class="w"> </span>/usr/local/bin/health.sh<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">#!/bin/bash</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">echo &quot;== health $(date) ==&quot;; df -h /; free -h; systemctl --failed</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">EOF</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sudo<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/local/bin/health.sh<span class="w">                </span><span class="c1"># M3: it must be executable</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/systemd/system/health.service<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">[Unit]</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">Description=System health report</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">[Service]</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s">Type=oneshot</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s">ExecStart=/usr/local/bin/health.sh</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s">EOF</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/systemd/system/health.timer<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s">[Unit]</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="s">Description=Run health report every 15 min</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="s">[Timer]</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="s">OnCalendar=*:0/15</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="s">Persistent=true</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="s">[Install]</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="s">WantedBy=timers.target</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="s">EOF</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>health.timer<span class="w">              </span><span class="c1"># wire for boot AND start now</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>systemctl<span class="w"> </span>list-timers<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>health<span class="w">                  </span><span class="c1"># confirm it&#39;s scheduled</span>
+</code></pre></div>
+Note the <code>[Install]</code> lives on the <strong>timer</strong>, not the service — the timer pulls, the service does.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>health.service<span class="w">                   </span><span class="c1"># force one run now</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>health.service<span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-20<span class="w">    </span><span class="c1"># the report, captured for free</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>systemctl<span class="w"> </span>status<span class="w"> </span>health.timer<span class="w">                         </span><span class="c1"># next elapse time</span>
+</code></pre></div>
+The service reports every quarter hour, forever, without you — and every run lands in the journal,
+queryable by unit and time. That is a supervised, observable, scheduled program: a real operational
+contract.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can survey the system, author a unit, read your own output in the journal, and put a service on
+a timer that survives — the guided lab is done. Now make it harder (and reach for a VM).</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. The storage and chaos challenges mutate the system: do them
+in a </em><em>disposable VM, snapshot first</em><em>. Struggle is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-run-something-30-s-after-every-boot">Challenge 1 — Run something 30 s after every boot<a class="headerlink" href="#challenge-1-run-something-30-s-after-every-boot" title="Permanent link">&para;</a></h3>
+<p>Make <code>hello-care.service</code> fire <strong>30 seconds after every boot</strong>, and prove it across two reboots.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>You want a <em>timer</em>, and a relative-to-boot expression rather than a wall-clock one. Look up
+<code>OnBootSec=</code> in <code>man systemd.timer</code>. Remember where the <code>[Install]</code> goes.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/systemd/system/hello-care.timer<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="s">[Unit]</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s">Description=hello-care 30s after boot</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">[Timer]</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">OnBootSec=30s</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">[Install]</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s">WantedBy=timers.target</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="s">EOF</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>hello-care.timer
+</code></pre></div>
+Verify with <code>systemctl list-timers</code> and, after a reboot, <code>journalctl -u hello-care -b</code>. <code>OnBootSec=</code>
+is measured from boot; <code>[Install]</code> is on the <strong>timer</strong>.</p>
+</details>
+<h3 id="challenge-2-decode-a-203exec-failure">Challenge 2 — Decode a <code>203/EXEC</code> failure<a class="headerlink" href="#challenge-2-decode-a-203exec-failure" title="Permanent link">&para;</a></h3>
+<p>A unit fails with <code>status=203/EXEC</code>. Name the three most likely causes and the one-command check for each.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>203/EXEC</code> means systemd could not <em>execute</em> what <code>ExecStart</code> points at. Think about the three things
+that stop a file from running.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>(1) <strong>Wrong path</strong> — <code>systemctl cat &lt;unit&gt;</code> then <code>ls -l</code> the <code>ExecStart</code> target. (2) <strong>Not
+executable</strong> — <code>ls -l</code> for the <code>x</code> bit; <code>chmod +x</code>. (3) <strong>Broken interpreter/shebang</strong> — <code>file
+&lt;script&gt;</code>, and try running it as the unit's user with <code>sudo -u &lt;user&gt; &lt;script&gt;</code>. Confirm the fix with
+<code>journalctl -u &lt;unit&gt; -b</code>.</p>
+</details>
+<h3 id="challenge-3-the-timer-that-never-fires">Challenge 3 — The timer that never fires<a class="headerlink" href="#challenge-3-the-timer-that-never-fires" title="Permanent link">&para;</a></h3>
+<p>A <code>.timer</code> is enabled but its service never runs. Give the diagnostic method.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Check both units. <code>systemctl list-timers</code> — does it appear with a next-elapse? If not, the timer's
+<code>[Install]</code> is missing/misplaced (must be on the timer, <code>WantedBy=timers.target</code>) or the <code>OnCalendar=</code>
+syntax is wrong (<code>systemd-analyze calendar '*:0/15'</code> validates it). If the timer fires but nothing
+happens, the paired <code>.service</code> name is wrong or was never installed. Method: <code>systemctl status</code>
+<strong>both</strong> units.</p>
+</details>
+<h3 id="challenge-4-storage-stack-end-to-end-vm">Challenge 4 — Storage stack, end to end (VM)<a class="headerlink" href="#challenge-4-storage-stack-end-to-end-vm" title="Permanent link">&para;</a></h3>
+<p>On a spare disk (or a loopback file), take a raw device all the way to a <strong>persistent, boot-safe</strong>
+mount at <code>/srv/data</code>, and prove it survives a reboot — narrating each layer <em>before</em> you run it.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>disk → partition (GPT) → filesystem → mount → fstab. Identify the device with <code>lsblk</code> <em>before</em> every
+destructive step. Persist by <strong>UUID</strong>, add <code>nofail</code>, and test with <code>mount -a</code> before rebooting.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>lsblk<span class="w">                                        </span><span class="c1"># find the device — triple-check!</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>mkfs.ext4<span class="w"> </span>/dev/sdb1<span class="w">                      </span><span class="c1"># (after fdisk: g, n, w to make sdb1)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/srv/data<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>mount<span class="w"> </span>/dev/sdb1<span class="w"> </span>/srv/data
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nv">UUID</span><span class="o">=</span><span class="k">$(</span>sudo<span class="w"> </span>blkid<span class="w"> </span>-s<span class="w"> </span>UUID<span class="w"> </span>-o<span class="w"> </span>value<span class="w"> </span>/dev/sdb1<span class="k">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;UUID=</span><span class="nv">$UUID</span><span class="s2"> /srv/data ext4 defaults,nofail 0 2&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>sudo<span class="w"> </span>mount<span class="w"> </span>-a<span class="w">                                 </span><span class="c1"># THE test — errors surface now, not at boot</span>
+</code></pre></div>
+Reboot and confirm with <code>findmnt /srv/data</code>. <code>mount -a</code> before reboot is what converts fstab fear into
+fstab competence.</p>
+</details>
+<h3 id="challenge-5-stretch-mask-vs-disable">Challenge 5 (stretch) — <code>mask</code> vs <code>disable</code><a class="headerlink" href="#challenge-5-stretch-mask-vs-disable" title="Permanent link">&para;</a></h3>
+<p>Explain, mechanically, how <code>systemctl mask</code> differs from <code>disable</code>, and give one case where mask is the
+right tool.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><code>disable</code> removes the boot-wiring symlink from the target's <code>.wants/</code> — but the unit can still be
+started manually or <strong>pulled by a dependency</strong>. <code>mask</code> symlinks the unit name to <code>/dev/null</code> in
+<code>/etc/systemd/system</code>, so it <strong>cannot be loaded or started by anything</strong>, dependencies included.
+Right tool: forcibly preventing a conflicting service from activating during a migration. <code>unmask</code> to
+reverse it.</p>
+</details>
+<details class="note">
+<summary>Project — bring it together: System Caretaker v1</summary>
+<p>The stage project: your machine <strong>reports on and protects itself</strong>. Build <code>health.sh</code> +
+<code>health.service</code>/<code>.timer</code> (from the Guided Lab) <em>and</em> a <code>backup.sh</code> + <code>backup.service</code>/<code>.timer</code>
+(daily <code>OnCalendar=*-*-* 02:30:00</code>, <code>Persistent=true</code>) that <code>rsync</code>s <code>/etc</code> and your learning dir to a
+dedicated location keeping <strong>3 generations</strong>, journal-logged, with a <strong>non-zero exit on failure</strong> so
+<code>systemctl --failed</code> catches it. Then the part that makes it real: a <strong>performed, documented restore
+drill</strong> — delete a chosen file, restore it from a generation, <code>diff</code>-verify — plus a README covering
+operate / verify / restore. See <code>08-projects.md</code>. <em>A backup existed only after that drill.</em></p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary><code>systemctl enable</code> vs <code>start</code> — what does each do, mechanically (not the effect)?</summary>
+<p><code>enable</code> creates a <strong>symlink</strong> in the target's <code>.wants/</code> directory per the unit's <code>[Install]</code> section —
+boot wiring, no process started. <code>start</code> asks PID 1 to <strong>launch the unit now</strong> per <code>[Service]</code>. They're
+independent axes; <code>enable --now</code> does both.</p>
+</details>
+<details class="question">
+<summary>You edited <code>health.service</code>, but <code>start</code> still uses the OLD <code>ExecStart</code>. What did you forget, and why?</summary>
+<p><code>sudo systemctl daemon-reload</code>. systemd caches parsed units <strong>in memory</strong>; editing the file changes
+disk, not PID 1's view — reload re-reads it. (After editing fstab, the equivalent is <code>mount -a</code>.)</p>
+</details>
+<details class="question">
+<summary>Walk the storage stack from raw disk to persistent mount — five layers, one tool each.</summary>
+<p>Disk (<code>lsblk</code>) → partition (<code>fdisk</code>, GPT) → filesystem (<code>mkfs.ext4</code>) → mount (<code>mount</code>, onto a <code>mkdir</code>'d
+point) → persistence (<code>/etc/fstab</code> <strong>by UUID</strong>, tested with <code>mount -a</code>).</p>
+</details>
+<details class="question">
+<summary>A timer with <code>Persistent=true</code> vs a cron line — the machine was OFF at the scheduled time. What happens on power-up?</summary>
+<p>The <strong>timer</strong> fires the missed run shortly after boot (it stores the last-trigger timestamp on disk).
+<strong>cron</strong> simply missed it — the moment passed, nothing runs. (anacron exists precisely to patch this for
+daily-class jobs.)</p>
+</details>
+<details class="question">
+<summary><code>systemctl status app</code> shows <code>activating (auto-restart)</code> in a loop. What's happening, and what fix would be <em>wrong</em>?</summary>
+<p>It's <strong>crash-looping</strong> under <code>Restart=</code>. Read <code>journalctl -u app -b</code> for <em>why it dies</em> and <code>systemctl
+cat app</code> for the policy/paths. The <strong>wrong</strong> fix is removing <code>Restart=</code> or masking it — that hides the
+disease and keeps the corpse down. Fix the cause.</p>
+</details>
+<details class="question">
+<summary>Why must <code>/</code> never reach 100%, and which three mechanisms from this module prevent it?</summary>
+<p>At 100% <strong>all writes fail</strong> — logs, PID files, sockets — so services fail chaotically and even fixes are
+hard (you can't write). Prevention: a <strong>size-capped journald</strong>, <strong>logrotate</strong>, and <strong><code>df -h</code> in the
+daily ritual</strong> (real alerting arrives in M25).</p>
+</details>
+<details class="question">
+<summary>Why <code>chmod 600</code> a swapfile?</summary>
+<p>Swap holds memory <strong>pages</strong> — potentially every secret that was in RAM. Mode <code>600</code> (root-only) stops
+other users reading swapped-out secrets straight off disk.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>: <em>"How does a Linux server keep itself running without a human?"</em>
+You must land <strong>supervision</strong> (PID 1 as parent), <strong>enable-vs-start</strong> (correctly — it's the trap), <strong>the
+journal</strong> as flight recorder, and <strong>why fstab + backups make data survive</strong>. Then, in <strong>90 seconds</strong>,
+teach <em>"why did grandpa's photos vanish when the external drive was unplugged?"</em> — the bookshelf-on-
+wheels analogy (the books never left the shelf; the shelf left the room; fstab is the note to wheel it
+back). If you can't yet, that's your signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress to Module 05 (Bash Scripting), the stage
+finale. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the supervision model, <code>enable</code> vs <code>start</code>, and the journal — flawlessly.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> 15 random terms cold (oneshot, <code>WantedBy</code>, UUID, <code>Persistent</code>, masking, <code>nofail</code>, RPO…).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all four from memory: unit anatomy, the storage stack, the boot chain, and a backup layout.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> a service + timer from a cold spec in ≤15 min — valid on first <code>daemon-reload</code>, <code>[Install]</code> on the timer.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure</strong> an fstab entry authored + <code>mount -a</code>-tested; journald persistence enabled and verified.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Administer</strong> the full service lifecycle narrated; a dispatcher run (6 services, mixed states) clean.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Develop</strong> <code>health.sh</code> with a meaningful non-zero exit, deployed and visible in the journal.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Automate</strong> both Caretaker timers live, surviving reboot, evidenced in <code>list-timers</code> + journal.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> unit hardening applied (<code>ProtectSystem</code>, <code>PrivateTmp</code>, <code>NoNewPrivileges</code>), each explained; backup/swap perms audited.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Monitor:</strong> answer "what is this machine doing and why?" from <code>--failed</code>, <code>-p err</code>, <code>status</code>, <code>list-timers</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> three fault classes with method (bad fstab / crash-loop / dead timer), journal-first.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a <code>203/EXEC</code> failure and a timer-not-firing case to root cause.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> boot analyzed with <code>systemd-analyze blame</code>; one justified change measured before/after.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> a backup (sources, generations, schedule, verification) cold, with RPO reasoning.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (supervision + enable-vs-start mandatory).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. <strong>Interleaving stays active</strong> —
+every M4 review also pulls in one prior-module item. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved (prior module)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · <code>enable</code>/<code>start</code> explanation cold · the enable-vs-start validation questions</td>
+<td>M3 flashcards you missed</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Write <code>health.service</code> + <code>.timer</code> from memory · decode a <code>203/EXEC</code> and a dead-timer</td>
+<td>M3 permission (octal) sprint</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>fstab line + <code>mount -a</code> narration · OnCalendar sprint (hourly · 02:30 · every 15 min · Mondays 9:00)</td>
+<td>M1 memory-hierarchy numbers</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Backup design cold (RPO 24 h) · the swap/<code>PrivateTmp</code>/<code>NoNewPrivileges</code> security questions</td>
+<td>M2 keystroke→output loop from memory</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Caretaker self-review: read its journal output, find one improvement</td>
+<td>M3 sudo audit redone</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> Bash scripting (M5 — today's scripts gain <code>set -euo pipefail</code> + traps so exit
+codes <em>mean</em> something to <code>Restart</code>/<code>--failed</code>) · Automation (M15 — Ansible-class tools template exactly
+these units, fstab, and backup jobs) · Docker (M16 — <code>--restart=on-failure</code> <em>is</em> supervision; containers
+vs units, compared) · Kubernetes (M19 — desired state, supervision, dependencies, timers→CronJobs,
+fstab→volumes) · Observability (M25 — journald → central logging, thresholds → alerts).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M4 is single-machine Kubernetes: desired state, supervision, schedules, and durable storage — learn the
+reconciliation instinct here, where the whole system still fits in your head.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-03/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 03 — Linux Essentials">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 03 — Linux Essentials
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-05/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 05 — Bash Scripting">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 05 — Bash Scripting
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

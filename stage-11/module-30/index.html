@@ -1,0 +1,3482 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The two mathematical languages an AI engineer must read — discrete math (logic, proof, sets, counting, graphs, modular arithmetic — the logic of computation) and linear algebra (vectors, matrices, eigenvalues, matrix factorization — the language of data and models). The math M22/M26/M27 spoke with an accent, now readable.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../../stage-10/module-29/">
+      
+      
+        <link rel="next" href="../module-31/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 30 — Discrete Math & Linear Algebra - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-30-discrete-math-linear-algebra" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 30 — Discrete Math & Linear Algebra
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-two-languages-one-bridge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: two languages, one bridge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discrete-math-the-logic-of-computation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discrete math — the logic of computation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-algebra-the-language-of-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear algebra — the language of data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-you-already-met-all-of-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where you already met all of this
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-the-numpy-bench" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: the numpy bench
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-derive-big-o-by-counting-not-reciting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Derive big-O by counting (not reciting)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-model-a-real-problem-as-a-graph-then-verify-with-the-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Model a real problem as a graph, then verify with the matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-pca-from-scratch-the-modules-payload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — PCA from scratch (the module's payload)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-classify-a-transformation-and-show-ab-ba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Classify a transformation and show AB ≠ BA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-svd-image-compression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — SVD image compression
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-two-languages-one-bridge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: two languages, one bridge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discrete-math-the-logic-of-computation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discrete math — the logic of computation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-algebra-the-language-of-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear algebra — the language of data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-you-already-met-all-of-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where you already met all of this
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-the-numpy-bench" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: the numpy bench
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-derive-big-o-by-counting-not-reciting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Derive big-O by counting (not reciting)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-model-a-real-problem-as-a-graph-then-verify-with-the-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Model a real problem as a graph, then verify with the matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-pca-from-scratch-the-modules-payload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — PCA from scratch (the module's payload)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-classify-a-transformation-and-show-ab-ba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Classify a transformation and show AB ≠ BA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-svd-image-compression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — SVD image compression
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-30-discrete-math-linear-algebra">Module 30 — Discrete Math &amp; Linear Algebra<a class="headerlink" href="#module-30-discrete-math-linear-algebra" title="Permanent link">&para;</a></h1>
+<p><small>Stage 11 · Math &amp; CS Foundations · ~3 weeks at 4 h/day · Prerequisites — M13 (Python — numpy is the lab bench), M1 (binary and logic gates — logic's hardware), high-school algebra. Generated in Stage 11; studied between Stage 4 and Stage 10 — it retro-fits the math M22/M26/M27 assumed.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p>Two branches of mathematics, one purpose — to make computation and data <strong>rigorous</strong> (provably correct,
+not merely tested). <strong>Discrete mathematics</strong> studies countable, separate structures — integers, sets,
+graphs, logical statements — the mathematics of things a computer can actually represent. It gives you
+<strong>proof</strong> (knowing something is true, not just testing it), <strong>counting</strong> (how many operations, how fast —
+the root of big-O), and <strong>structure</strong> (graphs and relations — the shape of data and networks). <strong>Linear
+algebra</strong> studies <strong>vectors</strong> (lists of numbers that name a point or a direction in space) and the
+<strong>linear transformations</strong> between them — and since a dataset is a matrix, a model's weights are matrices,
+and an <strong>embedding</strong> (a piece of data turned into a vector, M26) is a vector, it is quite literally the
+language every AI system is written in.</p>
+<p>You have been reading this language <strong>phonetically</strong> since Module 22 (multiplying matrices you didn't
+name) and Module 26 (following gradients across a graph). M26 built backprop bare-hands but leaned on a
+chain rule "revived gently"; M27 ran PCA without saying <strong>eigenvector</strong>; M22's napkin law multiplied
+without eigenvalues in sight. That worked because the <em>concepts</em> carried the load — but an AI <strong>engineer</strong>
+(not just a user) owns the mathematics underneath, or the ceiling is low: you can't read the attention
+paper's linear algebra, reason about why a covariance matrix's eigenvectors are the principal components,
+prove an algorithm's complexity, or model a network as a graph. This module teaches both at
+<strong>intuition-plus-mechanism</strong> depth: enough to read the papers, size the models, and never be bluffed by a
+Greek letter.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>This module is the <strong>retroactive foundation</strong> the AI stage assumed and the base the CS/data stages
+stand on. <strong>M1</strong>'s logic gates return as Boolean algebra (truth tables, formalized). <strong>M8</strong>'s git
+history and <strong>M15</strong>'s systemd dependencies are <strong>graphs</strong> (specifically <strong>DAGs</strong>). <strong>M22</strong>'s matmul
+and <strong>M26</strong>'s "a layer" become the same thing — <em>a matrix is a transformation</em>. <strong>M26</strong>'s embedding
+similarity is a <strong>dot product</strong>; <strong>M27</strong>'s PCA is <strong>eigenvectors of the covariance matrix</strong>; <strong>M24</strong>'s
+TLS keys rest on <strong>modular arithmetic</strong>. It is the on-ramp to <strong>M31</strong> (the continuous half — calculus,
+probability, statistics) and <strong>M32</strong> (data structures &amp; algorithms — big-O, graphs, hashing all come
+from here). Its job is to make the mathematics of every later module <strong>readable</strong>.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 30 — Discrete Math &amp; Linear Algebra&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Analogy / Visual Model / Misconceptions):
+the two languages AI is written in — discrete math is the <strong>grammar</strong> (rules of valid reasoning,
+counting words, how sentences connect), linear algebra is the <strong>vocabulary</strong> (nouns = vectors, verbs =
+matrices, idioms = eigenvectors) → you've read it phonetically since M22/M26 → a 2×2 matrix applied to
+the unit square (rotate/scale/shear — "a matrix is a verb") → the eigenvector, the one direction it
+doesn't turn → the bridge: a graph written as an <strong>adjacency matrix</strong> (discrete meets linear) → close
+on proof vs testing (M27): testing shows a bug exists, proof shows one never can.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-the-numpy-bench">Guided Lab</a> in a browser terminal and run each cell yourself as
+it appears. In this module the rule is <strong>predict → compute → reconcile</strong> (M21's ritual): say what the
+number should be <em>before</em> numpy prints it. Never trust a hand-calc you didn't machine-check.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-two-languages-one-bridge">The picture: two languages, one bridge<a class="headerlink" href="#the-picture-two-languages-one-bridge" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph D["Discrete math — the logic of computation"]
+        L["Logic and proof&lt;br/&gt;knowing, not guessing"]
+        S["Sets · relations · functions&lt;br/&gt;the vocabulary of structure"]
+        C["Combinatorics&lt;br/&gt;counting = big-O"]
+        G["Graphs&lt;br/&gt;the shape of networks"]
+        N["Modular arithmetic&lt;br/&gt;crypto and hashing"]
+    end
+    subgraph LA["Linear algebra — the language of data"]
+        V["Vector&lt;br/&gt;a data point / a direction"]
+        M["Matrix&lt;br/&gt;a transformation (a layer)"]
+        E["Eigenvector&lt;br/&gt;a direction only stretched"]
+        F["SVD&lt;br/&gt;rotate · stretch · rotate"]
+    end
+    G --&gt;|"adjacency matrix"| M
+    V --&gt; M --&gt; E --&gt; F</code></pre>
+<p><strong>Discrete</strong> for the algorithms and structure; <strong>linear algebra</strong> for the data and models. The two meet
+at the <strong>adjacency matrix</strong> — a graph (discrete) written as a matrix (linear algebra). Modern AI needs
+both.</p>
+<h3 id="discrete-math-the-logic-of-computation">Discrete math — the logic of computation<a class="headerlink" href="#discrete-math-the-logic-of-computation" title="Permanent link">&para;</a></h3>
+<p><strong>Logic &amp; proof.</strong> A <strong>proposition</strong> is a statement that is either true or false. <strong>Connectives</strong> combine
+them: <code>∧</code> (and), <code>∨</code> (or), <code>¬</code> (not), <code>→</code> (implies), <code>↔</code> (if-and-only-if). <strong>Quantifiers</strong> range over
+collections: <code>∀</code> (for all), <code>∃</code> (there exists). A <strong>truth table</strong> lists every input combination and the
+result — these <em>are</em> M1's logic gates, formalized. The one that surprises everyone: <strong><code>P → Q</code></strong> ("if P
+then Q") is false <strong>only</strong> when <code>P</code> is true and <code>Q</code> is false.</p>
+<p>A <strong>proof</strong> is an argument that a claim holds for <strong>every</strong> case, not just the ones you tried. Four
+methods, one per shape of claim:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Skeleton</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Direct</strong></td>
+<td>assume <code>P</code>, derive <code>Q</code></td>
+<td>"if P then Q" follows straightforwardly (e.g. n even ⟹ n² even)</td>
+</tr>
+<tr>
+<td><strong>Contrapositive</strong></td>
+<td>prove <code>¬Q → ¬P</code> (logically identical)</td>
+<td>the negation is easier (n² odd ⟹ n odd)</td>
+</tr>
+<tr>
+<td><strong>Contradiction</strong></td>
+<td>assume the opposite, reach an absurdity</td>
+<td>"there is no…" claims (√2 is irrational; no largest prime)</td>
+</tr>
+<tr>
+<td><strong>Induction</strong></td>
+<td>prove a <strong>base case</strong>, then that <code>P(k) → P(k+1)</code></td>
+<td>"for all n" — the domino chain</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The insight that pays for the whole module: induction ≈ recursion.</strong> Induction's base case <em>is</em>
+recursion's stopping condition; induction's step (assume <code>P(k)</code>, prove <code>P(k+1)</code>) <em>is</em> the recursive call
+trusting the smaller result and combining. Writing <code>sum(n) = n + sum(n−1)</code> with <code>sum(0) = 0</code> in Python (M13)
+<strong>is</strong> the induction proof of <code>1+2+…+n = n(n+1)/2</code>, in code. Proof is the point: it's how you <strong>KNOW</strong>,
+versus M27's testing (how you gain <strong>evidence</strong>) — testing can show a bug exists but never that none does.</p>
+<p><strong>Sets, relations, functions</strong> — the vocabulary of everything. A <strong>set</strong> is an unordered collection;
+operations are union (<code>∪</code>), intersection (<code>∩</code>), complement. A <strong>relation</strong> links elements and can be
+<strong>reflexive / symmetric / transitive</strong> (all three = an <strong>equivalence relation</strong>, which partitions a set —
+e.g. "same remainder mod 3" splits the integers into three classes). A <strong>function</strong> is a special relation:
+<strong>injective</strong> (one-to-one — no two inputs share an output), <strong>surjective</strong> (onto — every output is hit),
+<strong>bijective</strong> (both). The punchline: a <strong>hash function</strong> (maps a key to a bucket, M32) is a <em>non-injective</em>
+function — which is exactly <strong>why collisions exist</strong>.</p>
+<p><strong>Combinatorics (counting) → big-O.</strong> The <strong>sum rule</strong> (either/or → add) and <strong>product rule</strong> (this-then-that
+→ multiply); <strong>permutations</strong> (ordered arrangements) and <strong>combinations</strong> (<code>nCr</code> — unordered choices); the
+<strong>pigeonhole principle</strong> (n items in m &lt; n boxes ⟹ some box holds ≥ ⌈n/m⌉ — the <code>⌈ ⌉</code> is the ceiling, round
+up). Counting <strong>is</strong> complexity: <strong>big-O</strong> (asymptotic notation — how the operation <em>count</em> grows with input
+size <code>n</code>) is applied combinatorics, not a table to memorize.</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Name</th>
+<th>Grows like</th>
+<th>Code shape</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>O(1)</code></td>
+<td>constant</td>
+<td>fixed, whatever <code>n</code> is</td>
+<td>index one list element</td>
+</tr>
+<tr>
+<td><code>O(log n)</code></td>
+<td>logarithmic</td>
+<td>+1 step each time <code>n</code> doubles</td>
+<td>binary search</td>
+</tr>
+<tr>
+<td><code>O(n)</code></td>
+<td>linear</td>
+<td>doubles when <code>n</code> doubles</td>
+<td>one loop over the input</td>
+</tr>
+<tr>
+<td><code>O(n log n)</code></td>
+<td>linearithmic</td>
+<td>a hair above linear</td>
+<td>a good sort</td>
+</tr>
+<tr>
+<td><code>O(n²)</code></td>
+<td>quadratic</td>
+<td>×4 when <code>n</code> doubles</td>
+<td>a loop inside a loop</td>
+</tr>
+<tr>
+<td><code>O(2ⁿ)</code></td>
+<td>exponential</td>
+<td>doubles per <strong>+1</strong> input</td>
+<td>try every subset — intractable fast</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Graph theory</strong> — the shape of everything. A <strong>graph</strong> is <strong>vertices</strong> (nodes) joined by <strong>edges</strong>;
+edges can be <strong>directed</strong> (one-way), <strong>undirected</strong>, or <strong>weighted</strong> (carry a number). Key ideas: <strong>degree</strong>
+(edges at a vertex), <strong>path</strong>, <strong>cycle</strong>, <strong>tree</strong> (connected, no cycles, <code>n</code> nodes ⟹ <code>n−1</code> edges), and a
+<strong>DAG</strong> (<strong>directed acyclic graph</strong> — directed, no cycles). Euler abstracted Königsberg to a graph and
+proved no walk crosses all seven bridges once (1736 — graph theory's birth: <strong>structure</strong>, not detail,
+decides). The recognition tour: your git history is a DAG (M8), systemd dependencies are a graph (M15), a
+network is a graph (M14), and <strong>backprop runs on a DAG</strong> (M26's computation graph).</p>
+<p><strong>The bridge — adjacency matrix.</strong> Write a graph as a square table where cell <code>[i][j] = 1</code> if there's an
+edge <code>i → j</code>. For nodes A, B, C with edges A→B, A→C, B→C:</p>
+<table>
+<thead>
+<tr>
+<th>from ＼ to</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Now the magic: <strong><code>Aⁿ[i][j]</code> = the number of length-<code>n</code> walks from <code>i</code> to <code>j</code></strong> — a discrete fact you verify
+with matrix multiplication (linear algebra). The graph and the matrix are the same object in two languages.</p>
+<p><strong>Number theory &amp; modular arithmetic.</strong> <strong>Divisibility</strong>, <strong>primes</strong> (divisible only by 1 and themselves),
+<strong>gcd</strong> (greatest common divisor — Euclid's algorithm), and <strong>modular arithmetic</strong> ("clock math" — <code>a mod n</code>
+is the remainder). Two payoffs: <strong>crypto</strong> (modular exponentiation is easy forward but its inverse — the
+discrete logarithm — is believed <strong>hard</strong>, a one-way function; this asymmetry is what makes M24's TLS/RSA
+keys work) and <strong>hashing</strong> (<code>mod</code> maps a hash to a bucket, M32).</p>
+<h3 id="linear-algebra-the-language-of-data">Linear algebra — the language of data<a class="headerlink" href="#linear-algebra-the-language-of-data" title="Permanent link">&para;</a></h3>
+<p><strong>Vectors — the atom of data.</strong> A <strong>vector</strong> is a point / a direction / a list of numbers, all at once. Two
+operations: <strong>addition</strong> (tip-to-tail) and <strong>scalar multiplication</strong> (a <strong>scalar</strong> is a plain number that
+stretches the vector). The <strong>dot product</strong> <code>a·b = Σ aᵢbᵢ</code> (<code>Σ</code> = sum over the components) measures
+<strong>alignment</strong>: large positive when they point the same way, zero when perpendicular, negative when opposed.
+The <strong>norm</strong> <code>‖a‖</code> (the <code>‖ ‖</code> bars mean length/magnitude — <code>np.linalg.norm</code>) is the vector's length. Because
+the dot product also scales with length, a long unrelated vector can score high; dividing it out gives
+<strong>cosine similarity</strong> <code>a·b / (‖a‖‖b‖)</code> — pure directional similarity, which is why M26's embedding
+similarity is cosine, not raw dot product.</p>
+<p><strong>Matrices ARE transformations.</strong> A <strong>matrix</strong> is a <strong>function that transforms vectors linearly</strong> — rotate,
+scale, shear, project. <strong><code>A·x</code></strong> applies the transformation <code>A</code> to the vector <code>x</code>; the matrix's <strong>columns
+are where the basis vectors land</strong>. <strong>Matrix multiplication</strong> <code>AB</code> is <strong>composition</strong> — "do <code>B</code>, then <code>A</code>" —
+which is why <strong><code>AB ≠ BA</code></strong> in general (a rotation-then-shear lands somewhere different from a
+shear-then-rotation). The <strong>identity</strong> <code>I</code> leaves everything unchanged; the <strong>inverse</strong> <code>A⁻¹</code> undoes <code>A</code>
+(<code>A·A⁻¹ = I</code>, <code>np.linalg.inv</code>) — but only if <code>A</code> isn't <strong>singular</strong> (<strong>determinant</strong> ≈ 0, no inverse, it
+squashes space flat). <strong>A neural-network layer IS a matrix</strong> (M26), and <strong>matmul is the GPU's core op</strong>
+(M22) — the thing you multiplied without understanding now has geometric meaning.</p>
+<blockquote>
+<p><strong>A matrix is a verb — <code>A·x</code> moves the vector <code>x</code> through space; an eigenvector <code>v</code> is the one direction
+it only stretches, never rotates: <code>A·v = λ·v</code>.</strong></p>
+</blockquote>
+<p><strong>Systems, rank, solvability.</strong> <strong>Gaussian elimination</strong> solves a system of linear equations by hand
+(<code>np.linalg.solve</code> in code). <strong>Rank</strong> is the number of <strong>linearly independent</strong> rows/columns — "how much
+independent information the matrix carries." A system has <strong>one</strong> solution / <strong>none</strong> / <strong>infinitely many</strong>
+depending on rank (geometrically: planes meeting at a point / nowhere / along a line). Rank ≈ 0 information
+is the singular case from above — and the same idea PCA will exploit.</p>
+<p><strong>Eigenvalues &amp; eigenvectors.</strong> An <strong>eigenvector</strong> is a direction the transformation <strong>only stretches</strong>,
+never rotates; the <strong>eigenvalue</strong> <code>λ</code> (lambda) is the stretch factor: <strong><code>A·v = λ·v</code></strong> (<code>np.linalg.eig</code>).
+They reveal a matrix's "essence." <strong>PCA</strong> (principal component analysis — M27's dimensionality reduction)
+is exactly this: center the data, compute the <strong>covariance matrix</strong> (which encodes the spread/variance),
+take <strong>its eigenvectors</strong> — those are the <strong>principal components</strong>, the directions of maximum variance —
+and project onto the top ones. The eigenvalues <em>are</em> the variance captured. Same math runs <strong>PageRank</strong>
+(the web's importance ranking is the link matrix's principal eigenvector) and <strong>eigenfaces</strong> (face
+recognition on the top eigenvectors of a face-covariance matrix).</p>
+<p><strong>Matrix factorization — SVD.</strong> Decomposing a matrix into simpler pieces. <strong>SVD</strong> (singular value
+decomposition) writes <strong>any</strong> matrix as <strong><code>A = UΣVᵀ</code></strong> — "any transformation = rotate (<code>Vᵀ</code>), stretch (<code>Σ</code>,
+the diagonal of non-negative <strong>singular values</strong>), rotate (<code>U</code>)." It's the swiss army knife:
+<strong>compression</strong> (keep the top-<code>k</code> singular values, drop the rest — quality vs <code>k</code>), <strong>recommendation
+systems</strong>, and the low-rank math under embeddings and <strong>LoRA</strong> (low-rank adapters — M27's stretch).
+SVD is more general than eigendecomposition (<code>A = QΛQ⁻¹</code>, square matrices only) because it factors <em>any</em>
+rectangular map — which is why it powers real engineering.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>Induction ≈ recursion.</strong> Base case = stopping condition; inductive step = the recursive call. Proof
+   gives <strong>certainty</strong> (all cases); testing gives <strong>evidence</strong> (sampled cases) — M27's bridge.</li>
+<li><strong>Big-O comes from counting.</strong> It's the answer to "how many operations as <code>n</code> grows?" — derive it, then
+   measure it (M21). <code>O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(2ⁿ)</code>.</li>
+<li><strong>A graph and its adjacency matrix are one object in two languages</strong> — <code>Aⁿ[i][j]</code> counts length-<code>n</code>
+   walks. This is where discrete meets linear.</li>
+<li><strong>A matrix is a verb.</strong> <code>A·x</code> transforms space; columns are where the basis vectors land; <code>AB ≠ BA</code>
+   because composition order matters.</li>
+<li><strong>Dot product = alignment; normalize → cosine similarity.</strong> An embedding is a vector, "similar meanings
+   are nearby" is a dot-product statement (M26).</li>
+<li><strong><code>A·v = λ·v</code> — the eigenvector is the direction only stretched.</strong> PCA = eigenvectors of the covariance
+   matrix; SVD = <code>UΣVᵀ</code> = rotate·stretch·rotate.</li>
+</ol>
+</div>
+<h3 id="where-you-already-met-all-of-this">Where you already met all of this<a class="headerlink" href="#where-you-already-met-all-of-this" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Where it already appeared</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Truth tables</td>
+<td><strong>M1</strong> — logic gates (Boolean algebra is the hardware)</td>
+</tr>
+<tr>
+<td>DAGs</td>
+<td><strong>M8</strong> git history · <strong>M15</strong> systemd deps · <strong>M26</strong> backprop graph</td>
+</tr>
+<tr>
+<td>matmul</td>
+<td><strong>M22</strong> the GPU's core op · <strong>M26</strong> a layer is a matrix</td>
+</tr>
+<tr>
+<td>dot product</td>
+<td><strong>M26</strong> — embedding (cosine) similarity</td>
+</tr>
+<tr>
+<td>modular arithmetic</td>
+<td><strong>M24</strong> crypto/keys · <strong>M32</strong> hashing</td>
+</tr>
+<tr>
+<td>big-O</td>
+<td><strong>M21</strong> performance instincts · <strong>M13/M23</strong> the cost of code</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="guided-lab-the-numpy-bench">Guided Lab: the numpy bench<a class="headerlink" href="#guided-lab-the-numpy-bench" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. On a plain CPU you install numpy, then </em><em>verify every claim in code</em><em>: the dot
+product as similarity, a matrix as a transformation with <code>A·A⁻¹ = I</code>, eigenvalues confirming <code>A·v = λ·v</code>, a
+graph's adjacency matrix whose powers count walks, and a modular-arithmetic / combinatorics exercise. The
+ritual is </em><em>predict → compute → reconcile</em><em> — say the answer before numpy prints it.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-30" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-30" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">CPU only — and that is enough</p>
+<p>Every concept here — vectors, transformations, eigenvalues, adjacency-matrix walks, modular arithmetic —
+runs in <strong>milliseconds on a plain CPU</strong> with nothing but numpy. No GPU, no downloads. The linear algebra
+is identical to what a GPU does (M22); it's just smaller.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Set up the bench</label><label for="__tabbed_1_2">2 · Vectors: dot product = similarity</label><label for="__tabbed_1_3">3 · A matrix is a transformation</label><label for="__tabbed_1_4">4 · Eigenvalues: the directions only stretched</label><label for="__tabbed_1_5">5 · The bridge: a graph as a matrix, walks by matrix powers</label><label for="__tabbed_1_6">6 · Modular arithmetic &amp; pigeonhole</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip<span class="w"> </span>install<span class="w"> </span>numpy
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/math-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/math-lab
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import numpy; print(&#39;numpy&#39;, numpy.__version__)&quot;</span>
+</code></pre></div>
+A full linear-algebra toolbox on a plain CPU. Everything below lives in <code>~/math-lab</code>.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>~/math-lab
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">a = np.array([2.0, 1.0]); b = np.array([3.0, 4.0]); c = np.array([-1.0, 2.0])</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">print(&quot;a·b =&quot;, np.dot(a, b))            # predict first: 2*3 + 1*4 = 10</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">print(&quot;a·c =&quot;, np.dot(a, c))            # 2*-1 + 1*2 = 0  → perpendicular!</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">def cosine(u, v): return np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">print(&quot;cos(a,b) =&quot;, round(float(cosine(a, b)), 4))   # aligned → near 1</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">print(&quot;cos(a,c) =&quot;, round(float(cosine(a, c)), 4))   # perpendicular → 0</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">EOF</span>
+</code></pre></div>
+<code>a·c = 0</code> means <strong>perpendicular</strong> — the dot product caught it. Cosine strips out length and leaves pure
+direction: this is M26's embedding similarity, named.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>~/math-lab
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s"># A 90° rotation matrix — predict what it does to (1,0): it should land on (0,1)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">A = np.array([[0.0, -1.0], [1.0, 0.0]])</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">print(&quot;A @ [1,0] =&quot;, A @ np.array([1.0, 0.0]))     # → [0, 1]</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s"># Composition is not commutative: a shear S then A ≠ A then S</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">S = np.array([[1.0, 1.0], [0.0, 1.0]])</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">print(&quot;AB == BA ?&quot;, np.allclose(A @ S, S @ A))     # False</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s"># Inverse undoes the transform: A @ inv(A) = I</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s">print(&quot;A @ inv(A) =\n&quot;, np.round(A @ np.linalg.inv(A), 6))   # the identity</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s">EOF</span>
+</code></pre></div>
+Columns are where the basis vectors land; <code>AB ≠ BA</code> because composition order matters; <code>A·A⁻¹ = I</code>
+proves the inverse undoes the verb.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>~/math-lab
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s">A = np.array([[2.0, 0.0], [0.0, 3.0]])   # a pure stretch: x by 2, y by 3</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s">vals, vecs = np.linalg.eig(A)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s">for i in range(len(vals)):</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s">    lam, v = vals[i], vecs[:, i]</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s">    lhs, rhs = A @ v, lam * v</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s">    print(f&quot;λ={lam:.1f}  A·v == λ·v ? {np.allclose(lhs, rhs)}&quot;)   # both True</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s">EOF</span>
+</code></pre></div>
+<code>A·v = λ·v</code> holds for each eigenpair — the eigenvector is the direction <code>A</code> only stretches, <code>λ</code> is the
+stretch. (Try a rotation and <code>eig</code> returns <strong>complex</strong> eigenvalues — not a bug: a rotation turns <em>every</em>
+direction, so it has no real invariant one.)</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>~/math-lab
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">import numpy as np</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s"># Nodes A,B,C ; edges A-&gt;B, A-&gt;C, B-&gt;C</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">A = np.array([[0,1,1],[0,0,1],[0,0,0]])</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">print(&quot;A^2 =\n&quot;, np.linalg.matrix_power(A, 2))   # counts length-2 walks</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s"># A^2[0][2] = number of 2-step walks A-&gt;?-&gt;C  (via B: exactly 1)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">print(&quot;length-2 walks A-&gt;C:&quot;, np.linalg.matrix_power(A, 2)[0][2])</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">EOF</span>
+</code></pre></div>
+<code>A²[0][2] = 1</code> — the single 2-step walk A→B→C, found by <strong>matrix multiplication</strong>. A graph (discrete)
+written as a matrix (linear algebra): the bridge in code.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">cd</span><span class="w"> </span>~/math-lab
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="s">from math import comb, gcd</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s">print(&quot;gcd(48, 18) =&quot;, gcd(48, 18))          # Euclid → 6</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s">print(&quot;7^4 mod 13 =&quot;, pow(7, 4, 13))         # modular exponentiation (crypto&#39;s engine)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="s">print(&quot;C(5,2) =&quot;, comb(5, 2))                # 10 unordered choices</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s"># Pigeonhole: 11 keys into 10 buckets → some bucket has &gt;= 2 (collisions are provable)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s">keys = range(11); buckets = {}</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s">for k in keys: buckets.setdefault(k % 10, []).append(k)</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="s">print(&quot;a bucket with &gt;=2 keys?&quot;, any(len(v) &gt;= 2 for v in buckets.values()))  # True</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s">EOF</span>
+</code></pre></div>
+<code>mod</code> is crypto's one-way engine (M24) and hashing's bucket map (M32); the pigeonhole principle is
+<strong>why hash collisions provably exist</strong> — 11 keys can't fit 10 buckets without a repeat.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can read a dot product as similarity, see a matrix as a transformation you can invert, confirm
+<code>A·v = λ·v</code>, count graph walks with a matrix power, and explain why collisions are inevitable — the
+guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work in <code>~/math-lab</code>. The Learner's Law: predict by hand,
+then numpy-verify; a proof written by YOUR hand before any check. Struggle here is the point.</em></p>
+<h3 id="challenge-1-derive-big-o-by-counting-not-reciting">Challenge 1 — Derive big-O by counting (not reciting)<a class="headerlink" href="#challenge-1-derive-big-o-by-counting-not-reciting" title="Permanent link">&para;</a></h3>
+<p>Take three snippets of your own M13/M23 code, <strong>count the operations</strong> as a function of input size <code>n</code>, and
+read off the class. Then <strong>measure</strong> it: time each at <code>n</code>, <code>2n</code>, <code>4n</code> and check the ratio matches (M21's loop).</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>A single loop over the input is <code>O(n)</code>; a loop inside a loop is usually <code>O(n²)</code>; halving the search space
+each step is <code>O(log n)</code>. Don't pattern-match "nested = n²" — check the <strong>bounds</strong>: an inner loop that runs
+a <em>fixed</em> number of times is still <code>O(n)</code>.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>Count, then confirm empirically:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">quad</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>                      <span class="c1"># two nested loops over n  → O(n^2)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="k">return</span> <span class="n">c</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">):</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">();</span> <span class="n">quad</span><span class="p">(</span><span class="n">n</span><span class="p">);</span> <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</code></pre></div>
+Doubling <code>n</code> should <strong>quadruple</strong> the time. If you counted <code>O(n²)</code> but the time only <em>doubles</em>, the count
+was wrong — the measurement falsifies the derivation. Big-O stops being a table and becomes "the answer to
+a counting question."</p>
+</details>
+<h3 id="challenge-2-model-a-real-problem-as-a-graph-then-verify-with-the-matrix">Challenge 2 — Model a real problem as a graph, then verify with the matrix<a class="headerlink" href="#challenge-2-model-a-real-problem-as-a-graph-then-verify-with-the-matrix" title="Permanent link">&para;</a></h3>
+<p>Model something you own (git commits, systemd units, or your build order) as a graph: name the <strong>nodes</strong> and
+<strong>edges</strong>, state one property (connected? cyclic? is there a valid order?), then build the adjacency matrix
+and verify a walk count with <code>Aⁿ</code> in numpy.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Dependencies are <strong>directed</strong> edges ("must run before"). "Is there a valid order?" is asking <strong>is this a
+DAG?</strong> — a valid order (topological sort) exists <strong>iff</strong> there are no cycles.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># 4 build steps: 0-&gt;1, 0-&gt;2, 1-&gt;3, 2-&gt;3  (a diamond — a DAG, so an order exists)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;length-2 walks:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_power</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;0 -&gt; 3 in two steps:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_power</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>   <span class="c1"># 2 (via 1 and via 2)</span>
+</code></pre></div>
+Two 2-step paths from 0 to 3 (via node 1 and via node 2). No cycle ⟹ a valid build order exists; a cycle
+would mean a circular dependency and <strong>no</strong> order — exactly the systemd/build failure you'd debug (M15/M23),
+now stated as a graph property.</p>
+</details>
+<h3 id="challenge-3-pca-from-scratch-the-modules-payload">Challenge 3 — PCA from scratch (the module's payload)<a class="headerlink" href="#challenge-3-pca-from-scratch-the-modules-payload" title="Permanent link">&para;</a></h3>
+<p>On a real 2-D dataset: <strong>center</strong> it (subtract the mean), compute the <strong>covariance matrix</strong>, take <strong>its
+eigenvectors</strong> (the principal components), project onto the top one, and see the dimensionality reduction.
+Recognize this <strong>is</strong> M27's PCA — now with a reason.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>cov = np.cov(X_centered.T)</code>; then <code>vals, vecs = np.linalg.eig(cov)</code>. The eigenvector with the <strong>largest</strong>
+eigenvalue is the direction of most variance — the top principal component. Project with a dot product.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">X</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>  <span class="c1"># a tilted cloud</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">Xc</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>                       <span class="c1"># center</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">Xc</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>                            <span class="c1"># covariance matrix (variance/spread)</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">top</span> <span class="o">=</span> <span class="n">vecs</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">vals</span><span class="p">)]</span>               <span class="c1"># eigenvector of largest eigenvalue = PC1</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="n">proj</span> <span class="o">=</span> <span class="n">Xc</span> <span class="o">@</span> <span class="n">top</span>                              <span class="c1"># project onto the principal component</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;variance captured by PC1:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">/</span> <span class="n">vals</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span> <span class="mi">3</span><span class="p">))</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2-D reduced to 1-D, shape:&quot;</span><span class="p">,</span> <span class="n">proj</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div>
+The top eigenvector of the covariance matrix <strong>is</strong> "the important direction in the data." The eigenvalue
+ratio is the fraction of variance captured — the honest way to choose <em>how many</em> components to keep (the
+energy threshold). This is M27's PCA, defended from meaning, not recited from a recipe.</p>
+</details>
+<h3 id="challenge-4-classify-a-transformation-and-show-ab-ba">Challenge 4 — Classify a transformation and show <code>AB ≠ BA</code><a class="headerlink" href="#challenge-4-classify-a-transformation-and-show-ab-ba" title="Permanent link">&para;</a></h3>
+<p>Take two 2×2 matrices (say a rotation and a shear). Predict what each does to the unit square, confirm the
+<strong>non-commutativity</strong> in numpy, then identify a <strong>singular</strong> matrix three ways (determinant, rank, condition
+number).</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]);</span>  <span class="n">Sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R@Sh == Sh@R ?&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">R</span> <span class="o">@</span> <span class="n">Sh</span><span class="p">,</span> <span class="n">Sh</span> <span class="o">@</span> <span class="n">R</span><span class="p">))</span>     <span class="c1"># False — order matters</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">Sing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]])</span>                <span class="c1"># row 2 = 2 × row 1</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;det:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">Sing</span><span class="p">)),</span> <span class="mi">6</span><span class="p">))</span>      <span class="c1"># ~0</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rank:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">Sing</span><span class="p">))</span>              <span class="c1"># 1, not 2</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cond:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">Sing</span><span class="p">))</span>                     <span class="c1"># huge</span>
+</code></pre></div>
+A singular matrix squashes space flat — no inverse, rank &lt; n, det ≈ 0, condition number blows up. Its
+linear system has no unique solution (the "planes" don't meet in a point).</p>
+</details>
+<h3 id="challenge-5-stretch-svd-image-compression">Challenge 5 (stretch) — SVD image compression<a class="headerlink" href="#challenge-5-stretch-svd-image-compression" title="Permanent link">&para;</a></h3>
+<p><code>U, S, Vt = np.linalg.svd(A)</code> on a small matrix (or an image), rebuild with only the top-<code>k</code> singular values,
+and watch quality climb with <code>k</code>. Choose <code>k</code> by the <strong>energy threshold</strong> (cumulative <code>S²</code> ≥ 95%), not by guess.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">A</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">Vt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">S</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">S</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>               <span class="c1"># smallest k reaching 95%</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="n">Ak</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">[:</span><span class="n">k</span><span class="p">])</span> <span class="o">@</span> <span class="n">Vt</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>                   <span class="c1"># rank-k reconstruction</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="si">}</span><span class="s2"> captures 95% energy; error:&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>      <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="n">Ak</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">)),</span> <span class="mi">4</span><span class="p">))</span>
+</code></pre></div>
+<code>A = UΣVᵀ</code> = rotate·stretch·rotate; keeping the top-<code>k</code> singular values is compression made visible
+(storage ≈ <code>k(m+n+1)</code> vs <code>mn</code>). The measured — not assumed — choice of <code>k</code>.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard — is
+what builds the memory.</em></p>
+<details class="question">
+<summary>Why are induction and recursion 'the same shape'? Map base case and step to code.</summary>
+<p>Both reduce a problem of size <code>n</code> to the same problem at <code>n−1</code> plus a base case. Induction's <strong>base case</strong>
+= recursion's <strong>stopping condition</strong>; induction's <strong>step</strong> (assume <code>P(k)</code>, prove <code>P(k+1)</code>) = the
+<strong>recursive call</strong> trusting the smaller result and combining. <code>sum(n)=n+sum(n−1)</code> with <code>sum(0)=0</code> <em>is</em> the
+induction proof of <code>n(n+1)/2</code>, written in code.</p>
+</details>
+<details class="question">
+<summary>Where does big-O come from, and how do you confirm you got it right?</summary>
+<p><strong>Counting</strong> — how many operations run as input <code>n</code> grows; read off the growth class. Confirm it
+<strong>empirically</strong>: time at <code>n, 2n, 4n</code> and check the ratio (<code>O(n)</code> doubles, <code>O(n²)</code> quadruples, <code>O(log n)</code>
+grows by a constant step). If your counted <code>O(n²)</code> only doubles, the count was wrong — measurement
+falsifies the derivation (M21).</p>
+</details>
+<details class="question">
+<summary>What does a matrix DO geometrically, and why is <code>AB ≠ BA</code>?</summary>
+<p>A matrix <strong>transforms space linearly</strong> — it sends the basis vectors to new positions (its columns) and
+drags all of space along (rotate/scale/shear/project). <code>AB</code> means "do <code>B</code>, then <code>A</code>" — composition — and
+doing a rotation then a shear generally lands somewhere different from the shear then the rotation.
+Composition of transformations isn't commutative.</p>
+</details>
+<details class="question">
+<summary>What is an eigenvector, and why does PCA use eigenvectors of the <em>covariance</em> matrix?</summary>
+<p>An eigenvector is a direction the transformation leaves pointing the same way, only scaling it by <code>λ</code>
+(<code>A·v = λ·v</code>). PCA wants the directions of maximum <strong>variance</strong>; the covariance matrix encodes variance,
+and <strong>its</strong> eigenvectors are exactly those directions (eigenvalues = variance captured). Projecting onto
+the top ones keeps the most information for the fewest dimensions.</p>
+</details>
+<details class="question">
+<summary>A hash table has 10 buckets; you insert 11 keys. Prove a collision is unavoidable.</summary>
+<p><strong>Pigeonhole principle</strong>: <code>n</code> items into <code>m &lt; n</code> boxes ⟹ some box holds ≥ <code>⌈n/m⌉ = ⌈11/10⌉ = 2</code>. So at
+least one bucket has ≥ 2 keys. This is <em>why</em> hash collisions provably exist (M32/M24) — it's not bad luck,
+it's arithmetic.</p>
+</details>
+<details class="question">
+<summary><code>A @ B</code> raises a shape error: A is (3,4), B is (3,5). Diagnose and state the rule.</summary>
+<p>The <strong>inner dimensions must match</strong>: <code>(m,k)@(k,n) → (m,n)</code>. Here <code>4 ≠ 3</code>, so it fails. Fix: transpose one
+operand if the data intends it (<code>A @ B.T</code> where shapes allow), or you've mixed up which matrix is the
+transformation. Shapes are the linear-algebra type system.</p>
+</details>
+<details class="question">
+<summary>Your rotation matrix's <code>np.linalg.eig</code> returns complex eigenvalues. Bug or feature?</summary>
+<p><strong>Feature.</strong> A pure rotation turns <em>every</em> vector, so <strong>no real vector keeps its direction</strong> — there are
+no real eigenvectors, and <code>eig</code> correctly returns complex eigenvalues (magnitude 1, encoding the angle).
+It's reporting "this transformation has no real invariant directions."</p>
+</details>
+<details class="question">
+<summary>Proof vs testing — what does each give you, and when do you need the first?</summary>
+<p><strong>Testing</strong> (M27) gives <strong>evidence</strong> over sampled cases — it can show a bug exists but never that none
+does. <strong>Proof</strong> gives <strong>certainty</strong> over all cases. You need proof for algorithm correctness, complexity
+bounds, and security guarantees — anywhere a single missed counterexample would be catastrophic and
+sampling can't cover the space.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong>: <em>"Discrete math and linear algebra are the two languages AI is
+written in — what is each, and where have I already used them?"</em> You must frame discrete = grammar
+(logic/proof, counting, structure) and linear algebra = vocabulary (vectors/matrices/eigenvectors), with
+<strong>≥2 real curriculum callbacks</strong> (M22 matmul, M26 embeddings/gradients-DAG, M27 PCA). Then, in <strong>3
+minutes</strong> to a non-technical friend: <em>"A matrix is a </em><em>verb</em><em>"</em> — it does something to space (spins,
+stretches, flattens it); a data point is an arrow; a neural network is a stack of these moves with a
+squish between. Close on eigenvectors: "the directions it doesn't turn." If you can't yet, that's your
+signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress into Module 31 (the continuous half). A
+module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the four proof methods and logic's connectives/quantifiers, cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> why induction and recursion are the same shape, mapping base case and step to code.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>List</strong> the big-O growth classes and <strong>derive</strong> them by counting (not reciting).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> a matrix as a transformation — what it does to space — and why <code>AB ≠ BA</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Use</strong> sets/relations/functions as fluent vocabulary (incl. why a hash is a non-injective function).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> proofs by hand: direct, contrapositive, contradiction, induction (the portfolio, ≥5 incl. one induction paired with its recursion).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> the dot product as similarity, with the cosine fix (M26).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Apply</strong> Gaussian elimination and interpret rank/solvability; catch the singular case three ways.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> a real problem as a graph (paths/cycles/trees/toposort) and verify walk counts with <code>Aⁿ</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a flawed proof — find the missing base case or the step that assumes the conclusion.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> linear-algebra code: shape errors, singular matrices, unnormalized similarity.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Write</strong> eigenvectors/PCA from scratch (<code>A·v = λ·v</code>; covariance → eigenvectors → project) and interpret the eigenvalues as variance.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Evaluate</strong> how many PCA components to keep by the variance/energy threshold — measured, not guessed.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> an SVD compressor (quality vs <code>k</code>) and a graph model of a real dependency problem.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Assess</strong> the crypto/hashing consequences of modular arithmetic and the pigeonhole principle (M24/M32).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Connect</strong> every concept to where the curriculum already used it (M22 matmul, M26 gradients-DAG, M27 PCA, M14 graphs, M24 crypto).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above — "a matrix is a verb," with a live demo — and score ≥90% on the validation bank.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. This module's material is spoken
+in <strong>every</strong> module after M26, so its reviews are permanent by nature. Interleaving stays active — every
+M30 review also pulls one earlier item back. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved prior-module item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Week-1 close (Day 4)</strong></td>
+<td>Proof sprint (four methods + which fits "for all n") · logic/sets recall · the induction↔recursion equivalence re-derived</td>
+<td><strong>M13:</strong> one recursion re-read as its induction proof</td>
+</tr>
+<tr>
+<td><strong>Week-2 close (Day 7)</strong></td>
+<td>Big-O sprint (six classes, slow→fast) · graph recall · the adjacency-matrix bridge redrawn</td>
+<td><strong>M21:</strong> one performance number re-measured · <strong>M8:</strong> the git DAG named</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>The linear-algebra map redrawn cold · a matrix-as-transformation explained live (<code>AB ≠ BA</code>)</td>
+<td><strong>M22:</strong> the napkin law recited</td>
+</tr>
+<tr>
+<td><strong>Module close (gate)</strong></td>
+<td>All four blank diagrams · all sprints · PCA recited end to end (center → covariance → eigenvectors → project)</td>
+<td><strong>M26:</strong> embeddings as vectors (cosine) · <strong>M22:</strong> matmul as the GPU's op</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Validation retake ≥90% · SVD image compression re-run at a new <code>k</code> · one induction proof written cold</td>
+<td>earlier-module sampler</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> <strong>M31 (Calculus, Probability &amp; Statistics)</strong> — the <strong>continuous</strong> half; gradients
+need derivatives, models need distributions, and together M30 + M31 are the complete mathematics an AI
+engineer reads by. <strong>M32 (Data Structures &amp; Algorithms)</strong> stands on big-O, graphs, hashing, and
+induction-for-correctness from here. <strong>M26–M28 are retroactively upgraded</strong> — the matmuls, gradients,
+embeddings, PCA, and napkin-law arithmetic you followed phonetically are now <strong>readable</strong>. Carry the
+linear-algebra notebook forward: M31 and M27 extend it.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>Discrete math and linear algebra are the two languages the entire back half of the curriculum was
+written in — discrete for the algorithms, structure, and proofs that make computation rigorous, and
+linear algebra for the vectors, matrices, and eigenvectors that every dataset, model, and embedding is
+spelled in — and learning to READ them is exactly the line between <em>using</em> AI systems and <em>engineering</em>
+them.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../stage-10/module-29/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 29 — Claude Code Advanced">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 29 — Claude Code Advanced
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-31/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 31 — Calculus, Probability &amp; Statistics">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 31 — Calculus, Probability & Statistics
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

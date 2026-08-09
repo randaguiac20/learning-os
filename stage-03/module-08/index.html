@@ -1,0 +1,3480 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Version control from the object model up — commits as a graph of snapshots, branches as movable pointers, merge vs rebase with reasons, remotes, and recovery — until history is something you WRITE, not something that happens to you.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-07/">
+      
+      
+        <link rel="next" href="../module-09/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 08 — Git - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-08-git" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 08 — Git
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-three-areas-and-a-fourth-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the three areas (and a fourth machine)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-object-model-four-types-all-addressed-by-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The object model — four types, all addressed by content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-graph-pointers-a-branch-is-41-bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The graph &amp; pointers — a branch is 41 bytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#porcelain-vs-plumbing-two-layers-one-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Porcelain vs plumbing — two layers, one database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-daily-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The daily loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#merge-vs-rebase-the-choice-with-reasons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Merge vs rebase — the choice with reasons
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-undo-taxonomy-which-trees-move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The undo taxonomy — "which trees move"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fetch-vs-pull-and-the-bookmark-that-ends-the-confusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fetch vs pull — and the bookmark that ends the confusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-safety-model-panic-is-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The safety model — panic is optional
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-your-first-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: your first repository
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-wrong-branch-rescue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Wrong-branch rescue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-compose-atomic-commits-from-a-tangle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Compose atomic commits from a tangle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-find-when-a-line-appeared-three-ways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Find when a line appeared, three ways
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-recover-an-old-version-without-resetting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Recover an old version without resetting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-golden-rule-made-visceral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The Golden Rule, made visceral
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-three-areas-and-a-fourth-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the three areas (and a fourth machine)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-object-model-four-types-all-addressed-by-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The object model — four types, all addressed by content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-graph-pointers-a-branch-is-41-bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The graph &amp; pointers — a branch is 41 bytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#porcelain-vs-plumbing-two-layers-one-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Porcelain vs plumbing — two layers, one database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-daily-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The daily loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#merge-vs-rebase-the-choice-with-reasons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Merge vs rebase — the choice with reasons
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-undo-taxonomy-which-trees-move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The undo taxonomy — "which trees move"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fetch-vs-pull-and-the-bookmark-that-ends-the-confusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fetch vs pull — and the bookmark that ends the confusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-safety-model-panic-is-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The safety model — panic is optional
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-your-first-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: your first repository
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-wrong-branch-rescue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Wrong-branch rescue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-compose-atomic-commits-from-a-tangle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Compose atomic commits from a tangle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-find-when-a-line-appeared-three-ways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Find when a line appeared, three ways
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-recover-an-old-version-without-resetting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Recover an old version without resetting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-golden-rule-made-visceral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The Golden Rule, made visceral
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-08-git">Module 08 — Git<a class="headerlink" href="#module-08-git" title="Permanent link">&para;</a></h1>
+<p><small>Stage 3 · Intermediate Skills · ~2 weeks at 4 h/day · Prerequisite — Modules 05–07 (scripts worth versioning, Vim to write messages and resolve conflicts, Tmux so long rebases survive a disconnect).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Git</strong> is a distributed version control system: it stores your project as a graph of immutable
+<strong>snapshots</strong> (commits), each pointing to its parent(s), with movable pointers (<strong>branches</strong>) into that
+graph — so you can record every state, branch into parallel work, merge lines back together, share them
+between machines, and recover almost anything.</p>
+<p><code>script.sh.old2.FINAL.bak</code> is version control by fear. From this module on, <em>everything you build is
+versioned</em>: your dotfiles (M6/M7's artifacts are waiting), your scripts, every future project through
+the capstone. Git is also the industry's collaboration substrate — GitHub PRs, code review, and CI (M15)
+all stand on it — and its graph model is a <strong>thinking tool</strong>: engineers who can see the graph fix in
+minutes what costs graph-blind users their afternoon (or their work).</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>M9 (SSH) is <code>git clone git@…</code> finally understood — this exact model over the network · M10 (chezmoi)
+is a Git repo wearing dotfile-manager clothes — your M8 skills <em>are</em> its power-user mode · M11 (Claude
+Code) writes code <strong>in your repos</strong> — your diff-review discipline is what makes AI assistance safe ·
+M15 (CI) is a hook grown up server-side: every pipeline starts at a commit. Learn the <strong>graph</strong> now
+and collaboration, debugging-in-time, and AI-assisted work all become routine instead of risky.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 08 — Git&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+the photo album, not the edit-list (snapshots, not diffs) → the three areas and why staging exists →
+a branch is a 41-byte file (show it) → merge vs rebase drawn live, and the Golden Rule → the two
+safety nets: <code>revert</code> for shared history, <code>reflog</code> for local — "I lost my code" is a missing tool,
+not a missing feature.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-your-first-repository">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. Typing beats watching every time — and it is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-the-three-areas-and-a-fourth-machine">The picture: the three areas (and a fourth machine)<a class="headerlink" href="#the-picture-the-three-areas-and-a-fourth-machine" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph local["Your machine — one FULL repository"]
+        WT["Working tree&lt;br/&gt;your actual files"]
+        IDX["Index / staging&lt;br/&gt;the next snapshot, composed"]
+        REPO[".git — the object graph&lt;br/&gt;immutable commits"]
+    end
+    subgraph net["Another machine"]
+        REM["Remote 'origin'&lt;br/&gt;the same graph, shared"]
+    end
+    WT --&gt;|git add| IDX
+    IDX --&gt;|git commit| REPO
+    REPO --&gt;|git restore| WT
+    REPO --&gt;|git push| REM
+    REM --&gt;|git fetch| REPO</code></pre>
+<p>Only the <strong>working tree</strong> is your ordinary files; the <strong>index</strong> is the <em>proposed next commit</em> (you put
+changes there deliberately with <code>add</code>); the <strong>repository</strong> (<code>.git</code>) is the immutable graph of everything
+committed. A <strong>remote</strong> is just the same graph on another machine — and because your clone is a <em>full</em>
+repository, you are already using Git distributed (laptop now; a server via M9 soon).</p>
+<h3 id="the-object-model-four-types-all-addressed-by-content">The object model — four types, all addressed by content<a class="headerlink" href="#the-object-model-four-types-all-addressed-by-content" title="Permanent link">&para;</a></h3>
+<p>Everything in <code>.git</code> is one of four object types, each named by the <strong>hash of its content</strong> (identical
+content is stored once; corruption is detectable with <code>fsck</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>What it holds</th>
+<th>Points at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>blob</strong></td>
+<td>one file's <em>contents</em> (no name — the name lives in the tree)</td>
+<td>nothing</td>
+</tr>
+<tr>
+<td><strong>tree</strong></td>
+<td>one directory: names → blobs and sub-trees</td>
+<td>blobs, trees</td>
+</tr>
+<tr>
+<td><strong>commit</strong></td>
+<td>a snapshot: one tree hash + parent hash(es) + author/date + message</td>
+<td>its tree, its parent(s)</td>
+</tr>
+<tr>
+<td><strong>tag</strong> (annotated)</td>
+<td>a named, message-bearing pointer to a commit — for releases</td>
+<td>one commit</td>
+</tr>
+</tbody>
+</table>
+<p>A commit's hash covers its tree <strong>and</strong> its parents, so altering any ancestor changes every descendant
+hash — history is a tamper-evident chain (the same idea blockchains later borrowed). Diffs are <em>computed
+on demand</em>; commits store whole snapshots, which is why <code>checkout</code>/<code>switch</code> are instant.</p>
+<h3 id="the-graph-pointers-a-branch-is-41-bytes">The graph &amp; pointers — a branch is 41 bytes<a class="headerlink" href="#the-graph-pointers-a-branch-is-41-bytes" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph g["The commit graph (append-only)"]
+        C1["C1"] --&gt; C2["C2"] --&gt; C3["C3"]
+        C2 --&gt; D1["C2b"] --&gt; D2["C2c"]
+    end
+    main["branch: main"] -.-&gt;|points at| C3
+    feature["branch: feature"] -.-&gt;|points at| D2
+    HEAD["HEAD"] -.-&gt;|points at| main</code></pre>
+<p>A <strong>branch</strong> is a ~41-byte file in <code>.git/refs/heads/</code> holding one commit hash. Creating a branch writes
+<em>one file</em>; switching moves <em>one pointer</em> and materialises files from the local database. <strong>THAT</strong> is why
+Git branching changed how the industry works while SVN's directory-copy branches stayed scary. <strong>HEAD</strong>
+answers "where am I" — it points to your current branch (or, when it points straight at a commit,
+you are in a harmless <strong>detached HEAD</strong>).</p>
+<h3 id="porcelain-vs-plumbing-two-layers-one-database">Porcelain vs plumbing — two layers, one database<a class="headerlink" href="#porcelain-vs-plumbing-two-layers-one-database" title="Permanent link">&para;</a></h3>
+<p>Git ships a friendly <strong>porcelain</strong> (the daily commands) over a scriptable <strong>plumbing</strong> (the low-level
+ones). You live in porcelain; you visit plumbing to <em>see the model</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Examples</th>
+<th>You use it to…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Porcelain</strong> (daily)</td>
+<td><code>status</code> <code>add</code> <code>commit</code> <code>log</code> <code>branch</code> <code>switch</code> <code>merge</code> <code>rebase</code> <code>push</code> <code>pull</code></td>
+<td>do the work</td>
+</tr>
+<tr>
+<td><strong>Plumbing</strong> (internals)</td>
+<td><code>hash-object</code> <code>cat-file</code> <code>rev-list</code> <code>rev-parse</code> <code>show-ref</code></td>
+<td>prove <em>how</em> the work is stored</td>
+</tr>
+</tbody>
+</table>
+<p><code>git cat-file -p HEAD</code> shows a commit is just tree + parent + author + message; <code>echo hi | git
+hash-object --stdin</code> gives the same hash every time — content addressing, made visible.</p>
+<h3 id="the-daily-loop">The daily loop<a class="headerlink" href="#the-daily-loop" title="Permanent link">&para;</a></h3>
+<p><code>status</code> (<strong>always first</strong>) → work → <code>diff</code> (review <em>yourself</em> before staging) → <code>add -p</code> (stage
+<strong>hunks</strong>, deliberately) → <code>commit</code> (imperative subject ≤ 50 chars + a body saying <strong>WHY</strong>) → repeat →
+<code>push</code>. Feature work: <strong>branch → commits → merge/PR back</strong>. Weekly: <code>log --graph --oneline --all</code> to
+<em>see</em> your history and prune merged branches. The staging area is a <strong>feature, not friction</strong> — commits
+are <em>composed</em> (<code>add -p</code>), not dumped (<code>git add .</code> as a reflex is how junk sneaks in).</p>
+<h3 id="merge-vs-rebase-the-choice-with-reasons">Merge vs rebase — the choice with reasons<a class="headerlink" href="#merge-vs-rebase-the-choice-with-reasons" title="Permanent link">&para;</a></h3>
+<p>Two ways to combine lines of work. When history is linear, a merge is a <strong>fast-forward</strong> (pointer slide,
+no new commit); otherwise Git does a 3-way merge from the common ancestor (a <strong>conflict</strong> is just a region
+both sides changed — Git writes markers and asks the human):</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Merge</strong></th>
+<th><strong>Rebase</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Graph shape</td>
+<td>new commit with <strong>two parents</strong></td>
+<td>commits <strong>replayed</strong> onto a new base</td>
+</tr>
+<tr>
+<td>Hashes</td>
+<td>preserved</td>
+<td><strong>new</strong> (content re-committed)</td>
+</tr>
+<tr>
+<td>Reads like</td>
+<td>the truth (non-linear DAG)</td>
+<td>a clean linear story</td>
+</tr>
+<tr>
+<td>Safe on</td>
+<td>anything</td>
+<td><strong>private</strong> history only</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The Golden Rule: never rewrite commits that have left your machine.</strong> Rebasing shared history <em>forks
+reality</em> — you replaced pages other people already photocopied. Rebase to tidy your private diary; then
+stop.</p>
+<h3 id="the-undo-taxonomy-which-trees-move">The undo taxonomy — "which trees move"<a class="headerlink" href="#the-undo-taxonomy-which-trees-move" title="Permanent link">&para;</a></h3>
+<p>Every "undo" is a choice of which of the three areas moves. <code>reset</code> is the general lever:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Working tree</th>
+<th>Index</th>
+<th>HEAD</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>restore &lt;file&gt;</code></td>
+<td>✅ discards</td>
+<td>—</td>
+<td>—</td>
+<td>throw away an unstaged edit</td>
+</tr>
+<tr>
+<td><code>restore --staged &lt;file&gt;</code></td>
+<td>—</td>
+<td>✅ unstage</td>
+<td>—</td>
+<td>un-<code>add</code> something</td>
+</tr>
+<tr>
+<td><code>commit --amend</code></td>
+<td>—</td>
+<td>—</td>
+<td>✅ new hash</td>
+<td>fix the <strong>last</strong> commit (private only)</td>
+</tr>
+<tr>
+<td><code>revert &lt;hash&gt;</code></td>
+<td>—</td>
+<td>—</td>
+<td>➕ new inverse commit</td>
+<td>undo on <strong>shared</strong> history</td>
+</tr>
+<tr>
+<td><code>reset --soft HEAD~1</code></td>
+<td>—</td>
+<td>—</td>
+<td>✅</td>
+<td>recompose the last commit</td>
+</tr>
+<tr>
+<td><code>reset --mixed HEAD~1</code></td>
+<td>—</td>
+<td>✅</td>
+<td>✅</td>
+<td>unstage <em>and</em> rework staging</td>
+</tr>
+<tr>
+<td><code>reset --hard HEAD~1</code></td>
+<td>✅ <strong>discards</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>abandon local work (<code>status</code> first!)</td>
+</tr>
+</tbody>
+</table>
+<p><code>revert</code> on shared history (append-only — everyone fast-forwards); <code>reset</code> only on private history.</p>
+<h3 id="fetch-vs-pull-and-the-bookmark-that-ends-the-confusion">fetch vs pull — and the bookmark that ends the confusion<a class="headerlink" href="#fetch-vs-pull-and-the-bookmark-that-ends-the-confusion" title="Permanent link">&para;</a></h3>
+<p><code>fetch</code> downloads remote commits and moves <strong><code>origin/main</code></strong> — a <em>remote-tracking</em> pointer, a read-only
+local bookmark of where the remote was at last contact. Your own branch is untouched. <code>pull</code> = <code>fetch</code> +
+<strong>integrate</strong> (merge or rebase per config) into your current branch. Understanding this split kills most
+remote confusion: after a rejected <code>push</code> ("non-fast-forward"), the remote simply moved — <strong><code>fetch</code> →
+look (<code>log main..origin/main</code>) → integrate → push</strong>, never <code>--force</code> as a reflex (<code>--force-with-lease</code>
+exists for the rare legitimate rewrite of your <em>own</em> shared branch).</p>
+<h3 id="the-safety-model-panic-is-optional">The safety model — panic is optional<a class="headerlink" href="#the-safety-model-panic-is-optional" title="Permanent link">&para;</a></h3>
+<p>Almost nothing committed is ever lost. The <strong>reflog</strong> is your local journal of every place HEAD has been
+(~90 days), so a <code>reset --hard</code> "disaster" is a lookup, not a loss: <code>git reflog</code> → find the hash →
+<code>git branch rescue &lt;hash&gt;</code> → it's back. And <code>.gitignore</code> <strong>before the first commit</strong> keeps secrets and
+artifacts out — but it only affects <em>untracked</em> files, so anything already committed lives in history
+until it's rewritten <em>and</em> the secret is rotated (rotation first — rewriting can't recall copies).</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>Commits are snapshots in an append-only graph; branches are ~41-byte movable pointers.</strong> <em>See</em> the
+   graph (<code>log --graph</code>) until you think in it.</li>
+<li><strong>Three areas:</strong> working tree → <strong><code>add</code></strong> → index → <strong><code>commit</code></strong> → repository. Staging is a feature —
+   compose commits with <code>add -p</code>, don't dump with <code>git add .</code>.</li>
+<li><strong>Merge keeps the truth (two parents); rebase rewrites for readability (new hashes).</strong> The <strong>Golden
+   Rule</strong>: never rewrite history that left your machine.</li>
+<li><strong><code>revert</code> on shared, <code>reset</code> on private.</strong> Every scary command has an abort — learn the abort <em>with</em>
+   the operation.</li>
+<li><strong><code>fetch</code> moves the <code>origin/*</code> bookmark; <code>pull</code> = fetch + integrate.</strong> After a rejection: fetch, look,
+   integrate — never reflexive <code>--force</code>.</li>
+<li><strong><code>reflog</code> before panic.</strong> A pushed repo is a backed-up repo (prove it with a fresh clone).</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-your-first-repository">Guided Lab: your first repository<a class="headerlink" href="#guided-lab-your-first-repository" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. Everything happens inside a throwaway <code>~/git-lab</code> repo you build first — all local,
+no network or GitHub account needed. You'll set your identity, make atomic commits, branch, merge a real
+conflict, break history on purpose, and recover it.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-08" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-08" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Identity, first repo, atomic commits</label><label for="__tabbed_1_2">2 · Branch and fast-forward merge</label><label for="__tabbed_1_3">3 · A real merge and a conflict</label><label for="__tabbed_1_4">4 · Break history, then recover it</label><label for="__tabbed_1_5">5 · Your own 'remote' — no network needed</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Lab User&quot;</span><span class="w">       </span><span class="c1"># who the commits belong to</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;lab@example.com&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>init.defaultBranch<span class="w"> </span>main
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>mkdir<span class="w"> </span>~/git-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/git-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>init<span class="w">    </span><span class="c1"># a full repository, right here</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;set number\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>.vimrc
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>git<span class="w"> </span>status<span class="w">                                     </span><span class="c1"># untracked — status FIRST, always</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>git<span class="w"> </span>add<span class="w"> </span>.vimrc<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add vimrc with line numbers&quot;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;alias ll=&quot;ls -la&quot;\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>.bashrc
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>git<span class="w"> </span>add<span class="w"> </span>.bashrc<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add ll alias to bashrc&quot;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">                              </span><span class="c1"># two ATOMIC commits, one idea each</span>
+</code></pre></div>
+Journal: what did <code>status</code> say <em>before</em> the <code>add</code>, and <em>after</em>? A commit is a <strong>statement</strong>
+(chosen content + a caption), not an autosave.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>test-idea<span class="w">            </span><span class="c1"># create AND move onto a branch (watch .git/HEAD)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cat<span class="w"> </span>.git/HEAD<span class="w">                       </span><span class="c1"># &quot;ref: refs/heads/test-idea&quot; — HEAD is a pointer</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;syntax on\n&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>.vimrc
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">&quot;Enable syntax highlighting&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>git<span class="w"> </span>log<span class="w"> </span>--graph<span class="w"> </span>--oneline<span class="w"> </span>--all<span class="w">    </span><span class="c1"># SEE the two pointers</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>git<span class="w"> </span>switch<span class="w"> </span>main<span class="w">                    </span><span class="c1"># files revert — the working tree follows HEAD</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>git<span class="w"> </span>merge<span class="w"> </span>test-idea<span class="w">                </span><span class="c1"># fast-forward: pointer slide, NO merge commit</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>test-idea<span class="w">            </span><span class="c1"># the pointer dies; the commits remain</span>
+</code></pre></div>
+A fast-forward happens because history was <strong>linear</strong> — main just slides forward to the tip. No new
+commit was needed. Confirm with <code>git log --oneline</code>.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;echo &quot;v1&quot;\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>app.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>app.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add app.sh printing v1&quot;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>feature<span class="w">             </span><span class="c1"># diverge here</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;echo &quot;feature&quot;\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>app.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">&quot;Change app.sh to print feature&quot;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>git<span class="w"> </span>switch<span class="w"> </span>main
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;echo &quot;main&quot;\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>app.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">&quot;Change app.sh to print main&quot;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>git<span class="w"> </span>merge<span class="w"> </span>feature<span class="w">                 </span><span class="c1"># CONFLICT — both changed the same line</span>
+</code></pre></div>
+Don't flinch — a conflict is normal. <code>git status</code> lists the file; open <code>app.sh</code> and you'll see
+Git's markers (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature</code>) — two truths. Resolve by <strong>choosing</strong>,
+then finish the merge (this creates a merge commit with <strong>two parents</strong>):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;echo &quot;merged&quot;\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>app.sh<span class="w">   </span><span class="c1"># resolve: pick the combined truth, remove all markers</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>git<span class="w"> </span>add<span class="w"> </span>app.sh
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Merge feature into main&quot;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>git<span class="w"> </span>log<span class="w"> </span>--graph<span class="w"> </span>--oneline<span class="w">           </span><span class="c1"># two parents converge here</span>
+</code></pre></div>
+Click <strong>Check</strong> to verify the merge commit exists and no conflict markers remain.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;important work\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>notes.txt
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>git<span class="w"> </span>add<span class="w"> </span>notes.txt<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add rescue-me notes&quot;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">                     </span><span class="c1"># note the commit is on top</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~1<span class="w">               </span><span class="c1"># &quot;DISASTER&quot; — the commit is gone from main</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">                     </span><span class="c1"># ...it&#39;s not here anymore</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>git<span class="w"> </span>reflog<span class="w">                            </span><span class="c1"># but every HEAD move is journaled — find the hash</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>git<span class="w"> </span>branch<span class="w"> </span>rescue<span class="w"> </span>HEAD@<span class="o">{</span><span class="m">1</span><span class="o">}</span><span class="w">            </span><span class="c1"># rescue the lost commit onto a new branch</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>rescue<span class="w">              </span><span class="c1"># &quot;Add rescue-me notes&quot; is back</span>
+</code></pre></div>
+Nothing referenced is truly lost for ~90 days. <code>reflog</code> → <code>branch rescue &lt;hash&gt;</code> is the recovery
+reflex. Click <strong>Check</strong> to verify the <code>rescue</code> branch holds the recovered commit.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>git<span class="w"> </span>init<span class="w"> </span>--bare<span class="w"> </span>~/origin.git<span class="w">         </span><span class="c1"># a bare repo = &quot;your own GitHub&quot;, on local disk</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>~/origin.git
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main<span class="w">              </span><span class="c1"># publish; -u sets tracking</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>git<span class="w"> </span>branch<span class="w"> </span>-vv<span class="w">                       </span><span class="c1"># main now tracks origin/main</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>git<span class="w"> </span>clone<span class="w"> </span>~/origin.git<span class="w"> </span>~/git-lab-2<span class="w">   </span><span class="c1"># a second clone (the &quot;server&quot;)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nb">cd</span><span class="w"> </span>~/git-lab-2<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">  </span><span class="c1"># your full history, cloned</span>
+</code></pre></div>
+<div class="admonition success">
+<p class="admonition-title">You just used Git distributed</p>
+<p>A <code>push</code> to a bare repo, then a fresh <code>clone</code>, is exactly the GitHub loop — no network, no
+account. <code>fetch</code> moves the <code>origin/*</code> bookmark; your own branch only moves when you integrate.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can make atomic commits, branch and fast-forward, resolve a conflict into a merge commit,
+recover a hard-reset via <code>reflog</code>, and push to a local bare remote — the guided lab is done. Now make
+it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work in a gym clone so mistakes are cheap. Struggle here is
+the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-wrong-branch-rescue">Challenge 1 — Wrong-branch rescue<a class="headerlink" href="#challenge-1-wrong-branch-rescue" title="Permanent link">&para;</a></h3>
+<p>You made <strong>two commits on <code>main</code></strong> that belonged on a feature branch. Move them onto a new <code>feature</code>
+branch and return <code>main</code> to where it was — <strong>without losing anything</strong>.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>A branch is just a pointer at the current commit. Name the work <em>before</em> you move <code>main</code> back, and
+<code>reset</code> becomes safe.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>branch<span class="w"> </span>feature<span class="w">          </span><span class="c1"># pointer at current tip — the two commits are now safe there</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~2<span class="w">     </span><span class="c1"># move main back two commits</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>git<span class="w"> </span>switch<span class="w"> </span>feature<span class="w">          </span><span class="c1"># your work is here, intact</span>
+</code></pre></div>
+Commits get a <em>name</em> before <code>main</code> moves, so nothing is orphaned. <code>reflog</code> would recover them even if
+you forgot.</p>
+</details>
+<h3 id="challenge-2-compose-atomic-commits-from-a-tangle">Challenge 2 — Compose atomic commits from a tangle<a class="headerlink" href="#challenge-2-compose-atomic-commits-from-a-tangle" title="Permanent link">&para;</a></h3>
+<p>One file has <strong>two unrelated changes</strong>. Stage and commit them as <strong>two separate</strong> commits using hunk
+staging — not two files, two <em>hunks</em> of the same file.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>git add -p</code> walks you through hunks; press <code>y</code>/<code>n</code> per hunk (<code>s</code> splits a big one). Commit, then
+<code>add -p</code> again for the rest.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>git<span class="w"> </span>add<span class="w"> </span>-p<span class="w">            </span><span class="c1"># stage only the first change&#39;s hunk(s): y / n / s</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;First logical change&quot;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>git<span class="w"> </span>add<span class="w"> </span>-p<span class="w">            </span><span class="c1"># now the second</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Second logical change&quot;</span>
+</code></pre></div>
+Each commit builds and reads on its own — the atomicity test. This is what makes <code>bisect</code> and <code>blame</code>
+pay off later.</p>
+</details>
+<h3 id="challenge-3-find-when-a-line-appeared-three-ways">Challenge 3 — Find when a line appeared, three ways<a class="headerlink" href="#challenge-3-find-when-a-line-appeared-three-ways" title="Permanent link">&para;</a></h3>
+<p>For a line in a file's history, discover the commit that introduced it <strong>three different ways</strong> and say
+what each tells you the others don't.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>git<span class="w"> </span>blame<span class="w"> </span>app.sh<span class="w">                 </span><span class="c1"># who last touched each line (the &quot;now&quot; view)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>git<span class="w"> </span>log<span class="w"> </span>-S<span class="s1">&#39;echo&#39;</span><span class="w"> </span>--<span class="w"> </span>app.sh<span class="w">       </span><span class="c1"># pickaxe: commits where that string&#39;s count changed</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>git<span class="w"> </span>log<span class="w"> </span>-p<span class="w"> </span>--<span class="w"> </span>app.sh<span class="w">             </span><span class="c1"># the full patch narrative of the file</span>
+</code></pre></div>
+<code>blame</code> = this line <em>now</em>; <code>log -S</code> = when it <em>appeared/vanished</em>; <code>log -p</code> = the whole story.</p>
+</details>
+<h3 id="challenge-4-recover-an-old-version-without-resetting">Challenge 4 — Recover an old version without resetting<a class="headerlink" href="#challenge-4-recover-an-old-version-without-resetting" title="Permanent link">&para;</a></h3>
+<p>Retrieve a file's contents <strong>from 3 commits ago</strong> into your working tree, leaving history and HEAD
+exactly where they are.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>restore</code> can take a <code>--source</code>; <code>show</code> can print any <code>commit:path</code> straight to stdout.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>git<span class="w"> </span>restore<span class="w"> </span>--source<span class="o">=</span>HEAD~3<span class="w"> </span>--<span class="w"> </span>app.sh<span class="w">   </span><span class="c1"># overwrite working file from an old commit</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># or, just to look:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>git<span class="w"> </span>show<span class="w"> </span>HEAD~3:app.sh
+</code></pre></div>
+Neither moves a branch or HEAD — surgical retrieval, no reset.</p>
+</details>
+<h3 id="challenge-5-stretch-the-golden-rule-made-visceral">Challenge 5 (stretch) — The Golden Rule, made visceral<a class="headerlink" href="#challenge-5-stretch-the-golden-rule-made-visceral" title="Permanent link">&para;</a></h3>
+<p>Using two clones of your bare repo, <strong>reproduce the disaster</strong>: push a commit, <code>clone</code> it (the
+"teammate"), then rewrite that pushed commit (<code>commit --amend</code> or <code>rebase</code>) and force-push. Pull as the
+teammate and read the wreckage. Then name the correct habit.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># in clone A: git commit --amend -m &quot;rewritten&quot;;  git push --force</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># in clone B (had the OLD commit): git pull        # divergence / rejected / weird merge</span>
+</code></pre></div>
+You replaced a commit others already had — two versions of "the same" work now exist. The rule:
+<strong>never rewrite published history</strong>; when a legitimate rewrite of <em>your own</em> shared branch is truly
+needed, <code>--force-with-lease</code> refuses if the remote moved beyond what you last saw (<code>--force</code> would
+not).</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Commits are snapshots, not diffs — what does a commit object actually contain, and why is checkout instant?</summary>
+<p>A commit holds a <strong>tree</strong> hash (a full snapshot of the root directory), its <strong>parent</strong> hash(es),
+author/committer + timestamps, and the message. Trees point to blobs (content stored once, dedup'd by
+hash). Checkout materialises files straight from the <strong>local</strong> object database — no network, no
+diff-replay; diffs are computed on demand.</p>
+</details>
+<details class="question">
+<summary>What IS a branch, physically? Why did this change industry workflows when SVN's branches didn't?</summary>
+<p>A ~41-byte file in <code>.git/refs/heads/</code> containing one commit hash. Creating or switching a branch
+writes/moves <em>one file</em>, so branches cost nothing → developers branch for everything → feature
+branches and PRs are built on it. SVN branches were server-side directory copies — heavyweight, so
+people avoided them.</p>
+</details>
+<details class="question">
+<summary>Explain the three areas — what do <code>add</code>, <code>commit</code>, <code>restore</code>, and <code>restore --staged</code> each move?</summary>
+<p>Working tree = your files; index = the composed next commit; repo = the immutable graph. <code>add</code>:
+working → index. <code>commit</code>: index → graph. <code>restore &lt;file&gt;</code>: graph/index → working (discards your
+edit). <code>restore --staged</code>: unstage (index ← HEAD). (<code>reset</code> moves HEAD ± index ± working per flavor.)</p>
+</details>
+<details class="question">
+<summary>fetch vs pull — what does each move, and what is <code>origin/main</code> really?</summary>
+<p><code>fetch</code> downloads new objects and moves the <strong>remote-tracking bookmark</strong> <code>origin/main</code>; your own
+branches are untouched. <code>pull</code> = <code>fetch</code> + integrate (merge or rebase per config) into your current
+branch. <code>origin/main</code> is a read-only local pointer recording where the remote was at last contact.</p>
+</details>
+<details class="question">
+<summary>A <code>git push</code> is rejected 'non-fast-forward'. What happened, and the correct sequence?</summary>
+<p>The remote has commits you don't. Correct: <strong><code>fetch</code> → inspect (<code>log main..origin/main</code>) → integrate
+(merge/rebase) → push</strong>. <code>--force-with-lease</code> is legitimate only after a deliberate rewrite of your
+<em>own</em> shared branch — it refuses if the remote moved beyond what you last saw (protecting others'
+work where <code>--force</code> wouldn't).</p>
+</details>
+<details class="question">
+<summary>You hard-reset and 'lost' a commit. Walk the recovery.</summary>
+<p>Nothing referenced is lost for ~90 days. <code>git reflog</code> shows every place HEAD has been → find the lost
+commit's hash → <code>git branch rescue &lt;hash&gt;</code> (or <code>git reset --hard &lt;hash&gt;</code>) → it's back. Panic is a
+missing tool, not a missing feature.</p>
+</details>
+<details class="question">
+<summary>Why <code>revert</code> (not <code>reset</code>) on shared branches?</summary>
+<p><code>revert</code> <strong>adds a new commit</strong> that inverses an old one — the graph only grows, so everyone's clones
+fast-forward cleanly. <code>reset</code> moves your pointer <em>backward</em> — your history now diverges from what
+others hold, and their pulls conflict or resurrect the change. Shared history is <strong>append-only</strong>.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong>: <em>"Git is a graph of photographs."</em> You must cover <strong>snapshots
+not diffs</strong>, <strong>branches as ~41-byte pointers</strong> (show the file!), <strong>merge vs rebase</strong> drawn live, and
+the <strong>two safety nets</strong> (revert for shared, reflog for local) — with one live demo: delete a branch,
+resurrect it. Then, in <strong>90 seconds</strong>, teach <em>"why do programmers take snapshots all day?"</em> with the
+photo-album analogy (every photo captioned, pointing to the one before). If you can't yet, that's your
+signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress to Module 09 (SSH). A module is only
+"done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the snapshot model + three areas + the fetch/pull split, flawlessly.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> 15 random terms cold (index, merge-base, detached HEAD, remote-tracking, reflog, annotated tag, bare repo…).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all four from memory: three areas, merge-vs-rebase, the remote triangle, the object model.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> 5 atomic commits from a tangle in ≤ 20 min via <code>add -p</code>, each message to standard.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure</strong> global config with reasons (identity, editor, a written <code>pull.rebase</code> policy) and a categorical <code>.gitignore</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Automate</strong> a <code>pre-commit</code> shellcheck gate (both paths tested) and run <code>git bisect run</code> on a planted bug.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> the incident gauntlet: detached HEAD, non-fast-forward rejection, rebased-shared branch, committed secret, hard-reset — 5 of 6 clean.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> with <code>blame</code>, <code>log -S</code> (pickaxe), and <code>bisect</code> on real history — one archaeology dig completed.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Monitor:</strong> <code>log --graph</code> a daily habit; <code>branch -vv</code> / <code>remote -v</code> fluent; incoming inspected before integrating.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> <code>add -p</code> over <code>add .</code> habitual; a shallow clone measured; top-5 aliases earned <em>after</em> muscle memory.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> the secrets protocol recited in order (rotate first); why hooks don't clone; 2FA + a minimal token.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Recover:</strong> perform the reflog rescue live, and state what the reflog does <em>not</em> cover (other machines, fresh clones).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back (5/6 tasks; the snapshot-model explanation is mandatory).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. <strong>Interleaving stays active</strong> —
+every M8 review also pulls in one prior-module item (the toolbelt practices together). Daily repo use
+<em>is</em> review: commit discipline in your real work protects the graph model and the recovery reflexes — the
+parts panic erases. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · loop sprint (status→diff→add -p→commit→push) · undo sprint (four cures)</td>
+<td>M7: tmux lifecycle sprint</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Recovery drill LIVE (hard-reset a gym repo, rescue via reflog) · detached-HEAD &amp; rejection scenarios</td>
+<td>M6: Vim escape-room sprint</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Graph reading on a fresh unfamiliar repo — narrate its <code>log --graph</code> · merge-vs-rebase blank</td>
+<td>M5: write a <code>pre-commit</code>-style check cold</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Bisect a fresh planted bug (automated) · message audit of your last 20 real commits</td>
+<td>M7: layout-script improvement</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Branch-hygiene + secrets audit across all repos · your merge/message <strong>policy</strong> recited as your own</td>
+<td>M4: journal triage</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> SSH (M9 — <code>git clone git@…</code> as this model over the network, plus your own
+bare-repo-over-SSH "private GitHub") · chezmoi (M10 — the dotfiles repo becomes the machine-bootstrap
+source of truth) · Claude Code (M11 — AI writes code in your repos; your diff-review discipline keeps it
+safe) · CI (M15 — a hook grown up, triggered by every push) · Debugging (M23 — bisect and blame as
+archaeology under incident pressure).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M8 gives every artifact you'll ever make a memory and an undo — and gives <em>you</em> the graph literacy
+that turns collaboration, debugging-in-time, and AI-assisted work from risky into routine.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-07/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 07 — Tmux">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 07 — Tmux
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-09/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 09 — SSH">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 09 — SSH
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3525 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Operate machines over an untrusted network — encrypted login, keys instead of passwords, an agent that remembers, a config that names your hosts, and tunnels that carry anything. The interface of Module 02, now over the wire.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-08/">
+      
+      
+        <link rel="next" href="../module-10/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 09 — SSH - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-09-ssh" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 09 — SSH
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-two-authentications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the two authentications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-scary-first-connect-prompt-tofu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The scary first-connect prompt — TOFU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-geography-what-lives-where-and-what-it-proves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key geography — what lives where, and what it proves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-agent-passphrase-once-use-all-day" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The agent — passphrase once, use all day
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-config-book-sshconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The config book — ~/.ssh/config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tunnel-triple-the-hop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The tunnel triple (+ the hop)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sshd-is-just-a-service-harden-it-with-discipline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sshd is just a service — harden it with discipline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-going-remote-on-one-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: going remote on one machine
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-doorkeeper-from-scratch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The Doorkeeper, from scratch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-a-passphrase-key-the-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — A passphrase key + the agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-harden-the-server-with-the-ritual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Harden the server, with the ritual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-lockout-drill-break-glass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — The lockout drill (break-glass)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-agent-forwarding-vs-proxyjump-felt-not-memorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Agent forwarding vs ProxyJump, felt not memorized
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-two-authentications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the two authentications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-scary-first-connect-prompt-tofu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The scary first-connect prompt — TOFU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-geography-what-lives-where-and-what-it-proves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key geography — what lives where, and what it proves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-agent-passphrase-once-use-all-day" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The agent — passphrase once, use all day
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-config-book-sshconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The config book — ~/.ssh/config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tunnel-triple-the-hop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The tunnel triple (+ the hop)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sshd-is-just-a-service-harden-it-with-discipline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sshd is just a service — harden it with discipline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-going-remote-on-one-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: going remote on one machine
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-doorkeeper-from-scratch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The Doorkeeper, from scratch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-a-passphrase-key-the-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — A passphrase key + the agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-harden-the-server-with-the-ritual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Harden the server, with the ritual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-lockout-drill-break-glass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — The lockout drill (break-glass)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-agent-forwarding-vs-proxyjump-felt-not-memorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Agent forwarding vs ProxyJump, felt not memorized
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-09-ssh">Module 09 — SSH<a class="headerlink" href="#module-09-ssh" title="Permanent link">&para;</a></h1>
+<p><small>Stage 3 · Intermediate Skills · ~1 week at 4 h/day · Prerequisites — M4 (sshd is a systemd unit; the VM is the server; journal debugging), M7 (tmux — remote work's survival layer, the pairing this exists for), M8 (git@ remotes decoded), M3 (permissions SSH <em>enforces</em>).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>SSH</strong> (Secure Shell) is a protocol — and <strong>OpenSSH</strong> its universal implementation — for operating
+machines over an <strong>untrusted network</strong>. It authenticates <em>both</em> sides (host keys prove the <strong>server</strong>;
+your keys prove <strong>you</strong>), encrypts everything after, and carries not just shells but files, Git, port
+forwards, and any TCP stream.</p>
+<p>Every server you will ever touch — cloud VMs, Kubernetes nodes, GPU boxes, the capstone's
+infrastructure — is reached through SSH. This module is also <strong>Stage 3's convergence point</strong>: Vim edits
+remotely (M6's promise), tmux sessions survive disconnects (M7's reason for existing), Git pushes over
+SSH (M8's <code>git@github.com</code> decoded), and your dotfiles bootstrap any machine (M10 finishes it). After
+this week, "remote" stops being a different world — "this machine" and "that machine" become one
+workspace.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p><strong>M10</strong> turns this week's manual dotfile-landing into one bootstrap command over SSH · <strong>M11</strong> runs
+Claude Code on remote repos · <strong>M14</strong> (Networking) makes you <code>tcpdump</code> your own handshake — port
+22/TCP stops being abstract, and TLS will <em>rhyme</em> with the two-auth model · <strong>M15</strong> Ansible is your
+<code>ssh host 'cmd'</code> loops industrialized, over nothing but sshd and the keys you built · <strong>M16–M20</strong>
+<code>docker context</code> over SSH, K8s nodes debugged over SSH, <code>kubectl port-forward</code> is <code>-L</code>'s cousin ·
+<strong>M22/Capstone</strong> GPU boxes reached, dashboards tunnelled (TensorBoard via <code>-L</code>) · <strong>M24</strong> deepens the
+hardening (fail2ban, certificates, audit). "Comfortable over SSH" is the sentence under half the job
+posts you'll read.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 09 — SSH&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Analogy / Visual Model / Misconceptions):
+the threat (sniffing/spoofing on a shared network) → the <strong>two authentications in order</strong> (host
+first — the wax-seal + face-recognition analogies) → why a <em>signature</em> beats a <em>secret</em> (nothing
+replayable crosses the wire) → the scary first-connect prompt is TOFU, not noise → the agent vs agent
+<strong>forwarding</strong> risk gap → the ten-minute hardening ritual (second session, <code>sshd -t</code>, key-only) as the
+closing argument.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-going-remote-on-one-machine">Guided Lab</a> in a browser terminal and run each
+command yourself as it appears. Typing beats watching every time — and it is part of how the memory
+forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-the-two-authentications">The picture: the two authentications<a class="headerlink" href="#the-picture-the-two-authentications" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph C["CLIENT — your laptop"]
+        cmd["ssh you@vm"]
+        kh["~/.ssh/known_hosts&lt;br/&gt;hosts I trust"]
+        pk["private key + ssh-agent&lt;br/&gt;signs challenges"]
+    end
+    subgraph S["SERVER — the VM"]
+        d["sshd on :22&lt;br/&gt;a systemd unit (M4)"]
+        hk["host key&lt;br/&gt;/etc/ssh/ssh_host_*"]
+        ak["~/.ssh/authorized_keys&lt;br/&gt;keys allowed in"]
+    end
+    cmd --&gt; d
+    d --&gt;|"1 · key exchange&lt;br/&gt;encryption starts"| cmd
+    hk --&gt;|"2 · HOST auth&lt;br/&gt;server proves itself"| kh
+    pk --&gt;|"3 · USER auth&lt;br/&gt;sign a challenge"| ak
+    ak --&gt;|"4 · channels&lt;br/&gt;shell · scp · tunnels"| cmd</code></pre>
+<p>Every SSH connection performs <strong>two</strong> authentications, in this order. <strong>First the SERVER proves
+itself</strong> — it demonstrates it holds the private half of its <em>host key</em>, and your client checks that
+against <code>~/.ssh/known_hosts</code> (the defense against connecting to an impostor). <strong>Then you prove
+yourself</strong> — the server sends a challenge, your client <em>signs</em> it with your private key, and the server
+verifies the signature against <code>~/.ssh/authorized_keys</code>. You must know <strong>who</strong> you're talking to before
+proving who you are.</p>
+<p>The single most important consequence: <strong>public-key auth is a signature, not a secret you send.</strong> Only a
+signature over a server-chosen challenge crosses the wire — never the private key, never anything
+replayable. A sniffer captures nothing reusable; a fake server gains no credential. That is why keys beat
+passwords <em>even over a compromised path</em> (a password typed at a MITM'd prompt is simply stolen).</p>
+<h3 id="the-scary-first-connect-prompt-tofu">The scary first-connect prompt — TOFU<a class="headerlink" href="#the-scary-first-connect-prompt-tofu" title="Permanent link">&para;</a></h3>
+<p>The first time you connect, you get <em>"The authenticity of host … can't be established … Are you sure?"</em>
+That is <strong>TOFU — Trust On First Use</strong>: you are <strong>pinning</strong> an unverified host key into <code>known_hosts</code>. It
+accepts a window where an impostor could be pinned instead. Close that gap by verifying the fingerprint
+<strong>out-of-band</strong> (the VM console, the cloud panel, GitHub's published list) <em>before</em> you type <code>yes</code>.</p>
+<p>Later, a <strong>changed</strong> host key produces <code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED</code>. Know which
+warning is which — and what each means:</p>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>What happened</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"authenticity … can't be established"</td>
+<td><strong>First contact</strong> — no pin yet (TOFU)</td>
+<td>Verify the fingerprint out-of-band, <em>then</em> accept</td>
+</tr>
+<tr>
+<td>"REMOTE HOST IDENTIFICATION HAS CHANGED"</td>
+<td>The pinned key no longer matches</td>
+<td><strong>STOP.</strong> Rebuilt server <em>or</em> MITM. Verify out-of-band; <code>ssh-keygen -R host</code> only <strong>after</strong> verifying</td>
+</tr>
+</tbody>
+</table>
+<p>On a production box, treat a changed-key warning as an <strong>incident until verified</strong>. (GitHub's 2023 RSA
+host-key rotation made millions see this warning at once — the system <em>worked</em>; that is what it is for.)</p>
+<h3 id="key-geography-what-lives-where-and-what-it-proves">Key geography — what lives where, and what it proves<a class="headerlink" href="#key-geography-what-lives-where-and-what-it-proves" title="Permanent link">&para;</a></h3>
+<p>The private key <strong>is your identity.</strong> Generate one <strong>per device</strong>, protect it with a passphrase, and
+only ever copy the <strong>public</strong> half. Never copy a private key between machines.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Side</th>
+<th>Half</th>
+<th>Proves</th>
+<th>Perms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/.ssh/id_ed25519</code></td>
+<td>client</td>
+<td><strong>private</strong></td>
+<td>you, to a server (by signing) — never leaves</td>
+<td><strong>600</strong></td>
+</tr>
+<tr>
+<td><code>~/.ssh/id_ed25519.pub</code></td>
+<td>client</td>
+<td>public</td>
+<td>— (travels freely)</td>
+<td>644</td>
+</tr>
+<tr>
+<td><code>~/.ssh/known_hosts</code></td>
+<td>client</td>
+<td>—</td>
+<td>which host keys you trust (server → you)</td>
+<td>644</td>
+</tr>
+<tr>
+<td><code>~/.ssh/authorized_keys</code></td>
+<td>server</td>
+<td>public</td>
+<td>which keys may log in <strong>as this user</strong></td>
+<td>600</td>
+</tr>
+<tr>
+<td><code>/etc/ssh/ssh_host_*_key</code></td>
+<td>server</td>
+<td>private</td>
+<td>the server's own identity, to you</td>
+<td>600</td>
+</tr>
+<tr>
+<td><code>/etc/ssh/sshd_config</code></td>
+<td>server</td>
+<td>—</td>
+<td>the door policy</td>
+<td>644</td>
+</tr>
+</tbody>
+</table>
+<p>OpenSSH <strong>refuses</strong> to use a private key with loose permissions (and <code>~/.ssh</code> must be <code>700</code>) — software-
+enforced least privilege, exactly as M3 predicted. Modern keys are <strong>Ed25519</strong> (djb's curve, 2013);
+prefer it over RSA.</p>
+<table>
+<thead>
+<tr>
+<th>Key type</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ed25519</strong></td>
+<td>The modern default — short, fast, strong. <code>ssh-keygen -t ed25519</code></td>
+</tr>
+<tr>
+<td>RSA (≥3072)</td>
+<td>Still fine, larger and slower; needed only for very old servers</td>
+</tr>
+<tr>
+<td>ECDSA / DSA</td>
+<td>Avoid — ECDSA's curves are contested, DSA is dead</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-agent-passphrase-once-use-all-day">The agent — passphrase once, use all day<a class="headerlink" href="#the-agent-passphrase-once-use-all-day" title="Permanent link">&para;</a></h3>
+<p>The <strong>ssh-agent</strong> holds your <em>decrypted</em> private keys in process memory and signs challenges for
+clients on request. You type the passphrase <strong>once per login session</strong> (<code>ssh-add</code>), and every later
+<code>ssh</code> is prompt-free. <code>ssh-add -l</code> lists what it holds.</p>
+<p><strong>Agent <em>forwarding</em> (<code>-A</code>) is a different risk class.</strong> It exports the agent's <strong>socket</strong> to the remote
+host — anyone with root there can ask it to sign, <strong>borrowing your identity</strong> live, for everything your
+key opens (GitHub included). The recurring compromise: dev <code>ssh -A</code>s into a shared box, attacker pivots.</p>
+<ul>
+<li><strong>Agent risk</strong> = local compromise (bounded to your machine).</li>
+<li><strong>Forwarded-agent risk</strong> = <em>every</em> box you forwarded to.</li>
+</ul>
+<p>Default forwarding <strong>off</strong>; use <strong>ProxyJump (<code>-J</code>)</strong> instead — it routes <em>through</em> a bastion and <strong>lends
+nothing</strong>.</p>
+<h3 id="the-config-book-sshconfig">The config book — <code>~/.ssh/config</code><a class="headerlink" href="#the-config-book-sshconfig" title="Permanent link">&para;</a></h3>
+<p><code>ssh vm</code> reads <code>~/.ssh/config</code> top-down, <strong>first match wins per option</strong>. Host aliases expand to the
+facts of each machine — this is infrastructure-as-config for your connections (chezmoi manages it in
+M10). Comment it like every config you own; it becomes the README of your infrastructure.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Host vm
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    HostName 203.0.113.10
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    User you
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    IdentityFile ~/.ssh/id_ed25519
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    IdentitiesOnly yes
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    AddKeysToAgent yes
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Host vm</code></td>
+<td>the <strong>alias</strong> you type — <code>ssh vm</code></td>
+</tr>
+<tr>
+<td><code>HostName</code></td>
+<td>the real address (IP or DNS name)</td>
+</tr>
+<tr>
+<td><code>User</code></td>
+<td>who to log in as (no more <code>you@</code>)</td>
+</tr>
+<tr>
+<td><code>IdentityFile</code></td>
+<td>which private key to offer</td>
+</tr>
+<tr>
+<td><code>IdentitiesOnly yes</code></td>
+<td>offer <strong>only</strong> this key — faster, quieter, avoids <code>MaxAuthTries</code> lockouts</td>
+</tr>
+<tr>
+<td><code>ProxyJump bastion</code></td>
+<td>hop through a bastion in one command</td>
+</tr>
+<tr>
+<td><code>ControlMaster</code> / <code>ControlPersist</code></td>
+<td>reuse one connection — instant repeat <code>ssh</code>/<code>scp</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-tunnel-triple-the-hop">The tunnel triple (+ the hop)<a class="headerlink" href="#the-tunnel-triple-the-hop" title="Permanent link">&para;</a></h3>
+<p>The encrypted transport <strong>multiplexes channels</strong>: your shell, <code>sftp</code>, and forwarded ports all ride one
+TCP session. Any TCP app can ride SSH — the poor man's VPN, and the debugging superpower. The mnemonic
+is baked into the flag:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Reads as</th>
+<th>Direction</th>
+<th>One real use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-L 8080:localhost:80</code></td>
+<td><strong>L</strong>ocal — <em>bring it to me</em></td>
+<td>my <code>:8080</code> → tunnel → the server's view of <code>localhost:80</code></td>
+<td>reach a server-only web admin UI</td>
+</tr>
+<tr>
+<td><code>-R 9090:localhost:3000</code></td>
+<td><strong>R</strong>emote — <em>expose mine there</em></td>
+<td>the server's <code>:9090</code> → tunnel → my <code>localhost:3000</code></td>
+<td>demo my local dev service from the server</td>
+</tr>
+<tr>
+<td><code>-D 1080</code></td>
+<td><strong>D</strong>ynamic — <em>browse as the server</em></td>
+<td>a SOCKS proxy: my apps exit <strong>from</strong> the server</td>
+<td>reach anything the server can reach</td>
+</tr>
+<tr>
+<td><code>-J bastion</code></td>
+<td><strong>J</strong>ump</td>
+<td>laptop → bastion → internal, one command</td>
+<td>multi-hop <strong>without lending the agent</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A <code>-D</code> proxy makes the server your ISP — it sees your destinations and any plaintext payloads. Route
+work traffic through work bastions; not personal browsing through prod.</p>
+<h3 id="sshd-is-just-a-service-harden-it-with-discipline">sshd is just a service — harden it with discipline<a class="headerlink" href="#sshd-is-just-a-service-harden-it-with-discipline" title="Permanent link">&para;</a></h3>
+<p>Server-side is M4 <strong>verbatim</strong>: <code>systemctl status ssh</code>, <code>journalctl -u ssh -f</code> (watch your own logins —
+and, on an exposed box, the Internet's knocking). Put changes in a <strong>drop-in</strong> (<code>sshd_config.d/*.conf</code>,
+the M4 vendor-file rule), never edit the vendor file blindly.</p>
+<table>
+<thead>
+<tr>
+<th>Directive</th>
+<th>Set to</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PermitRootLogin</code></td>
+<td><code>no</code></td>
+<td>root over SSH is a brute-force magnet</td>
+</tr>
+<tr>
+<td><code>PasswordAuthentication</code></td>
+<td><code>no</code></td>
+<td>passwords are guessable/phishable/reusable — keys are none</td>
+</tr>
+<tr>
+<td><code>MaxAuthTries</code></td>
+<td><code>3</code></td>
+<td>cut off credential-stuffing early</td>
+</tr>
+<tr>
+<td><code>AllowUsers</code> / <code>AllowGroups</code></td>
+<td>your user</td>
+<td>least privilege on who may even try</td>
+</tr>
+</tbody>
+</table>
+<p>The ritual, every time — <strong>and the golden rule: never change auth without a proven second way in.</strong></p>
+<ol>
+<li><strong>Two sessions open</strong> (one survives a bad restart) <em>plus</em> console/break-glass access.</li>
+<li><code>sudo sshd -t</code> — <strong>syntax gate</strong> before any restart.</li>
+<li><code>sudo systemctl restart ssh</code>.</li>
+<li><strong>Positive test</strong> (new key login works) <em>and</em> <strong>negative test</strong> (<code>ssh -o PubkeyAuthentication=no vm</code> →
+   denied). <code>sudo sshd -T | grep -iE 'permitroot|password'</code> confirms the <em>effective</em> config.</li>
+</ol>
+<p>The failure mode of an auth change is locking out the only person who can fix it. The lockout drill makes
+that real, cheaply.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>Two authentications, in order:</strong> the <strong>server</strong> proves itself (host key vs <code>known_hosts</code>), <em>then</em>
+   <strong>you</strong> prove yourself (a signature vs <code>authorized_keys</code>).</li>
+<li><strong>Key auth sends a signature, not a secret</strong> — nothing replayable crosses the wire; that's why keys
+   beat passwords even on a hostile network.</li>
+<li><strong>The private key is your identity</strong> — passphrase it, agent it, one per device; only the <strong>public</strong>
+   half travels.</li>
+<li><strong>The changed-host-key warning is the one you never ignore</strong> — STOP, verify out-of-band, <em>then</em> act.</li>
+<li><strong>Agent forwarding (<code>-A</code>) lends your identity to a remote root</strong> — default off; use <code>ProxyJump (-J)</code>.</li>
+<li><strong>Tunnels:</strong> <code>-L</code> bring it <strong>L</strong>ocal · <code>-R</code> expose mine (<strong>R</strong>emote) · <code>-D</code> <strong>D</strong>ynamic SOCKS exit.</li>
+<li><strong>Never change sshd auth without a proven second door</strong> — two sessions + console; <code>sshd -t</code> before
+   every restart; <strong>tmux first</strong> on any server (M7's law).</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-going-remote-on-one-machine">Guided Lab: going remote on one machine<a class="headerlink" href="#guided-lab-going-remote-on-one-machine" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You install a real SSH server, generate an Ed25519 key, log in </em><em>password-free</em><em>,
+name the host in <code>~/.ssh/config</code>, and open a tunnel — all against <code>localhost</code>, so no second machine is
+needed. Nothing here is destructive.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-09" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-09" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Bring the server up, meet its identity</label><label for="__tabbed_1_2">2 · Generate your Ed25519 identity</label><label for="__tabbed_1_3">3 · Install the key, log in password-free</label><label for="__tabbed_1_4">4 · Name the host in your config</label><label for="__tabbed_1_5">5 · A tunnel, and watch the door</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>openssh-server<span class="w">   </span><span class="c1"># sshd — a real SSH server</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>service<span class="w"> </span>ssh<span class="w"> </span>start<span class="w">                                     </span><span class="c1"># start the daemon (a service! M4)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>service<span class="w"> </span>ssh<span class="w"> </span>status<span class="w">                                    </span><span class="c1"># confirm it&#39;s listening on :22</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>ssh-keygen<span class="w"> </span>-l<span class="w"> </span>-f<span class="w"> </span>/etc/ssh/ssh_host_ed25519_key.pub<span class="w">    </span><span class="c1"># the SERVER&#39;s fingerprint — note it</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">StrictHostKeyChecking</span><span class="o">=</span>accept-new<span class="w"> </span>localhost<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="c1"># first contact: HOST auth (TOFU) pins the key</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>cat<span class="w"> </span>~/.ssh/known_hosts<span class="w">                                </span><span class="c1"># the pin you just recorded</span>
+</code></pre></div>
+You just did <strong>auth #1</strong>: your client verified the server's host key and pinned it into
+<code>known_hosts</code>. In real life you'd compare that fingerprint out-of-band <strong>before</strong> trusting it.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;you@lab-</span><span class="k">$(</span>date<span class="w"> </span>+%Y%m<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>-N<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls<span class="w"> </span>-l<span class="w"> </span>~/.ssh<span class="w">                     </span><span class="c1"># note the perms: private 600, public 644, dir 700</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>file<span class="w"> </span>~/.ssh/id_ed25519<span class="w"> </span>~/.ssh/id_ed25519.pub<span class="w">   </span><span class="c1"># private vs public — which one travels?</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ssh-keygen<span class="w"> </span>-l<span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519.pub<span class="w">         </span><span class="c1"># YOUR fingerprint</span>
+</code></pre></div>
+The <code>.pub</code> half travels; the private half <strong>never leaves this machine</strong>. (Here we use an empty
+passphrase so the lab flows — on a real key you'd set one and load it with <code>ssh-add</code>; see the note in
+the Solo Lab.)</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>cat<span class="w"> </span>~/.ssh/id_ed25519.pub<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/authorized_keys<span class="w">    </span><span class="c1"># authorize YOUR key for this user</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/authorized_keys
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">BatchMode</span><span class="o">=</span>yes<span class="w"> </span>localhost<span class="w"> </span><span class="s1">&#39;whoami; hostname&#39;</span><span class="w">      </span><span class="c1"># BatchMode = keys only, no prompt</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>ssh<span class="w"> </span>-v<span class="w"> </span>localhost<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-iE<span class="w"> </span><span class="s1">&#39;offering|accepted|authenticated&#39;</span><span class="w">  </span><span class="c1"># watch auth #2 happen</span>
+</code></pre></div>
+That was <strong>auth #2</strong>: the server challenged, your key <strong>signed</strong>, and it matched a line in
+<code>authorized_keys</code>. <code>ssh-copy-id user@host</code> is the real-world tool that appends that line for you;
+here we did it by hand to see exactly what it writes.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cat<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/config<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">Host mybox</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">    HostName 127.0.0.1</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">    User root</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">    IdentityFile ~/.ssh/id_ed25519</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">    IdentitiesOnly yes</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">EOF</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/config
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">StrictHostKeyChecking</span><span class="o">=</span>accept-new<span class="w"> </span>mybox<span class="w"> </span><span class="s1">&#39;echo connected as $USER&#39;</span><span class="w">   </span><span class="c1"># ssh mybox — bare alias</span>
+</code></pre></div>
+<code>ssh mybox</code> now carries the address, user, and key — nothing to remember or type. <code>IdentitiesOnly
+yes</code> offers <strong>only</strong> this key (faster, and it avoids <code>MaxAuthTries</code> lockouts when an agent holds many).</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>python3<span class="w"> </span>-m<span class="w"> </span>http.server<span class="w"> </span><span class="m">8000</span><span class="w"> </span>--bind<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>&gt;/tmp/srv.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span><span class="w">   </span><span class="c1"># a service only localhost sees</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>ssh<span class="w"> </span>-f<span class="w"> </span>-N<span class="w"> </span>-L<span class="w"> </span><span class="m">8080</span>:localhost:8000<span class="w"> </span>mybox<span class="w">            </span><span class="c1"># -L: bring the remote :8000 to my :8080</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-3<span class="w">                  </span><span class="c1"># the tunnelled page appears (bring it Local)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>ssh<span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-5<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>sshd<span class="w"> </span>/var/log/auth.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-5
+</code></pre></div>
+<code>-L 8080:localhost:8000</code> means <em>my</em> <code>:8080</code> delivers to the <strong>server's</strong> view of <code>localhost:8000</code>.
+The last line is the door log — every accepted and failed login is an observable event (on a real
+exposed box this list is never empty; that's where fail2ban earns its place, M24).</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can stand up sshd, generate a key, log in with <strong>no password</strong>, alias the host in
+<code>~/.ssh/config</code>, and open an <code>-L</code> tunnel — the guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Keep working against <code>localhost</code>/<code>127.0.0.1</code>; a second user
+created with <code>adduser</code> can stand in for "another machine". Struggle here is the point; reveal a hint only
+after you've tried.</em></p>
+<h3 id="challenge-1-the-doorkeeper-from-scratch">Challenge 1 — The Doorkeeper, from scratch<a class="headerlink" href="#challenge-1-the-doorkeeper-from-scratch" title="Permanent link">&para;</a></h3>
+<p>Create a <strong>new</strong> user (<code>adduser alice</code>), then — as that user — generate a labeled Ed25519 key, install it
+into that user's <code>authorized_keys</code>, alias the host in <em>their</em> <code>~/.ssh/config</code>, and prove password-free
+login. Then <strong>inventory aloud</strong>: which file is where, and what does each prove? ≤10 min.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Keys are <strong>per-user</strong>: <code>authorized_keys</code> lives in the <em>target</em> user's home. Switch with <code>su - alice</code>.
+The private key must be <code>600</code> and <code>~/.ssh</code> <code>700</code>, or OpenSSH silently refuses it.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>adduser<span class="w"> </span>--disabled-password<span class="w"> </span>--gecos<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>alice
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>su<span class="w"> </span>-<span class="w"> </span>alice<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;ssh-keygen -t ed25519 -C &quot;alice@lab&quot; -N &quot;&quot; -f ~/.ssh/id_ed25519 \</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s1">  &amp;&amp; install -d -m700 ~/.ssh \</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s1">  &amp;&amp; cat ~/.ssh/id_ed25519.pub &gt;&gt; ~/.ssh/authorized_keys &amp;&amp; chmod 600 ~/.ssh/authorized_keys&#39;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>su<span class="w"> </span>-<span class="w"> </span>alice<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new localhost whoami&#39;</span>
+</code></pre></div>
+Inventory: <code>alice</code>'s <strong>private</strong> key proves <em>her</em> by signing; her <code>.pub</code> in <em>her</em> <code>authorized_keys</code>
+is what the server checks; the host key (in her <code>known_hosts</code> after first contact) proves the server
+to her. No file misplaced, perms right without fixing-after.</p>
+</details>
+<h3 id="challenge-2-a-passphrase-key-the-agent">Challenge 2 — A passphrase key + the agent<a class="headerlink" href="#challenge-2-a-passphrase-key-the-agent" title="Permanent link">&para;</a></h3>
+<p>Regenerate your key <strong>with</strong> a passphrase, and make login prompt-free anyway by loading it into the
+agent. Prove the agent holds it, then show what happens in a shell with <strong>no</strong> agent.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>ssh-agent</code> prints the env vars a shell needs — <code>eval "$(ssh-agent -s)"</code> starts one for the current
+shell. <code>ssh-add</code> loads a key (passphrase once); <code>ssh-add -l</code> lists what's held.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-N<span class="w"> </span><span class="s1">&#39;correct horse&#39;</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;you@lab&quot;</span><span class="w"> </span><span class="o">&lt;&lt;&lt;</span>y<span class="w">   </span><span class="c1"># overwrite</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>cat<span class="w"> </span>~/.ssh/id_ed25519.pub<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/authorized_keys<span class="w">      </span><span class="c1"># re-authorize the new key</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ssh-add<span class="w"> </span>~/.ssh/id_ed25519<span class="w">       </span><span class="c1"># passphrase ONCE</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>ssh-add<span class="w"> </span>-l<span class="w">                                                </span><span class="c1"># fingerprint held in memory</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">BatchMode</span><span class="o">=</span>yes<span class="w"> </span>localhost<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;no prompt — the agent signed&quot;</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>env<span class="w"> </span>-u<span class="w"> </span>SSH_AUTH_SOCK<span class="w"> </span>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">BatchMode</span><span class="o">=</span>yes<span class="w"> </span>localhost<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;no agent -&gt; would need the passphrase&quot;</span>
+</code></pre></div>
+The agent holds the <strong>decrypted</strong> key and signs on request — passphrase once per session. Strip
+<code>SSH_AUTH_SOCK</code> and the plumbing is gone: this is why cron jobs (no agent) need <code>BatchMode</code> + an
+explicit key.</p>
+</details>
+<h3 id="challenge-3-harden-the-server-with-the-ritual">Challenge 3 — Harden the server, with the ritual<a class="headerlink" href="#challenge-3-harden-the-server-with-the-ritual" title="Permanent link">&para;</a></h3>
+<p>Turn passwords <strong>off</strong> and root login <strong>off</strong> via a drop-in, with full discipline: <code>sshd -t</code> before
+restart, a second session held open, and <strong>both</strong> a positive and a negative test. Prove the effective
+config.</p>
+<details class="warning">
+<summary>Keep a second terminal open</summary>
+<p>Never change auth policy without a proven second way in. In the lab your other pane <em>is</em> that door;
+on a real box it is the console. Run <code>sshd -t</code> <strong>before</strong> every restart.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/ssh/sshd_config.d/10-hardening.conf<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="s">PermitRootLogin prohibit-password</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="s">PasswordAuthentication no</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="s">MaxAuthTries 3</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="s">EOF</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>sshd<span class="w"> </span>-t<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>service<span class="w"> </span>ssh<span class="w"> </span>restart<span class="w">                              </span><span class="c1"># syntax gate, THEN restart</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">BatchMode</span><span class="o">=</span>yes<span class="w"> </span>localhost<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;key login: OK (positive test)&quot;</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">PubkeyAuthentication</span><span class="o">=</span>no<span class="w"> </span>-o<span class="w"> </span><span class="nv">PreferredAuthentications</span><span class="o">=</span>password<span class="w"> </span>localhost<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">  </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-qi<span class="w"> </span><span class="s1">&#39;permission denied&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;passwords: DEAD (negative test)&quot;</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>sshd<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-iE<span class="w"> </span><span class="s1">&#39;permitrootlogin|passwordauthentication|maxauthtries&#39;</span>
+</code></pre></div>
+<code>sshd -t</code> is the syntax gate; <code>sshd -T</code> dumps the <strong>effective</strong> config (defaults + drop-ins merged) —
+trust but verify. The negative test is the half people skip: proving passwords are <em>actually</em> refused.</p>
+</details>
+<h3 id="challenge-4-the-lockout-drill-break-glass">Challenge 4 — The lockout drill (break-glass)<a class="headerlink" href="#challenge-4-the-lockout-drill-break-glass" title="Permanent link">&para;</a></h3>
+<p>Simulate the classic disaster <strong>on purpose</strong>: move your <code>authorized_keys</code> aside so a fresh key login is
+refused, confirm the lockout, then recover — and write the one-line moral.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>mv<span class="w"> </span>~/.ssh/authorized_keys<span class="o">{</span>,.bak<span class="o">}</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">BatchMode</span><span class="o">=</span>yes<span class="w"> </span>localhost<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;LOCKED OUT: no key accepted (passwords are off too)&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>mv<span class="w"> </span>~/.ssh/authorized_keys<span class="o">{</span>.bak,<span class="o">}</span><span class="w">                 </span><span class="c1"># recover — your &#39;console&#39; is this same shell</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">BatchMode</span><span class="o">=</span>yes<span class="w"> </span>localhost<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;recovered&quot;</span>
+</code></pre></div>
+Moral: <strong>never change auth without a proven second door.</strong> Here your still-open shell was the
+break-glass; on a real server that's the provider console. The failure mode of an auth change is
+locking out the one person who can fix it.</p>
+</details>
+<h3 id="challenge-5-stretch-agent-forwarding-vs-proxyjump-felt-not-memorized">Challenge 5 (stretch) — Agent forwarding vs ProxyJump, felt not memorized<a class="headerlink" href="#challenge-5-stretch-agent-forwarding-vs-proxyjump-felt-not-memorized" title="Permanent link">&para;</a></h3>
+<p>Show that agent forwarding (<code>-A</code>) makes your agent reachable <em>from the remote box</em>, then show
+<code>ProxyJump</code> giving the same multi-hop reach with <strong>nothing lent</strong>.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ssh-add<span class="w"> </span>~/.ssh/id_ed25519
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>ssh<span class="w"> </span>-A<span class="w"> </span>localhost<span class="w"> </span><span class="s1">&#39;ssh-add -l&#39;</span><span class="w">                    </span><span class="c1"># your agent, visible on the REMOTE side (-A)</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>ssh<span class="w"> </span>-J<span class="w"> </span>localhost<span class="w"> </span>localhost<span class="w"> </span><span class="s1">&#39;echo hopped through the jump host, no agent lent&#39;</span><span class="w">  </span><span class="c1"># -J: route, don&#39;t lend</span>
+</code></pre></div>
+With <code>-A</code>, root on that box could sign as you for as long as you're connected — the pivot-to-GitHub
+attack. <code>-J</code> tunnels the second hop <em>through</em> the first and exposes no agent: same reach, nothing to
+steal. Default <code>-A</code> off; reach for <code>-J</code>.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>SSH performs two authentications per connection — name them, their order, and the file that anchors each.</summary>
+<p><strong>Host authentication first:</strong> the server proves it holds its host key; the client checks
+<code>~/.ssh/known_hosts</code> (defends against an impostor server). <strong>Then user authentication:</strong> the client
+signs a challenge with the private key; the server checks <code>~/.ssh/authorized_keys</code>. Order matters —
+you must know <em>who</em> you're talking to before proving who you are.</p>
+</details>
+<details class="question">
+<summary>Why does public-key auth beat passwords even over a compromised network path?</summary>
+<p>Only a <strong>signature over a server-chosen challenge</strong> crosses the wire — never the private key, never
+a reusable secret. A sniffer captures nothing replayable; a fake server gains no credential. A
+password typed at a MITM'd prompt, by contrast, is simply stolen.</p>
+</details>
+<details class="question">
+<summary>What is TOFU, what risk does it accept, and how do you close the gap when it matters?</summary>
+<p><strong>Trust On First Use:</strong> the first connection pins an <em>unverified</em> host key — accepting a window where
+an impostor could be pinned instead. Close it by verifying the fingerprint <strong>out-of-band</strong>: the VM
+console, the provider panel, or a published list (e.g. GitHub's).</p>
+</details>
+<details class="question">
+<summary>You see <code>REMOTE HOST IDENTIFICATION HAS CHANGED</code>. Two legitimate causes, the dangerous one, and the protocol?</summary>
+<p>Legitimate: the server was <strong>reinstalled/rekeyed</strong>, or the name now points at a different legitimate
+machine. Dangerous: <strong>MITM</strong>. Protocol: do <strong>not</strong> connect or blindly <code>ssh-keygen -R</code>; verify the new
+fingerprint out-of-band; <em>only then</em> remove the old entry and accept. On production, treat as an
+incident until verified.</p>
+</details>
+<details class="question">
+<summary>Why is agent <em>forwarding</em> (<code>-A</code>) a different risk class than the agent itself — and the safer alternative?</summary>
+<p>The agent serves <strong>your</strong> machine; forwarding exports its <strong>socket</strong> to the <strong>remote</strong> host, so
+anyone with root there can request signatures — borrowing your identity live, for every box your key
+opens. The agent's risk is local; a forwarded agent's risk is <em>every</em> host you forwarded to. Use
+<strong>ProxyJump (<code>-J</code>)</strong> — it routes through and lends nothing.</p>
+</details>
+<details class="question">
+<summary>You get <code>Permission denied (publickey)</code>. Give an ordered checklist with the evidence for each.</summary>
+<p>(1) <code>ssh-add -l</code> — is the right key in the agent? (2) <code>ssh -v</code> — was it <strong>offered</strong>, and what did the
+server answer? (3) server <code>journalctl -u ssh</code> — the <em>real</em> reason (perms, bad line). (4)
+<code>authorized_keys</code> intact, one line, in the <strong>right</strong> user's home? (5) perms — <code>~/.ssh</code> 700, key 600,
+<code>$HOME</code> not group-writable (server refuses silently otherwise). (6) config — <code>IdentityFile</code> /
+<code>IdentitiesOnly</code> pointing at the right key?</p>
+</details>
+<details class="question">
+<summary>Why must the private key be 600 and <code>~/.ssh</code> 700 — and what does OpenSSH do if not?</summary>
+<p>The private key <strong>is</strong> the identity: group/world-readable means anyone local can <em>be</em> you; a writable
+<code>~/.ssh</code> lets others add <em>their</em> key to your <code>authorized_keys</code>. OpenSSH <strong>refuses</strong> permissive files
+(silent key-skip; the journal/<code>-v</code> notes it) — software-enforced least privilege, exactly as M3 taught.</p>
+</details>
+<details class="question">
+<summary><code>sshd -t</code> vs <code>sshd -T</code> — what does each do and where does it belong?</summary>
+<p><code>sshd -t</code>: <strong>syntax/validity check</strong> — run <strong>before every restart</strong>. <code>sshd -T</code>: dump the
+<strong>effective</strong> config (all defaults resolved, drop-ins merged) — run <strong>after</strong> changes to confirm
+what's actually live, and when debugging "but I set that!".</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>: <em>"How is it safe to administer a server across the open
+Internet?"</em> — you must land the threat (sniffing/spoofing), the <strong>two authentications in order (host
+first!)</strong>, why a <em>signature</em> beats a <em>secret</em>, and the operational layer (agent, config, tmux-first);
+the <strong>wax-seal</strong> analogy must appear and then yield to mechanism. Then, in <strong>90 seconds</strong>, teach <em>"how
+does the computer know it's really you without you ever sending a password?"</em> to a beginner — the
+<strong>signet-ring</strong> story required (you never mail the ring; the bank sends fresh wax, you stamp it, they
+compare the imprint on file), jargon last. If you can't yet, reread the Key Notes, don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress. A module is only "done" when every box is
+true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the two authentications in order and <em>what crosses the wire</em>, flawlessly.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> 15 random terms cold (TOFU, host key, agent, ProxyJump, ControlMaster, BatchMode, SOCKS, drop-in, IdentitiesOnly…).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all four blanks: the two-auth handshake (four key files placed), key geography, the tunnel triple, and your own <code>~/.ssh/config</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> the Doorkeeper: a clean-user identity chain (keygen → install → config → agent → password-free login) in ≤10 min, perms right without fixing-after.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Configure</strong> the client config-book live — aliases, <code>IdentitiesOnly</code>, a jump block — and own every line.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Administer</strong> the Gatekeeper: hardening with the full ritual (second session, <code>sshd -t</code>, restart, <strong>positive <em>and</em> negative</strong> test, <code>sshd -T</code> confirmation), ≤12 min.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> rank blast radius (passphrase-less key stolen › forwarded agent on a compromised host › leaked <code>authorized_keys</code> ≥ leaked <code>known_hosts</code>); demonstrate <code>-A</code> vs <code>-J</code>; author a hardening checklist.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Tunnel:</strong> produce <code>-L</code>/<code>-R</code>/<code>-D</code>/<code>-J</code> for five dictated scenarios, right direction first try, each <strong>proven</strong> with <code>curl</code>/<code>ss</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> the gauntlet: 4 of 5 incidents clean (permission-denied, changed-key, frozen session <code>~.</code>, cron-ssh-fails, the lockout) — <code>-v</code> and the journal <em>before</em> theories.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Automate</strong> a <code>BatchMode</code> remote health check and a <code>vm-up.sh</code> (wait-for-sshd → attach) with honest exit codes (M5).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize:</strong> measure ControlMaster cold-vs-warm; test <code>-C</code> compression honestly; reach any host in ≤6 keystrokes.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Scale/Design:</strong> argue the keys-vs-certificates threshold and sketch team/fleet access (bastion, per-device keys, revocation story) cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Self-serve:</strong> learn ≥3 things from the OpenSSH man pages alone (a config option, an escape sequence, an <code>ssh-keygen</code> capability), and score ≥80% on the validation bank.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (the two-authentications explanation is mandatory; host-auth-first is the trap everyone drops).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active —
+every M9 review also pulls in one <strong>prior-module</strong> item (M7's tmux and M8's Git are the pairings this
+converges). Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved prior-module item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · tunnel-triple sprint · validation B5–B7 (changed-key, denied, <code>-A</code> risk)</td>
+<td>M8 flashcards you missed</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>Cold hardening recipe typed against a fresh sshd — full ritual, negative test included</td>
+<td>M7: tmux builder sprint</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Denied-checklist drill on a planted fault · the perms/blast-radius questions (H19–H21)</td>
+<td>M8: <code>git bisect</code> drill</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Tunnel triple rebuilt from memory against live services · config audit (own every line still?)</td>
+<td>M6: Vim keystroke audit</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Full key-hygiene audit (agent / authorized_keys / config — one table, no orphans) · re-read your hardening checklist vs reality</td>
+<td>M5: script audit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> Chezmoi + Mise (M10 — the manual dotfile-landing becomes one bootstrap command
+over SSH) · Claude Code (M11 — agent workflows over your own infrastructure) · Networking (M14 —
+<code>tcpdump</code> your handshake; refused-vs-timed-out becomes layer knowledge; TLS rhymes with the two-auth
+model) · Automation (M15 — Ansible is your <code>ssh</code> loops industrialized over the exact transport and keys) ·
+Docker/Kubernetes (M16–M20 — <code>docker context</code> and node debugging over SSH; <code>kubectl port-forward</code> is
+<code>-L</code>'s cousin) · Security (M24 — fail2ban, certificates, audit, bastions at enterprise scale).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M9 makes the network disappear: with keys, config, tmux, and Git converging over SSH, "this machine"
+and "that machine" become one workspace — the property every remaining stage silently assumes.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-08/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 08 — Git">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 08 — Git
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../module-10/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 10 — Dotfiles &amp; Toolchains">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 10 — Dotfiles & Toolchains
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

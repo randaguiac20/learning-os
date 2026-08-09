@@ -1,0 +1,3465 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The server-side interface every service exposes — HTTP and REST, request validation, authentication, versioning, error contracts, pagination, and observability — built hands-on with FastAPI, and the synthesis that closes Stage 12.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-35/">
+      
+      
+        <link rel="next" href="../../stage-13/module-37/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 36 — Backend & API Engineering - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-36-backend-api-engineering" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 36 — Backend & API Engineering
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-a-requests-journey-through-the-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: a request's journey through the API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-methods-the-verbs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP methods — the verbs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-codes-the-waiters-reply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status codes — the waiter's reply
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-never-trust-the-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation — never trust the client
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authentication-vs-authorization-who-then-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication vs authorization — who, then what
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-concerns-what-turns-an-endpoint-into-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production concerns — what turns an endpoint into a service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rest-vs-the-alternatives-and-serving-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        REST vs the alternatives, and serving a model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-a-real-crud-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: a real CRUD API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-add-put-with-the-right-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Add PUT with the right semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-paginate-the-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Paginate the list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-make-the-404-honest-under-a-fake-always-200-route" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Make the 404 honest under a fake "always-200" route
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-add-authorization-not-just-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Add authorization, not just authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-version-a-breaking-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Version a breaking change
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-a-requests-journey-through-the-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: a request's journey through the API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-methods-the-verbs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP methods — the verbs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-codes-the-waiters-reply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status codes — the waiter's reply
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-never-trust-the-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation — never trust the client
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authentication-vs-authorization-who-then-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication vs authorization — who, then what
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-concerns-what-turns-an-endpoint-into-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production concerns — what turns an endpoint into a service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rest-vs-the-alternatives-and-serving-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        REST vs the alternatives, and serving a model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-a-real-crud-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: a real CRUD API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-add-put-with-the-right-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Add PUT with the right semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-paginate-the-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Paginate the list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-make-the-404-honest-under-a-fake-always-200-route" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Make the 404 honest under a fake "always-200" route
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-add-authorization-not-just-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — Add authorization, not just authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-version-a-breaking-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Version a breaking change
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-36-backend-api-engineering">Module 36 — Backend &amp; API Engineering<a class="headerlink" href="#module-36-backend-api-engineering" title="Permanent link">&para;</a></h1>
+<p><small>Stage 12 · Data &amp; Software Engineering · ~3 weeks at 4 h/day · Prerequisite — Module 33 (Databases &amp; SQL — the store this API fronts), Module 35 (SWE Practice — built test-first and reviewed).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p>A <strong>backend</strong> is the server-side of an application — the code that holds business logic, talks to the
+database (M33) and other services, and exposes an <strong>API</strong> (Application Programming Interface — the set
+of operations a program offers other programs) for clients to use over the network. The dominant style
+is the <strong>REST API</strong> (REST — Representational State Transfer: an architectural style for HTTP APIs where
+<strong>resources</strong> are nouns identified by URLs and <strong>HTTP methods</strong> are the verbs acting on them) over
+<strong>HTTP</strong> (HyperText Transfer Protocol — the request/response protocol of the Web). A client sends a
+request (method + URL + <strong>headers</strong> — key/value metadata like content type and auth + an optional body);
+the server answers with a <strong>status code</strong> (a 3-digit outcome code) and usually a <strong>JSON</strong> body
+(JavaScript Object Notation — the plain-text <code>{"key": value}</code> wire format).</p>
+<p>Every service the curriculum has touched exposes an API: Module 28 served a model behind an HTTP
+endpoint; Kubernetes (M19–20) ran services talking over the network; M33's database sits <em>behind</em> a
+backend, never exposed raw. But those were built ad hoc — a minimal serving endpoint, a <code>docker run</code> —
+without the discipline of <strong>API design</strong>: what makes a URL a good resource, which status code is
+correct, how to validate input safely, how to authenticate, how to version so you don't break clients,
+how to fail well. This module supplies that discipline. It turns <em>"I can return JSON from a function"</em>
+into <em>"I can design and build a secure, versioned, observable REST API."</em></p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>This is Stage 12's <strong>synthesis and closer</strong>. The stage's data (M33), scale (M34), and process (M35)
+now meet an interface: a served <strong>model</strong> (M26–28) behind a validated, authed, versioned, observed,
+tested REST API over M33's database — the capstone's exact shape. · M37 (Cloud Platforms) deploys
+<em>this</em> containerized API to managed cloud compute, its observability becoming cloud monitoring. ·
+Every "backend engineer" and "ML/platform engineer" job lives in this module. <strong>The API is the
+contract between your service and the world</strong> — design it well and you can rebuild everything behind
+it without breaking a single consumer.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 36 — Backend &amp; API Engineering&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Analogy / Misconceptions):
+the restaurant-menu analogy (the API is the menu + waiter, not the kitchen) → resources-as-nouns /
+methods-as-verbs / status-codes-as-the-waiter's-reply → validation as the waiter refusing an
+incoherent order → authn vs authz (checking your reservation vs what you're allowed to order) →
+versioning as keeping the old menu working (<code>/v1</code>, <code>/v2</code>) → why serving a model is just a new dish on
+a well-run menu.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-a-real-crud-api">Guided Lab</a> in a browser terminal and build the API yourself
+as it appears. You learn an API by <em>hitting</em> it — sending a bad body and watching the 422 come back
+teaches more than any paragraph.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-a-requests-journey-through-the-api">The picture: a request's journey through the API<a class="headerlink" href="#the-picture-a-requests-journey-through-the-api" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    C["Client&lt;br/&gt;app · ML consumer · another service"] --&gt;|"HTTP request&lt;br/&gt;method + URL + headers + body"| API
+    subgraph API["Backend API (FastAPI)"]
+        direction TB
+        R["Route&lt;br/&gt;/v1/items/{id} · GET"] --&gt; V["Validate request&lt;br/&gt;Pydantic schema (M25)"]
+        V --&gt; A["Authn / Authz&lt;br/&gt;token · JWT (M9)"]
+        A --&gt; L["Service logic"]
+        L --&gt; D["Data access&lt;br/&gt;pooled connection"]
+        D --&gt; S["Serialize response&lt;br/&gt;response schema"]
+        S --&gt; O["Log · metrics · trace (M25)"]
+    end
+    API --&gt;|"HTTP response&lt;br/&gt;status code + JSON"| C
+    subgraph BE["Behind the interface"]
+        direction TB
+        DB["Database (M33)"]
+        MO["Model (M26–28)"]
+    end
+    D --&gt; BE</code></pre>
+<p>The client never sees the kitchen. It sends a <strong>request</strong> and gets a <strong>response</strong>; everything between —
+validation, auth, logic, the database (M33), the model (M26–28) — is hidden behind the interface. That
+hiding is the point: a good interface lets you rebuild everything behind it without reprinting a single
+client's expectations. Notice <strong>statelessness</strong> — each request carries everything the server needs
+(no memory of the last one), which is exactly what lets you run many copies of the API behind a load
+balancer (the M19–20 scaling reason).</p>
+<h3 id="http-methods-the-verbs">HTTP methods — the verbs<a class="headerlink" href="#http-methods-the-verbs" title="Permanent link">&para;</a></h3>
+<p>Read a REST call as <em>verb + noun</em>: <code>POST /books</code> = "create a book", <code>GET /books/42</code> = "read book 42".
+Two properties decide how clients (and proxies, and retry logic) may treat each method:</p>
+<ul>
+<li><strong>Safe</strong> — has no side effects; only reads. A cache or crawler may call it freely.</li>
+<li><strong>Idempotent</strong> — sending the same request repeatedly has the <strong>same effect as sending it once</strong>. This
+  is what makes a retry safe: if the network drops the response, the client can retry without fear.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Does</th>
+<th>Safe?</th>
+<th>Idempotent?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td>read a resource</td>
+<td>✅ yes</td>
+<td>✅ yes</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td>create (server assigns identity)</td>
+<td>❌ no</td>
+<td>❌ no — two calls make two things</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td>replace a resource entirely</td>
+<td>❌ no</td>
+<td>✅ yes — same result each time</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td>partially update a resource</td>
+<td>❌ no</td>
+<td>⚠️ not necessarily</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td>remove a resource</td>
+<td>❌ no</td>
+<td>✅ yes — gone stays gone</td>
+</tr>
+</tbody>
+</table>
+<p>This is the M34/M35 <strong>idempotency</strong> idea, now expressed in HTTP. Resources are <strong>nouns</strong> (<code>/books</code>,
+<code>/books/42</code>, <code>/members</code>) — never verbs (<code>/getBooks</code> is a design smell); the method carries the verb.</p>
+<h3 id="status-codes-the-waiters-reply">Status codes — the waiter's reply<a class="headerlink" href="#status-codes-the-waiters-reply" title="Permanent link">&para;</a></h3>
+<p>The status code is a <strong>contract</strong> every client, proxy, and monitoring tool relies on to know what
+happened <em>without parsing the body</em>. Return the <strong>correct</strong> code — never 200-with-an-error-body.</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Meaning</th>
+<th>Codes that matter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2xx</strong></td>
+<td>success</td>
+<td><code>200</code> OK · <code>201</code> Created · <code>204</code> No Content</td>
+</tr>
+<tr>
+<td><strong>3xx</strong></td>
+<td>redirect</td>
+<td><code>301</code>/<code>304</code> (caching) — rare in APIs</td>
+</tr>
+<tr>
+<td><strong>4xx</strong></td>
+<td><strong>client's</strong> fault</td>
+<td><code>400</code> Bad Request · <code>401</code> Unauthenticated · <code>403</code> Forbidden · <code>404</code> Not Found · <code>409</code> Conflict · <code>422</code> Unprocessable Entity (validation) · <code>429</code> Too Many Requests</td>
+</tr>
+<tr>
+<td><strong>5xx</strong></td>
+<td><strong>server's</strong> fault</td>
+<td><code>500</code> Internal Server Error · <code>503</code> Service Unavailable</td>
+</tr>
+</tbody>
+</table>
+<p>The decision is a small tree — success, or whose fault:</p>
+<pre class="mermaid"><code>flowchart TB
+    Q{"What happened?"} --&gt;|succeeded| S["2xx&lt;br/&gt;200 read · 201 created · 204 deleted"]
+    Q --&gt;|"client sent something wrong"| Cx["4xx&lt;br/&gt;bad input 422 · no token 401 · not allowed 403 · missing 404"]
+    Q --&gt;|"the server broke"| Sx["5xx&lt;br/&gt;500 · 503"]</code></pre>
+<p>Returning <code>500</code> for a <em>bad request</em> misattributes blame — it tells monitoring the <strong>server</strong> is failing
+when the client sent garbage, misfires alerts, and can trigger inappropriate retries. A missing required
+field is a <code>422</code> (or <code>400</code>), not a <code>500</code>; a not-found is a <code>404</code>, not a <code>200</code> with <code>{"error": ...}</code>.</p>
+<h3 id="validation-never-trust-the-client">Validation — never trust the client<a class="headerlink" href="#validation-never-trust-the-client" title="Permanent link">&para;</a></h3>
+<p>The client is outside your control and may send malformed, malicious, or unexpected data. <strong>Validation</strong>
+is a <em>security boundary</em>, not a nicety. In FastAPI you declare the request shape as a <strong>Pydantic</strong> model
+(Pydantic — the type-driven validation library FastAPI is built on); FastAPI validates every incoming
+body against it and returns a <strong>422</strong> with a precise error automatically. Unvalidated input is the door
+to crashes, injection (SQL/command — M33/M25), and corruption. Keep the <strong>API model</strong> (the public
+Pydantic schema — what clients send/receive) <strong>separate</strong> from the <strong>database model</strong> (M33 — the internal
+storage shape): the schema is a boundary that lets you change storage without breaking the API, and
+expose only what clients should see.</p>
+<h3 id="authentication-vs-authorization-who-then-what">Authentication vs authorization — who, then what<a class="headerlink" href="#authentication-vs-authorization-who-then-what" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Authentication (authn)</strong> — verifying <em>who you are</em> (a login, a token). Comes first.</li>
+<li><strong>Authorization (authz)</strong> — verifying <em>what you're allowed to do</em> (roles, scopes, ownership). Comes second.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Scheme</th>
+<th>What it is</th>
+<th>Fits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API key</strong></td>
+<td>a shared secret in a header</td>
+<td>simple server-to-server access; coarse (no user identity/expiry)</td>
+</tr>
+<tr>
+<td><strong>JWT / OAuth2</strong></td>
+<td><strong>JWT</strong> (JSON Web Token — a signed token carrying identity/claims); <strong>OAuth2</strong> the delegated-auth standard around it</td>
+<td>user-facing auth, expiry, fine-grained scopes — stateless</td>
+</tr>
+<tr>
+<td><strong>Session</strong></td>
+<td>a server-stored session id in a cookie</td>
+<td>classic web apps; server holds state</td>
+</tr>
+</tbody>
+</table>
+<p>Passwords are stored <strong>hashed</strong> (with a library like <code>passlib</code>), <strong>never plaintext</strong> (M9). The top API
+risk is <strong>BOLA</strong> (Broken Object-Level Authorization — OWASP API #1): a user is authenticated but the
+endpoint never checks they <em>own</em> the object they're touching, so changing an id in the URL reaches
+someone else's data. Fix: on every object access, verify the caller is authorized for <em>that specific
+object</em> — authn is not authz.</p>
+<h3 id="production-concerns-what-turns-an-endpoint-into-a-service">Production concerns — what turns an endpoint into a service<a class="headerlink" href="#production-concerns-what-turns-an-endpoint-into-a-service" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Error handling</strong> — a consistent <em>problem+detail</em> shape with the right status code; catch exceptions
+  so the API <strong>never leaks a stack trace</strong> to clients (M25). A leaked trace hands attackers your file
+  paths and library versions.</li>
+<li><strong>Versioning</strong> — put the API under <code>/v1</code>; ship a breaking change as <code>/v2</code> while <code>/v1</code> keeps working, so
+  clients migrate on their <em>own</em> schedule. An API is a contract with consumers you don't control —
+  changing it in place breaks every one of them at once.</li>
+<li><strong>Pagination</strong> — a list endpoint returns <em>pages</em> (limit/offset or cursor), not a million rows — a
+  memory-and-latency bomb otherwise.</li>
+<li><strong>Rate limiting</strong> — cap requests per client (return <code>429</code>) to defend against abuse and DoS.</li>
+<li><strong>CORS</strong> (Cross-Origin Resource Sharing — the browser rule that blocks a page on one origin from
+  calling an API on another unless the API opts in) — allow cross-origin callers <em>deliberately</em>.</li>
+<li><strong>Observability</strong> — one structured log line per request (method, path, status, latency), the <strong>RED</strong>
+  metrics (Rate, Errors, Duration), and health/readiness probes (<code>/healthz</code>, <code>/readyz</code> — M19–20's
+  Kubernetes probes). <em>An API you can't observe you can't operate.</em> All of this rides on FastAPI's
+  auto-generated <strong>OpenAPI</strong> docs (OpenAPI/Swagger — the machine-readable API contract, served live at
+  <code>/docs</code>): the API documents itself.</li>
+</ul>
+<h3 id="rest-vs-the-alternatives-and-serving-a-model">REST vs the alternatives, and serving a model<a class="headerlink" href="#rest-vs-the-alternatives-and-serving-a-model" title="Permanent link">&para;</a></h3>
+<p><strong>REST</strong> is the default — resource-oriented, broadly interoperable, cacheable, simple. <strong>GraphQL</strong>
+(clients request exactly the fields they need in one query) fits flexible, client-driven front-ends;
+<strong>gRPC</strong> (fast binary RPC over HTTP/2) fits internal service-to-service where low latency and strict
+typed contracts beat browser-friendliness. Pick by need, not fashion. And the stage's punchline:
+<strong>serving a model is just putting a powerful new dish on the same well-run menu</strong> — a <code>/v1/predict</code>
+endpoint with a validated request schema (garbage → 422, not a crash), auth + rate limits, a latency/cost
+budget (M28), prediction monitoring for drift (M27/M34), model versioning, and integration tests (M35).
+The gap between "the model works in a notebook" and "the model is a reliable service" <em>is</em> this module.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>Resources are nouns, methods are verbs, status codes tell the truth, and the API is a contract.</strong></li>
+<li><strong>GET is safe &amp; idempotent; PUT/DELETE idempotent; POST neither</strong> — idempotency is what makes a retry safe.</li>
+<li><strong>Correct status code, always:</strong> <code>201</code> create · <code>404</code> missing · <code>422</code> validation · <code>401</code> no-token · <code>403</code> forbidden · never 200-with-an-error-body.</li>
+<li><strong>Never trust the client</strong> — validate at the boundary (Pydantic → 422); validation is a <em>security</em> boundary (M25).</li>
+<li><strong>authn (who) ≠ authz (what)</strong> — check object ownership too, or you have BOLA (OWASP #1). Hash passwords (M9).</li>
+<li><strong>Version to evolve</strong> (<code>/v1</code>, <code>/v2</code>) — an API is a promise to consumers you don't control.</li>
+<li><strong>Serving a model right is 90% not-the-model</strong> — validate · auth · rate-limit · monitor · version · test.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-a-real-crud-api">Guided Lab: a real CRUD API<a class="headerlink" href="#guided-lab-a-real-crud-api" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You build a real </em><em>REST API</em><em> with FastAPI — an <code>/items</code> resource with correct
+methods and status codes, Pydantic request validation, a token-protected route, and the auto-generated
+OpenAPI docs — then exercise it with <code>curl</code>.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-36" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-36" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then <code>apt-get update &amp;&amp; apt-get install -y python3-pip</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Install the bench</label><label for="__tabbed_1_2">2 · Design on paper, then write the API</label><label for="__tabbed_1_3">3 · Run it, then create + validate</label><label for="__tabbed_1_4">4 · Missing → 404, and the protected route</label><label for="__tabbed_1_5">5 · The API documents itself</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip<span class="w"> </span>install<span class="w"> </span>fastapi<span class="w"> </span>uvicorn<span class="w"> </span>httpx<span class="w">        </span><span class="c1"># web framework · ASGI server · HTTP client</span>
+</code></pre></div>
+<strong>FastAPI</strong> is the framework; <strong>uvicorn</strong> is the <strong>ASGI</strong> server (Asynchronous Server Gateway
+Interface — the standard that runs an async Python web app) that actually serves it; <strong>httpx</strong> is a
+client for hitting endpoints from scripts. All three go in one <code>pip install</code>.</p>
+</div>
+<div class="tabbed-block">
+<p>Design first (the Learner's Law): <code>GET /items</code> (list → 200), <code>POST /items</code> (create → <strong>201</strong>),
+<code>GET /items/{id}</code> (read → 200 or <strong>404</strong>), <code>DELETE /items/{id}</code> (remove → 200, <strong>token-protected</strong>).
+Bad input → <strong>422</strong> automatically. Now write it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/api-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cat<span class="w"> </span>&gt;<span class="w"> </span>~/api-lab/main.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">from fastapi import FastAPI, HTTPException, Depends, Header, status</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">from pydantic import BaseModel, Field</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">app = FastAPI(title=&quot;Items API&quot;, version=&quot;1.0.0&quot;)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">API_TOKEN = &quot;secret-token&quot;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">_items, _next = {}, {&quot;id&quot;: 1}</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">class ItemIn(BaseModel):            # the request contract (validated)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">    name: str = Field(min_length=1)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">    price: float = Field(gt=0)      # must be &gt; 0 — bad input -&gt; 422</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">class ItemOut(ItemIn):</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s">    id: int</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s">def require_token(authorization: str = Header(default=&quot;&quot;)):</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s">    if authorization != f&quot;Bearer {API_TOKEN}&quot;:     # authn: who are you?</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s">        raise HTTPException(status.HTTP_401_UNAUTHORIZED, &quot;missing or invalid token&quot;)</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s">@app.get(&quot;/items&quot;)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s">def list_items():</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="s">    return list(_items.values())</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="s">@app.post(&quot;/items&quot;, status_code=201, response_model=ItemOut)</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="s">def create_item(item: ItemIn):</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="s">    rec = {&quot;id&quot;: _next[&quot;id&quot;], **item.model_dump()}</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="s">    _items[_next[&quot;id&quot;]] = rec</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="s">    _next[&quot;id&quot;] += 1</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="s">    return rec</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="s">@app.get(&quot;/items/{item_id}&quot;, response_model=ItemOut)</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="s">def get_item(item_id: int):</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="s">    if item_id not in _items:</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="s">        raise HTTPException(404, &quot;item not found&quot;)   # correct code, not 200</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="s">    return _items[item_id]</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="s">@app.delete(&quot;/items/{item_id}&quot;)</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="s">def delete_item(item_id: int, _=Depends(require_token)):   # protected route</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="s">    if item_id not in _items:</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="s">        raise HTTPException(404, &quot;item not found&quot;)</span>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="s">    return {&quot;deleted&quot;: _items.pop(item_id)[&quot;id&quot;]}</span>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a><span class="s">PY</span>
+</code></pre></div>
+Read it top to bottom: the <strong>Pydantic</strong> model is the contract, the method+<code>status_code</code> set the verb
+and success code, <code>HTTPException</code> sets the correct failure code, and <code>Depends(require_token)</code> makes
+one route need a token.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>~/api-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>nohup<span class="w"> </span>uvicorn<span class="w"> </span>main:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span>&gt;/tmp/uvicorn.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">3</span>
+</code></pre></div>
+Create an item — expect <strong>201</strong> and a server-assigned <code>id</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/items<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;name&quot;:&quot;Widget&quot;,&quot;price&quot;:9.99}&#39;</span>
+</code></pre></div>
+Now send a <strong>bad body</strong> (price ≤ 0) — expect <strong>422</strong>, not a 500, and note the precise error FastAPI
+returns <em>without you writing a line of validation</em>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/items<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;name&quot;:&quot;&quot;,&quot;price&quot;:-5}&#39;</span>
+</code></pre></div>
+(If <code>curl</code> can't connect, check <code>/tmp/uvicorn.log</code>.) Click <strong>Check</strong> to verify create→201 and bad→422.</p>
+</div>
+<div class="tabbed-block">
+<p>A resource that isn't there is a <strong>404</strong>, never a 200:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-s<span class="w"> </span>http://localhost:8000/items/999999
+</code></pre></div>
+The <code>DELETE</code> route is <strong>protected</strong>. No token → <strong>401</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8000/items/1
+</code></pre></div>
+With the token → <strong>200</strong> (and it removes the item):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8000/items/1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer secret-token&#39;</span>
+</code></pre></div>
+Feel authn: the <em>same</em> request differs only by a header, and that header is the difference between
+401 and 200. Click <strong>Check</strong> to verify 404, 401-without-token, and 200-with-token.</p>
+</div>
+<div class="tabbed-block">
+<p>FastAPI generated the <strong>OpenAPI</strong> contract from your type hints — no extra work:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8000/openapi.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">400</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span>
+</code></pre></div>
+In a real browser, <code>http://localhost:8000/docs</code> is the interactive <strong>Swagger UI</strong> — every endpoint,
+its schema, and a "Try it out" button. That auto-doc is a first-class deliverable: the machine-readable
+contract other teams build against. Stop the server when done:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>pkill<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;uvicorn main:app&quot;</span>
+</code></pre></div></p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you designed the resource, built it with correct methods and status codes, watched Pydantic reject
+bad input with a 422, protected a route with a token, and read the auto OpenAPI docs — the guided lab
+is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Extend the <code>~/api-lab/main.py</code> you built. Struggle here is
+the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-add-put-with-the-right-semantics">Challenge 1 — Add <code>PUT</code> with the right semantics<a class="headerlink" href="#challenge-1-add-put-with-the-right-semantics" title="Permanent link">&para;</a></h3>
+<p>Add <code>PUT /items/{id}</code> that <strong>replaces</strong> an item entirely. Choose its success and not-found status codes,
+and state why <code>PUT</code> is idempotent while <code>POST</code> is not.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>PUT</code> targets a <em>known</em> URL and replaces what's there — calling it twice with the same body leaves
+the same result. Reuse <code>ItemIn</code> as the body and return the updated <code>ItemOut</code> (200), or <code>404</code> if the
+id is unknown.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/items/</span><span class="si">{item_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">ItemOut</span><span class="p">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">replace_item</span><span class="p">(</span><span class="n">item_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ItemIn</span><span class="p">):</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="k">if</span> <span class="n">item_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_items</span><span class="p">:</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;item not found&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">rec</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">,</span> <span class="o">**</span><span class="n">item</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()}</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">_items</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rec</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    <span class="k">return</span> <span class="n">rec</span>
+</code></pre></div>
+<code>PUT</code> is idempotent: replacing item 5 with the same body twice yields the same state as once. <code>POST</code>
+creates a <em>new</em> resource each call (a new id), so two <code>POST</code>s make two items — not idempotent.</p>
+</details>
+<h3 id="challenge-2-paginate-the-list">Challenge 2 — Paginate the list<a class="headerlink" href="#challenge-2-paginate-the-list" title="Permanent link">&para;</a></h3>
+<p><code>GET /items</code> currently returns everything. Add <code>limit</code> and <code>offset</code> <strong>query parameters</strong> (with sane
+defaults) so it returns a page. Why is an unbounded list endpoint a production hazard?</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Declare <code>limit: int = 20</code> and <code>offset: int = 0</code> as function parameters — FastAPI reads them from the
+query string automatically. Slice the list.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/items&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_items</span><span class="p">(</span><span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_items</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="n">offset</span> <span class="p">:</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">limit</span><span class="p">]</span>
+</code></pre></div>
+An unbounded list can return a million rows — blowing memory and latency for the server <em>and</em> the
+client. Pagination (limit/offset or cursor) bounds every response. <code>curl 'localhost:8000/items?limit=2'</code>.</p>
+</details>
+<h3 id="challenge-3-make-the-404-honest-under-a-fake-always-200-route">Challenge 3 — Make the 404 honest under a fake "always-200" route<a class="headerlink" href="#challenge-3-make-the-404-honest-under-a-fake-always-200-route" title="Permanent link">&para;</a></h3>
+<p>Add a <em>deliberately wrong</em> <code>GET /bad/{id}</code> that returns <code>200</code> with <code>{"error": "not found"}</code> for a missing
+item. Then explain, in one paragraph, everything that breaks — for clients, retries, caches, and
+monitoring — versus a real <code>404</code>.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/bad/</span><span class="si">{item_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">bad_get</span><span class="p">(</span><span class="n">item_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="k">if</span> <span class="n">item_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_items</span><span class="p">:</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;not found&quot;</span><span class="p">}</span>     <span class="c1"># WRONG: 200 for a failure</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="k">return</span> <span class="n">_items</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span>
+</code></pre></div>
+A client can't tell success from failure without parsing the body; automatic retry logic won't retry
+(it "succeeded"); a cache may cache the error; monitoring counts it as a healthy request, so the
+error rate reads zero while users see failures. The status code is a shared contract — lying in it
+makes the API dishonest and un-observable. The fix is the real <code>404</code> you already wrote.</p>
+</details>
+<h3 id="challenge-4-add-authorization-not-just-authentication">Challenge 4 — Add authorization, not just authentication<a class="headerlink" href="#challenge-4-add-authorization-not-just-authentication" title="Permanent link">&para;</a></h3>
+<p>The <code>DELETE</code> route checks a token (authn). Add a rule that only an <strong>admin</strong> token may delete, while a
+normal token may not — and name the OWASP risk you're defending against.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Give admins a different token (or a claim). In the dependency, distinguish "valid token" (authn) from
+"may delete" (authz) and return <strong>403</strong> — not 401 — when the caller is authenticated but not allowed.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">ADMIN_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;admin-token&quot;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">require_admin</span><span class="p">(</span><span class="n">authorization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)):</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="k">if</span> <span class="n">authorization</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">API_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">ADMIN_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;missing or invalid token&quot;</span><span class="p">)</span>     <span class="c1"># authn fail</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="k">if</span> <span class="n">authorization</span> <span class="o">!=</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">ADMIN_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;admin only&quot;</span><span class="p">)</span>                   <span class="c1"># authz fail</span>
+</code></pre></div>
+<code>401</code> = <em>who are you?</em> (not authenticated); <code>403</code> = <em>you're known but not allowed</em>. Without the object/
+role check you'd have <strong>BOLA</strong> (Broken Object-Level Authorization, OWASP API #1) — a logged-in user
+doing what only an admin should.</p>
+</details>
+<h3 id="challenge-5-stretch-version-a-breaking-change">Challenge 5 (stretch) — Version a breaking change<a class="headerlink" href="#challenge-5-stretch-version-a-breaking-change" title="Permanent link">&para;</a></h3>
+<p>Suppose you must rename <code>name</code> to <code>title</code> in the response. Do it <strong>without breaking existing clients</strong>.
+Sketch the routing that lets old and new clients coexist, and state the one rule you must never violate.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Freeze the current API under <code>/v1</code> (still returns <code>name</code>) and add <code>/v2</code> returning <code>title</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">v1</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/v1&quot;</span><span class="p">);</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/v2&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># v1 routes return {&quot;name&quot;: ...}; v2 routes return {&quot;title&quot;: ...}</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">v1</span><span class="p">);</span> <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+</code></pre></div>
+The never-violate rule: <strong>never change <code>/v1</code> in place</strong> once clients depend on it. A breaking change
+ships as a new version; the old one keeps working until consumers migrate on their own schedule —
+because an API is a contract with clients you don't control.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Name the five main HTTP methods and what each does — which are safe, which idempotent?</summary>
+<p><strong>GET</strong> (read — safe &amp; idempotent), <strong>POST</strong> (create — neither), <strong>PUT</strong> (replace — idempotent),
+<strong>PATCH</strong> (partial update — not necessarily idempotent), <strong>DELETE</strong> (remove — idempotent). <em>Safe</em> =
+no side effects; <em>idempotent</em> = repeating it has the same effect as once — which is what makes a
+retry safe.</p>
+</details>
+<details class="question">
+<summary>A client omits a required field. What should the API return, and why not a 500?</summary>
+<p>A <strong>422</strong> (Unprocessable Entity) or <strong>400</strong> — a <em>client</em> error, because the client sent invalid data.
+Not a <strong>500</strong>: 500 means the <em>server</em> failed, which misattributes blame, misleads monitoring (a spike
+of "server errors" that are really bad requests), and can trigger inappropriate retries.</p>
+</details>
+<details class="question">
+<summary>Why is returning 200 with <code>{\"error\": \"not found\"}</code> wrong?</summary>
+<p>The status code is the contract every client, proxy, and monitor relies on <em>without parsing the body</em>.
+A 200-for-a-failure means clients can't tell success from failure, retries misfire, caches cache
+errors, and monitoring can't count the error rate. Return the real <strong>404</strong>.</p>
+</details>
+<details class="question">
+<summary>authn vs authz — and what is BOLA?</summary>
+<p><strong>Authentication</strong> = verifying <em>who you are</em> (login/token). <strong>Authorization</strong> = verifying <em>what you
+may do</em> (roles/scopes/ownership). <strong>BOLA</strong> (Broken Object-Level Authorization, OWASP API #1) is authn
+<em>without</em> object-level authz: a logged-in user reaches another user's data by changing an id, because
+the endpoint never checked ownership.</p>
+</details>
+<details class="question">
+<summary>Why never trust client input, and what does validation defend against?</summary>
+<p>The client is outside your control and may send malformed or malicious data. Validation (Pydantic →
+422) rejects it at the boundary, defending against crashes, injection (SQL/command — M33/M25), and
+corruption. Input is hostile until proven valid — validation is a <strong>security boundary</strong>.</p>
+</details>
+<details class="question">
+<summary>Why version an API, and how?</summary>
+<p>Because an API is a contract with consumers you don't control; changing it in place breaks every
+client at once. Ship breaking changes as a new version (<code>/v2</code>) while the old one (<code>/v1</code>) keeps
+working, so clients migrate on their own schedule.</p>
+</details>
+<details class="question">
+<summary>You must ship a model as a real endpoint. List the concerns beyond <code>model.predict()</code>.</summary>
+<p>A validated request schema (bad → 422, not a crash); auth + rate limiting (not open to the world);
+a latency/cost budget with batching/async (M28); prediction monitoring for drift (M27/M34); model
+versioning (<code>/v1/predict</code>); consistent error handling; a health probe (M19–20); and integration tests
+(M35). That gap <em>is</em> the module.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>3 minutes, no notes</strong>: <em>"What is a REST API and why is it more than returning JSON?"</em>
+Lead with the <strong>restaurant-menu</strong> analogy (the menu + waiter, not the kitchen), then name
+resources/methods/status-codes as a <strong>contract</strong>. Then, in <strong>90 seconds</strong>, answer a skeptic: <em>"can't
+we add auth and versioning later?"</em> — say why both are <strong>architectural</strong> (retrofitting auth is
+dangerous; re-versioning after clients depend on you breaks them). If you can't yet, reread the Key
+Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M36 also closes </em><em>Stage 12</em><em>
+(Data &amp; Software Engineering). A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> HTTP's request/response model and why statelessness scales (M19–20).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> RESTful resources (nouns) and choose the correct method — and explain safe vs idempotent.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Choose</strong> the correct status code for any outcome (201/204/400/401/403/404/409/422/429/500).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Build</strong> a FastAPI endpoint with path/query params and JSON, and read its auto OpenAPI docs.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Validate</strong> requests with Pydantic — bad input returns 422, not 500 — and say why validation is a security boundary.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Separate</strong> the API model from the database model (M33) and explain the boundary.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Structure</strong> the backend in layers (routes → services → data) with dependency injection (M35 design-for-change).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> authentication (token/JWT), hash passwords (M9), and add authorization without BOLA.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Handle</strong> errors consistently (problem+detail, right code, no leaked stack traces).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Version</strong> an API (<code>/v1</code>→<code>/v2</code>) so a breaking change never breaks existing clients.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Add</strong> pagination and rate limiting, and configure CORS deliberately.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compare</strong> REST, GraphQL, and gRPC and pick by need; walk three OWASP API Top-10 risks against your API.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Instrument</strong> the API — one log line per request, RED metrics, <code>/healthz</code>/<code>/readyz</code> (M19–20).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Serve</strong> a model as a hardened API (validate/auth/rate-limit/monitor/version/test) — the stage synthesis.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Test</strong> endpoints with integration tests (httpx/TestClient — M35): assert status + body.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (menu analogy + "add security later" dismantled).</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. <strong>Interleaving is active</strong> —
+every M36 review also pulls in one Module 35 item (the API is built <strong>test-first</strong>, reviewed in a small
+PR, and the <em>definition of done</em> gates it — process is what makes it a service, not a script). Schedule
+these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M35 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards 1–20 · design CRUD endpoints for a fresh domain cold (methods + status codes)</td>
+<td>Write one failing test first, then make it pass (red→green)</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>The three cases · add validation + correct status codes to an endpoint</td>
+<td>Explain the test pyramid (unit vs integration vs e2e)</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Reproduce the full Visual Model blank · add JWT auth + a <code>/v2</code> version to an API</td>
+<td>Review a small PR against a definition-of-done checklist</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Wrap a model in a hardened endpoint (validate/auth/rate-limit/monitor/test)</td>
+<td>Refactor under a green test suite without changing behavior</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Reproduce both artifacts (REST API + model service) from scratch</td>
+<td>Turn a vague ask into written requirements + acceptance criteria</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> Cloud Platforms (M37 — this containerized API and model deployed to a cloud
+provider's managed compute and AI services; the observability becomes cloud monitoring; the database
+becomes a managed database) · the <strong>capstone</strong> — a served model over a database, professionally built,
+which <em>is</em> this API done right. <strong>Stage 12 (Data &amp; Software Engineering) is complete</strong> — data (M33),
+scale (M34), process (M35), and the interface (M36): a full data-backed-service capability.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M33 built the store, M34 scaled it, M35 made the process trustworthy — M36 is the <strong>interface</strong>: a
+REST API, validated and secured and versioned and observable, exposing a system to the world, with a
+served model as its capstone dish.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-35/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 35 — Software Engineering Practice">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 35 — Software Engineering Practice
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../stage-13/module-37/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 37 — Cloud Platforms &amp; Certification">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 37 — Cloud Platforms & Certification
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

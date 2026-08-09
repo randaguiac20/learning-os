@@ -1,0 +1,3438 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A beginner-to-expert journey through Linux, systems, containers, Kubernetes, and AI infrastructure — video + standalone notes + runnable labs, free and public.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-24/">
+      
+      
+        <link rel="next" href="../../stage-10/module-26/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 25 — Observability - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-25-observability" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 25 — Observability
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-three-signals-choose-by-the-question" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three signals — choose by the question
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-watchtower-how-the-signals-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Watchtower — how the signals flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-four-golden-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four golden signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-four-metric-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four metric types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cardinality-the-loaded-gun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cardinality — the loaded gun
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sli-slo-error-budgets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLI / SLO / error budgets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-alert-law-the-modules-moral-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The alert law — the module's moral core
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-stand-up-a-real-prometheus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: stand up a real Prometheus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-the-traps-and-the-alert-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: the traps and the alert law
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: the traps and the alert law">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-absent-metric-trap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The absent-metric trap
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-counter-reset-attack-or-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Counter reset: attack or artifact?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-cardinality-bomb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The cardinality bomb
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-one-lawful-alert-and-one-deletion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — One lawful alert, and one deletion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-who-watches-the-watchtower" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Who watches the watchtower?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-three-signals-choose-by-the-question" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three signals — choose by the question
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-watchtower-how-the-signals-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Watchtower — how the signals flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-four-golden-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four golden signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-four-metric-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four metric types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cardinality-the-loaded-gun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cardinality — the loaded gun
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sli-slo-error-budgets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLI / SLO / error budgets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-alert-law-the-modules-moral-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The alert law — the module's moral core
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-stand-up-a-real-prometheus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: stand up a real Prometheus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-the-traps-and-the-alert-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: the traps and the alert law
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: the traps and the alert law">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-the-absent-metric-trap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — The absent-metric trap
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-counter-reset-attack-or-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Counter reset: attack or artifact?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-the-cardinality-bomb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — The cardinality bomb
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-one-lawful-alert-and-one-deletion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — One lawful alert, and one deletion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-who-watches-the-watchtower" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Who watches the watchtower?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-25-observability">Module 25 — Observability<a class="headerlink" href="#module-25-observability" title="Permanent link">&para;</a></h1>
+<p><small>Stage 9 · Professional Workflows · ~2 weeks at 4 h/day · Prerequisites — Module 23 (the requirements doc you wrote) and Module 24 (the Fortress this Watchtower now guards).</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Observability</strong> is the property of a system that lets you answer questions about its internal state
+from its external outputs — <strong>without shipping new code to ask</strong>. Its raw materials are three signals:
+<strong>metrics</strong> (cheap numeric time series — <em>what</em> and <em>how much</em>), <strong>logs</strong> (discrete structured events —
+<em>what exactly</em> happened), and <strong>traces</strong> (a request's journey across components — <em>where</em> the time
+went). <em>Operations</em> is the practice built on top: dashboards that answer questions, alerts that demand
+actions, runbooks that make 3 a.m. survivable.</p>
+<p>You wrote the requirements for this module yourself. In Module 23 every gauntlet scenario got a
+postscript — <em>"what dashboard or alert would have caught this in 30 seconds?"</em> This module <strong>builds
+those answers.</strong> The defining test, inherited from M23: <strong>"what changed?" answered from a screen in 30
+seconds, not from an <code>ssh</code> session in 30 minutes.</strong> And it teaches the discipline's hard half — which is
+not installing Prometheus (that's an afternoon) but <strong>alert quality</strong>: the alert that wakes you must be
+actionable, symptom-based, and runbooked, because the alternative is the fatigue that let 97 unread
+warnings drown at Knight Capital.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>This is the Watchtower that completes Stage 9's medieval city — walls (M24) without watchmen are
+archaeology. It industrializes M23's OBSERVE stage (the first-five-minutes protocol becomes a
+Grafana tab) and gives M24's Fortress eyes (audit scores graphed, auth anomalies alerted). Forward:
+M26–M28 put <strong>new numbers</strong> on the same boards — training-loss curves, token throughput, GPU
+saturation are just new tenants; M29 traces agent runs; the <strong>capstone inherits the whole
+Watchtower.</strong> Learn the laws here and every later system just reports in.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 25 — Observability&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Analogy / Visual Model / Misconceptions):
+the three signals by their <strong>economics</strong> (tally board vs gate ledger vs the numbered flag on one
+cart) → the four <strong>golden signals</strong> → the <strong>pull model</strong> and why the scrape list is an inventory →
+<strong>alert fatigue as a mechanism</strong> (Knight's 97 emails, the two-bell code) → the <strong>watch loop</strong>
+(instrument → graph → alert → drill → tune) and why an alert that never fired in a drill is a
+hypothesis, not a control.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-stand-up-a-real-prometheus">Guided Lab</a> in a browser terminal and run each
+command yourself as it appears. You will start a real Prometheus, scrape a real target, and query it
+over the HTTP API — typing beats watching every time, and it is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-three-signals-choose-by-the-question">The three signals — choose by the question<a class="headerlink" href="#the-three-signals-choose-by-the-question" title="Permanent link">&para;</a></h3>
+<p>Ship all three from one instrument (OpenTelemetry) when you can; but know which answers which question,
+because their <strong>economics</strong> differ:</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Cost</th>
+<th>Precision</th>
+<th>Answers</th>
+<th>Reach for it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Metrics</strong></td>
+<td>cheap, pre-aggregated</td>
+<td>low (you chose the questions in advance)</td>
+<td><em>what</em> / <em>how much</em> — trends</td>
+<td>you need a cheap, always-on number to detect and alert on</td>
+</tr>
+<tr>
+<td><strong>Logs</strong></td>
+<td>expensive, linear forever</td>
+<td>exact — one event per line</td>
+<td><em>what exactly</em> happened</td>
+<td>you need the precise event after the fact (usernames, IPs, the error)</td>
+</tr>
+<tr>
+<td><strong>Traces</strong></td>
+<td>sampled, cross-service</td>
+<td>per-request</td>
+<td><em>where</em> the time/failure was</td>
+<td>a request crossed components and you must find which hop lost the 800 ms</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The signal ladder for a mystery: metric <em>detects</em> → trace <em>localizes</em> → log <em>identifies</em>.</strong> Smell,
+then component, then event. Reaching for <code>grep</code> first is the expensive habit this module retires.</p>
+<h3 id="the-watchtower-how-the-signals-flow">The Watchtower — how the signals flow<a class="headerlink" href="#the-watchtower-how-the-signals-flow" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph Sources["Sources — what emits signals"]
+        App["Netscope app&lt;br/&gt;metrics · logs · traces"]
+        Host["Host&lt;br/&gt;node_exporter (USE)"]
+        Audit["Audit fleet&lt;br/&gt;Lynis · trivy · authlog"]
+    end
+    subgraph Collect["Collection"]
+        Prom["Prometheus&lt;br/&gt;pull-scrapes /metrics"]
+        Jrnl["journald&lt;br/&gt;structured logs"]
+        OTel["OpenTelemetry&lt;br/&gt;trace spans"]
+    end
+    subgraph Consume["Consumption — the answers"]
+        Dash["Grafana dashboards&lt;br/&gt;golden row then layers"]
+        Alert["Alertmanager&lt;br/&gt;page vs ticket"]
+    end
+    App --&gt; Prom
+    Host --&gt; Prom
+    Audit --&gt; Prom
+    App --&gt; Jrnl
+    App --&gt; OTel
+    Prom --&gt; Dash
+    Prom --&gt; Alert
+    Jrnl --&gt; Dash
+    OTel --&gt; Dash</code></pre>
+<p>Prometheus <strong>pulls</strong> — it reaches out and scrapes each target's <code>/metrics</code> endpoint on a timer. The
+operational consequence: targets are <strong>enumerable</strong>, so <strong>the scrape list IS an inventory</strong> (M24's
+attack-surface enumeration, now automated). A target you forgot to scrape is a service you forgot you
+ran — and <code>up</code> (is this target reachable?) comes free with every scrape.</p>
+<h3 id="the-four-golden-signals">The four golden signals<a class="headerlink" href="#the-four-golden-signals" title="Permanent link">&para;</a></h3>
+<p>The four questions that cover any request-serving system (the SRE book's monitoring chapter — this
+module's canon). Their cousins: <strong>USE</strong> for resources (M21 — utilization/saturation/errors) and <strong>RED</strong>
+for services (rate/errors/duration).</p>
+<table>
+<thead>
+<tr>
+<th>Golden signal</th>
+<th>The question</th>
+<th>Example PromQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td>how long do requests take (especially the tail)?</td>
+<td><code>histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))</code></td>
+</tr>
+<tr>
+<td><strong>Traffic</strong></td>
+<td>how much demand is arriving?</td>
+<td><code>rate(http_requests_total[5m])</code></td>
+</tr>
+<tr>
+<td><strong>Errors</strong></td>
+<td>what fraction is failing?</td>
+<td><code>rate(http_requests_total{code=~"5.."}[5m]) / rate(http_requests_total[5m])</code></td>
+</tr>
+<tr>
+<td><strong>Saturation</strong></td>
+<td>how full is the most-constrained resource?</td>
+<td><code>node_load1 / count(node_cpu_seconds_total{mode="idle"})</code></td>
+</tr>
+</tbody>
+</table>
+<p>Average latency hides the users having the worst day; <strong>p99 is user empathy in math</strong> — at 100
+requests, p99 <em>is</em> someone, every second.</p>
+<h3 id="the-four-metric-types">The four metric types<a class="headerlink" href="#the-four-metric-types" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>What it is</th>
+<th>Example</th>
+<th>How you query it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Counter</strong></td>
+<td>only ever goes up (and resets to 0 on restart)</td>
+<td><code>http_requests_total</code></td>
+<td>always via <code>rate()</code> — never raw</td>
+</tr>
+<tr>
+<td><strong>Gauge</strong></td>
+<td>a value that goes up and down</td>
+<td><code>in_flight_requests</code>, <code>node_memory_free_bytes</code></td>
+<td>read directly, <code>avg</code>/<code>max</code> over time</td>
+</tr>
+<tr>
+<td><strong>Histogram</strong></td>
+<td>bucketed observations (client-side buckets)</td>
+<td><code>http_request_duration_seconds</code></td>
+<td><code>histogram_quantile()</code> on the <code>_bucket</code> series</td>
+</tr>
+<tr>
+<td><strong>Summary</strong></td>
+<td>pre-computed quantiles (client-side)</td>
+<td>request-size summary</td>
+<td>read the quantile series directly (can't re-aggregate)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why <code>rate()</code> exists — raw counters lie twice.</strong> The absolute value reflects <em>uptime</em>, not current
+behaviour; and a restart resets the counter to zero, which reads as a crash. <code>rate()</code> differentiates
+over a window and <strong>absorbs resets</strong>, giving you the per-second truth. The classic bug is <code>sum</code> <strong>before</strong>
+<code>rate</code> — that aggregates away the resets. Always <code>rate()</code> first, then aggregate.</p>
+<h3 id="cardinality-the-loaded-gun">Cardinality — the loaded gun<a class="headerlink" href="#cardinality-the-loaded-gun" title="Permanent link">&para;</a></h3>
+<p>Every unique <strong>label combination</strong> is a stored time series, and memory/storage scale with the series
+count — which is the <strong>product</strong> of each label's distinct values. A <code>user_id</code> label turns one series
+into a million.</p>
+<div class="admonition warning">
+<p class="admonition-title">The cardinality law</p>
+<p><strong>Labels are for DIMENSIONS you aggregate over</strong> (endpoint, status, instance) — <strong>never for
+identities</strong> (user ID, request ID, full path). Identity-level questions belong to <strong>logs</strong>
+(searchable) and <strong>traces</strong> (per-request), which are built for high cardinality. Detection by
+dimension; identification by log.</p>
+</div>
+<h3 id="sli-slo-error-budgets">SLI / SLO / error budgets<a class="headerlink" href="#sli-slo-error-budgets" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>SLI</strong> — the <em>measured</em> signal (e.g. fraction of checks completing successfully under a latency
+  bound: good events / total).</li>
+<li><strong>SLO</strong> — the SLI's <em>target with a time window</em> (e.g. 99% over a rolling 7 days). Choose the objective
+  <strong>after measuring current truth</strong> — an objective you already miss is an aspiration, not an objective.</li>
+<li><strong>Error budget</strong> — the allowed failure (1 − SLO). You alert on <strong>burn rate</strong> (how fast the budget is
+  being consumed): <strong>fast burn pages, slow burn tickets.</strong></li>
+</ul>
+<h3 id="the-alert-law-the-modules-moral-core">The alert law — the module's moral core<a class="headerlink" href="#the-alert-law-the-modules-moral-core" title="Permanent link">&para;</a></h3>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only six things):</strong></p>
+<ol>
+<li><strong>Three signals, three questions:</strong> metric <em>detects</em> (cheap), trace <em>localizes</em> (where), log <em>identifies</em> (exact). No single one is cheap, exact, AND cross-component.</li>
+<li><strong>The golden signals:</strong> latency · traffic · errors · saturation — the symptom row, always first on the dashboard.</li>
+<li><strong>Prometheus pulls.</strong> Time series = <strong>name + label set</strong>; the scrape list is an <strong>inventory</strong>; <code>up</code> is free. Query counters with <strong><code>rate()</code> first</strong>, then aggregate.</li>
+<li><strong>The alert law:</strong> every alert <strong>symptom-based · actionable · runbooked · honest severity.</strong> The dividing question: <strong>"must a human act NOW?"</strong> — yes → alert; no → dashboard.</li>
+<li><strong>Alert fatigue is a mechanism, not an annoyance.</strong> Every non-actionable ring trains people to ignore rings. Knight's 97 emails were "everything" alerted; the real one drowned. Delete bells until every ring means <em>run</em>.</li>
+<li><strong>The drill law:</strong> an alert that never fired in a drill is a <strong>hypothesis, not a control</strong> — inject the failure, time the bell (M23's restore-law, applied to detection).</li>
+</ol>
+</div>
+<p><strong>Dashboards are pre-answered questions</strong>, designed top-down: golden-signals row first (the symptom
+row), then drill-down rows per layer (M23's matrix as tab order). The anti-pattern is the wall of
+every-metric-we-have — <em>a dashboard nobody can read is a log file with colours.</em> And the <strong>stack is
+code</strong>: scrape configs, recording/alert rules, and dashboard JSON live in the repo — the bench rebuilds
+from files (M15's law).</p>
+<hr />
+<h2 id="guided-lab-stand-up-a-real-prometheus">Guided Lab: stand up a real Prometheus<a class="headerlink" href="#guided-lab-stand-up-a-real-prometheus" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You will obtain the real Prometheus binary, run a target that exposes <code>/metrics</code>,
+write a scrape config, start Prometheus, and query it over the HTTP API. Everything lives in a throwaway
+<code>~/obs-lab/</code> sandbox; nothing outside it is touched.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-25" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-25" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Get a real Prometheus</label><label for="__tabbed_1_2">2 · Run a target that exposes /metrics</label><label for="__tabbed_1_3">3 · Write the scrape config</label><label for="__tabbed_1_4">4 · Start Prometheus and query the API</label><label for="__tabbed_1_5">5 · A golden-signal query, then reason about an alert</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Build the sandbox, then fetch the static Prometheus binary (no dependencies — one tarball). If the
+download is flaky, the package manager is the fallback:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/obs-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/obs-lab
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">VER</span><span class="o">=</span><span class="m">2</span>.53.0
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>-o<span class="w"> </span>prom.tar.gz<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="s2">&quot;https://github.com/prometheus/prometheus/releases/download/v</span><span class="si">${</span><span class="nv">VER</span><span class="si">}</span><span class="s2">/prometheus-</span><span class="si">${</span><span class="nv">VER</span><span class="si">}</span><span class="s2">.linux-amd64.tar.gz&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>--strip-components<span class="o">=</span><span class="m">1</span><span class="w"> </span>-xzf<span class="w"> </span>prom.tar.gz<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="o">||</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>prometheus<span class="p">;</span><span class="w"> </span><span class="o">}</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>./prometheus<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./prometheus<span class="w"> </span>--version<span class="w"> </span><span class="o">||</span><span class="w"> </span>prometheus<span class="w"> </span>--version
+</code></pre></div>
+You now have a <code>prometheus</code> binary. It is one static executable — the whole "monitoring stack" is an
+afternoon; the <em>discipline</em> is the module.</p>
+</div>
+<div class="tabbed-block">
+<p>Prometheus scrapes HTTP endpoints that speak its text format. Write a tiny app (Python stdlib only —
+always available) that exposes a <strong>counter</strong> and a <strong>gauge</strong>, then start it in the background:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/obs-lab/app.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">import http.server, time</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">reqs = 0</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">class H(http.server.BaseHTTPRequestHandler):</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">    def do_GET(self):</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">        global reqs</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">        reqs += 1</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">        body = (</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">            &quot;# HELP app_requests_total Requests handled\n&quot;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">            &quot;# TYPE app_requests_total counter\n&quot;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">            f&quot;app_requests_total {reqs}\n&quot;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">            &quot;# HELP app_up App self-health\n&quot;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">            &quot;# TYPE app_up gauge\n&quot;</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s">            &quot;app_up 1\n&quot;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s">        ).encode()</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s">        self.send_response(200)</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s">        self.send_header(&quot;Content-Type&quot;, &quot;text/plain; version=0.0.4&quot;)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s">        self.end_headers(); self.wfile.write(body)</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s">    def log_message(self, *a): pass</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s">http.server.HTTPServer((&quot;127.0.0.1&quot;, 8000), H).serve_forever()</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s">PY</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>nohup<span class="w"> </span>python3<span class="w"> </span>~/obs-lab/app.py<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>sleep<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8000/metrics
+</code></pre></div>
+Read that output — <strong>this is what an exporter actually says</strong>: a <code># HELP</code>/<code># TYPE</code> header, then
+<code>name{labels} value</code> lines. Each <code>curl</code> increments the counter.</p>
+</div>
+<div class="tabbed-block">
+<p>Prometheus reads a <code>prometheus.yml</code>. Declare a global scrape interval and <strong>two jobs</strong>: Prometheus
+scraping itself, and your app. The <code>job</code> label is a dimension you will aggregate by later:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/obs-lab/prometheus.yml<span class="w"> </span><span class="s">&lt;&lt;&#39;YML&#39;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s">global:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">  scrape_interval: 5s</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">scrape_configs:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s">  - job_name: prometheus</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">    static_configs:</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">      - targets: [&quot;localhost:9090&quot;]</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">  - job_name: metrics-app</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">    static_configs:</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s">      - targets: [&quot;localhost:8000&quot;]</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s">YML</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>cat<span class="w"> </span>~/obs-lab/prometheus.yml
+</code></pre></div>
+This file <strong>is</strong> the inventory: every service Prometheus knows about is listed here. Click <strong>Check</strong>
+to verify the config declares the <code>metrics-app</code> job.</p>
+</div>
+<div class="tabbed-block">
+<p>Start Prometheus against your config (in the background), give it a few seconds to scrape, then ask
+it the most fundamental question — <strong>which targets are up?</strong> — over the HTTP query API:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>~/obs-lab
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">PROM</span><span class="o">=</span>./prometheus<span class="p">;</span><span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span><span class="nv">$PROM</span><span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">PROM</span><span class="o">=</span>prometheus
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>nohup<span class="w"> </span><span class="nv">$PROM</span><span class="w"> </span>--config.file<span class="o">=</span>prometheus.yml<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sleep<span class="w"> </span><span class="m">8</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;localhost:9090/api/v1/query?query=up&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">600</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span>
+</code></pre></div>
+Each target reports <code>up</code> = <code>1</code> (reachable) or <code>0</code> (down). <code>up</code> is the cheapest, most important series
+you own. Click <strong>Check</strong> to verify Prometheus is running and a target is <code>up == 1</code>.</p>
+</div>
+<div class="tabbed-block">
+<p>Generate some traffic, then ask a real golden-signal question — <strong>traffic</strong>, as a per-second rate off
+the counter:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">20</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8000/metrics<span class="w"> </span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;localhost:9090/api/v1/query?query=rate(app_requests_total[1m])&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">400</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span>
+</code></pre></div>
+<code>rate()</code> turns the ever-climbing counter into "requests per second right now" — and would survive an
+app restart (it absorbs the reset). Now <strong>reason about an alert</strong> without writing YAML yet:</p>
+<blockquote>
+<p>If <code>app_up == 0</code> for 1 minute, is that page-worthy or ticket-worthy? Apply the dividing question —
+<em>must a human act NOW?</em> A single-instance app being down and user-facing → <strong>page</strong>. Note also the
+<strong>absent-metric trap</strong>: if the target vanishes entirely, a threshold on <code>app_up</code> never evaluates —
+which is why you alert on <strong><code>up == 0</code></strong> (absence itself), not only on the value.</p>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you started a real Prometheus, scraped a target you wrote, saw <code>up == 1</code> over the query API, and
+wrote one <code>rate()</code> golden-signal query — the guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-the-traps-and-the-alert-law">Solo Lab: the traps and the alert law<a class="headerlink" href="#solo-lab-the-traps-and-the-alert-law" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Keep the Guided Lab's stack running in <code>~/obs-lab/</code>. These
+are the traps the curriculum plants and the discipline that separates a monitored system from an
+observable one. Struggle here is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-the-absent-metric-trap">Challenge 1 — The absent-metric trap<a class="headerlink" href="#challenge-1-the-absent-metric-trap" title="Permanent link">&para;</a></h3>
+<p>Stop your app, wait for the next scrape, and prove — from the query API — that the target is now down.
+Then state the alert expression that would catch it, and why a threshold on <code>app_up</code> alone would <strong>not</strong>.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>up{job="metrics-app"}</code> is the free liveness series. Kill the app process; re-query <code>up</code>. If the
+metric is <em>gone</em> rather than <em>bad</em>, what can a <code>&gt;</code> / <code>&lt;</code> threshold on it evaluate?</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pkill<span class="w"> </span>-f<span class="w"> </span>obs-lab/app.py
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sleep<span class="w"> </span><span class="m">8</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;localhost:9090/api/v1/query?query=up{job=&quot;metrics-app&quot;}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">400</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span>
+</code></pre></div>
+<code>up</code> for the app flips to <code>0</code> (Prometheus tried to scrape and failed). The standing alert is
+<strong><code>up == 0</code></strong> — because when a target disappears, <code>app_up</code> returns <em>no data</em>, and a threshold can't
+fire on data that isn't there. <strong>Absence needs its own alert.</strong> (Restart the app for the next
+challenges: <code>nohup python3 ~/obs-lab/app.py &gt;/dev/null 2&gt;&amp;1 &amp;</code>)</p>
+</details>
+<h3 id="challenge-2-counter-reset-attack-or-artifact">Challenge 2 — Counter reset: attack or artifact?<a class="headerlink" href="#challenge-2-counter-reset-attack-or-artifact" title="Permanent link">&para;</a></h3>
+<p>Restart your app so the counter falls off a cliff to zero. Show, in one query, that <code>rate()</code> reads
+<em>across</em> the reset without reporting a giant negative spike — and state the discriminating check for
+"cliff at 03:00: attack or artifact?"</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Raw <code>app_requests_total</code> drops to 0 on restart; <code>rate(...[1m])</code> is designed to absorb exactly that.
+What real-world evidence (a process metric, a journald line) distinguishes a restart from an attack?</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pkill<span class="w"> </span>-f<span class="w"> </span>obs-lab/app.py<span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span>nohup<span class="w"> </span>python3<span class="w"> </span>~/obs-lab/app.py<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sleep<span class="w"> </span><span class="m">8</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;localhost:9090/api/v1/query?query=rate(app_requests_total[1m])&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">300</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span>
+</code></pre></div>
+The raw counter cliffs to zero; <code>rate()</code> treats the drop as a reset and keeps reporting sane
+per-second values. <strong>A cliff-then-climb is <em>most likely</em> an artifact (a restart).</strong> Discriminating
+check: process start-time / uptime metric or journald at that timestamp — restart evidence. No
+restart evidence? <em>Now</em> investigate (the fork's honesty: verify, don't assume).</p>
+</details>
+<h3 id="challenge-3-the-cardinality-bomb">Challenge 3 — The cardinality bomb<a class="headerlink" href="#challenge-3-the-cardinality-bomb" title="Permanent link">&para;</a></h3>
+<p>Reason precisely: a teammate wants to add <code>request_id</code> as a metric label "so we can debug per-user
+issues." State what happens to the series count, the instrument that would show it, the reversal, and
+the correct alternative that still lets you debug per-user.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Series count = the product of each label's distinct values. What is the cardinality of <code>request_id</code>?
+Which series does Prometheus expose about its own head block?</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><code>request_id</code> has <strong>unbounded</strong> cardinality — every request is a new value, so one series becomes
+millions; Prometheus holds series indexes in memory, so memory explodes. The instrument:
+<code>prometheus_tsdb_head_series</code> (or the TSDB status page) — watch it jump. Reversal: <strong>remove the label
+at the instrument</strong> and let the old series go stale. The correct alternative: <strong>keep metrics
+aggregated</strong> (per-endpoint error rate detects that <em>someone</em> is failing), put the <code>request_id</code>/user
+in <strong>structured logs and trace attributes</strong>. Detection by dimension, identification by log — the
+cardinality law.</p>
+</details>
+<h3 id="challenge-4-one-lawful-alert-and-one-deletion">Challenge 4 — One lawful alert, and one deletion<a class="headerlink" href="#challenge-4-one-lawful-alert-and-one-deletion" title="Permanent link">&para;</a></h3>
+<p>Write, in words (condition · duration · severity · runbook's first three probes), the alert for
+"Netscope is failing its checks." Then take a <strong>cause-based CPU alert</strong> ("CPU &gt; 90%") and argue it <em>out
+loud</em> into deletion.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The alert law: symptom-based, actionable, runbooked, honest severity. The deletion argument is a
+single question: <em>"when this fires, what do I DO?"</em></p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><strong>The alert:</strong> <em>Condition</em> — check error ratio over 5 m above the SLO-derived threshold (e.g. &gt; 5%);
+<em>duration</em> — sustained 5 m (filters blips); <em>severity</em> — page if user-facing/SLO-burning, ticket if
+redundancy holds; <em>runbook first three (matrix-ordered)</em> — (1) dashboard: all targets failing or
+some? (2) <code>up</code>/scrape health + Netscope's structured logs (correlation IDs); (3) the M23
+first-five sweep on the implicated layer. <strong>The deletion:</strong> "CPU &gt; 90%" is a <em>cause</em>, not a symptom —
+a batch job at 90% is fine, and users hurting at 30% is missed. Ask "when it fires, what do I do?" —
+"look at whether it matters" — which means it's a <strong>dashboard panel</strong>, not a page. Delete it; the
+information moves to the saturation row where it belongs.</p>
+</details>
+<h3 id="challenge-5-stretch-who-watches-the-watchtower">Challenge 5 (stretch) — Who watches the watchtower?<a class="headerlink" href="#challenge-5-stretch-who-watches-the-watchtower" title="Permanent link">&para;</a></h3>
+<p>Your Prometheus watches your bench <em>from inside it</em>. Name the failure this shares with the 2017 AWS S3
+outage, and design the minimal fix.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>The <strong>S3 trap</strong>: the status dashboard depended on S3, so it couldn't show red when S3 died — you
+must <strong>monitor from outside the failure domain.</strong> At home scale: run the checker on a <strong>second
+device</strong> (an old laptop, a Pi, a phone via Termux) that probes the bench's endpoints and consumes a
+<strong>dead-man's switch</strong> — an always-firing heartbeat whose <em>silence</em> is the alarm — over a channel that
+doesn't depend on the bench. The residual (what watches the second device? <em>nothing</em>) is stated and
+accepted; its simplicity is the design argument.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Name the three signals with each one's economics and the question it answers.</summary>
+<p><strong>Metrics</strong> — cheap, pre-aggregated; answer <em>what / how much</em> (trends, chosen in advance).
+<strong>Logs</strong> — expensive, exact, discrete events; answer <em>what exactly</em> happened, after the fact.
+<strong>Traces</strong> — sampled, cross-component; answer <em>where</em> the time/failure was in a request's journey.
+The ladder: <strong>metric detects → trace localizes → log identifies.</strong></p>
+</details>
+<details class="question">
+<summary>State the four golden signals and the alert law's four requirements.</summary>
+<p>Golden signals: <strong>latency · traffic · errors · saturation.</strong> Alert law: every alert
+<strong>symptom-based · actionable · runbooked · honest severity.</strong> The dividing question between alert and
+dashboard: <em>must a human act NOW?</em></p>
+</details>
+<details class="question">
+<summary>Explain symptom-based vs cause-based alerting, and why the law prefers symptoms.</summary>
+<p><strong>Symptom</strong> = user-visible badness (error rate, SLO burn) — pages because users are hurting.
+<strong>Cause</strong> = internal state (CPU 90%) — may be fine (a batch job) and by itself demands no action.
+Symptoms have bounded false-positive cost and cover <em>unknown</em> causes; cause-alerts multiply, cry
+wolf, and still miss novel failure modes.</p>
+</details>
+<details class="question">
+<summary>Why does <code>rate()</code> exist — what two lies do raw counter values tell?</summary>
+<p>Counters only increase and occasionally <strong>reset</strong> (restart → zero). Raw values lie twice: the
+absolute number reflects <strong>uptime</strong>, not current behaviour; and a reset <strong>reads as a crash</strong>.
+<code>rate()</code> differentiates over a window and absorbs the reset, giving the per-second truth. Corollary:
+<code>rate()</code> <strong>before</strong> aggregating (<code>sum</code> first destroys the reset handling).</p>
+</details>
+<details class="question">
+<summary>A teammate adds <code>user_id</code> as a metric label to debug per-user. Your response?</summary>
+<p><strong>Refuse the label</strong> (cardinality law: identities are unbounded — series = product of label values,
+so memory explodes). Alternative: keep metrics <strong>aggregated</strong> (per-endpoint error rate detects that
+<em>someone</em> is failing), put the user ID in <strong>structured logs and trace attributes</strong>. Detection by
+dimension, identification by log.</p>
+</details>
+<details class="question">
+<summary>Explain alert fatigue as a MECHANISM (not an annoyance), using Knight Capital.</summary>
+<p>Every non-actionable alert teaches receivers that alerts are ignorable; <strong>attention is a budget</strong>
+spent by every ring. Knight: 97 warning emails before market open — routed like noise, treated like
+noise — then the real one drowned with them ($460 M in 45 minutes). Fatigue is <em>trained</em> and
+dose-dependent, reversed only by <strong>deleting</strong> alerts until every ring demands action.</p>
+</details>
+<details class="question">
+<summary>A target's metrics vanish from dashboards but no alert fired. The trap and the fix?</summary>
+<p>The <strong>absent-metric trap</strong>: dashboards render gaps and alert expressions on the metric return <em>no
+data</em> (not "bad data") — so threshold alerts can't evaluate. Standing fix: alert on <strong><code>up == 0</code></strong> per
+target (absence itself alerts), plus <code>absent()</code>-style guards on load-bearing series.</p>
+</details>
+<details class="question">
+<summary>Map each case study — Knight, S3, GitHub — to its one-line lesson.</summary>
+<p><strong>Knight:</strong> warnings that don't page aren't alerts — routing and severity decide whether information
+becomes action. <strong>S3:</strong> monitor from <em>outside</em> the failure domain — the status page died with its
+dependency. <strong>GitHub:</strong> seeing everything is necessary but not sufficient — and a great public
+timeline is observability's visible product.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, bare notes</strong>: teach <em>"The two bells."</em> Use Knight's 97 emails to install
+alert fatigue as a mechanism, install the dividing question (<em>"must a human act NOW?"</em>), and
+demonstrate the bell code on your <strong>own</strong> alert set — one page, one ticket, and <strong>one deletion with
+its argument</strong> (the hardest, most valuable move). Close with the drill law. The listener should be
+able to classify three fresh symptoms as page / ticket / dashboard afterward. If they can't, that's
+your signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M25 also closes </em><em>Stage 9</em><em>
+(Fortress &amp; Watchtower together). A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> observability and the ≤30 s test; <strong>explain</strong> the three signals' economics and the metric→trace→log ladder.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>List</strong> the golden signals, USE, and RED, and say when each frame applies.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> the alert law (symptom · actionable · runbooked · honest severity) and the dividing question.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Use</strong> PromQL fluently: <code>rate()</code>, aggregation by label, <code>histogram_quantile()</code>, and one recording rule — vector types never confused.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> instrumentation: the four metric types on Netscope, every label <strong>defended</strong> against the cardinality law.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> structured logging with correlation IDs and journald fields queried (<code>journalctl -o json</code>).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Apply</strong> OpenTelemetry tracing and read a waterfall to find where the time went.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> a mystery from the SCREEN first — no reflexive <code>ssh</code> — matrix-ordered (symptom row → layer rows).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> the four traps: absent metrics (<code>up == 0</code>), counter resets, cardinality bombs, stale panels.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Evaluate</strong> an alert against the law — and <strong>DELETE</strong> one with the argument.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Write</strong> an SLO from measured truth (objective chosen <em>after</em> measuring) with a burn-rate guard.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Automate</strong> detection drills (<code>make drill</code>) and the stack-as-code (configs, rules, dashboards rebuild from files).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Predict</strong> detection: for any pack scenario, name the panel/alert that catches it — the requirements table GREEN with measured times.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Assess</strong> the watchtower's own risks: dependency boundary + dead-man's answer, telemetry leaks, the stack's own audit.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach</strong> the two bells and the deletion discipline (teach-back rubric passed, ≤1 Weak row).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>STAGE 9 GATE:</strong> one pack scenario injected → detected on the screen → runbook followed → restored; threat model, justified hardening, secrets, and least-privilege all defended.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. Interleaving stays active —
+every M25 review also pulls one <strong>Module 24</strong> (or older) item, and the weekly <code>make drill</code> joins the
+standing gauntlet. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved (prior-module recall)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Week-1 close (Day 7)</strong></td>
+<td>Golden + signal-ladder sprints · PromQL drills cold · the first drill's gaps reviewed</td>
+<td><strong>M24:</strong> the four audit questions · <strong>M23:</strong> the smell sprint</td>
+</tr>
+<tr>
+<td><strong>Module close (Day 14, gate)</strong></td>
+<td>All four blanks drawn cold · validation D–K · the requirements table walked green</td>
+<td><strong>M24:</strong> the sin sprint · <strong>M21:</strong> the USE method</td>
+</tr>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · alert-law + case sprints · validation misses</td>
+<td><strong>M24:</strong> the audit misses</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td><code>make drill</code> ×2 (detection timed against the table)</td>
+<td><strong>M23:</strong> gauntlet N = 1</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Three PromQL questions cold (no docs) · one dashboard critiqued against the anti-patterns</td>
+<td><strong>M24:</strong> <code>make audit</code> glance</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Validation retake ≥ 90 · the alert set audited — any ring that didn't demand action? <strong>DELETE</strong> it</td>
+<td>Stage-9 sampler (M24 + M25)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M26–M28 (AI/ML — loss curves, token throughput, GPU saturation become new
+tenants on these same boards; drift detection is alerting on model symptoms) · M29 (Claude Code advanced
+— agent runs as traced workflows, sessions as spans) · the <strong>capstone</strong>, whose inference SLO and incident
+drills run on this module's rails — the Watchtower doesn't get rebuilt for AI, it gets new tenants.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>Observability is the curriculum growing a nervous system: every layer now reports in, every number
+M21 taught you to measure streams to a board, every failure M23 taught you to debug rings a lawful
+bell — and the 3 a.m. engineer who once had only a terminal now starts with an answer.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-24/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 24 — Security">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 24 — Security
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../stage-10/module-26/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 26 — AI Foundations">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 26 — AI Foundations
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

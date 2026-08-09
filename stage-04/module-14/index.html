@@ -1,0 +1,3406 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The invisible layer made inspectable. The 4-layer model as a working tool — addressing, DNS, TCP/UDP, ports and sockets, routing — each watched live with ip, ss, dig, curl, and tcpdump. Closes Stage 4.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-13/">
+      
+      
+        <link rel="next" href="../../stage-05/module-15/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 14 — Networking - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-14-networking" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 14 — Networking
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-encapsulation-down-the-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: encapsulation down the stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-four-layers-one-table-to-keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four layers — one table to keep
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#names-vs-addresses-vs-routes-three-questions-three-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names vs addresses vs routes — three questions, three tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tcp-vs-udp-connected-vs-connectionless" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TCP vs UDP — connected vs connectionless
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ports-sockets-the-programs-mailbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ports &amp; sockets — the program's mailbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-debugging-ladder-the-habit-deliverable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The debugging ladder — the habit-deliverable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-operators-kit-tool-to-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The operator's kit — tool to layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-inspect-your-own-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: inspect your own stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-subnet-by-hand-then-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Subnet by hand, then verify
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-refused-vs-timeout-made-concrete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Refused vs timeout, made concrete
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-prove-http-is-just-text-over-a-socket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Prove HTTP is just text over a socket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-two-ttls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — The two TTLs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-time-the-waterfall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Time the waterfall
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-encapsulation-down-the-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: encapsulation down the stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-four-layers-one-table-to-keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four layers — one table to keep
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#names-vs-addresses-vs-routes-three-questions-three-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names vs addresses vs routes — three questions, three tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tcp-vs-udp-connected-vs-connectionless" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TCP vs UDP — connected vs connectionless
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ports-sockets-the-programs-mailbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ports &amp; sockets — the program's mailbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-debugging-ladder-the-habit-deliverable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The debugging ladder — the habit-deliverable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-operators-kit-tool-to-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The operator's kit — tool to layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-inspect-your-own-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: inspect your own stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-subnet-by-hand-then-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Subnet by hand, then verify
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-refused-vs-timeout-made-concrete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Refused vs timeout, made concrete
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-prove-http-is-just-text-over-a-socket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Prove HTTP is just text over a socket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-two-ttls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — The two TTLs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-time-the-waterfall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Time the waterfall
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-14-networking">Module 14 — Networking<a class="headerlink" href="#module-14-networking" title="Permanent link">&para;</a></h1>
+<p><small>Stage 4 · Advanced Topics · ~3 weeks at 4 h/day · Prerequisite — Module 13 (Netscope's engineered shell — the stubs this module fills with real network code). This module closes Stage 4.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Networking</strong> is how independent computers cooperate: an agreed stack of protocols — <strong>layers</strong>, each
+solving ONE problem and trusting the layer below — that turns "electrical signals on a wire" into "an
+HTTPS page in your terminal." This module teaches that stack not as trivia but as a <strong>live system you
+can interrogate on your own machine</strong>: from an Ethernet frame up to a TLS handshake, each layer made
+visible before the next is stacked on top of it.</p>
+<p>Every remaining module stands on this one. SSH (M9) rides TCP; Docker (M16) builds virtual networks;
+Kubernetes (M19–M20) is roughly <strong>40% networking by weight</strong>; observability (M25) watches these very
+packets. And the debugging superpower it grants is immediate: <em>"is it DNS, the route, the port, or the
+app?"</em> stops being an hour of guessing and becomes a <strong>60-second ladder</strong>. This is also where Stage 4
+lands its finale — Netscope's four stubs (<code>dns</code>, <code>tcp</code>, <code>http</code>, <code>trace</code>) get their organs, and the
+stage closes with a tool that <em>proves</em> both this module and M13.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>M15 automates calls to network services · M16–M18 (Docker) publish ports = the NAT you now
+understand · M19–M20 (Kubernetes) is Services, Ingress, and NetworkPolicy — <strong>this module wearing new
+names</strong> · M24 turns your listener audit into security policy · M25 watches this exact traffic · M28
+(AI infrastructure) lives and dies by interconnect bandwidth. Learn the layers as inspectable
+mechanisms now, and every later "network problem" is just a known failure mode with a known tool.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 14 — Networking&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+the postal-system analogy for layers (each level ignores the ones above and below) → encapsulation as
+nested envelopes, one <code>tcpdump</code> showing all four at once → names vs addresses vs routes (three
+questions, three tools) → connectionless UDP vs connected TCP (why DNS and HTTP choose differently) →
+plaintext-by-default and why TLS exists → the five-command debugging ladder as the module's habit.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-inspect-your-own-stack">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. You will inspect real interfaces, resolve real names, watch a real socket
+accept a real connection — typing beats watching every time, and it is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-encapsulation-down-the-stack">The picture: encapsulation down the stack<a class="headerlink" href="#the-picture-encapsulation-down-the-stack" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph App["Application — message"]
+        A["HTTP · DNS · SSH&lt;br/&gt;names, URLs"]
+    end
+    subgraph Transport["Transport — segment / datagram"]
+        T["TCP · UDP&lt;br/&gt;ports · delivery to a PROGRAM"]
+    end
+    subgraph Internet["Internet — packet"]
+        I["IP · ICMP&lt;br/&gt;IP addresses · routing across NETWORKS"]
+    end
+    subgraph Link["Link — frame"]
+        L["Ethernet · WiFi&lt;br/&gt;MAC · one wire or radio"]
+    end
+    A --&gt; T --&gt; I --&gt; L --&gt; Wire["The wire / the radio"]</code></pre>
+<p>Your HTTP request is wrapped in a <strong>TCP segment</strong>, wrapped in an <strong>IP packet</strong>, wrapped in an <strong>Ethernet
+frame</strong> — each layer adding its own header like nested envelopes, each stripped by the matching layer on
+the far side. A switch reads only the frame; a router reads only the packet; the far host peels all four
+and hands the bytes to the listening program. One <code>tcpdump</code> capture shows every envelope at once —
+learning to read that capture is most of the module.</p>
+<h3 id="the-four-layers-one-table-to-keep">The four layers — one table to keep<a class="headerlink" href="#the-four-layers-one-table-to-keep" title="Permanent link">&para;</a></h3>
+<p>The practical model is <strong>4 working layers</strong> (not OSI's ceremonial 7). Each has its own unit, its own
+address type, its own failure modes, and its own inspection tool:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Unit</th>
+<th>Solves</th>
+<th>Address</th>
+<th>Inspect with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Application</strong> (HTTP, DNS, SSH)</td>
+<td>message</td>
+<td>meaning</td>
+<td>names, URLs</td>
+<td><code>curl -v</code>, <code>dig</code></td>
+</tr>
+<tr>
+<td><strong>Transport</strong> (TCP, UDP)</td>
+<td>segment / datagram</td>
+<td>delivery to a <strong>program</strong></td>
+<td>ports</td>
+<td><code>ss</code>, <code>nc</code></td>
+</tr>
+<tr>
+<td><strong>Internet</strong> (IP, ICMP)</td>
+<td>packet</td>
+<td>delivery across <strong>networks</strong></td>
+<td>IP addresses</td>
+<td><code>ip</code>, <code>ping</code>, <code>traceroute</code></td>
+</tr>
+<tr>
+<td><strong>Link</strong> (Ethernet, WiFi)</td>
+<td>frame</td>
+<td>delivery on <strong>one wire</strong></td>
+<td>MAC addresses</td>
+<td><code>ip link</code>, <code>tcpdump -e</code></td>
+</tr>
+</tbody>
+</table>
+<p>Because a layer only talks to its neighbours, you can debug one <strong>without</strong> understanding everything
+above it — which is exactly why WiFi swaps for Ethernet without HTTP ever noticing.</p>
+<h3 id="names-vs-addresses-vs-routes-three-questions-three-tools">Names vs addresses vs routes — three questions, three tools<a class="headerlink" href="#names-vs-addresses-vs-routes-three-questions-three-tools" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Names</strong> (who?) — DNS is the distributed phonebook: stub resolver → caching resolver → root → TLD →
+  authoritative, each hop cacheable with a <strong>TTL</strong>. <code>dig</code> interrogates it; <code>dig +trace</code> walks it by hand.</li>
+<li><strong>Addresses</strong> (where?) — a 32-bit IPv4 dotted quad with a <strong>CIDR</strong> split into network + host bits
+  (<code>192.168.1.0/24</code>). Private ranges (RFC 1918: <code>10/8</code>, <code>172.16/12</code>, <code>192.168/16</code>) are NAT'd behind one
+  public address. <code>ip addr</code> shows yours.</li>
+<li><strong>Routes</strong> (how do I get there?) — every host has a route table (<code>ip route</code>); the <strong>default gateway</strong>
+  is "everything I don't recognise goes here." <code>ip route</code> reads it.</li>
+</ul>
+<p>Three different questions, three different failure modes, three different tools — keeping them apart is
+half of network debugging.</p>
+<h3 id="tcp-vs-udp-connected-vs-connectionless">TCP vs UDP — connected vs connectionless<a class="headerlink" href="#tcp-vs-udp-connected-vs-connectionless" title="Permanent link">&para;</a></h3>
+<p><strong>TCP</strong> is the reliability machine: a three-way handshake (<strong>SYN → SYN-ACK → ACK</strong>) opens the
+connection, sequence numbers name every byte, ACKs confirm receipt, timers resend what's lost, and a FIN
+tears it down. <strong>UDP</strong> is a datagram — no connection, no guarantee, no order; cheap and honest. Choosing
+between them is engineering, not preference:</p>
+<ul>
+<li><strong>DNS rides UDP</strong> — one tiny query, one tiny answer; a handshake would triple the cost, and retry is
+  trivial at the application.</li>
+<li><strong>HTTP requires TCP</strong> — arbitrary-size, ordered payloads where loss and reordering must be handled
+  invisibly. That is exactly TCP's product.</li>
+</ul>
+<h3 id="ports-sockets-the-programs-mailbox">Ports &amp; sockets — the program's mailbox<a class="headerlink" href="#ports-sockets-the-programs-mailbox" title="Permanent link">&para;</a></h3>
+<p>A <strong>port</strong> is a program's mailbox number (0–65535; below 1024 is <strong>privileged</strong> — M3's permissions
+reappear). A <strong>socket</strong> is the full tuple <code>(protocol, local addr:port, remote addr:port)</code>. <code>ss -tlnp</code>
+reads the mailbox directory — every LISTEN socket on your machine, and (with privilege) the process
+behind each. Some ports you already know:</p>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Proto</th>
+<th>Service</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22</td>
+<td>TCP</td>
+<td>SSH</td>
+<td>M9's transport — <code>git push</code> rides this</td>
+</tr>
+<tr>
+<td>53</td>
+<td>UDP (→TCP)</td>
+<td>DNS</td>
+<td>UDP by default; TCP for big answers</td>
+</tr>
+<tr>
+<td>67 / 68</td>
+<td>UDP</td>
+<td>DHCP</td>
+<td>how you got an address without configuring one</td>
+</tr>
+<tr>
+<td>80</td>
+<td>TCP</td>
+<td>HTTP</td>
+<td>plaintext — readable in <code>tcpdump</code></td>
+</tr>
+<tr>
+<td>443</td>
+<td>TCP</td>
+<td>HTTPS</td>
+<td>HTTP wrapped in TLS</td>
+</tr>
+</tbody>
+</table>
+<p>A <strong>loopback bind</strong> (<code>127.0.0.1:8080</code>) is reachable only from this machine, by design — reading a LISTEN
+state as "reachable from outside" is a classic mistake.</p>
+<h3 id="the-debugging-ladder-the-habit-deliverable">The debugging ladder — the habit-deliverable<a class="headerlink" href="#the-debugging-ladder-the-habit-deliverable" title="Permanent link">&para;</a></h3>
+<p>Five commands, one minute, failure localised to a <strong>layer</strong>. This is the module's single most useful
+reflex — drilled until automatic, and encoded as <code>netscope trace</code>:</p>
+<pre class="mermaid"><code>flowchart TB
+    A["ip addr&lt;br/&gt;do I have an address?"] --&gt;|no| L1["Link / DHCP"]
+    A --&gt;|yes| B["ping gateway&lt;br/&gt;reach my own LAN?"]
+    B --&gt;|no| L2["LAN / WiFi"]
+    B --&gt;|yes| C["ping 1.1.1.1&lt;br/&gt;can I route out?"]
+    C --&gt;|no| L3["Routing / ISP"]
+    C --&gt;|yes| D["dig example.com&lt;br/&gt;do names resolve?"]
+    D --&gt;|no| L4["DNS"]
+    D --&gt;|yes| E["curl -v https://…&lt;br/&gt;does the app answer?"]
+    E --&gt;|no| L5["Service / TLS / app"]
+    E --&gt;|yes| OK["All layers up"]</code></pre>
+<p>The first failing step names the layer. <code>ping HOST</code> succeeding but <code>curl http://HOST</code> timing out is not
+a contradiction — ICMP proves the route; it says nothing about whether a program owns the port.</p>
+<h3 id="the-operators-kit-tool-to-layer">The operator's kit — tool to layer<a class="headerlink" href="#the-operators-kit-tool-to-layer" title="Permanent link">&para;</a></h3>
+<p>The tools you will actually reach for, mapped to what they show (the deprecated ancestors are recognised
+in old docs, never used):</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Layer it reads</th>
+<th>What it tells you</th>
+<th>Replaces</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ip addr</code> / <code>ip route</code> / <code>ip neigh</code></td>
+<td>Link + Internet</td>
+<td>interfaces, addresses, routes, ARP cache</td>
+<td><code>ifconfig</code></td>
+</tr>
+<tr>
+<td><code>ss -tlnp</code></td>
+<td>Transport</td>
+<td>every listener + its process</td>
+<td><code>netstat</code></td>
+</tr>
+<tr>
+<td><code>dig</code></td>
+<td>Application (DNS)</td>
+<td>resolution, records, the walk (<code>+trace</code>)</td>
+<td><code>nslookup</code></td>
+</tr>
+<tr>
+<td><code>curl -v</code> / <code>-w</code></td>
+<td>Application (HTTP/TLS)</td>
+<td>request, response, the timing waterfall</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tcpdump</code></td>
+<td>all four at once</td>
+<td>the raw packets on the wire</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>Four layers, each solving ONE problem:</strong> Application/message · Transport/segment · Internet/packet · Link/frame. Names → ports → IP addresses → MACs.</li>
+<li><strong>Encapsulation is nested envelopes.</strong> Read a capture by peeling them; each device opens only its own.</li>
+<li><strong>Names vs addresses vs routes</strong> — three questions (who / where / how), three tools: <code>dig</code> · <code>ip addr</code> · <code>ip route</code>.</li>
+<li><strong>UDP is honest, TCP makes promises.</strong> DNS rides UDP; HTTP rides TCP — and you can say <em>why</em>.</li>
+<li><strong>A port is a program's mailbox; <code>ss -tlnp</code> reads the directory.</strong> A <code>127.0.0.1</code> bind is local-only by design.</li>
+<li><strong>The ladder:</strong> <code>ip addr</code> → <code>ping gateway</code> → <code>ping 1.1.1.1</code> → <code>dig name</code> → <code>curl -v URL</code>. First failure names the layer.</li>
+<li><strong>Everything below TLS is plaintext</strong> — every hop can read it. <code>tcpdump</code> on your own loopback proves it once, and the lesson sticks.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-inspect-your-own-stack">Guided Lab: inspect your own stack<a class="headerlink" href="#guided-lab-inspect-your-own-stack" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You inspect your machine's interfaces and routes, resolve names, run a real local
+server, and watch a socket accept a real connection. Everything runs on YOUR machine and YOUR loopback —
+capture ethics are simple and binding: </em><em>your machine, your traffic, full stop</em><em>.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-14" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-14" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a real Linux terminal in your browser, with its own interfaces, routes, and loopback to inspect.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then install the tools in step 1 and follow along.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Your machine's network identity</label><label for="__tabbed_1_2">2 · Names — DNS and the /etc/hosts override</label><label for="__tabbed_1_3">3 · Sockets — start a listener, read the directory</label><label for="__tabbed_1_4">4 · Make a request — end to end</label><label for="__tabbed_1_5">5 · Watch the packets, then the ladder</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Install the toolkit, then read your own stack from the link layer up:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>iproute2<span class="w"> </span>dnsutils<span class="w"> </span>tcpdump<span class="w"> </span>curl<span class="w"> </span>netcat-openbsd
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ip<span class="w"> </span>addr<span class="w">        </span><span class="c1"># interfaces + IP addresses (find lo = 127.0.0.1, and your real one)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>ip<span class="w"> </span>link<span class="w">        </span><span class="c1"># link state + MAC addresses</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>ip<span class="w"> </span>route<span class="w">       </span><span class="c1"># the route table — which line is the default gateway?</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>ip<span class="w"> </span>neigh<span class="w">       </span><span class="c1"># the ARP cache: IP → MAC on the local link</span>
+</code></pre></div>
+Journal: which of your addresses is <strong>RFC 1918 private</strong> (<code>10.</code>, <code>172.16–31.</code>, <code>192.168.</code>)? Which
+interface carries the <strong>default</strong> route — the "everything I don't recognise goes here" line?</p>
+</div>
+<div class="tabbed-block">
+<p>Resolve a name the normal way, then read the answer in full:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>dig<span class="w"> </span>+short<span class="w"> </span>example.com<span class="w">          </span><span class="c1"># just the A record(s)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>dig<span class="w"> </span>example.com<span class="w">                 </span><span class="c1"># read EVERY section: question/answer/authority/additional + TTL</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>getent<span class="w"> </span>hosts<span class="w"> </span>example.com<span class="w">        </span><span class="c1"># what the system resolver returns (nsswitch order)</span>
+</code></pre></div>
+Now the override rig — <code>/etc/hosts</code> is consulted <strong>before</strong> DNS, so you can fake a name locally:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;127.0.0.1 lab.local&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/hosts
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>getent<span class="w"> </span>hosts<span class="w"> </span>lab.local<span class="w">          </span><span class="c1"># resolves to 127.0.0.1 — your entry won</span>
+</code></pre></div>
+Journal: the TTL in <code>dig</code> <strong>counts down</strong> on repeat queries — that is caching, live. <code>/etc/hosts</code>
+winning over DNS is the <code>nsswitch.conf</code> lookup order in action.</p>
+</div>
+<div class="tabbed-block">
+<p>Start a real HTTP server in the background, then find its socket:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>nohup<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>http.server<span class="w"> </span><span class="m">8080</span><span class="w"> </span>&gt;/tmp/http.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sleep<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w">                   </span><span class="c1"># every LISTEN socket — find :8080 and its process</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="s1">&#39;sport = :8080&#39;</span><span class="w">   </span><span class="c1"># just that one: note the bind address</span>
+</code></pre></div>
+A <code>0.0.0.0:8080</code> bind listens on every interface; a <code>127.0.0.1:8080</code> bind is loopback-only. <code>-t</code> tcp
+· <code>-l</code> listening · <code>-n</code> numeric · <code>-p</code> process. <strong>Leave the server running</strong> — steps 4 and 5 use it.</p>
+<p>Click <strong>Check</strong> to verify your local server is up and reachable.</p>
+</div>
+<div class="tabbed-block">
+<p>Hit the server by its real name (resolved through the <code>/etc/hosts</code> entry from step 2) and read the
+exchange with <code>-v</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-v<span class="w"> </span>http://lab.local:8080/<span class="w">          </span><span class="c1"># -v shows the request line + response headers</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>curl<span class="w"> </span>-sI<span class="w"> </span>http://lab.local:8080/<span class="w">         </span><span class="c1"># headers only</span>
+</code></pre></div>
+Read <code>curl -v</code> like a transcript: lines with <code>&gt;</code> are what <strong>you</strong> sent, lines with <code>&lt;</code> are what the
+<strong>server</strong> said. The name <code>lab.local</code> resolved locally, TCP connected to <code>127.0.0.1:8080</code>, and HTTP
+carried the request as plain text.</p>
+<p>Click <strong>Check</strong> to verify <code>lab.local</code> resolves and the request succeeds.</p>
+</div>
+<div class="tabbed-block">
+<p>Capture your own loopback traffic while a request happens — the envelopes, live:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>tcpdump<span class="w"> </span>-i<span class="w"> </span>lo<span class="w"> </span>-n<span class="w"> </span>-c<span class="w"> </span><span class="m">10</span><span class="w"> </span>port<span class="w"> </span><span class="m">8080</span><span class="w"> </span><span class="p">&amp;</span><span class="w">   </span><span class="c1"># capture 10 packets on loopback</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sleep<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://lab.local:8080/<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="c1"># generate the traffic</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>sleep<span class="w"> </span><span class="m">1</span><span class="w">                                    </span><span class="c1"># let the capture print</span>
+</code></pre></div>
+You'll see the <strong>SYN → SYN-ACK → ACK</strong> handshake, then the HTTP exchange, then the FIN. Now run the
+<strong>debugging ladder</strong> top to bottom and name the layer each command tests:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ip<span class="w"> </span>addr<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>inet<span class="w">          </span><span class="c1"># 1. address?</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>ip<span class="w"> </span>route<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>default<span class="w">      </span><span class="c1"># 2. gateway/route?</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>dig<span class="w"> </span>+short<span class="w"> </span>example.com<span class="w">       </span><span class="c1"># 3-4. names resolve?</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>curl<span class="w"> </span>-sI<span class="w"> </span>http://lab.local:8080/<span class="w">  </span><span class="c1"># 5. does the app answer?</span>
+</code></pre></div></p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can read your own addresses and routes, resolve a name and fake one with <code>/etc/hosts</code>, find a
+listener with <code>ss</code>, drive a request with <code>curl -v</code>, and watch a handshake in <code>tcpdump</code> — the guided
+lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Everything stays on your own machine and loopback. Struggle
+here is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-subnet-by-hand-then-verify">Challenge 1 — Subnet by hand, then verify<a class="headerlink" href="#challenge-1-subnet-by-hand-then-verify" title="Permanent link">&para;</a></h3>
+<p>For <code>192.168.10.0/24</code>: how many usable host addresses, and what are the network and broadcast
+addresses? Compute it on paper first, then verify with a tool.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>/24</code> means 24 network bits, leaving 8 for hosts. Reach for Python's stdlib <code>ipaddress</code> module — no
+install needed.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import ipaddress; n=ipaddress.ip_network(&#39;192.168.10.0/24&#39;); print(n.network_address, n.broadcast_address, n.num_addresses-2)&quot;</span>
+</code></pre></div>
+8 host bits → 256 addresses, minus network (<code>.0</code>) and broadcast (<code>.255</code>) = <strong>254 usable</strong>. The <code>/N</code>
+is the split point: everything left of it is the network, everything right addresses a host inside it.</p>
+</details>
+<h3 id="challenge-2-refused-vs-timeout-made-concrete">Challenge 2 — Refused vs timeout, made concrete<a class="headerlink" href="#challenge-2-refused-vs-timeout-made-concrete" title="Permanent link">&para;</a></h3>
+<p>Produce, on your own rig, one connection that is <strong>refused</strong> and one that <strong>times out</strong> — and state what
+each tells you about the far end.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>A port with nothing listening on a live host answers instantly. A routable-but-dead address (RFC 5737
+reserves <code>192.0.2.0/24</code> for exactly this) never answers.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span><span class="m">9</span><span class="w">   </span><span class="c1"># refused: something is home, but no one owns port 9 → instant RST</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>nc<span class="w"> </span>-zv<span class="w"> </span>-w<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="m">192</span>.0.2.1<span class="w"> </span><span class="m">80</span><span class="w">   </span><span class="c1"># timeout: the packet is dropped/black-holed → silence</span>
+</code></pre></div>
+<strong>Refused</strong> = the host answered with a RST — fast and honest, nothing is listening. <strong>Timeout</strong> =
+silence — a firewall dropped it or the route black-holes; you cannot tell empty from ignoring from
+gone. Two different failures, two different next steps.</p>
+</details>
+<h3 id="challenge-3-prove-http-is-just-text-over-a-socket">Challenge 3 — Prove HTTP is just text over a socket<a class="headerlink" href="#challenge-3-prove-http-is-just-text-over-a-socket" title="Permanent link">&para;</a></h3>
+<p>Without <code>curl</code>, fetch a page (or your own step-3 server) by typing the HTTP request yourself.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>nc</code> (netcat) is a raw socket you drive by hand. An HTTP/1.1 request is a request line, a <code>Host:</code>
+header, and a blank line.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;GET / HTTP/1.1\r\nHost: lab.local\r\nConnection: close\r\n\r\n&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span><span class="m">8080</span>
+</code></pre></div>
+You typed the exact bytes <code>curl</code> sends. HTTP/1.1 is <strong>readable text over a TCP socket</strong> — after this,
+<code>curl</code> is never magic again. The <code>Host:</code> header is what lets one IP serve a thousand sites.</p>
+</details>
+<h3 id="challenge-4-the-two-ttls">Challenge 4 — The two TTLs<a class="headerlink" href="#challenge-4-the-two-ttls" title="Permanent link">&para;</a></h3>
+<p>A <code>dig</code> answer shows <code>TTL 300</code>; a <code>traceroute</code> (or <code>ping -t</code>) mentions TTL too. They are different
+things — name each precisely.</p>
+<details class="success">
+<summary>Solution</summary>
+<ul>
+<li><strong>DNS TTL</strong> — a <strong>cache lifetime in seconds</strong>: how long a resolver may reuse this answer before
+  asking again (300 s here). This is why a changed record isn't instant — caches honour the <em>old</em>
+  TTL. ("Propagation" is a myth; it's cache expiry.)</li>
+<li><strong>IP TTL</strong> — a <strong>hop budget</strong>: each router decrements it, and at zero sends back ICMP
+  time-exceeded. Traceroute abuses this — TTL 1, 2, 3… — to map the path <em>from the errors</em>.</li>
+</ul>
+<p>Same three letters, unrelated meanings — disambiguate them on sight.</p>
+</details>
+<h3 id="challenge-5-stretch-time-the-waterfall">Challenge 5 (stretch) — Time the waterfall<a class="headerlink" href="#challenge-5-stretch-time-the-waterfall" title="Permanent link">&para;</a></h3>
+<p>Use <code>curl</code>'s timing output to break one request into its cost stages, and say which round trips
+dominate.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>-w<span class="w"> </span><span class="s1">&#39;dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} firstbyte=%{time_starttransfer} total=%{time_total}\n&#39;</span><span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span>https://example.com
+</code></pre></div>
+<code>namelookup</code> (DNS) → <code>connect</code> (one RTT: the TCP handshake) → <code>appconnect</code> (TLS adds ~2 more RTTs) →
+<code>starttransfer</code> (one more RTT + server think time). <strong>Round trips dominate</strong> — the fix family is
+<em>fewer</em> of them (keep-alive, TLS resumption, a closer endpoint), not more bandwidth.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Name the four layers, the unit at each, and the address type each uses.</summary>
+<p><strong>Application</strong> (message; names/URLs) · <strong>Transport</strong> (segment/datagram; ports) · <strong>Internet</strong>
+(packet; IP addresses) · <strong>Link</strong> (frame; MAC addresses). Each solves one problem and trusts only its
+neighbour below.</p>
+</details>
+<details class="question">
+<summary>What is encapsulation? Walk one HTTP GET to the wire.</summary>
+<p>Each layer wraps the layer above with its own header — nested envelopes. The GET (message) goes into
+a <strong>TCP segment</strong> (ports, sequence numbers), into an <strong>IP packet</strong> (source/dest IP), into an
+<strong>Ethernet frame</strong> (MACs, next hop), onto the wire. Each device peels only the layer it needs; the far
+host peels all four and delivers the bytes to the listening program.</p>
+</details>
+<details class="question">
+<summary>Why does DNS default to UDP while HTTP requires TCP?</summary>
+<p>DNS is one tiny query and one tiny answer — a TCP handshake would triple the cost, and retry-on-loss
+is trivial at the application. HTTP carries arbitrary-size, ordered payloads where loss and reordering
+must be handled invisibly — exactly TCP's product. (DNS falls back to TCP for large answers.)</p>
+</details>
+<details class="question">
+<summary><code>ping HOST</code> works but <code>curl http://HOST</code> times out. Which layer, and how do you tell why?</summary>
+<p>ICMP proved the <strong>route</strong> (Internet layer); the failure is at <strong>transport/application</strong>. Two
+explanations: no program is listening on port 80, <strong>or</strong> a firewall silently drops TCP :80 while
+allowing ICMP. Distinguish with <code>ss -tlnp</code> on the host (is there a listener?) plus <code>nc -zv HOST 80</code>
+from outside (refused = nothing listening; timeout = filtered).</p>
+</details>
+<details class="question">
+<summary>A service shows LISTEN in <code>ss -tlnp</code> but the phone on your LAN can't reach it. Two ladder-ordered causes.</summary>
+<p>(1) It's bound to <strong><code>127.0.0.1</code></strong>, not the LAN interface — loopback is local-only by design (<code>ss</code>
+shows the bind address). (2) The <strong>firewall</strong> is default-deny with no allow rule for that port
+(<code>ufw status</code>). LISTEN means "a program owns the port here," not "reachable from outside."</p>
+</details>
+<details class="question">
+<summary>You fixed a DNS record an hour ago; some users still hit the old address. Explain — without the word 'propagation'.</summary>
+<p>Caches honour the <strong>old record's TTL</strong>: any resolver that fetched before the change serves the cached
+answer until it expires. Users behind resolvers that never cached it get the new answer immediately —
+hence <em>some</em> users. The fix pattern is to <strong>lower the TTL before</strong> a planned change.</p>
+</details>
+<details class="question">
+<summary>The two TTLs — name each and a bug each causes.</summary>
+<p><strong>DNS TTL</strong> = cache lifetime in seconds → the "why isn't my DNS change live?" confusion (it's cache
+expiry). <strong>IP TTL</strong> = per-packet hop budget → traceroute's whole trick, and "TTL exceeded" on a
+routing loop. Same letters, unrelated meanings.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>4 minutes, no notes</strong>: <em>"What actually happens when you load a web page?"</em> The
+<strong>postal analogy</strong> must appear — phonebook (DNS), a reliable pipe dialed (TCP), sealed envelopes
+inside envelopes (encapsulation, TLS) — and then <strong>yield to mechanism</strong>: name the layers, the
+handshake, where the analogy breaks (packets race, arrive out of order, get re-sent; letters don't).
+Then, in <strong>90 seconds</strong>, teach <em>"refused vs timeout"</em> with the knocking-on-doors story — a shout of
+"wrong house!" versus dead silence — and show <code>nc -zv</code> giving each answer on your own rig. If you
+can't yet, reread the Key Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M14 also closes </em><em>Stage 4</em><em>, and
+Netscope v1.0 is the stage's proof artifact. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the 4-layer model with the unit, address, and tool at each layer — the blank drawn cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> encapsulation on a real capture: point to the frame, packet, segment, and message.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the vocabulary (CIDR, MTU, RTT, resolver, SNI, the two TTLs) on demand, ≥9/10.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compare</strong> TCP vs UDP as engineering trade-offs — the cost of guarantees vs the honesty of datagrams.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Contrast</strong> refused vs timeout vs DNS-fail, each with its cause and its distinguishing command.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> every listener on your machine with <code>ss -tlnp</code> and justify each one (the audit table).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> a pcap: locate the handshake, the data, the teardown, and one anomaly (a retransmit).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> with the five-step ladder as reflex — the layer named BEFORE the fix, every time.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Test</strong> reachability at the RIGHT layer (ICMP vs TCP connect vs an app-level check), and say why.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> a request from raw bytes (via <code>nc</code> or a Python socket) — HTTP as text over a socket.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure</strong> the machine: <code>ufw</code> default-deny live, every allow rule mapped to a listener you can name.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Deploy</strong> Netscope v1.0 — <code>dns</code>/<code>tcp</code>/<code>http</code>/<code>trace</code> live, three TCP outcomes distinguished, <code>--json</code> valid, gate green, tagged.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Narrate</strong> a famous outage in layer vocabulary (Facebook 2021: BGP withdrawn → DNS unreachable → cascading timeouts).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the six teach-back tasks (≥4 avg, none below 3) — the postal and knocking analogies deployed AND bounded.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory forms. <strong>Interleaving stays active</strong> — every M14 review also pulls
+one item from Module 13 (the shell this module fills). This module closes Stage 4, so the <strong>stage</strong>
+review applies alongside the module reviews. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M13 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Stack + envelope blanks · ladder sprint · validation A1–A2, B5</td>
+<td>Netscope gate blank (typed results + the contract)</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>Handshake + DNS-walk blanks · <code>dig</code> and <code>ss</code> sprints · validation B3–B4, C6</td>
+<td>Package/<code>--json</code> contract recitation</td>
+</tr>
+<tr>
+<td><strong>Day 21 (gate)</strong></td>
+<td>All five blanks · all sprints · validation E13–E15, J25 · <strong>STAGE 4 GATE</strong></td>
+<td>Class-law recitation · recreate-drill on the netscope venv</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>The ladder run on a real (or planted) issue · one fresh capture read</td>
+<td>Netscope: TDD one tiny check</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>Planted-fault set re-run cold (hosts poison · firewall block · dead resolver)</td>
+<td>Netscope run + one enhancement under the gate</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Full validation retake (target ≥90) · the <code>curl -w</code> waterfall re-measured vs baseline</td>
+<td>Third-tool packaging drill</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M15 (automation that calls network services · Netscope's timer is the first
+scheduled network job) · M16–M18 (Docker networking — bridges, veth, published ports = NAT you now
+understand) · M19–M20 (Kubernetes Services, Ingress, NetworkPolicy — this module renamed) · M24
+(security formalises the listener audit and TLS policy) · M25 (observability of this exact traffic) ·
+M28 (interconnects at datacenter scale — the same layers at 400 Gb/s).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M14 makes the invisible layer inspectable — names, routes, ports, and packets each with a tool and a
+failure mode — closing Stage 4 with Netscope as proof: network knowledge, engineered into software
+you shipped.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-13/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 13 — Python for Engineers">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 13 — Python for Engineers
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../stage-05/module-15/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 15 — Automation">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 15 — Automation
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

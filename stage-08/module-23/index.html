@@ -1,0 +1,3470 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The scientific method aimed at broken systems — the debugging loop, Agans' nine rules, the layer matrix, strace/ltrace/gdb, git bisect, log-timeline forensics, and the blameless post-mortem. Root cause, not symptom. Opens Stage 8.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../../stage-07/module-22/">
+      
+      
+        <link rel="next" href="../../stage-09/module-24/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 23 — Debugging Methodology - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-23-debugging-methodology" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 23 — Debugging Methodology
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-07/module-22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-debugging-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the debugging loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agans-nine-rules-the-guardrails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agans' nine rules — the guardrails
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-layer-matrix-the-map-that-picks-the-ladder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The layer matrix — the map that picks the ladder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-the-smell-symptom-vocabulary-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the smell — symptom vocabulary → layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-instruments-one-question-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The instruments — one question each
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#git-bisect-halving-beats-scanning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        git bisect — halving beats scanning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-3-am-fork-mitigate-now-vs-diagnose-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 3 a.m. fork — mitigate now vs diagnose now
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#root-cause-vs-symptom-and-why-plural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root cause vs symptom — and why plural
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-the-loop-and-the-instruments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: the loop and the instruments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-read-one-strace-tail-correctly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Read one strace tail correctly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-enoent-despite-ls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — ENOENT despite ls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-corner-a-flake-before-chasing-its-cause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Corner a flake before chasing its cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-3-am-fork-walked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — The 3 a.m. fork, walked
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-design-a-failure-the-mastery-inversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Design a failure (the mastery inversion)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-the-debugging-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: the debugging loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agans-nine-rules-the-guardrails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agans' nine rules — the guardrails
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-layer-matrix-the-map-that-picks-the-ladder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The layer matrix — the map that picks the ladder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-the-smell-symptom-vocabulary-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the smell — symptom vocabulary → layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-instruments-one-question-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The instruments — one question each
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#git-bisect-halving-beats-scanning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        git bisect — halving beats scanning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-3-am-fork-mitigate-now-vs-diagnose-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 3 a.m. fork — mitigate now vs diagnose now
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#root-cause-vs-symptom-and-why-plural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root cause vs symptom — and why plural
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-the-loop-and-the-instruments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: the loop and the instruments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-read-one-strace-tail-correctly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Read one strace tail correctly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-enoent-despite-ls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — ENOENT despite ls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-corner-a-flake-before-chasing-its-cause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Corner a flake before chasing its cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-3-am-fork-walked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — The 3 a.m. fork, walked
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-design-a-failure-the-mastery-inversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — Design a failure (the mastery inversion)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-23-debugging-methodology">Module 23 — Debugging Methodology<a class="headerlink" href="#module-23-debugging-methodology" title="Permanent link">&para;</a></h1>
+<p><small>Stage 8 · Troubleshooting · ~2 weeks at 4 h/day · Prerequisite — Modules 01–22 (every ladder this method routes between). Opens Stage 8; the one-module stage that turns twenty-two modules of layer knowledge into one routed discipline.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p><strong>Debugging methodology</strong> is the scientific method aimed at broken systems: observe what <strong>is</strong> (not what
+<em>should</em> be), form <strong>one</strong> testable hypothesis, test it with <strong>one</strong> change, conclude honestly, and repeat —
+with an audit trail — until the root cause is found, fixed, <em>verified</em> fixed, and documented.</p>
+<p>You already debug — every prior module planted faults and drilled their ladders. What's missing is the
+<strong>unified layer above them</strong>: when a system breaks and nobody tells you <em>which</em> layer, where do you start?
+How do you keep three hypotheses from becoming thirty minutes of flailing? How do you debug at 3 a.m.
+without trusting your 3 a.m. brain? This module answers all three — and the profession treats it as <strong>the</strong>
+senior-engineer differentiator: everyone can fix bugs they understand; <em>method</em> is how you fix the ones you
+don't.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>The layer matrix's six rows <strong>are</strong> the curriculum's stages — app (M12–13), container (M16), below-deck
+(M17), orchestrator (M19–20), network (M14), OS/hardware (M1–M4, M21–22). M23 adds no new layer; it adds
+the <strong>method that routes between them</strong>. Forward: <strong>M24</strong> (security) is this loop under an adversary who
+edits the logs · <strong>M25</strong> (observability) industrialises the OBSERVE stage · <strong>M26–28</strong> run the same loop
+on <em>stochastic</em> systems · the <strong>capstone</strong> is where something <em>will</em> break. Learn the method now and
+every later failure is the same conversation with new vocabulary.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 23 — Debugging Methodology&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Internal mechanisms):
+the loop as the engine (observe → hypothesize → test → conclude → verify → document) →
+"quit thinking and look" vs confirmation bias (read the <em>actual</em> error, aloud) →
+one variable is information theory (N changes buy 2ⁿ ambiguity) →
+the layer matrix and the triage question ("where does the first <em>hard</em> evidence point?") →
+strace as the wiretap between program and kernel → git bisect as binary search over history →
+the 3 a.m. fork and why mitigation ≠ resolution → the blameless post-mortem as an evidence-quality mechanism.</p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-the-loop-and-the-instruments">Guided Lab</a> in a browser terminal and run each
+command yourself as it appears. In this module especially, <em>reading the actual output</em> is the whole
+skill — you can't build that muscle by watching.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-the-debugging-loop">The picture: the debugging loop<a class="headerlink" href="#the-picture-the-debugging-loop" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    subgraph loop["The loop — one hypothesis at a time"]
+        direction TB
+        O["OBSERVE&lt;br/&gt;evidence, not expectation"] --&gt; H["HYPOTHESIZE&lt;br/&gt;one mechanism, fits all evidence"]
+        H --&gt; T["TEST&lt;br/&gt;one discriminating change"]
+        T --&gt; C{"CONCLUDE&lt;br/&gt;confirmed or refuted?"}
+        C --&gt;|refuted| H
+        C --&gt;|confirmed| V["VERIFY&lt;br/&gt;fix vs the original symptom"]
+        V --&gt; D["DOCUMENT&lt;br/&gt;runbook / post-mortem"]
+    end
+    J["Audit trail — the journal&lt;br/&gt;records every hypothesis AND verdict"] -.-&gt; loop</code></pre>
+<p>The loop <strong>starts at OBSERVE</strong> because the debugger's disease is confirmation bias — the brain
+pattern-matches to the <em>last</em> similar bug and then sees supporting evidence everywhere. Refuted
+hypotheses aren't failures; they feed the next observation. That's why it's a <em>loop</em>, and why the journal
+wrapping it is half the value: it makes negative results reusable and hand-offs possible.</p>
+<h3 id="agans-nine-rules-the-guardrails">Agans' nine rules — the guardrails<a class="headerlink" href="#agans-nine-rules-the-guardrails" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Understand the system</strong> — the ladders exist because of this.</li>
+<li><strong>Make it fail</strong> — reproduce first; the smallest reliable trigger (M12's minimal-repro instinct).</li>
+<li><strong>Quit thinking and look</strong> — evidence before theory; read the <em>actual</em> error, aloud, to the end.</li>
+<li><strong>Divide and conquer</strong> — bisect the layers, bisect the history.</li>
+<li><strong>Change one thing at a time</strong> — M21's bench law, generalised.</li>
+<li><strong>Keep an audit trail</strong> — the journal (a habit since M2, on purpose).</li>
+<li><strong>Check the plug</strong> — the dumb thing first: right cluster? right namespace? plugged in?</li>
+<li><strong>Get a fresh view</strong> — the rubber duck, a walk, AI as reviewer of your <em>trail</em> (never as the loop).</li>
+<li><strong>If you didn't fix it, it ain't fixed</strong> — verify against the original symptom; the coincidence killer.</li>
+</ol>
+<h3 id="the-layer-matrix-the-map-that-picks-the-ladder">The layer matrix — the map that picks the ladder<a class="headerlink" href="#the-layer-matrix-the-map-that-picks-the-ladder" title="Permanent link">&para;</a></h3>
+<p>The triage question that chooses the row: <strong>where does the first <em>hard</em> evidence point?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>First evidence</th>
+<th>The ladder (its module)</th>
+<th>Deep tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>App</strong></td>
+<td>logs, traceback, exit code</td>
+<td>M12 traceback autopsy · pdb/pytest (M13)</td>
+<td>pdb, py-spy dump, <code>git bisect</code></td>
+</tr>
+<tr>
+<td><strong>Container</strong></td>
+<td><code>ps -a</code> exit codes, <code>docker logs</code>/<code>inspect</code></td>
+<td>M16's five rungs</td>
+<td><code>docker diff</code>/<code>exec</code>, the debug image</td>
+</tr>
+<tr>
+<td><strong>Below deck</strong></td>
+<td>shim tree, cgroup files</td>
+<td>M17's below-deck ladder</td>
+<td><code>nsenter</code>, <code>ctr</code>, <code>memory.events</code>, <code>strace</code></td>
+</tr>
+<tr>
+<td><strong>Orchestrator</strong></td>
+<td>events, <code>describe</code>, endpoints</td>
+<td>M19 pod ladder · M20 operations</td>
+<td><code>kubectl debug</code>, <code>auth can-i</code>, <code>helm diff</code></td>
+</tr>
+<tr>
+<td><strong>Network</strong></td>
+<td>refused-vs-timeout, <code>dig</code></td>
+<td>M14's five commands</td>
+<td><code>tcpdump</code>/wireshark, netscope, <code>ss</code></td>
+</tr>
+<tr>
+<td><strong>OS / hardware</strong></td>
+<td><code>journalctl -k</code>, PSI, <code>dmesg</code></td>
+<td>M4 service ladder · M21 perf ladder</td>
+<td><code>strace</code>, <code>perf</code>, <code>vmstat</code>, the OOM chain</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-the-smell-symptom-vocabulary-layer">Reading the smell — symptom vocabulary → layer<a class="headerlink" href="#reading-the-smell-symptom-vocabulary-layer" title="Permanent link">&para;</a></h3>
+<p>The fast prior that aims the first probe (a <em>hypothesis</em>, never a verdict — "it's always DNS" is a prior,
+not a conclusion):</p>
+<table>
+<thead>
+<tr>
+<th>Symptom / errno</th>
+<th>Smells like</th>
+<th>Where to look next</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ETIMEDOUT</code>, hang, no answer</td>
+<td>a silent drop</td>
+<td>network / policy / firewall (M14: timeout ≠ refused)</td>
+</tr>
+<tr>
+<td><code>ECONNREFUSED</code></td>
+<td>the service said "no"</td>
+<td>wrong port, or the process is down</td>
+</tr>
+<tr>
+<td><strong>Exit 137</strong></td>
+<td>OOM-killed (128 + SIGKILL 9)</td>
+<td>memory — the OOM chain (M17/M21)</td>
+</tr>
+<tr>
+<td><code>EACCES</code></td>
+<td>permissions</td>
+<td>M3: owner / mode / ACL, seen from the syscall side</td>
+</tr>
+<tr>
+<td><code>ENOENT</code> <em>despite</em> <code>ls</code></td>
+<td>wrong namespace / cwd / symlink</td>
+<td>container fs, relative path, <code>$HOME</code> under another user</td>
+</tr>
+<tr>
+<td>"works locally"</td>
+<td>environment</td>
+<td>PATH · cwd · env (M15's big three)</td>
+</tr>
+<tr>
+<td><code>futex</code> storm</td>
+<td>lock contention</td>
+<td>pair <code>strace</code> with <code>py-spy dump</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-instruments-one-question-each">The instruments — one question each<a class="headerlink" href="#the-instruments-one-question-each" title="Permanent link">&para;</a></h3>
+<p>The toolkit is a set of witnesses, each answering a <em>different</em> question. Fluency in six beats mastery of
+one — this is the matrix's argument:</p>
+<table>
+<thead>
+<tr>
+<th>The question</th>
+<th>The instrument that answers it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Which file did it <strong>actually</strong> open?</td>
+<td><code>strace -f -e trace=file -y</code> — the ENOENT hunt, the "works-on-my-machine" killer</td>
+</tr>
+<tr>
+<td>Which address did it <strong>actually</strong> dial?</td>
+<td><code>strace -e trace=network</code> — the <code>connect()</code>/<code>ETIMEDOUT</code> tail</td>
+</tr>
+<tr>
+<td>Where is a <em>live</em> process stuck?</td>
+<td><code>strace -p PID</code> — the syscall it's blocked in</td>
+</tr>
+<tr>
+<td>What's the syscall <em>bill</em>?</td>
+<td><code>strace -c</code> — the census (unbatched-I/O, quantified)</td>
+</tr>
+<tr>
+<td>Which <strong>library</strong> call failed?</td>
+<td><code>ltrace</code> — one layer up from syscalls</td>
+</tr>
+<tr>
+<td>Which <strong>commit</strong> introduced it?</td>
+<td><code>git bisect run &lt;test&gt;</code> — binary search over history</td>
+</tr>
+<tr>
+<td>What happened, <strong>in order</strong>?</td>
+<td><code>journalctl --since … -o short-precise</code> — build the timeline first</td>
+</tr>
+</tbody>
+</table>
+<p><code>strace</code> gets its truth by <code>ptrace</code>: the kernel stops the process at each syscall and strace reads the
+registers — the <strong>actual</strong> kernel-boundary traffic. Logs say what the programmer chose to <em>claim</em>;
+syscalls confess what the program <em>did</em>. Working set: <code>-f</code> (children) · <code>-p</code> (attach) · <code>-e trace=</code> (focus)
+· <code>-c</code> (census) · <code>-y</code> (fd paths) · <code>-T</code> (durations). Reading discipline: the <strong>last lines before death</strong>,
+and the errno vocabulary spoken aloud.</p>
+<h3 id="git-bisect-halving-beats-scanning">git bisect — halving beats scanning<a class="headerlink" href="#git-bisect-halving-beats-scanning" title="Permanent link">&para;</a></h3>
+<p>1000 commits ≈ <strong>10</strong> tests; six layers ≈ <strong>3</strong> probes with good discriminators. Binary search over
+history works <em>because</em> of the M8 dividend — <strong>atomic commits</strong> (each is a testable, meaningful state) and
+a <strong>fast reliable oracle</strong> test (M13's suite). <code>git bisect start</code> → mark <code>bad</code>/<code>good</code> → <code>git bisect run
+&lt;test&gt;</code> and the machine executes the method for you. The matrix's triage <em>is</em> layer-bisection: "does a
+pod-to-pod curl work?" splits the stack in half in one probe.</p>
+<h3 id="the-3-am-fork-mitigate-now-vs-diagnose-now">The 3 a.m. fork — mitigate now vs diagnose now<a class="headerlink" href="#the-3-am-fork-mitigate-now-vs-diagnose-now" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    S["Symptom — users affected"] --&gt; Q{"Impact high AND&lt;br/&gt;mitigation available?"}
+    Q --&gt;|no| DG["Diagnose now&lt;br/&gt;run the loop on the live fault"]
+    Q --&gt;|yes| SNAP["Snapshot evidence FIRST&lt;br/&gt;logs · describe · pcap — seconds"]
+    SNAP --&gt; MIT["Mitigate&lt;br/&gt;rollback · restart · failover"]
+    MIT --&gt; REC["Verify users recovered"]
+    REC --&gt; DAY["Diagnose in daylight&lt;br/&gt;on the preserved evidence"]
+    DG --&gt; RC["Root cause → fix → VERIFY (rule 9)"]
+    DAY --&gt; RC</code></pre>
+<p>Impact decides the fork — but <strong>mitigation ≠ resolution</strong>: rollback stops the bleeding; the loop still owes
+a root cause. Preserve evidence <em>before</em> mitigating where it's cheap (seconds), because a restart that
+truncates the logs destroys the case.</p>
+<h3 id="root-cause-vs-symptom-and-why-plural">Root cause vs symptom — and why plural<a class="headerlink" href="#root-cause-vs-symptom-and-why-plural" title="Permanent link">&para;</a></h3>
+<p>The error message is a symptom <strong>at the reporting layer</strong>, not the cause <strong>at the origin layer</strong> — the
+500-mile email <em>said</em> mail failed by distance; the cause was a units bug (a timeout zeroed to ~3 ms) three
+layers down. And root causes are <strong>plural</strong>: real failures are conjunctions. Cloudflare's 2019 outage was a
+catastrophic-backtracking regex <strong>plus</strong> a missing CPU limit <strong>plus</strong> a global instant rollout <strong>plus</strong> a
+rusted kill-switch. A post-mortem that found <em>one</em> cause stopped early. The blameless form —
+timeline · impact · causes (plural) · contributing factors · what-went-well · action items with owners —
+is an <strong>evidence-quality mechanism</strong>: blame taxes testimony, and Therac-25 is the body count of the
+alternative.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>The loop:</strong> observe → hypothesize → test → conclude → verify → document — and it <em>loops</em> (refuted feeds the next observe).</li>
+<li><strong>Evidence before theory.</strong> Read the <em>actual</em> error, aloud, to the end — the mechanical antidote to confirmation bias.</li>
+<li><strong>One variable per test = one bit.</strong> N simultaneous changes buy 2ⁿ ambiguity; flailing destroys attribution.</li>
+<li><strong>The triage question:</strong> <em>where does the first hard evidence point?</em> — it picks the matrix row, and the row picks the ladder.</li>
+<li><strong>strace confesses; logs claim.</strong> The syscall boundary shows the file it <em>actually</em> opened, the address it <em>actually</em> dialed.</li>
+<li><strong>Bisection halves</strong> — history with <code>git bisect</code>, layers with a discriminating probe. Halving beats scanning.</li>
+<li><strong>Mitigation ≠ resolution; "it went away" ≠ fixed (rule 9).</strong> Root causes are plural; blameless post-mortems buy complete timelines.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-the-loop-and-the-instruments">Guided Lab: the loop and the instruments<a class="headerlink" href="#guided-lab-the-loop-and-the-instruments" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. You'll debug </em><em>real planted failures</em><em> by method: read the error and its exit code,
+use <code>strace</code> to see the syscall the program actually made, <code>git bisect</code> a regression buried in a throwaway
+repo, and fix each </em><em>root cause</em><em> — then prove it. Everything lives inside a disposable <code>~/debug-lab/</code>.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-23" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-23" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Three ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a Linux terminal in your browser.</li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120 core-hrs/mo).</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or a throwaway container: <code>docker run -it ubuntu bash</code>, then <code>apt-get update &amp;&amp; apt-get install -y gdb strace ltrace file git</code> and follow the steps below.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; Codespaces and local use <em>your own</em> free resources, so they scale to any class size.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Install the tools, meet the bench</label><label for="__tabbed_1_2">2 · Read the error, read the exit code</label><label for="__tabbed_1_3">3 · strace the failing syscall, fix the root cause</label><label for="__tabbed_1_4">4 · git bisect a planted regression</label><label for="__tabbed_1_5">5 · Root cause vs symptom — and a gdb/ltrace taste</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>apt-get<span class="w"> </span>update<span class="w"> </span>-qq<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>gdb<span class="w"> </span>strace<span class="w"> </span>ltrace<span class="w"> </span>file<span class="w"> </span>git
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/debug-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/debug-lab
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>strace<span class="w"> </span>-V<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w">     </span><span class="c1"># the syscall wiretap</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>ltrace<span class="w"> </span>-V<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w">     </span><span class="c1"># the library-call tracer</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>gdb<span class="w"> </span>--version<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w">  </span><span class="c1"># the interactive debugger</span>
+</code></pre></div>
+These are your standing instruments. <code>strace</code> reads the program↔kernel boundary, <code>ltrace</code> the
+program↔library boundary, <code>gdb</code> stops a process and inspects it. You'll reach for <code>strace</code> first this
+lab — it needs no source and cannot be lied to.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/debug-lab/report.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">#!/bin/bash</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">set -euo pipefail</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">config=&quot;$HOME/debug-lab/etc/report.conf&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">threshold=$(grep &#39;^threshold=&#39; &quot;$config&quot; | cut -d= -f2)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">echo &quot;Report OK — threshold=$threshold&quot;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">EOF</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>chmod<span class="w"> </span>+x<span class="w"> </span>~/debug-lab/report.sh
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;threshold=42\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>~/debug-lab/report.conf<span class="w">   </span><span class="c1"># a config exists...</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>~/debug-lab/report.sh<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;exit=</span><span class="nv">$?</span><span class="s2">&quot;</span>
+</code></pre></div>
+It fails. <strong>Read it, don't guess:</strong> the message names a file, and <code>exit=</code> is non-zero. <code>ls
+~/debug-lab</code> shows a <code>report.conf</code> <em>does</em> exist — so why <code>No such file or directory</code>? Resist the urge
+to theorise. The next step <em>looks</em>.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>strace<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>file<span class="w"> </span>~/debug-lab/report.sh<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;report.conf&#39;</span>
+</code></pre></div>
+The <code>openat(... ) = -1 ENOENT</code> line shows the <strong>exact path</strong> the program tried — and it's <em>not</em> where
+your <code>report.conf</code> sits. This is the "works locally" bug: the file exists, just not where the code
+opens it. Fix the <strong>root cause</strong> (put the config where it's actually looked for), then <strong>verify</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/debug-lab/etc
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>cp<span class="w"> </span>~/debug-lab/report.conf<span class="w"> </span>~/debug-lab/etc/report.conf
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>~/debug-lab/report.sh<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;exit=</span><span class="nv">$?</span><span class="s2">&quot;</span><span class="w">     </span><span class="c1"># exit=0, prints threshold=42</span>
+</code></pre></div>
+Click <strong>Check</strong> — the verifier confirms <code>report.sh</code> now exits 0 with the right threshold.</p>
+</div>
+<div class="tabbed-block">
+<p>Build a throwaway repo whose history hides a regression, then let binary search find it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/debug-lab/calc<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/debug-lab/calc<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>init<span class="w"> </span>-q
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>git<span class="w"> </span>config<span class="w"> </span>user.email<span class="w"> </span>dev@example.com<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>config<span class="w"> </span>user.name<span class="w"> </span>dev
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;#!/bin/bash\nadd() { echo $(( $1 + $2 )); }\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>calc.sh
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;#!/bin/bash\nsource &quot;$(dirname &quot;$0&quot;)/calc.sh&quot;\nadd &quot;$1&quot; &quot;$2&quot;\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>run.sh
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;#!/bin/bash\ngot=$(bash &quot;$(dirname &quot;$0&quot;)/run.sh&quot; 2 3)\n[ &quot;$got&quot; = &quot;5&quot; ] || { echo &quot;FAIL: 2+3=$got&quot;; exit 1; }\necho &quot;PASS: 2+3=5&quot;\n&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>test.sh
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;calc&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>README.md<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-qm<span class="w"> </span><span class="s2">&quot;init calc&quot;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;note </span><span class="nv">$i</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>README.md<span class="p">;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-aqm<span class="w"> </span><span class="s2">&quot;docs: note </span><span class="nv">$i</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/\$1 + \$2/\$1 - \$2/&#39;</span><span class="w"> </span>calc.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-aqm<span class="w"> </span><span class="s2">&quot;refactor: simplify add&quot;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="m">7</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">9</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;note </span><span class="nv">$i</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>README.md<span class="p">;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-aqm<span class="w"> </span><span class="s2">&quot;docs: note </span><span class="nv">$i</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>bash<span class="w"> </span>test.sh<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;exit=</span><span class="nv">$?</span><span class="s2">&quot;</span><span class="w">      </span><span class="c1"># FAIL — the bug is somewhere in history</span>
+</code></pre></div>
+Now bisect — good is the root commit, bad is <code>HEAD</code>, and the oracle is the test:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>git<span class="w"> </span>bisect<span class="w"> </span>start
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>git<span class="w"> </span>bisect<span class="w"> </span>bad
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>git<span class="w"> </span>bisect<span class="w"> </span>good<span class="w"> </span><span class="k">$(</span>git<span class="w"> </span>rev-list<span class="w"> </span>--max-parents<span class="o">=</span><span class="m">0</span><span class="w"> </span>HEAD<span class="k">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>git<span class="w"> </span>bisect<span class="w"> </span>run<span class="w"> </span>bash<span class="w"> </span>test.sh<span class="w">       </span><span class="c1"># names &quot;refactor: simplify add&quot; as the culprit</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>git<span class="w"> </span>bisect<span class="w"> </span>reset
+</code></pre></div>
+Fix the <strong>root cause</strong> (the flipped operator), verify, and check:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/\$1 - \$2/\$1 + \$2/&#39;</span><span class="w"> </span>calc.sh
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>bash<span class="w"> </span>test.sh<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;exit=</span><span class="nv">$?</span><span class="s2">&quot;</span><span class="w">       </span><span class="c1"># PASS, exit=0</span>
+</code></pre></div>
+Click <strong>Check</strong> — the verifier confirms the regression is gone and the test is green.</p>
+</div>
+<div class="tabbed-block">
+<p>Re-run <strong>both</strong> original symptoms to satisfy rule 9 ("if you didn't fix it, it ain't fixed"):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>~/debug-lab/report.sh<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;exit=</span><span class="nv">$?</span><span class="s2">&quot;</span><span class="w">          </span><span class="c1"># 0</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="o">(</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/debug-lab/calc<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>bash<span class="w"> </span>test.sh<span class="w"> </span><span class="o">)</span><span class="w">        </span><span class="c1"># PASS</span>
+</code></pre></div>
+Then taste the other two instruments. <code>ltrace</code> shows library calls a level above syscalls:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ltrace<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;+puts+printf&#39;</span><span class="w"> </span>ls<span class="w"> </span>&gt;/dev/null
+</code></pre></div>
+And <code>gdb</code> catches a crash and prints where it happened — no source required:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>gdb<span class="w"> </span>-q<span class="w"> </span>-batch<span class="w"> </span>-ex<span class="w"> </span>run<span class="w"> </span>-ex<span class="w"> </span>bt<span class="w"> </span>--args<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;kill -SEGV $$&#39;</span>
+</code></pre></div>
+Symptom = the error you <em>saw</em> (grep's <code>ENOENT</code>, the failing test). Root cause = what actually broke
+(a misplaced config, a flipped operator). You fixed causes, not symptoms — and you verified.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you read an error and its exit code instead of guessing, used <code>strace</code> to see the syscall a program
+<em>actually</em> made, bisected a regression to a single commit, and fixed + verified two root causes — the
+guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Work in <code>~/debug-lab/</code>. The gauntlet is </em><em>bare-hands by law</em><em>:
+no AI during a scenario (rule 8 is post-game analysis, never a mid-loop crutch). Struggle here is the
+point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-read-one-strace-tail-correctly">Challenge 1 — Read one strace tail correctly<a class="headerlink" href="#challenge-1-read-one-strace-tail-correctly" title="Permanent link">&para;</a></h3>
+<p>A process' <code>strace</code> tail ends with <code>connect(3, {sa_family=AF_INET, sin_port=htons(5432), ...}) = -1
+ETIMEDOUT</code>. State, in one breath: what was attempted, which layer the verdict implicates, and the next two
+probes.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>5432 is Postgres. <code>ETIMEDOUT</code> is <em>not</em> <code>ECONNREFUSED</code> — one means silence, the other means a <code>RST</code>.
+Which one implicates the <em>path</em> rather than the <em>service</em>?</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>The process tried to open a TCP connection (fd 3) to port 5432 and the connect <strong>timed out</strong> — no
+answer at all (not refused). That implicates the <strong>network path or a silent drop</strong> (firewall /
+NetworkPolicy / dead host) — <em>not</em> "wrong password / DB down," which would return <code>ECONNREFUSED</code>. Next
+probes: (1) <code>nc -zv host 5432</code> from the <em>same context</em> (refused vs timeout vs success splits it), and
+(2) the policy/route check for that destination (NetworkPolicy / ufw / route — the timeout's usual
+suspects). This is M14's signature, read at the syscall boundary.</p>
+</details>
+<h3 id="challenge-2-enoent-despite-ls">Challenge 2 — ENOENT despite <code>ls</code><a class="headerlink" href="#challenge-2-enoent-despite-ls" title="Permanent link">&para;</a></h3>
+<p><code>strace</code> shows <code>openat(AT_FDCWD, "/etc/app/config.yml") = -1 ENOENT</code>, but the file <strong>exists</strong> when you <code>ls</code>
+it. Give three distinct explanations, each with its check.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>(1) <strong>Different namespace/root</strong> — the process runs in a container/chroot, so <em>its</em> <code>/etc</code> isn't yours
+(check: <code>nsenter -m -t PID ls /etc/app</code>, or inspect the image's fs). (2) <strong>Different user/cwd
+resolution</strong> — a relative path or <code>$HOME</code> expansion differs under the service user (the strace shows
+the <em>exact</em> string tried — compare it). (3) <strong>A race/order issue</strong> — the file exists <em>now</em> but didn't
+at open time (check timestamps; does a retry succeed?). Honourable fourth: a <strong>symlink to a missing
+target</strong> — <code>ls</code> sees the link, <code>open</code> follows it (<code>ls -L</code> / <code>stat</code>).</p>
+</details>
+<h3 id="challenge-3-corner-a-flake-before-chasing-its-cause">Challenge 3 — Corner a flake before chasing its cause<a class="headerlink" href="#challenge-3-corner-a-flake-before-chasing-its-cause" title="Permanent link">&para;</a></h3>
+<p>A script fails intermittently (~1 in 8 runs). Before you diagnose anything, what is your first move, and
+why is it the <em>first</em> move?</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Reproduction is a <em>rate</em> problem before it's a <em>cause</em> problem. You cannot debug what won't fail on
+demand.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><strong>Make it fail <em>more</em></strong> — raise the frequency until it's reliable: loop it (<code>for i in $(seq 100); do
+...; done</code>), add load, tighten the timing window. Only once it fails on demand do you diagnose (a race
+becomes visible when frequency cooperates), then fix, then <strong>verify with a 100-run soak</strong> at zero
+failures. Instrument <em>less</em> invasively if adding logging makes it vanish — that's a heisenbug
+(observation-dependent); sample (<code>py-spy</code>) rather than perturb.</p>
+</details>
+<h3 id="challenge-4-the-3-am-fork-walked">Challenge 4 — The 3 a.m. fork, walked<a class="headerlink" href="#challenge-4-the-3-am-fork-walked" title="Permanent link">&para;</a></h3>
+<p>A service is down and users are bleeding. Walk the fork: the decision, the order of operations, and what
+gets preserved.</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Impact high <strong>and</strong> mitigation available → <strong>mitigate first</strong>. Order: <strong>snapshot evidence where cheap</strong>
+(copy logs, save <code>kubectl describe</code>/<code>docker inspect</code> output, a <code>pcap</code> if network-shaped — seconds, not
+minutes) → <strong>mitigate</strong> (rollback to the previous digest / restart / failover) → <strong>verify users
+recovered</strong> → <em>then</em> run the diagnosis loop on the preserved evidence <strong>in daylight</strong>. Preserve: logs,
+state dumps, the exact deployed versions/digests, and the timeline of actions you took. Mitigation
+bought daylight; it did <strong>not</strong> discharge the root cause.</p>
+</details>
+<h3 id="challenge-5-stretch-design-a-failure-the-mastery-inversion">Challenge 5 (stretch) — Design a failure (the mastery inversion)<a class="headerlink" href="#challenge-5-stretch-design-a-failure-the-mastery-inversion" title="Permanent link">&para;</a></h3>
+<p>The stage project is <strong>"Break My System."</strong> Author one <em>realistic</em> failure: an <code>inject.sh</code> (idempotent), a
+<strong>tested</strong> <code>restore.sh</code>, and a sealed <code>SOLUTION.md</code> (symptom → expected loop → root cause → the
+discriminating test that cracks it). State which of the nine rules it teaches.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>Realistic, not a puzzle-box. A plausible production mistake — a bind-mount shadowing code, an env-var
+absent in the unit file, a wrong-context <code>kubectl</code> session (the plug!). Difficulty via <em>realism</em>, never
+obscurity.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p>Example: <strong>inject</strong> a config that points a service at <code>etc/app.conf</code> while the file ships at
+<code>conf/app.conf</code> (the M15 "big three" — cwd/PATH/env). <strong>restore</strong> deletes the misdirection and is run
+<em>after</em> every solve (the restore law applies to drills too). <strong>SOLUTION.md</strong>: symptom = <code>ENOENT</code> on
+start; expected loop = read error → <code>strace -e trace=file</code> → see the real path → fix location →
+verify; root cause = wrong config path in the unit; discriminating test = does a fresh start from the
+<em>same image</em> reproduce it (config bug) or not (host bug)? Rule taught: <strong>make it fail</strong> (reproduce
+before fixing). The mastery thesis: designing a convincing failure requires knowing the layer's real
+failure modes — solving only requires following one.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard — is
+what builds the memory. This module's whole subject is not fooling yourself, so grade honestly.</em></p>
+<details class="question">
+<summary>State the debugging loop's six stages and what the audit trail adds.</summary>
+<p><strong>Observe</strong> (evidence, not expectation) → <strong>hypothesize</strong> (one mechanism fitting <em>all</em> evidence) →
+<strong>test</strong> (one discriminating change/measurement) → <strong>conclude</strong> (confirmed/refuted, honestly) →
+<strong>verify</strong> (the fix against the original symptom) → <strong>document</strong> (runbook/post-mortem). The audit trail
+makes negative results reusable, enables hand-off, and feeds the documentation — it's the loop's memory.</p>
+</details>
+<details class="question">
+<summary>Why does changing one variable per test converge faster — the information argument?</summary>
+<p>One change = <strong>one bit</strong> cleanly attributed: the outcome discriminates exactly one hypothesis. N
+simultaneous changes create <strong>2ⁿ</strong> candidate explanations for the observation — you spent a test and
+<em>bought</em> ambiguity. Convergence is measured in eliminated hypotheses per test; one-at-a-time maximises
+it. (Flailing isn't slow because it's sloppy — it's slow because it destroys attribution.)</p>
+</details>
+<details class="question">
+<summary>How does strace get its information, and what truth does it offer that logs cannot?</summary>
+<p>Via <code>ptrace</code>: the kernel stops the process at syscall entry/exit and strace reads its registers/memory
+— the <strong>actual</strong> kernel-boundary traffic. Truth class: what the program really <strong>did</strong> (paths actually
+opened, addresses actually dialed, errors actually returned) versus logs, which say what the
+programmer <em>chose to claim</em>. No source needed; lies impossible.</p>
+</details>
+<details class="question">
+<summary><code>strace</code> shows <code>openat(..., \"/etc/app/config.yml\") = -1 ENOENT</code> but the file exists on <code>ls</code>. Three explanations?</summary>
+<p>(1) <strong>Different namespace/root</strong> — a container/chroot's <code>/etc</code> isn't yours; (2) <strong>different
+user/cwd/<code>$HOME</code> resolution</strong> — a relative path resolves elsewhere under the service user (the strace
+shows the exact string tried); (3) <strong>a race</strong> — it exists now but didn't at open time. (Also: a
+<strong>symlink to a missing target</strong> — <code>ls</code> sees the link, <code>open</code> follows it.)</p>
+</details>
+<details class="question">
+<summary>How does git bisect find a culprit in 1000 commits, and which two M8 disciplines make it work?</summary>
+<p>Binary search over history: each test <strong>halves</strong> the suspect range — 1000 commits ≈ 10 tests; <code>git
+bisect run</code> automates it via a test's exit code. It works because of <strong>atomic commits</strong> (each is a
+testable, meaningful state) and a <strong>fast, reliable oracle</strong> test (M13's suite) to judge good/bad.</p>
+</details>
+<details class="question">
+<summary>Why are post-mortems blameless — the <em>evidence</em> argument, not the kindness one?</summary>
+<p>Post-mortems run on <strong>testimony</strong>; blame taxes it — people facing consequences sand timelines, omit
+the fatal 4:07 command, defend instead of narrate. Psychological safety is an <strong>evidence-quality
+mechanism</strong>: blameless culture buys complete timelines, and complete timelines buy real (plural) root
+causes. Kindness is a bonus; accuracy is the argument. Therac-25 is the cost of the alternative.</p>
+</details>
+<details class="question">
+<summary>Your fix 'seems to work.' What does rule 9 demand, concretely?</summary>
+<p>Re-trigger the <strong>original</strong> failure condition (the reproduction from rule 2) and observe it <strong>not</strong>
+fail — and, where stakes warrant, state <strong>why</strong> the fix works (the mechanism). "Seems better" without
+re-running the original trigger is a coincidence candidate. If you <em>can't</em> reproduce-then-verify, say
+so explicitly in the trail (known-unverified).</p>
+</details>
+<details class="question">
+<summary>Exit 137, <code>EACCES</code>, <code>ETIMEDOUT</code>, 'works locally' — the smell each points to?</summary>
+<p>137 = <strong>OOM-killed</strong> (128 + SIGKILL 9) → memory/the OOM chain. <code>EACCES</code> = <strong>permissions</strong> (M3).
+<code>ETIMEDOUT</code> = a <strong>silent drop</strong> → network/policy (M14: timeout ≠ refused). "Works locally" =
+<strong>environment</strong> → PATH/cwd/env (M15's big three). A smell is a <em>prior</em> that aims the first probe — not
+a verdict.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>3 minutes, no notes</strong>, to a non-technical friend: <em>"How do you debug?"</em> — the detective
+frame required (collect evidence before naming suspects, test one alibi at a time, write everything in
+the case file, never close a case on a hunch you didn't re-test). Then, in <strong>90 seconds</strong>, compare the
+three witnesses: <strong>logs</strong> (the program's own testimony — can lie or omit), the <strong>debugger</strong> (the
+interrogation room — total control, but the suspect must come in / be reproducible), and <strong>strace</strong>
+(the wiretap — what it <em>actually</em> did, works on live suspects via <code>-p</code>). If you can't yet, that's your
+signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes) — "honestly" is more load-bearing here than anywhere, because the
+whole module is about not fooling yourself. They </em><em>gate</em><em> progress; passing M23 also </em><em>opens Stage 8's
+gate</em><em> into M24. A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Define</strong> the loop's six stages and what each produces — and why it <em>loops</em> (refuted feeds the next observe).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> why evidence precedes hypothesis: the confirmation bias it defeats and the mechanical antidote (read the actual error, aloud).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>List</strong> Agans' nine rules from memory, in phrases, in 45 seconds.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> the likely layer from a symptom smell (timeout, 137, <code>EACCES</code>, works-locally, futex) — the smell sprint, cold.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Use</strong> the journal template on every scenario without prompting — every hypothesis written <em>before</em> its test, every verdict recorded.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Implement</strong> the first-five-minutes protocol as one practiced parallel sweep, one probe per matrix layer.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Demonstrate</strong> strace fluency — <code>-f -p -e -c -y -T</code> chosen for stated reasons, errno vocabulary read aloud, last-lines discipline.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> a multi-source incident by building the unified timeline <strong>first</strong> — the clock skew detected and corrected before theorising.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a flaky failure by raising its frequency <em>before</em> chasing its cause; verify with a 100-run soak.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> across all six matrix layers with the right ladder per layer — triage picks the layer within two probes.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compare</strong> logs vs debugger vs strace as witnesses (when each lies, when each binds) and explain the pincer.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Evaluate</strong> the mitigate-vs-diagnose fork and name what to snapshot first; state why mitigation ≠ resolution.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Bisect</strong> a planted regression manually and with <code>git bisect run</code>, and name the two M8 disciplines that make it work.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> realistic failure scenarios that each teach a <em>distinct</em> rule, with idempotent inject / <strong>tested</strong> restore / sealed solution.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Write</strong> a blameless post-mortem with plural causes and owned action items — zero sentences naming a person as a cause.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back — the detective frame, the three witnesses, and rule 9 landed on a listener who can retell it.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory forms. <strong>Interleaving stays active</strong> — every M23 review also pulls
+one item from <strong>Module 22</strong> (the GPU/NPU napkin and the performance ladder, which now slot into the matrix
+as the OS/hardware row's symptom class). This module <strong>opens Stage 8</strong>, so the <em>stage</em> review rides
+alongside the module reviews, and from here the <strong>gauntlet is the review engine</strong> (<code>make gauntlet N=1</code>
+weekly, forever). Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M22 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>The loop + matrix blanks cold · the rules + smell sprints · flashcards</td>
+<td>The napkin law derived (params × bytes-per-param)</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>strace triathlon (ENOENT/EACCES ≤8 min · bisect ≤10 min · timeline ≤12 min) · validation misses</td>
+<td>A model's VRAM sized cold ("13B ≠ 13 GB")</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td><code>make gauntlet N=2</code> (blind draw) · the 3 a.m. fork drilled on paper</td>
+<td>The roofline placed (memory-bound vs compute-bound)</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td><code>make gauntlet N=3</code> — MTTR tracked against the module's trend · post-mortem #1 re-read</td>
+<td>nvidia-smi's four vital signs read fluently</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Validation retake (target ≥90) · one <strong>new</strong> scenario designed and added to the pack</td>
+<td>The transfer break-even / crossover curve, cold</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> <strong>M24</strong> (security — the same loop under an adversary who deletes logs; the
+bug-or-attack fork added to triage) · <strong>M25</strong> (observability — the OBSERVE stage industrialised; every
+gauntlet's "what dashboard would have caught this in 30 s?" postscript is its requirements doc) · <strong>M26–28</strong>
+(debugging <em>stochastic</em> systems — the loop survives, but "make it fail" becomes seeds, datasets, and eval
+harnesses) · the <strong>capstone</strong>, whose incident drills draw literally from this module's "Break My System"
+pack.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>Every prior module built a ladder for its layer; M23 built the <strong>method that routes between them</strong> —
+evidence picks the layer, the ladder walks it, the journal remembers it, and the post-mortem makes sure
+it never costs full price twice.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../stage-07/module-22/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 22 — GPU &amp; NPU Performance">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 22 — GPU & NPU Performance
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../stage-09/module-24/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 24 — Security">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 24 — Security
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>

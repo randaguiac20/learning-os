@@ -1,0 +1,3641 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The throughput machine — SIMT, memory bandwidth and the roofline, arithmetic intensity, occupancy, batching, the host↔device transfer tax, reading nvidia-smi, and the NPU/TPU tier. Sizing math before silicon. Closes Stage 7.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../module-21/">
+      
+      
+        <link rel="next" href="../../stage-08/module-23/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 22 — GPU & NPU Performance - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-22-gpu-npu-performance" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 22 — GPU & NPU Performance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-01/module-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 02 — First Contact with the Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 2 — Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 03 — Linux Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 04 — Linux Administration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-02/module-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 05 — Bash Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Intermediate Skills
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 3 — Intermediate Skills
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 06 — Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 07 — Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 08 — Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 09 — SSH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 10 — Dotfiles & Toolchains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-03/module-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 11 — Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 4 — Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 4 — Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 12 — Programming Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 13 — Python for Engineers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-04/module-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 14 — Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 5 — Production Practices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 5 — Production Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 15 — Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 16 — Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 17 — containerd & OCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-05/module-18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 18 — devcontainers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 6 — Enterprise Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 6 — Enterprise Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 19 — Kubernetes Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-06/module-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 20 — Kubernetes Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 7 — Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 7 — Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 21 — CPU & Memory Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 22 — GPU & NPU Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-two-philosophies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: two philosophies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-vs-gpu-side-by-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU vs GPU, side by side
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simt-divergence-the-warp-is-the-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIMT divergence — the warp is the unit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-memory-ladder-new-rungs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The memory ladder — new rungs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-intensity-the-roofline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arithmetic intensity &amp; the roofline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batching-the-gpus-oxygen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batching — the GPU's oxygen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-transfer-tax-and-the-napkin-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The transfer tax and the napkin law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-instruments-nvidia-smis-four-vital-signs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The instruments — nvidia-smi's four vital signs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#precision-menu-and-the-nputpu-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Precision menu and the NPU/TPU tier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-accelerator-judgment-table-the-modules-closing-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The accelerator judgment table — the module's closing artifact
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-the-numbers-that-decide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: the numbers that decide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-size-three-models-cold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Size three models cold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-assign-silicon-to-three-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Assign silicon to three workloads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-find-the-three-timing-sins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Find the three timing sins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-roofline-verdict-by-hand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — The roofline verdict, by hand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-accelerator-postscript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The accelerator postscript
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 8 — Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 8 — Troubleshooting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-08/module-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 23 — Debugging Methodology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 9 — Professional Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 9 — Professional Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 24 — Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-09/module-25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 25 — Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 10 — Expert Mastery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 10 — Expert Mastery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 26 — AI Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 27 — Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 28 — AI Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-10/module-29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 29 — Claude Code Advanced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 11 — Math & CS Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 11 — Math & CS Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 30 — Discrete Math & Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 31 — Calculus, Probability & Statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-11/module-32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 32 — Data Structures & Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 12 — Data & Software Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 12 — Data & Software Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 33 — Databases & SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 34 — Big Data & Data Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 35 — Software Engineering Practice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-12/module-36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 36 — Backend & API Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 13 — Cloud & AI Domains
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-37/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 37 — Cloud Platforms & Certification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-38/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 38 — Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stage-13/module-39/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 39 — Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-two-philosophies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: two philosophies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-vs-gpu-side-by-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU vs GPU, side by side
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simt-divergence-the-warp-is-the-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIMT divergence — the warp is the unit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-memory-ladder-new-rungs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The memory ladder — new rungs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-intensity-the-roofline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arithmetic intensity &amp; the roofline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batching-the-gpus-oxygen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batching — the GPU's oxygen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-transfer-tax-and-the-napkin-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The transfer tax and the napkin law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-instruments-nvidia-smis-four-vital-signs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The instruments — nvidia-smi's four vital signs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#precision-menu-and-the-nputpu-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Precision menu and the NPU/TPU tier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-accelerator-judgment-table-the-modules-closing-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The accelerator judgment table — the module's closing artifact
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-the-numbers-that-decide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: the numbers that decide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-size-three-models-cold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Size three models cold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-assign-silicon-to-three-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Assign silicon to three workloads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-find-the-three-timing-sins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Find the three timing sins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-the-roofline-verdict-by-hand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 — The roofline verdict, by hand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-stretch-the-accelerator-postscript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5 (stretch) — The accelerator postscript
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-22-gpu-npu-performance">Module 22 — GPU &amp; NPU Performance<a class="headerlink" href="#module-22-gpu-npu-performance" title="Permanent link">&para;</a></h1>
+<p><small>Stage 7 · Optimization · ~1 week at 4 h/day · Prerequisite — Module 21 (the memory ladder, bandwidth thinking, the profile-first reflex, Amdahl). Builds on M1 (the hardware vocabulary) and M14 (PCIe/NVLink as networks). This module closes Stage 7.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p>A <strong>GPU</strong> is a throughput machine: thousands of simple cores that <strong>hide</strong> memory latency with massive
+parallelism, where a CPU (M21) <strong>avoids</strong> latency with caches and prediction — the same machine,
+philosophically inverted, and fed by memory ~10–20× wider. An <strong>NPU</strong> (and Google's TPU) narrows
+further: fixed-function matrix engines that trade generality for efficiency. This week teaches the
+architecture well enough to <strong>size workloads, read the instruments, and argue CPU-vs-GPU-vs-NPU
+credibly</strong> — the hardware literacy the AI stage spends daily.</p>
+<p>M21 ended at a ceiling: the free lunch is over, Amdahl caps threading, and DRAM bandwidth (~50–100 GB/s)
+starves data-parallel math. For workloads that are <strong>wide and regular</strong> — exactly ML's matmuls — the GPU
+changes the regime: ~10–20× the memory bandwidth (HBM: 1–3+ TB/s), ~100× the raw FLOPs, latency
+<strong>hidden</strong> by oversubscription instead of avoided by caches. What it does <strong>not</strong> fix: serial logic,
+branchy code, and small/chatty workloads (the transfer tax eats them). Knowing that boundary <em>is</em> the
+module — and the habit it installs is <strong>sizing math before you reach for silicon.</strong></p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>The curriculum's AI stage runs on this silicon. <strong>M26</strong> (training) is a GPU-feeding exercise — batches,
+mixed precision, and the starvation clinic on real DataLoaders. <strong>M27</strong> (inference) is bandwidth
+arithmetic: the napkin law productized as quantization + continuous batching. <strong>M28</strong> (infrastructure)
+schedules this silicon — NVLink fabrics, <code>nvidia.com/gpu</code> on M19's platform, utilization-is-money. And
+the capstone's budget is GPU-hours priced by this week's dossier. Learn the sizing and judgment now and
+every hardware decision ahead runs on arithmetic instead of faith.</p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 22 — GPU &amp; NPU Performance&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Definition / Architecture / Misconceptions):
+the two philosophies (four geniuses vs a ten-thousand-worker factory with a giant conveyor) → SIMT and
+the warp as the unit → latency hidden, not avoided (the 400-cycle stall swapped away) → why matmul is
+the perfect workload (N³ FLOPs on N² data) → the crossover curve as the honest boundary (the loading
+dock is narrow — small jobs lose in shipping) → the napkin law derived live (tokens/s ≈ bandwidth ÷
+model bytes) → close on the judgment table: <em>is this workload wide and regular?</em></p>
+</details>
+<p><strong>Terminal cast — pending; record per <code>../media/README.md</code>.</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-the-numbers-that-decide">Guided Lab</a> and <strong>run the arithmetic yourself</strong> — the
+roofline classification, the batching curve, the transfer break-even. Every idea here is a number you
+can compute on a plain CPU; the GPU just lives on the same curves, larger. Typing beats watching, and
+it is part of how the memory forms.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-two-philosophies">The picture: two philosophies<a class="headerlink" href="#the-picture-two-philosophies" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    W["A workload arrives"]
+    subgraph CPU["CPU — latency AVOIDANCE"]
+        C1["Few fast cores"] --&gt; C2["Big caches + prediction&lt;br/&gt;keep one thread from waiting"]
+    end
+    subgraph GPU["GPU — latency HIDING"]
+        G1["Thousands of simple cores"] --&gt; G2["Oversubscribe: a stalled warp&lt;br/&gt;is swapped for a ready one"]
+    end
+    W --&gt; CPU
+    W --&gt; GPU</code></pre>
+<p>The CPU spends its die on <em>not waiting</em> — caches, branch prediction, out-of-order execution keep one fast
+thread fed. The GPU does the opposite: it <em>assumes</em> it will wait on memory and keeps so many threads in
+flight that a stalled one costs nothing — the scheduler instantly runs a ready one. Same stall M21 fought
+with caches, <strong>defeated by oversubscription</strong> instead.</p>
+<h3 id="cpu-vs-gpu-side-by-side">CPU vs GPU, side by side<a class="headerlink" href="#cpu-vs-gpu-side-by-side" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CPU (M21)</th>
+<th>GPU (this week)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Philosophy</td>
+<td>Latency avoidance (caches, prediction, OoO)</td>
+<td>Latency hiding (10 000s of threads in flight)</td>
+</tr>
+<tr>
+<td>Cores</td>
+<td>Few, complex, fast (~GHz, deep OoO)</td>
+<td>Thousands, simple, slower — grouped into SMs</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>Independent threads</td>
+<td><strong>SIMT</strong>: warps of 32 threads in lockstep</td>
+</tr>
+<tr>
+<td>Cache role</td>
+<td>The main event (most of the die)</td>
+<td>Small; bandwidth + parallelism do the job</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>DDR ~50–100 GB/s</td>
+<td>HBM/GDDR ~0.5–3+ TB/s</td>
+</tr>
+<tr>
+<td>Wins at</td>
+<td>Serial, branchy, latency-critical</td>
+<td>Wide, regular, throughput math</td>
+</tr>
+</tbody>
+</table>
+<p>The software model (CUDA's, but vendor-neutral in concept): a <strong>kernel</strong> launched over a <strong>grid</strong> of
+<strong>blocks</strong> of <strong>threads</strong>; blocks land on <strong>SMs</strong> (streaming multiprocessors); threads run in <strong>warps</strong>
+(32, lockstep). Occupancy — resident warps vs the SM's capacity — is the fuel gauge for latency hiding:
+too few warps and the machine idles.</p>
+<h3 id="simt-divergence-the-warp-is-the-unit">SIMT divergence — the warp is the unit<a class="headerlink" href="#simt-divergence-the-warp-is-the-unit" title="Permanent link">&para;</a></h3>
+<p>A warp's 32 threads share one instruction pointer. Hit a data-dependent branch and <strong>both paths run
+serially under masks</strong> — half the threads idle each way:</p>
+<pre class="mermaid"><code>flowchart TB
+    A["Warp of 32 threads&lt;br/&gt;hits: if (x &gt; 0)"]
+    A --&gt; B["Pass 1: run the THEN path&lt;br/&gt;threads with x ≤ 0 masked off (idle)"]
+    B --&gt; C["Pass 2: run the ELSE path&lt;br/&gt;threads with x &gt; 0 masked off (idle)"]
+    C --&gt; D["Reconverge&lt;br/&gt;cost ≥ 2× (worse when nested)"]</code></pre>
+<p>This is the branch-mispredict lesson's harsher sibling: not a <em>probabilistic</em> penalty but <strong>guaranteed
+serialization</strong>. It is why GPU code avoids branching on data, and why you reason in warps of 32, not in
+threads.</p>
+<h3 id="the-memory-ladder-new-rungs">The memory ladder — new rungs<a class="headerlink" href="#the-memory-ladder-new-rungs" title="Permanent link">&para;</a></h3>
+<p>M21's ladder gains a top end. The numbers to add to your atlas:</p>
+<pre class="mermaid"><code>flowchart TB
+    R["Registers&lt;br/&gt;~0, per-thread"] --&gt; S["Shared memory / L1&lt;br/&gt;~ns, per-SM (locality by hand)"]
+    S --&gt; L2["L2 cache&lt;br/&gt;MBs, shared"]
+    L2 --&gt; H["HBM / VRAM&lt;br/&gt;0.5–3+ TB/s — the regime-changer"]
+    H --&gt; P["PCIe&lt;br/&gt;~16–64 GB/s — the CHOKEPOINT (host↔device)"]
+    P --&gt; NV["NVLink&lt;br/&gt;~hundreds of GB/s — GPU↔GPU (M28)"]
+    NV --&gt; DR["Host DRAM&lt;br/&gt;~50–100 GB/s (M21's top rung)"]</code></pre>
+<p>The two facts that drive everything below: <strong>HBM is 10–20× a CPU's DRAM bandwidth</strong> (the product you're
+buying), and <strong>PCIe is 30–100× slower than HBM</strong> (the transfer tax that gates small jobs).</p>
+<h3 id="arithmetic-intensity-the-roofline">Arithmetic intensity &amp; the roofline<a class="headerlink" href="#arithmetic-intensity-the-roofline" title="Permanent link">&para;</a></h3>
+<p><strong>Arithmetic intensity</strong> = FLOPs performed per byte moved. Plot it against the machine's two ceilings and
+one plot answers <em>"can this workload ever be fast here?"</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arithmetic intensity</td>
+<td>FLOPs ÷ bytes moved — the workload's position on the x-axis</td>
+</tr>
+<tr>
+<td>Bandwidth roof</td>
+<td>intensity × memory bandwidth — the ceiling <em>below</em> the ridge</td>
+</tr>
+<tr>
+<td>Compute roof</td>
+<td>the chip's peak FLOP/s — the flat ceiling <em>above</em> the ridge</td>
+</tr>
+<tr>
+<td>Ridge point</td>
+<td>compute roof ÷ bandwidth — where the two roofs cross</td>
+</tr>
+<tr>
+<td>Memory-bound</td>
+<td>intensity &lt; ridge: bandwidth is your ceiling (most ML kernels)</td>
+</tr>
+<tr>
+<td>Compute-bound</td>
+<td>intensity &gt; ridge: FLOP/s is your ceiling (big matmul)</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>flowchart TB
+    I["Kernel intensity = FLOPs ÷ bytes"] --&gt; Q{"intensity &lt; ridge point?"}
+    Q --&gt;|yes| M["MEMORY-bound&lt;br/&gt;ceiling = bandwidth × intensity"]
+    Q --&gt;|no| C["COMPUTE-bound&lt;br/&gt;ceiling = peak FLOP/s"]</code></pre>
+<p><strong>Matmul is the perfect workload:</strong> an N×N multiply does N³ FLOPs on N² data, so intensity <strong>grows with
+N</strong> — tiles stage into shared memory, get reused many times, and tensor cores chew them compute-bound.
+"AI runs on GPUs" reduces to "AI is mostly matmul."</p>
+<h3 id="batching-the-gpus-oxygen">Batching — the GPU's oxygen<a class="headerlink" href="#batching-the-gpus-oxygen" title="Permanent link">&para;</a></h3>
+<p>Two mechanisms make batching <em>mandatory</em> here where it was merely <em>nice</em> on a CPU. (1) <strong>Occupancy:</strong> the
+machine needs thousands of resident threads to hide latency — batch-1 leaves SMs empty (starvation).
+(2) <strong>Amortization:</strong> fixed costs (kernel launches, weight fetches over HBM) divide across the batch, so
+per-sample cost collapses. The batch-size knob trades <strong>latency for throughput</strong> — you measure this exact
+curve on a CPU in the Guided Lab.</p>
+<h3 id="the-transfer-tax-and-the-napkin-law">The transfer tax and the napkin law<a class="headerlink" href="#the-transfer-tax-and-the-napkin-law" title="Permanent link">&para;</a></h3>
+<p><strong>The transfer tax:</strong> host→device over PCIe is ~tens of GB/s vs HBM's TB/s. A small job spends more time
+<em>shipping</em> than <em>computing</em>, so the CPU finishes before the GPU's data even arrives. The rule: <strong>move
+data once, keep it resident, batch the work.</strong> There is a <strong>crossover size</strong> below which the GPU always
+loses — you compute it in the lab.</p>
+<p><strong>Why inference is memory-bound (the napkin law):</strong> generating one token reads <strong>every weight once</strong>
+(~model-size bytes) for only a handful of FLOPs each — tiny intensity, firmly memory-bound. So:</p>
+<blockquote>
+<p><strong>tokens/s ≈ HBM bandwidth ÷ model bytes.</strong></p>
+</blockquote>
+<p>This one line predicts single-stream LLM serving speed to first order — and explains why <strong>batching is the
+only lever that changes the arithmetic</strong> (the weight-read amortizes across sequences). It is the price of
+every AI API, on a napkin.</p>
+<h3 id="the-instruments-nvidia-smis-four-vital-signs">The instruments — nvidia-smi's four vital signs<a class="headerlink" href="#the-instruments-nvidia-smis-four-vital-signs" title="Permanent link">&para;</a></h3>
+<p><code>nvidia-smi</code> is the GPU's <code>top</code>. Read these four fluently:</p>
+<table>
+<thead>
+<tr>
+<th>Vital sign</th>
+<th>Healthy</th>
+<th>The anomaly it reveals</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Utilization %</strong></td>
+<td>high + steady</td>
+<td>low = starvation or CPU fallback; spiky = batch too small</td>
+</tr>
+<tr>
+<td><strong>Memory (used/total)</strong></td>
+<td>headroom below total</td>
+<td>at the ceiling = OOM risk; unexpectedly empty = <strong>CPU fallback</strong></td>
+</tr>
+<tr>
+<td><strong>Power (draw vs cap)</strong></td>
+<td>near cap when working</td>
+<td>far under cap = starved (not being fed)</td>
+</tr>
+<tr>
+<td><strong>Temperature</strong></td>
+<td>below throttle</td>
+<td>high = thermal <strong>throttling</strong> — clocks drop, performance sags</td>
+</tr>
+</tbody>
+</table>
+<p>The timing law that keeps GPU numbers honest: <strong>execution is asynchronous — synchronize before every
+timestamp.</strong> Recipe: warmup run (JIT + allocator) → <code>torch.cuda.synchronize()</code> around the timed region →
+N runs, median + spread (M21's hygiene, intact). Skip the sync and the benchmark <em>lies</em> impossibly fast.</p>
+<h3 id="precision-menu-and-the-nputpu-tier">Precision menu and the NPU/TPU tier<a class="headerlink" href="#precision-menu-and-the-nputpu-tier" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Precision</th>
+<th>Bytes/param</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FP32</td>
+<td>4</td>
+<td>the baseline</td>
+</tr>
+<tr>
+<td>TF32 / FP16 / BF16</td>
+<td>2</td>
+<td>~2× throughput, ½ memory — tensor cores feast</td>
+</tr>
+<tr>
+<td>FP8 / INT8</td>
+<td>1</td>
+<td>~2× again — accuracy managed with a <em>test</em>, not a mood</td>
+</tr>
+</tbody>
+</table>
+<p>Each halving roughly doubles tensor-core throughput and halves memory. Below the GPU sits the <strong>NPU/TPU</strong>
+tier: <strong>systolic arrays</strong> — data marches through a fixed grid of multiply-accumulate units (matmul as
+plumbing). TPUs do this at datacenter scale; edge NPUs (phone/laptop SoCs) run <em>blessed</em> ops at
+single-digit watts. Fixity buys perf/W and costs generality — only the blessed ops run fast.</p>
+<h3 id="the-accelerator-judgment-table-the-modules-closing-artifact">The accelerator judgment table — the module's closing artifact<a class="headerlink" href="#the-accelerator-judgment-table-the-modules-closing-artifact" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CPU</th>
+<th>GPU</th>
+<th>NPU / TPU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wins at</strong></td>
+<td>serial, branchy, latency-critical, small</td>
+<td>wide/regular throughput math (matmul)</td>
+<td>stable <em>blessed</em> ops at best perf/W</td>
+</tr>
+<tr>
+<td><strong>Loses at</strong></td>
+<td>wide data-parallel math</td>
+<td>serial/branchy/small (transfer tax)</td>
+<td>anything novel or off its fixed path</td>
+</tr>
+<tr>
+<td><strong>Feed it</strong></td>
+<td>keep the working set in cache</td>
+<td>batches + resident data (kill the transfer)</td>
+<td>the exact op it was built for</td>
+</tr>
+<tr>
+<td><strong>Measure it</strong></td>
+<td>perf/py-spy flamegraph (M21)</td>
+<td>nvidia-smi + honest sync-timing</td>
+<td>vendor tooling; perf/W</td>
+</tr>
+</tbody>
+</table>
+<p>The workflow, daily form: <strong>is it wide and regular?</strong> (no → CPU) → <strong>does it fit?</strong> (the VRAM math) →
+<strong>is it worth the transfer?</strong> (crossover size) → <strong>memory- or compute-bound?</strong> (intensity/napkin math) →
+then the instrument loop (nvidia-smi <em>during</em> the run: starved? full? hot?). And remember the moat: the
+market runs on <strong>CUDA's software ecosystem</strong>, not the transistors — the M13→M16→M17 interface thesis at
+industry scale.</p>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only seven things):</strong></p>
+<ol>
+<li><strong>Latency hidden, not avoided</strong> — the CPU avoids waiting with caches; the GPU oversubscribes so a stalled warp costs nothing. The whole design secret.</li>
+<li><strong>The warp is the unit</strong> — think in 32s; <strong>divergence</strong> serializes both branch paths under masks (≥2×), the mispredict lesson's harsher sibling.</li>
+<li><strong>Bandwidth is the product</strong> — HBM is 10–20× a CPU's DRAM; most ML kernels are <strong>memory-bound</strong>, so bytes-÷-bandwidth predicts real speed shockingly well.</li>
+<li><strong>The napkin law:</strong> tokens/s ≈ HBM bandwidth ÷ model bytes — inference reads every weight per token; <strong>batching</strong> is the only lever that moves it.</li>
+<li><strong>The transfer tax gates entry</strong> — PCIe is 30–100× slower than HBM; below the <strong>crossover size</strong> the GPU loses before it computes. Residency is strategy.</li>
+<li><strong>Sizing is <code>params × bytes-per-param</code></strong> — 13B at FP16 ≈ 26 GB <em>weights alone</em>; training with Adam multiplies again. "13B ≠ 13 GB."</li>
+<li><strong>Synchronize before timing</strong> — GPU execution is async; skip the sync and the number lies. Warmup → sync → N runs, median + spread.</li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-the-numbers-that-decide">Guided Lab: the numbers that decide<a class="headerlink" href="#guided-lab-the-numbers-that-decide" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step, and </em><em>GPU-optional</em><em> — every activity is a number you compute on a plain CPU, the
+same curve a GPU lives on, larger. You'll classify kernels on the roofline, MEASURE the batching effect
+with numpy, read a saved <code>nvidia-smi</code> sample, and compute the host↔device transfer break-even. The live
+CUDA path is signposted for when you have real silicon. Everything lives in a throwaway <code>~/gpu-lab/</code>.</em></p>
+<div class="lo-lab-actions">
+<p><a class="lo-btn" href="https://killercoda.com/learning-os/course/killercoda/module-22" target="_blank">▶ Open interactive lab</a>
+<a class="lo-btn" href="https://codespaces.new/randaguiac20/learning-os" target="_blank">⧉ Open in Codespaces</a>
+<a class="lo-btn lo-btn--ghost" href="#run-locally">⌨ Run locally</a>
+<a class="lo-btn lo-btn--ghost" href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-22" target="_blank">View lab source</a></p>
+</div>
+<p><span id="run-locally"></span></p>
+<div class="admonition tip">
+<p class="admonition-title">Ways to run this lab — pick any (all free)</p>
+<ul>
+<li><strong>Instant, no account</strong> — click <strong>Open interactive lab</strong> (Killercoda): a plain Linux CPU VM. It has
+  <strong>no GPU</strong>, and it doesn't need one — the roofline, batching, and transfer arithmetic are the same
+  numbers on any silicon. GPU-specific commands are shown as <em>"run on your own NVIDIA box."</em></li>
+<li><strong>Your own cloud</strong> — click <strong>Open in Codespaces</strong>: runs in your GitHub account's free tier (120
+  core-hrs/mo). Also CPU-only, and equally sufficient for every activity here.</li>
+<li><strong>Local, unlimited, $0</strong> — any Linux / macOS / WSL terminal, or <code>docker run -it ubuntu bash</code>, then
+  follow the steps below.</li>
+<li><strong>With a real GPU</strong> — run locally on an NVIDIA box, or rent a <strong>cloud spot GPU</strong> (M37): only then do
+  live <code>nvidia-smi</code>, CUDA, and vLLM produce real numbers. The lab teaches the reasoning so those
+  numbers <em>mean</em> something when you get there.</li>
+</ul>
+<p>Killercoda is the zero-setup on-ramp; the transferable ideas (intensity, batching, the transfer tax)
+need no accelerator — the GPU just relocates the same curves.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Two philosophies + your bench</label><label for="__tabbed_1_2">2 · Arithmetic intensity &amp; the roofline</label><label for="__tabbed_1_3">3 · Measure the batching effect (numpy, CPU)</label><label for="__tabbed_1_4">4 · Read nvidia-smi like an instrument</label><label for="__tabbed_1_5">5 · The transfer tax — compute the break-even</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Set up a sandbox and check what silicon this box actually has — hardware honesty first:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/gpu-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/gpu-lab
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>lspci<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;vga\|3d\|display&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;no discrete GPU enumerated (expected on Killercoda)&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>nvidia-smi<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>nvidia-smi<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;no nvidia-smi here — that&#39;s fine; we compute the numbers instead&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python3<span class="w"> </span>--version
+</code></pre></div>
+On this VM there is <strong>no GPU</strong> — and that is the point of the design. The CPU <strong>avoids</strong> latency
+(caches, prediction); the GPU <strong>hides</strong> it (thousands of resident warps). Everything a GPU is <em>good at</em>
+reduces to arithmetic you can do here: how much data moves, how many FLOPs, and how a fixed cost
+amortizes over a batch. Journal the one question this module hangs on: <strong>is my workload wide and
+regular?</strong></p>
+</div>
+<div class="tabbed-block">
+<p>Write a tiny classifier: FLOPs ÷ bytes gives a kernel's <strong>intensity</strong>; compare it to the machine's
+<strong>ridge point</strong> (compute roof ÷ bandwidth) to call it memory- or compute-bound.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>ai.py<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s"># Roofline classifier — pure arithmetic, no GPU needed.</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s"># A model H100-class machine: 2 TB/s HBM, 100 TFLOP/s compute.</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">BW    = 2_000e9      # bytes/s  (2 TB/s HBM)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">PEAK  = 100e12       # FLOP/s   (100 TFLOP/s)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">RIDGE = PEAK / BW    # FLOP/byte where the two roofs cross</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">def classify(name, flops, bytes_moved):</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">    ai = flops / bytes_moved</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">    verdict = &quot;MEMORY-BOUND&quot; if ai &lt; RIDGE else &quot;COMPUTE-BOUND&quot;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">    print(f&quot;{name:14s} intensity={ai:8.2f} FLOP/byte -&gt; {verdict}&quot;)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">print(f&quot;ridge point = {RIDGE:.1f} FLOP/byte\n&quot;)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s"># SAXPY: y = a*x + y  -&gt; 2 FLOP, reads x,y writes y = 12 bytes (FP32)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s">classify(&quot;saxpy&quot;,       2,                       12)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s"># LLM decode: read every weight once (2 bytes FP16) for ~2 FLOP each</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s">classify(&quot;llm_decode&quot;,  2,                       2)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s"># Big matmul N=4096: 2*N^3 FLOPs on 3*N^2 * 4 bytes</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s">N = 4096</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s">classify(&quot;matmul_4096&quot;, 2*N**3,                  3*N*N*4)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s">EOF</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>python3<span class="w"> </span>ai.py
+</code></pre></div>
+Read the output: <strong>saxpy</strong> and <strong>llm_decode</strong> sit far below the ridge — memory-bound, bandwidth is
+their ceiling. <strong>matmul_4096</strong> towers above it — compute-bound, the one workload where every GPU
+feature aligns. Change <code>N</code> to 64 and re-run: small matmul is memory-bound too (intensity ≈ N/6). That
+is why <em>size</em> decides whether a matmul is GPU-shaped.</p>
+</div>
+<div class="tabbed-block">
+<p>The GPU's oxygen is batching — and you can measure the exact curve on a CPU. Each <strong>forward pass reads
+every weight once</strong> (a fixed cost, the napkin law's <em>model bytes</em>), then does the per-sample compute;
+the fixed read amortizes across the batch. Install numpy and time it at growing batch sizes:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>pip3<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-numpy<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>batch.py<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">import time, numpy as np</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s"># The &quot;weights&quot;: read once per forward pass — the FIXED cost (the napkin law&#39;s model bytes),</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s"># batch-independent, and larger than cache so it streams from RAM every call.</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s">W  = np.random.rand(4096, 4096).astype(np.float32)   # ~67 MB of weights</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">Dc = 256</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">Wc = np.random.rand(Dc, Dc).astype(np.float32)       # the per-sample compute</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">reps = 20</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s">rows = []</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s">print(f&quot;weights = {W.nbytes/1e6:.0f} MB, read once per forward pass (the fixed cost)\n&quot;)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s">for B in (1, 8, 64, 512):</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s">    X = np.random.rand(B, Dc).astype(np.float32)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s">    _ = W.sum(); _ = X @ Wc                          # warmup</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s">    t0 = time.perf_counter()</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s">    for _ in range(reps):</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="s">        _ = W.sum()      # fetch every weight once — batch-INDEPENDENT (the weight tax)</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="s">        Y = X @ Wc       # per-sample compute — scales WITH the batch</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="s">    total = (time.perf_counter() - t0) / reps</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="s">    per_item = total / B</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="s">    rows.append((B, total, per_item))</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="s">    print(f&quot;batch={B:4d}  total={total*1e3:8.3f} ms  per-item={per_item*1e3:.5f} ms&quot;)</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="s">with open(&quot;batch-results.csv&quot;, &quot;w&quot;) as f:</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="s">    f.write(&quot;batch,total_ms,per_item_ms\n&quot;)</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="s">    for B, total, per_item in rows:</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="s">        f.write(f&quot;{B},{total*1e3:.5f},{per_item*1e3:.6f}\n&quot;)</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="s">print(&quot;\nwrote batch-results.csv&quot;)</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="s">EOF</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>python3<span class="w"> </span>batch.py
+</code></pre></div>
+<strong>Total</strong> time barely moves (the fixed weight-read dominates), but <strong>per-item</strong> time <em>plummets</em> —
+often 100×+ from batch 1 to batch 512. That is the napkin law in miniature: batch-1 pays the whole
+weight-read for one result; batch-512 shares it across 512. A starved GPU at batch-1 wastes the machine
+the same way — this curve is why serving fleets batch hard.</p>
+<p>Click <strong>Check</strong> (in the interactive lab) to verify <code>batch-results.csv</code> shows per-item time decreasing.</p>
+</div>
+<div class="tabbed-block">
+<p>There's no GPU here, so read a <strong>saved sample</strong> — the same skill, offline. Create it, then interpret
+the four vital signs:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>nvidia-smi-sample.txt<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="s">+-----------------------------------------------------------------------------+</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s">| NVIDIA-SMI 550.54      Driver Version: 550.54      CUDA Version: 12.4        |</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s">|-------------------------------+----------------------+----------------------+</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s">|===============================+======================+======================|</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s">|   0  NVIDIA A100-80GB    On   | 00000000:07:00.0 Off |                    0 |</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s">| N/A   38C    P0    71W / 400W |   2048MiB / 81920MiB |     18%      Default |</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s">+-------------------------------+----------------------+----------------------+</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s">| Processes:                                                                  |</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s">|  GPU   GI   CI        PID   Type   Process name            GPU Memory Usage |</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s">|    0   N/A  N/A     31337      C   python train.py             2046MiB      |</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s">+-----------------------------------------------------------------------------+</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s">EOF</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>cat<span class="w"> </span>nvidia-smi-sample.txt
+</code></pre></div>
+Now diagnose from the four vital signs — <strong>utilization 18%</strong>, <strong>power 71W of 400W</strong>, <strong>memory 2 GB of
+80 GB</strong>, <strong>temp 38C</strong>. A python process <em>is</em> on the GPU (so not a silent CPU fallback), temperature is
+cool (no throttle), VRAM is nearly empty. Util 18% + power far under cap = <strong>starvation</strong>: the GPU is
+fed too slowly. The verdict this module drills: <em>low util is a </em><em>data-pipeline</em><em> symptom</em> — M21's
+ladder owns the fix (profile the host: disk? decode? single-threaded transform?), not the GPU.</p>
+<blockquote>
+<p>On a real NVIDIA box, run <code>nvidia-smi</code> live and <code>nvidia-smi dmon</code> for the time series — the columns
+you just read are the same.</p>
+</blockquote>
+</div>
+<div class="tabbed-block">
+<p>A GPU only wins if the compute it saves beats the cost of <strong>shipping the data across PCIe</strong>. Compute
+the crossover size for a matmul — pure arithmetic, no silicon:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>breakeven.py<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s"># Should this matmul go to the GPU? Compare CPU-only vs GPU (transfer + compute).</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">CPU   = 500e9     # FLOP/s  (fast numpy on CPU)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">GPU   = 20e12     # FLOP/s  (device compute)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">PCIE  = 16e9      # bytes/s (host&lt;-&gt;device)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">LAUNCH = 1e-5     # s, fixed kernel-launch overhead</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">print(f&quot;{&#39;N&#39;:&gt;6} {&#39;cpu_ms&#39;:&gt;9} {&#39;gpu_ms&#39;:&gt;9} {&#39;transfer_ms&#39;:&gt;12}  winner&quot;)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">crossover = None</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s">for N in (64, 128, 256, 512, 1024, 2048, 4096, 8192):</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s">    flops = 2 * N**3</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s">    bytes_moved = 3 * N*N * 4          # ship A, B, and C back (FP32)</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s">    cpu   = flops / CPU</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s">    gpu   = flops / GPU + bytes_moved / PCIE + LAUNCH</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="s">    win = &quot;GPU&quot; if gpu &lt; cpu else &quot;CPU&quot;</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="s">    if win == &quot;GPU&quot; and crossover is None:</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="s">        crossover = N</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="s">    print(f&quot;{N:6d} {cpu*1e3:9.3f} {gpu*1e3:9.3f} {bytes_moved/PCIE*1e3:12.3f}  {win}&quot;)</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="s">print(f&quot;\ncrossover: the GPU first wins at N = {crossover}&quot;)</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="s">EOF</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>python3<span class="w"> </span>breakeven.py
+</code></pre></div>
+Below the crossover the <strong>CPU wins</strong> — the tiny compute can't repay the PCIe shipping + launch cost;
+above it the GPU's throughput dominates. That single number is the transfer tax made concrete, and it
+is why <em>"we have a GPU"</em> never means <em>"use the GPU."</em> Small, chatty workloads lose before they compute.</p>
+<p>Click <strong>Check</strong> (in the interactive lab) to verify <code>breakeven.py</code> prints a crossover and the small
+sizes favor the CPU.</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you classified kernels on the roofline, watched per-item time fall as the batch grew, read the four
+vital signs off a saved <code>nvidia-smi</code>, and computed a transfer break-even — you have the module's whole
+reasoning, no GPU required. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. The arithmetic is </em><em>bare-hands</em><em>: estimate on paper first,
+confirm with a script after. Struggle here is the point; reveal a hint only after you've tried.</em></p>
+<h3 id="challenge-1-size-three-models-cold">Challenge 1 — Size three models cold<a class="headerlink" href="#challenge-1-size-three-models-cold" title="Permanent link">&para;</a></h3>
+<p>For each, give VRAM for <strong>weights only</strong> and state the method: a <strong>3B</strong> at FP16, an <strong>8B</strong> at INT8, a
+<strong>70B</strong> for training with Adam. No calculator before your estimate.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The whole method is <code>params × bytes-per-param</code> (FP16 = 2, INT8 = 1), then <strong>overhead honesty</strong>.
+Training is not weights alone — optimizer states (Adam keeps two extra tensors per parameter) plus
+activations multiply the number several times over.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<ul>
+<li><strong>3B FP16:</strong> 3e9 × 2 = <strong>~6 GB</strong> weights (fits a 24 GB card with room for activations/KV cache).</li>
+<li><strong>8B INT8:</strong> 8e9 × 1 = <strong>~8 GB</strong> weights (a 16 GB card becomes plausible — with the caveat that INT8
+  is <em>measured against an accuracy budget</em>, never assumed free).</li>
+<li><strong>70B training (Adam):</strong> weights ~140 GB at FP16 <strong>alone</strong>, then Adam's two moment tensors + master
+  copy + activations push it to <strong>several hundred GB</strong> — many GPUs, not one. The universal mistake is
+  "70B = 70 GB": params × <em>bytes</em>, and training multiplies again.</li>
+</ul>
+</details>
+<h3 id="challenge-2-assign-silicon-to-three-workloads">Challenge 2 — Assign silicon to three workloads<a class="headerlink" href="#challenge-2-assign-silicon-to-three-workloads" title="Permanent link">&para;</a></h3>
+<p>Assign <strong>CPU / GPU / NPU</strong> and defend each with the judgment table's logic (shape → size → transfer →
+perf/W): (a) a <strong>branchy regex log-miner</strong>, (b) <strong>nightly embedding of 10M documents</strong>, (c) an
+<strong>always-on wake-word detector on a phone</strong>.</p>
+<details class="success">
+<summary>Solution</summary>
+<ul>
+<li><strong>(a) regex log-miner → CPU.</strong> Branchy and serial — SIMT's worst case (divergence). Latency-critical,
+  pointer-chasing, small per-item work: the CPU's home turf.</li>
+<li><strong>(b) 10M-doc embedding → GPU.</strong> Wide and regular (the same matmul over millions of inputs), and
+  <strong>batchable</strong> — the transfer tax amortizes across a huge, pre-staged corpus. Right answer for the
+  right reason: the batch/residency argument, not "it's ML so GPU."</li>
+<li><strong>(c) wake-word on battery → NPU.</strong> A stable, <em>blessed</em> op where <strong>perf/W</strong> dominates — fixity's whole
+  point. A GPU would win on throughput and lose on the power bill; the NPU exists for exactly this.</li>
+</ul>
+</details>
+<h3 id="challenge-3-find-the-three-timing-sins">Challenge 3 — Find the three timing sins<a class="headerlink" href="#challenge-3-find-the-three-timing-sins" title="Permanent link">&para;</a></h3>
+<p>A colleague's GPU benchmark claims a matmul is "impossibly fast," the first run is counted in the average,
+and the end-to-end number omits something. Name all three sins and the fix for each.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>One is about <em>when</em> the timer reads relative to async execution; one is about the <em>first</em> launch; one
+is about what the "end-to-end" number quietly leaves out.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<ol>
+<li><strong>No synchronize.</strong> GPU execution is asynchronous, so the timer stops before the kernel finishes —
+   an impossible speed. Fix: <code>torch.cuda.synchronize()</code> before <em>and</em> after the timed region.</li>
+<li><strong>First-run JIT counted.</strong> Run 1 pays kernel compilation + allocator warmup (seconds vs
+   milliseconds). Fix: a <strong>warmup</strong> run, then measure runs 2…N (median + spread).</li>
+<li><strong>Transfer excluded.</strong> The "end-to-end" claim timed only the resident kernel, not the host→device
+   copy — the kernel is fast, the pipeline slow. Fix: include the PCIe transfer in any end-to-end
+   number (M21's <em>measure the whole thing</em> law).</li>
+</ol>
+</details>
+<h3 id="challenge-4-the-roofline-verdict-by-hand">Challenge 4 — The roofline verdict, by hand<a class="headerlink" href="#challenge-4-the-roofline-verdict-by-hand" title="Permanent link">&para;</a></h3>
+<p>A kernel moves <strong>4 bytes per FLOP</strong>. The GPU has <strong>2 TB/s</strong> bandwidth and <strong>100 TFLOP/s</strong> compute. Which
+roof binds, and what is the actual ceiling — regardless of the FLOP/s on the spec sheet?</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Intensity = 1 FLOP ÷ 4 bytes = <strong>0.25 FLOP/byte</strong>. Bandwidth roof = 2 TB/s × 0.25 = <strong>0.5 TFLOP/s</strong>.
+Against the 100 TFLOP/s compute roof, it is <strong>memory-bound by 200×</strong> — the ceiling is <strong>0.5 TFLOP/s</strong> no
+matter what the spec sheet advertises. This is the napkin law generalized: for low-intensity kernels,
+<em>bandwidth × intensity</em> is the truth, and 100% utilization can still be "slow."</p>
+</details>
+<h3 id="challenge-5-stretch-the-accelerator-postscript">Challenge 5 (stretch) — The accelerator postscript<a class="headerlink" href="#challenge-5-stretch-the-accelerator-postscript" title="Permanent link">&para;</a></h3>
+<p>Your "Make It Fast" victim (Stage 7 project) had branchy parsing, string/dict work, and disk IO on a
+~500 MB dataset. Would a GPU have helped? Argue the verdict as rigorously as a positive one.</p>
+<details class="success">
+<summary>Solution</summary>
+<p><strong>Mostly no — and the <em>why</em> is the lesson.</strong> Shape: the parsing is branchy/serial (divergence), the
+string/dict work is pointer-chasing (cache-hostile, not matmul), and the GPU cannot touch disk IO.
+Size + transfer: ~500 MB with per-item logic sits <strong>below the crossover</strong> — the PCIe transfer tax is
+never amortized. <strong>If</strong> a heavy numeric pass existed (a big aggregation expressible as matrix math), you
+would run the sizing math — but here the CPU fixes (M21's profiling ladder) were the right fixes. A
+negative verdict, defended with mechanisms (divergence, intensity, crossover), is worth as much as a
+positive one.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard — is
+what builds the memory.</em></p>
+<details class="question">
+<summary>State the two latency philosophies (CPU vs GPU) and the mechanism behind each.</summary>
+<p><strong>CPU — latency avoidance:</strong> caches, branch prediction, and out-of-order execution keep one fast thread
+from waiting. <strong>GPU — latency hiding:</strong> massive oversubscription (thousands of resident warps); a
+stalled warp is swapped for a ready one, so stalls cost nothing while work remains. Same problem,
+opposite answer.</p>
+</details>
+<details class="question">
+<summary>Define warp, SM, occupancy, and divergence — one line each.</summary>
+<p><strong>Warp:</strong> 32 threads executing in lockstep (the real unit of execution). <strong>SM:</strong> the GPU's
+core-equivalent — warp schedulers + ALUs + tensor cores + shared memory. <strong>Occupancy:</strong> resident warps
+vs the SM's capacity (the latency-hiding fuel gauge). <strong>Divergence:</strong> a warp's threads disagreeing at a
+branch — both paths run serially under masks.</p>
+</details>
+<details class="question">
+<summary>Derive the napkin law for LLM token generation and state what it predicts.</summary>
+<p>Each generated token reads <strong>every weight once</strong> (~P params × bytes-per-param) for only a few FLOPs
+each → tiny intensity → memory-bound → <strong>tokens/s ≈ HBM bandwidth ÷ model bytes</strong>. It predicts
+single-stream serving speed to first order, and shows why <strong>batching</strong> (amortizing the weight-read
+across sequences) is the economic lever.</p>
+</details>
+<details class="question">
+<summary>Size a 13B model: VRAM for FP16 inference (weights only), and roughly with INT8?</summary>
+<p>FP16: 13e9 × 2 bytes ≈ <strong>26 GB</strong> weights alone (fits a 40/80 GB card; not a 24 GB card once
+activations/KV land). INT8: ×1 byte ≈ <strong>13 GB</strong> (a 24 GB card becomes plausible with overheads).
+Method: <code>params × bytes-per-param</code>, then overhead honesty — never "13B = 13 GB."</p>
+</details>
+<details class="question">
+<summary>GPU util reads 20% with host CPUs pegged. Diagnose it, and name which module owns the fix.</summary>
+<p>The GPU is <strong>starved</strong>: the host-side data pipeline (loading/preprocessing/augmenting) can't feed it —
+classic input-bound training. <strong>M21's ladder owns it</strong> — profile the <em>host</em> (disk? decode?
+single-threaded transform?); the fix is prefetch/parallel loading/faster IO, not GPU work.</p>
+</details>
+<details class="question">
+<summary>Training is slow and nvidia-smi shows NO python process on the GPU. What happened, and the one-line check?</summary>
+<p><strong>Silent CPU fallback</strong> — tensors/model never moved to the device (or CUDA was unavailable and the code
+defaulted quietly). Check: <code>print(next(model.parameters()).device)</code> — assert <code>"cuda"</code> early, and gate
+on <code>torch.cuda.is_available()</code> at startup.</p>
+</details>
+<details class="question">
+<summary>util reads 100% but throughput is far below the napkin prediction. Why can 100% util still be 'slow'?</summary>
+<p>util% means "an SM had work this sample period," <strong>not</strong> efficiency. The kernels can be
+bandwidth-starved (low-intensity ops pinned at the memory roof), divergent, or non-coalesced — busy
+machinery moving little useful work. The <strong>roofline verdict</strong> and effective GB/s tell the truth util%
+can't.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>5 minutes, no notes</strong> — <em>"The factory and the geniuses"</em>: four geniuses (CPU) vs ten
+thousand assembly workers with a giant conveyor (GPU); one hard puzzle vs a million identical stickers.
+Then land the twist that makes the module: the factory's <strong>loading dock is narrow</strong> (PCIe) — a small
+job spends longer in shipping than in the factory. Bound the analogy honestly: the workers move in
+<strong>lockstep rows of 32</strong>, and a fork in the instructions makes half of each row wait (divergence).
+Finish by <strong>deriving the napkin law live</strong> (bandwidth ÷ bytes) and stating the judgment table's
+one-sentence version. If you can't yet, reread the Key Notes — don't move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress — passing M22 also closes </em><em>Stage 7</em><em>
+(Optimization) and opens Troubleshooting (M23). A module is only "done" when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> latency hiding vs avoidance with the mechanism — no CPU-thinking leaks ("the GPU caches it").</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Describe</strong> the SIMT model — warps, SMs, occupancy, divergence — reasoning in 32s, not threads.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> the extended memory ladder cold, with numbers (HBM, PCIe, NVLink) and PCIe marked as the chokepoint.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Contrast</strong> memory-bound vs compute-bound via the roofline, and place two workloads (LLM decode; a big matmul).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Derive</strong> the napkin law from first principles and apply it to a model on a stated bandwidth.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Size</strong> a model's VRAM cold — <code>params × bytes-per-param</code> + overhead honesty; "13B ≠ 13 GB."</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Identify</strong> the four failure signatures — CPU fallback, starvation, OOM, throttle — from nvidia-smi.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Analyze</strong> nvidia-smi's four vital signs fluently (util, memory, power, temp) and each anomaly.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Design</strong> honest GPU benchmarks — the sync-before-timing law + warmup + N-runs hygiene.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Compute</strong> the transfer break-even and read the crossover curve's three regions.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Evaluate</strong> CPU vs GPU vs NPU for three fresh workloads with the judgment table's logic.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Optimize</strong> by the GPU catalog — batch, keep resident, drop precision (with a test), coalesce.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back — the factory analogy bounded, the napkin law derived live, "when NOT to use a GPU" landed.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is where the memory forms. <strong>Interleaving stays active</strong> — every M22 review also pulls
+one item from <strong>Module 21</strong> (the ladder, the profile-first reflex, the hygiene this week extends). This
+module closes Stage 7, so the <strong>stage</strong> review rides alongside the module reviews. The napkin + ladder
+sprints join permanent weekly rotation through the capstone. Schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+<th>Interleaved M21 item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 4 (midpoint)</strong></td>
+<td>Philosophy + ladder blanks · the timing + napkin sprints · validation A1–C7</td>
+<td>Memory-ladder sprint (registers → disk, with numbers)</td>
+</tr>
+<tr>
+<td><strong>Day 7 (gate)</strong></td>
+<td>All five blanks cold · every sprint · validation E13–F18, I23–I24 · <strong>STAGE 7 GATE</strong></td>
+<td>The four host-side starvation signatures, cold</td>
+</tr>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>Flashcards · the napkin sprint · validation misses re-derived</td>
+<td>M21 misses</td>
+</tr>
+<tr>
+<td><strong>Day 3</strong></td>
+<td>A fresh model sized cold (one you haven't sized) + the worksheet cross-check</td>
+<td>Read a flamegraph, cold</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>The crossover experiment re-run on a fresh runtime (variance witnessed)</td>
+<td>An OOM log interpreted (the cgroup ledger)</td>
+</tr>
+<tr>
+<td><strong>Day 14</strong></td>
+<td>The judgment table reproduced cold + one real workload assigned per column</td>
+<td>The OOM chain (cgroup → kernel → allocator)</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Validation retake (target ≥90) · the atlas's GPU column re-verified</td>
+<td>Stage-7 sampler (both M21 and M22)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Connects forward to:</strong> M23 (debugging methodology — the GPU ladder joins the symptom catalog) · M25
+(DCGM metrics on the dashboards; utilization-is-money automated) · M26 (training — mixed precision, the
+starvation clinic on real DataLoaders, batch sizing as the first hyperparameter) · M27 (inference — the
+napkin law productized: quantization, continuous batching, the latency/throughput SLO knob) · M28
+(infrastructure — NVLink fabrics, <code>nvidia.com/gpu</code> on M19's platform, the rent-vs-own arithmetic) · the
+capstone, whose every hardware decision cites this week's dossier.</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>M22 completes the hardware arc begun in M1 — the throughput machine understood, measured, and sized —
+closing Stage 7 with the instruments <em>and</em> the judgment to command silicon, so the AI stage ahead runs
+on arithmetic instead of faith.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../module-21/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Module 21 — CPU &amp; Memory Performance">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Module 21 — CPU & Memory Performance
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../stage-08/module-23/" class="md-footer__link md-footer__link--next" aria-label="Next: Module 23 — Debugging Methodology">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Module 23 — Debugging Methodology
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>
