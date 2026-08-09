@@ -1,0 +1,42 @@
+{
+  "title": "Module 22 — GPU & NPU Performance",
+  "description": "Reason about GPUs on a plain CPU VM: classify kernels on the roofline, measure the batching effect with numpy, read a saved nvidia-smi sample, and compute the host<->device transfer break-even. GPU-optional — every activity is the same arithmetic a GPU lives on, larger.",
+  "difficulty": "advanced",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Two philosophies + your bench",
+        "text": "step1.md"
+      },
+      {
+        "title": "Arithmetic intensity & the roofline",
+        "text": "step2.md",
+        "verify": "verify-step2.sh"
+      },
+      {
+        "title": "Measure the batching effect (numpy)",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Read nvidia-smi like an instrument",
+        "text": "step4.md"
+      },
+      {
+        "title": "The transfer tax: compute the break-even",
+        "text": "step5.md",
+        "verify": "verify-step5.sh"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Module 19 — Kubernetes Core",
+  "description": "Learn Kubernetes as a model: inspect a real single-node cluster's control plane, deploy an app from a handwritten manifest, expose it with a Service and read its endpoints, scale it, then delete a pod and watch the reconcile loop heal it. A ready cluster with kubectl — no install.",
+  "difficulty": "intermediate",
+  "time": "30-40 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Meet the control plane",
+        "text": "step1.md"
+      },
+      {
+        "title": "The API is the system",
+        "text": "step2.md"
+      },
+      {
+        "title": "Deploy from a handwritten manifest",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Expose it with a Service",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Scale, then delete a pod and watch it heal",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-1node"
+  }
+}

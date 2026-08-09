@@ -1,0 +1,41 @@
+{
+  "title": "Module 21 — CPU & Memory Performance",
+  "description": "Install the performance toolkit, read an idle machine with the USE method, generate a CPU load and measure it with mpstat, and FEEL the cache with a row-major vs column-major timing. All work is scoped to a throwaway ~/perf-lab and the machine is restored at the end.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install the toolkit and read the spec sheet",
+        "text": "step1.md"
+      },
+      {
+        "title": "The 60-second USE checklist (idle baseline)",
+        "text": "step2.md"
+      },
+      {
+        "title": "Generate a CPU load and measure it",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Feel the cache: row-major vs column-major",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Memory-bound vs CPU-bound, then restore",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

@@ -94,7 +94,12 @@ live · ✅ dark-mode mermaid fix · ✅ M01 Killercoda lab published + URL wire
   - ✅ **Batch 4 — Stage 5 Production Practices (M15 Automation, M16 Docker, M17 containerd & OCI,
     M18 devcontainers):** lessons + Killercoda labs (Docker/containerd on full-VM images, Ansible
     idempotence, devcontainer scaffold+build), `build --strict` EXIT=0, buttons validated, committed.
-  - ☐ Batches 5–8 → Stages 6–13 (M19–M39).
+  - ✅ **Batch 5 — Stage 6 Enterprise (M19 Kubernetes Core, M20 K8s Operations) + Stage 7 Optimization
+    (M21 CPU & Memory Perf, M22 GPU & NPU Perf):** lessons + labs (K8s on kubernetes-kubeadm-1node;
+    perf via stress-ng/mpstat + a C cache-locality timer; M22 GPU-optional with CPU roofline/batching
+    experiments), `build --strict` EXIT=0, buttons validated, committed. (Stripped a stray-tag leak
+    from M20; M20 builder also fixed a request>limit bug.)
+  - ☐ Batches 6–8 → Stages 8–13 (M23–M39).
 - **Current:** Site is **live and public**; **M01** fully done (lesson + published lab);
   **M02–M05** authored (lessons + labs); **M02+** Killercoda labs pending user **Sync Now**.
 - **Next up:** finish Batch 2 → wire + strict-build + commit → continue Batch 3 (Stage 4).

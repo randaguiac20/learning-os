@@ -1,0 +1,41 @@
+{
+  "title": "Module 20 — Kubernetes Operations",
+  "description": "Operate one Deployment on a real single-node cluster: inject config with a ConfigMap and Secret, add health probes and watch a failing one restart a pod, set resource requests/limits, and ship a rolling update you roll back in one command. All work is scoped to a throwaway k8s-ops namespace.",
+  "difficulty": "advanced",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Bearings and a scoped namespace",
+        "text": "step1.md"
+      },
+      {
+        "title": "Config as data — ConfigMap and Secret",
+        "text": "step2.md"
+      },
+      {
+        "title": "A Deployment with config and health probes",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "A failing probe, a bad rollout, and a rollback",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "The day-2 troubleshooting ladder",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-1node"
+  }
+}

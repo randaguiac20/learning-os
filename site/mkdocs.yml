@@ -126,3 +126,9 @@ nav:
       - "Module 16 — Docker": stage-05/module-16.md
       - "Module 17 — containerd & OCI": stage-05/module-17.md
       - "Module 18 — devcontainers": stage-05/module-18.md
+  - "Stage 6 — Enterprise Architecture":
+      - "Module 19 — Kubernetes Core": stage-06/module-19.md
+      - "Module 20 — Kubernetes Operations": stage-06/module-20.md
+  - "Stage 7 — Optimization":
+      - "Module 21 — CPU & Memory Performance": stage-07/module-21.md
+      - "Module 22 — GPU & NPU Performance": stage-07/module-22.md
