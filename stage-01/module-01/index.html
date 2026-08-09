@@ -1,0 +1,1332 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="What a computer and an operating system really are — the foundation every later topic stands on.">
+      
+      
+        <meta name="author" content="Learning OS">
+      
+      
+      
+        <link rel="prev" href="../../learn-how-to-learn/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Module 01 — Computer & OS Fundamentals - Learning OS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%206a6%206%200%200%201%206%206c0%202.22-1.21%204.16-3%205.2V19a1%201%200%200%201-1%201h-4a1%201%200%200%201-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6%206%200%200%201%206-6m2%2015v1a1%201%200%200%201-1%201h-2a1%201%200%200%201-1-1v-1zm6-10h3v2h-3zM1%2011h3v2H1zM13%201v3h-2V1zM4.92%203.5l2.13%202.14-1.42%201.41L3.5%204.93zm12.03%202.13%202.12-2.13%201.43%201.43-2.13%202.12z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M6%2022a3%203%200%200%201-3-3c0-.6.18-1.16.5-1.63L9%207.81V6a1%201%200%200%201-1-1V4a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v1a1%201%200%200%201-1%201v1.81l5.5%209.56c.32.47.5%201.03.5%201.63a3%203%200%200%201-3%203zm-1-3a1%201%200%200%200%201%201h12a1%201%200%200%200%201-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14%2017l-5.07-5.07-3.75%206.5c-.11.16-.18.36-.18.57m8-9a1%201%200%200%200-1%201%201%201%200%200%200%201%201%201%201%200%200%200%201-1%201%201%200%200%200-1-1%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:300,300i,400,400i,700,700i%7CDejaVu+Sans+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans";--md-code-font:"DejaVu Sans Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-01-computer-os-fundamentals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Learning OS" class="md-header__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Learning OS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module 01 — Computer & OS Fundamentals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Learning OS" class="md-nav__button md-logo" aria-label="Learning OS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Learning OS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-how-to-learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to learn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module 01 — Computer & OS Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-hardware-kernel-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: hardware, kernel, you
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-six-ideas-that-explain-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The six ideas that explain everything
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-memory-hierarchy-know-these-magnitudes-cold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The memory hierarchy (know these magnitudes cold)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-button-to-running-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power button to running program
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-concepts-compressed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core concepts, compressed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-meet-your-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: meet your machine
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-count-the-context-switches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Count the context switches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-reconcile-the-cpu-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Reconcile the CPU count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-read-the-error-name-the-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Read the error, name the layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-stretch-200-processes-one-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 (stretch) — 200 processes, one core
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture-hardware-kernel-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture: hardware, kernel, you
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-six-ideas-that-explain-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The six ideas that explain everything
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-memory-hierarchy-know-these-magnitudes-cold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The memory hierarchy (know these magnitudes cold)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-button-to-running-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power button to running program
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-concepts-compressed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core concepts, compressed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-lab-meet-your-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided Lab: meet your machine
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solo-lab-figure-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solo Lab: figure it out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solo Lab: figure it out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-count-the-context-switches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1 — Count the context switches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-reconcile-the-cpu-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2 — Reconcile the CPU count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-read-the-error-name-the-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3 — Read the error, name the layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-stretch-200-processes-one-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4 (stretch) — 200 processes, one core
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mastery-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mastery checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-lock-it-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review — lock it in
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="module-01-computer-os-fundamentals">Module 01 — Computer &amp; OS Fundamentals<a class="headerlink" href="#module-01-computer-os-fundamentals" title="Permanent link">&para;</a></h1>
+<p><small>Stage 1 · Foundations · ~2 weeks at 4 h/day · No prerequisites — this is the front door.</small></p>
+<h2 id="why-this-matters">Why this matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h2>
+<p>A <strong>computer</strong> stores instructions and data in memory and executes those instructions, one after
+another, on a processor. An <strong>operating system (OS)</strong> is the master program that manages the
+hardware and shares it safely among every other program.</p>
+<p>Everything later in this course — Linux, containers, Kubernetes, GPUs, AI infrastructure — is just
+<strong>programs being managed by an OS on hardware</strong>. Understand this module deeply and nothing later is
+magic. Skip it and everything later is memorization.</p>
+<div class="admonition info">
+<p class="admonition-title">What this unlocks</p>
+<p>Linux <em>is</em> one of these kernels · the shell speaks to the kernel through system calls · Docker is
+kernel isolation mechanisms · Kubernetes is the scheduler idea at cluster scale · performance
+tuning is the memory hierarchy with a profiler · AI infrastructure is the accelerator at
+production depth. <strong>Every later module is this one, specialized.</strong></p>
+</div>
+<hr />
+<h2 id="watch">Watch<a class="headerlink" href="#watch" title="Permanent link">&para;</a></h2>
+<p><em>Watch once, then rely on the notes below — you should never need to rewatch.</em></p>
+<div class="lo-video-placeholder">
+<p><span class="lo-play">▶</span>
+<strong>Explainer video — coming</strong>
+<small>Record per <code>../media/README.md</code>, upload to YouTube, then replace this card with the embed.</small></p>
+</div>
+<details class="note">
+<summary>For the author — drop-in YouTube embed (replace VIDEO_ID)</summary>
+<p>Once the explainer is on YouTube, replace the placeholder card above with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lo-video-embed&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://www.youtube-nocookie.com/embed/VIDEO_ID&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>          <span class="na">title</span><span class="o">=</span><span class="s">&quot;Module 01 — Computer &amp; OS Fundamentals&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>          <span class="na">allow</span><span class="o">=</span><span class="s">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          <span class="na">allowfullscreen</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+Video script beats (from the blueprint's Analogy / Visual Model / Misconceptions):
+the kitchen analogy (CPU = chef, RAM = counter, disk = pantry, cache = arm's reach) →
+the six mechanisms → "measure first" → the three misconceptions to kill (RAM≠storage,
+OS≠the desktop, GHz≠speed).</p>
+</details>
+<p><strong>Terminal cast — the inspection commands, start to finish:</strong></p>
+<div class="asciinema-player-wrapper" data-cast="../casts/module-01-demo.cast" data-cols="90" data-rows="24"></div>
+
+<div class="admonition tip">
+<p class="admonition-title">Follow along, don't just watch</p>
+<p>Open the <a href="#guided-lab-meet-your-machine">Guided Lab</a> in a browser terminal and run each command
+yourself as it appears. Typing beats watching every time.</p>
+</div>
+<hr />
+<h2 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h2>
+<p><em>Standalone. This is the reference you keep.</em></p>
+<h3 id="the-picture-hardware-kernel-you">The picture: hardware, kernel, you<a class="headerlink" href="#the-picture-hardware-kernel-you" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    A["Applications — browser, python, docker"]:::user
+    L["Libraries and shells — bash, libc"]:::user
+    S{{"system calls — the ONLY door downward"}}:::door
+    K["KERNEL — processes · memory · files · network"]:::kern
+    D["Drivers"]:::kern
+    H["HARDWARE — CPU · RAM · disk · GPU · NIC"]:::metal
+    A --&gt; L --&gt; S --&gt; K --&gt; D --&gt; H
+    classDef user fill:#eaf0f9,stroke:#2b4c7e,color:#1a1f2e;
+    classDef door fill:#fff3e0,stroke:#a9722c,color:#1a1f2e;
+    classDef kern fill:#e6f3ef,stroke:#1f7a68,color:#1a1f2e;
+    classDef metal fill:#f4f6f9,stroke:#6b7280,color:#1a1f2e;</code></pre>
+<p>The <strong>user/kernel boundary</strong> is the security line of the entire stack: user code is restricted and
+must ask the kernel — through a <strong>system call</strong> (<code>open</code>, <code>read</code>, <code>write</code>, <code>fork</code>, <code>execve</code>) — for
+anything privileged.</p>
+<h3 id="the-six-ideas-that-explain-everything">The six ideas that explain everything<a class="headerlink" href="#the-six-ideas-that-explain-everything" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Stored program &amp; fetch–decode–execute.</strong> Instructions are just numbers in memory; the CPU
+   endlessly fetches the next one, decodes it, executes it. That's all "running a program" is.</li>
+<li><strong>Memory hierarchy.</strong> Each level is bigger and slower than the one above it. Performance work is
+   mostly "stay near the top."</li>
+<li><strong>Process.</strong> A <em>running</em> program: its code + its private virtual memory + its state. One program
+   can run as many processes.</li>
+<li><strong>Scheduling.</strong> The kernel switches the CPU between processes thousands of times a second
+   (context switches), creating the illusion everything runs at once.</li>
+<li><strong>Virtual memory.</strong> Each process sees its own private address space; the kernel + CPU (MMU) map it
+   to real RAM pages. This is both the <em>protection</em> and the "more memory than RAM" trick — and later
+   the foundation of containers.</li>
+<li><strong>Syscalls &amp; privilege.</strong> The CPU runs in <strong>user mode</strong> (restricted) or <strong>kernel mode</strong>
+   (all-powerful). The split, enforced by hardware, is where all security begins.</li>
+</ol>
+<h3 id="the-memory-hierarchy-know-these-magnitudes-cold">The memory hierarchy (know these magnitudes cold)<a class="headerlink" href="#the-memory-hierarchy-know-these-magnitudes-cold" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Size</th>
+<th>Latency</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Registers</td>
+<td>~KB</td>
+<td>~0.3 ns</td>
+<td>fastest / smallest</td>
+</tr>
+<tr>
+<td>L1 / L2 / L3 cache</td>
+<td>~MB</td>
+<td>1–30 ns</td>
+<td></td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>~GB</td>
+<td>~100 ns</td>
+<td></td>
+</tr>
+<tr>
+<td>SSD</td>
+<td>~TB</td>
+<td>~100 µs</td>
+<td></td>
+</tr>
+<tr>
+<td>Network / cloud</td>
+<td>~∞</td>
+<td>~ms</td>
+<td>slowest / biggest</td>
+</tr>
+</tbody>
+</table>
+<p>Each jump down is roughly <strong>1000× slower</strong>. "Slow" always means <em>waiting on something further down
+the hierarchy</em>.</p>
+<h3 id="power-button-to-running-program">Power button to running program<a class="headerlink" href="#power-button-to-running-program" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart LR
+    F["Firmware / UEFI&lt;br/&gt;self-test"] --&gt; B["Bootloader / GRUB&lt;br/&gt;loads kernel"]
+    B --&gt; K["Kernel&lt;br/&gt;inits hardware, mounts root FS"]
+    K --&gt; P["PID 1 / systemd&lt;br/&gt;starts services"]
+    P --&gt; Sh["Login → shell"]
+    Sh --&gt; R["You run python3:&lt;br/&gt;fork + execve → process"]</code></pre>
+<p>When you type <code>python3</code>: the shell asks the kernel (<code>fork</code> + <code>execve</code>) to create a process; the
+kernel loads the program and schedules it; every print/read is a syscall; on exit the kernel
+reclaims everything.</p>
+<h3 id="core-concepts-compressed">Core concepts, compressed<a class="headerlink" href="#core-concepts-compressed" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Everything is numbers — data <em>and</em> instructions <em>and</em> text <em>and</em> pixels, all binary.</li>
+<li>The CPU is fast but dumb; software is layers of simple steps.</li>
+<li>Memory is a hierarchy; distance from the CPU = slowness.</li>
+<li>The OS = <strong>sharing + protection + abstraction</strong>, enforced by hardware privilege modes.</li>
+<li>A <strong>process</strong> is the unit of running software; a <strong>file</strong> is the unit of stored data.</li>
+<li>GPUs/NPUs trade flexibility for parallel throughput.</li>
+</ul>
+<div class="lo-remember">
+<p><strong>Must remember (if you keep only five things):</strong></p>
+<ol>
+<li>A program is a file; a <strong>process</strong> is that program <em>running</em> (own memory, PID, state).</li>
+<li>The OS does three jobs: <strong>sharing, protection, abstraction</strong> — enforced by user vs kernel mode.</li>
+<li><strong>Memory hierarchy:</strong> registers → cache → RAM → SSD → network, each ~1000× slower.</li>
+<li>A <strong>syscall</strong> is the only door from user code into the kernel.</li>
+<li>Boot order: <strong>UEFI → bootloader → kernel → PID 1 (systemd) → services → login.</strong></li>
+</ol>
+</div>
+<hr />
+<h2 id="guided-lab-meet-your-machine">Guided Lab: meet your machine<a class="headerlink" href="#guided-lab-meet-your-machine" title="Permanent link">&para;</a></h2>
+<p><em>Basic, step-by-step. Every command here is </em><em>read-only</em><em> — it inspects, never changes anything.</em></p>
+<div class="lo-lab-actions">
+<p><a href="https://killercoda.com/learning-os/course/killercoda/module-01" target="_blank">▶ Open interactive lab (browser terminal){ .lo-btn }</a>
+<a href="https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-01" target="_blank">View lab source{ .lo-btn .lo-btn--ghost }</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">No install needed</p>
+<p>The button opens a free Ubuntu terminal in your browser (Killercoda) — no signup, nothing to
+install. You can also run every command on any Linux machine, or in the terminal cast above.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1 · Your machine</label><label for="__tabbed_1_2">2 · Your CPU</label><label for="__tabbed_1_3">3 · Your memory</label><label for="__tabbed_1_4">4 · Your storage</label><label for="__tabbed_1_5">5 · Processes, live</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uname<span class="w"> </span>-a<span class="w">       </span><span class="c1"># kernel + architecture</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>hostnamectl<span class="w">    </span><span class="c1"># machine identity</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>uptime<span class="w">         </span><span class="c1"># how long it&#39;s been running, load average</span>
+</code></pre></div>
+<strong>Record:</strong> kernel version, hostname, uptime. Which fact came from the kernel, which from a file?</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>lscpu
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cat<span class="w"> </span>/proc/cpuinfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>less
+</code></pre></div>
+Find: model, <strong>cores vs threads</strong>, L1/L2/L3 cache sizes, max MHz. Draw the memory-hierarchy
+pyramid for <em>your</em> CPU.</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>free<span class="w"> </span>-h
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>cat<span class="w"> </span>/proc/meminfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+</code></pre></div>
+Explain <strong>total vs used vs available vs cached</strong>. Open 10 browser tabs, rerun <code>free -h</code>, explain
+the change. (High "used" from cache is <em>healthy</em> — read the <code>available</code> column.)</p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>lsblk
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>df<span class="w"> </span>-h
+</code></pre></div>
+Map the chain: <strong>physical device → partition → mount point → your files.</strong></p>
+</div>
+<div class="tabbed-block">
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>top<span class="w">            </span><span class="c1"># press P (sort by CPU), M (sort by memory), q to quit</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sleep<span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="p">&amp;</span><span class="w">    </span><span class="c1"># start a background process; note its PID</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>sleep
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nb">kill</span><span class="w"> </span>&lt;PID&gt;<span class="w">     </span><span class="c1"># terminate it; verify it&#39;s gone</span>
+</code></pre></div>
+You just <strong>created, observed, and terminated a process</strong> through the kernel. What is PID 1?</p>
+</div>
+</div>
+</div>
+<div class="admonition success">
+<p class="admonition-title">You can stop here and have learned something real</p>
+<p>If you can read your machine's vital signs and run a process through its whole lifecycle, the
+guided lab is done. Now make it harder.</p>
+</div>
+<hr />
+<h2 id="solo-lab-figure-it-out">Solo Lab: figure it out<a class="headerlink" href="#solo-lab-figure-it-out" title="Permanent link">&para;</a></h2>
+<p><em>Harder. Goals only — minimal hand-holding. Struggle here is the point; reveal a hint only after you've tried.</em></p>
+<p><strong>Same browser terminal as above.</strong> Work each goal before opening its hint.</p>
+<h3 id="challenge-1-count-the-context-switches">Challenge 1 — Count the context switches<a class="headerlink" href="#challenge-1-count-the-context-switches" title="Permanent link">&para;</a></h3>
+<p>Find out how many context switches your system has performed since boot.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p>The kernel exposes live counters as files under <code>/proc</code>. Look for a system-wide stats file.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>grep<span class="w"> </span>ctxt<span class="w"> </span>/proc/stat
+</code></pre></div>
+<code>/proc/stat</code>'s <code>ctxt</code> line is the total context-switch count since boot — direct evidence of the
+scheduler doing mechanism #4, thousands of times a second.</p>
+</details>
+<h3 id="challenge-2-reconcile-the-cpu-count">Challenge 2 — Reconcile the CPU count<a class="headerlink" href="#challenge-2-reconcile-the-cpu-count" title="Permanent link">&para;</a></h3>
+<p><code>nproc</code> prints a number. Reconcile it exactly with <code>lscpu</code>'s <strong>cores × threads-per-core × sockets</strong>.</p>
+<details class="tip">
+<summary>Hint</summary>
+<p><code>nproc</code> counts <em>logical</em> CPUs. <code>lscpu</code> shows sockets, cores per socket, and threads per core —
+multiply them.</p>
+</details>
+<details class="success">
+<summary>Solution</summary>
+<p><code>nproc</code> == <code>Socket(s) × Core(s) per socket × Thread(s) per core</code> from <code>lscpu</code>. If threads-per-core
+is 2, hyper-threading is why <code>nproc</code> is double the physical core count.</p>
+</details>
+<h3 id="challenge-3-read-the-error-name-the-layer">Challenge 3 — Read the error, name the layer<a class="headerlink" href="#challenge-3-read-the-error-name-the-layer" title="Permanent link">&para;</a></h3>
+<p>Run <code>ls /root</code>. It fails. In your journal, answer: <strong>which layer refused you</strong> (hardware? kernel?
+filesystem permissions?) and why is that refusal <em>correct</em> behaviour?</p>
+<details class="success">
+<summary>Solution</summary>
+<p>Filesystem <strong>permissions</strong>, enforced by the kernel: <code>/root</code> is mode <code>700</code>, owned by root. Your
+unprivileged process is denied by the protection model (mechanism #6) — exactly what should
+happen. This is security as a <em>feature</em>, not a bug.</p>
+</details>
+<h3 id="challenge-4-stretch-200-processes-one-core">Challenge 4 (stretch) — 200 processes, one core<a class="headerlink" href="#challenge-4-stretch-200-processes-one-core" title="Permanent link">&para;</a></h3>
+<p><code>top</code> shows hundreds of processes but your machine has few cores. Explain precisely how they all
+appear to "run at once."</p>
+<details class="success">
+<summary>Solution</summary>
+<p>"Running" mostly means <em>runnable</em>; one core executes exactly one instruction stream at a time, in
+~millisecond slices. The scheduler context-switches so fast it looks simultaneous, and most of
+those processes are actually <strong>sleeping</strong> on I/O or timers, not competing for the CPU at all.</p>
+</details>
+<hr />
+<h2 id="self-check">Self-Check<a class="headerlink" href="#self-check" title="Permanent link">&para;</a></h2>
+<p><em>Close the notes. Answer aloud or in writing </em><em>first</em><em>, then reveal. Recalling — even when it's hard —
+is what builds the memory.</em></p>
+<details class="question">
+<summary>Program vs process?</summary>
+<p>A program is a passive file of instructions on disk. A <strong>process</strong> is a running instance with its
+own virtual memory, PID, and state. One program → many processes.</p>
+</details>
+<details class="question">
+<summary>The three jobs of an OS?</summary>
+<p><strong>Sharing</strong> (many programs, few resources), <strong>protection</strong> (one crash can't kill another), and
+<strong>abstraction</strong> ("open file", not "spin disk to sector 5012").</p>
+</details>
+<details class="question">
+<summary>Order by latency: RAM, L1 cache, SSD, network round-trip — with rough magnitudes.</summary>
+<p>L1 ≈ 1 ns → RAM ≈ 100 ns → SSD ≈ 100 µs → intercontinental network ≈ 150 ms. Each jump ≈ 1000×.</p>
+</details>
+<details class="question">
+<summary><code>free -h</code> shows 95% used but the machine is snappy. Problem?</summary>
+<p>Usually not. Most "used" is reclaimable <strong>page cache</strong>. Check the <strong>available</strong> column; worry only
+if <em>available</em> is low <strong>and</strong> swap is churning.</p>
+</details>
+<details class="question">
+<summary>What is a syscall, and why does it matter for security?</summary>
+<p>A user program's request for a kernel service — the only door into kernel mode. Because it's
+hardware-enforced, untrusted code physically cannot touch other processes' memory or devices
+except through kernel-checked syscalls.</p>
+</details>
+<details class="question">
+<summary>Boot order, power button to login?</summary>
+<p>UEFI/firmware → bootloader (GRUB) → kernel (mounts root FS) → PID 1 (systemd) → services → login.</p>
+</details>
+<div class="admonition example">
+<p class="admonition-title">Teach it back (the real test)</p>
+<p>Out loud, in <strong>2 minutes, no notes</strong>: <em>"Explain what an operating system is and why computers need
+one."</em> You must land <strong>sharing, protection, abstraction</strong> (any wording). Then, in <strong>90 seconds</strong>,
+teach <em>"memory vs storage"</em> to a 10-year-old — analogy required, jargon forbidden. If you can't yet,
+that's your signal to reread the Key Notes, not to move on.</p>
+</div>
+<hr />
+<h2 id="mastery-checklist">Mastery checklist<a class="headerlink" href="#mastery-checklist" title="Permanent link">&para;</a></h2>
+<p><em>Tick these honestly, cold (no notes). They </em><em>gate</em><em> progress to Module 02 — a module is only "done"
+when every box is true.</em></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Explain</strong> the three OS jobs with one example each.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Draw</strong> all four diagrams from memory: the stack, the memory hierarchy, fetch–decode–execute, and boot.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Inspect</strong> unaided: kernel, CPU, memory, and disks via <code>uname</code>, <code>lscpu</code>, <code>free</code>, <code>lsblk</code>, and <code>/proc</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Administer</strong> a full process lifecycle: start a background process, find it, inspect it, terminate it, verify.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Monitor</strong> with <code>top</code>: distinguish CPU pressure vs memory pressure vs idle.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Troubleshoot</strong> an unseen "slow machine" scenario with stated hypotheses and the right tool order.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Debug</strong> a given error (<code>Permission denied</code>, or a state-<code>D</code> process) to the correct layer, with reasoning.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Secure:</strong> explain user/kernel privilege as a security boundary, why <code>sudo</code> demands suspicion, and what <code>/etc/shadow</code> protects.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Scale:</strong> explain up vs out, and why multicore happened (the ~2005 power wall).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Teach:</strong> pass the teach-back above (OS explanation mandatory).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Read one thing unaided this module — a <code>man</code> page, the kernel docs, or OSTEP ch. 2 — and say what question it answered.</li>
+</ul>
+<hr />
+<h2 id="review-lock-it-in">Review — lock it in<a class="headerlink" href="#review-lock-it-in" title="Permanent link">&para;</a></h2>
+<p>Spaced repetition is not optional; it's where the memory actually forms. When you finish this module,
+schedule these and <em>keep</em> them:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 1</strong></td>
+<td>All flashcards · redraw the stack diagram · one 1-minute "what is an OS" explanation</td>
+</tr>
+<tr>
+<td><strong>Day 7</strong></td>
+<td>All four diagrams from memory · rewrite the inspection commands cold · the security questions</td>
+</tr>
+<tr>
+<td><strong>Day 30</strong></td>
+<td>Reread your own notes and correct anything you now understand better · the two stretch challenges</td>
+</tr>
+</tbody>
+</table>
+<p>From Module 02 onward, every review day also pulls in <strong>one</strong> Module 01 item (a diagram, a question,
+or a lab redone cold) — that interleaving is what makes it stick.</p>
+<p><strong>Connects forward to:</strong> Linux (the concrete OS) · the shell (the interface to all of this) · Docker
+(process isolation) · Kubernetes (the scheduler at scale) · performance tuning (the hierarchy with a
+profiler) · AI infrastructure (the accelerator, industrialized).</p>
+<div class="admonition quote">
+<p class="admonition-title">The one-sentence takeaway</p>
+<p>Learn Module 01 deeply and the rest of the course is variations on themes you already own.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../learn-how-to-learn/" class="md-footer__link md-footer__link--prev" aria-label="Previous: How to learn">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                How to learn
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Content is the learner's own work — reuse the framework, cite the sources.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tabs.link", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+      
+        <script src="../../assets/casts.js"></script>
+      
+    
+  </body>
+</html>
