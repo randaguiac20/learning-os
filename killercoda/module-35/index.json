@@ -1,0 +1,41 @@
+{
+  "title": "Module 35 — Software Engineering Practice",
+  "description": "Live the real TDD loop: write a failing pytest test first (RED), implement it (GREEN), catch a genuine bug with an edge-case test and fix it, then refactor and review your own diff — committing atomically with git.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Set up the bench (pytest + git)",
+        "text": "step1.md"
+      },
+      {
+        "title": "RED — write the failing test first",
+        "text": "step2.md"
+      },
+      {
+        "title": "GREEN — implement to pass",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "An edge case that catches a bug",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Refactor + review your own diff",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

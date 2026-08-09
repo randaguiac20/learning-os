@@ -1,0 +1,41 @@
+{
+  "title": "Module 39 — Computer Vision",
+  "description": "See how a machine sees, on a plain CPU with numpy + pillow: build a synthetic image as an (H×W×C) tensor, slide an edge-detecting Sobel kernel across it BY HAND and watch the edges appear, apply blur/sharpen kernels, max-pool to downsample, and threshold to a binary mask (toy segmentation). No GPU, no downloads.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Set up the bench (numpy + pillow)",
+        "text": "step1.md"
+      },
+      {
+        "title": "A synthetic image as a tensor",
+        "text": "step2.md"
+      },
+      {
+        "title": "Convolution by hand — Sobel edges",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Blur, sharpen, and pool (downsample)",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Threshold to a binary mask (toy segmentation)",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

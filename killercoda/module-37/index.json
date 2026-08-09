@@ -1,0 +1,45 @@
+{
+  "title": "Module 37 — Cloud Platforms & Certification",
+  "description": "Learn the transferable cloud skill you can practice with zero cloud account and zero cost: the Infrastructure-as-Code lifecycle with OpenTofu. Write a config, init/plan/apply, inspect the state, simulate drift, and destroy — the exact loop that provisions a real VM, database, or GPU. All work lives in a throwaway ~/iac-lab directory.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install OpenTofu",
+        "text": "step1.md"
+      },
+      {
+        "title": "Write your first config (main.tf)",
+        "text": "step2.md"
+      },
+      {
+        "title": "tofu init — download the providers",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "tofu plan — read the diff",
+        "text": "step4.md"
+      },
+      {
+        "title": "tofu apply — create it, then inspect the state",
+        "text": "step5.md",
+        "verify": "verify-step5.sh"
+      },
+      {
+        "title": "Change, re-plan, then destroy",
+        "text": "step6.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

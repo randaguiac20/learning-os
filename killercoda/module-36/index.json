@@ -1,0 +1,41 @@
+{
+  "title": "Module 36 — Backend & API Engineering",
+  "description": "Build a real REST API with FastAPI — an /items resource with correct HTTP methods and status codes, Pydantic request validation (422), a token-protected route (401/200), and the auto-generated OpenAPI docs. Exercised with curl.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install the bench",
+        "text": "step1.md"
+      },
+      {
+        "title": "Design on paper, then write the API",
+        "text": "step2.md"
+      },
+      {
+        "title": "Run it — create (201) and validate (422)",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Missing (404) and the protected route (401/200)",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "The API documents itself (OpenAPI)",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

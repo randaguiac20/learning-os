@@ -43,6 +43,11 @@ Status legend: ☐ not started · ◐ recorded, not published · ✅ live and em
 | M32 | Data Structures & Algorithms | _(pending)_ | ☐ |
 | M33 | Databases & SQL | _(pending)_ | ☐ |
 | M34 | Big Data & Data Architecture | _(pending)_ | ☐ |
+| M35 | Software Engineering Practice | _(pending)_ | ☐ |
+| M36 | Backend & API Engineering | _(pending)_ | ☐ |
+| M37 | Cloud Platforms & Certification | _(pending)_ | ☐ |
+| M38 | Natural Language Processing | _(pending)_ | ☐ |
+| M39 | Computer Vision | _(pending)_ | ☐ |
 
 ## Terminal casts (asciinema `.cast`, shipped with the site)
 
@@ -82,6 +87,11 @@ Status legend: ☐ not started · ◐ recorded, not published · ✅ live and em
 | M32 | _(pending — record per `media/README.md`)_ | Module 32 · Watch | ☐ |
 | M33 | _(pending — record per `media/README.md`)_ | Module 33 · Watch | ☐ |
 | M34 | _(pending — record per `media/README.md`)_ | Module 34 · Watch | ☐ |
+| M35 | _(pending — record per `media/README.md`)_ | Module 35 · Watch | ☐ |
+| M36 | _(pending — record per `media/README.md`)_ | Module 36 · Watch | ☐ |
+| M37 | _(pending — record per `media/README.md`)_ | Module 37 · Watch | ☐ |
+| M38 | _(pending — record per `media/README.md`)_ | Module 38 · Watch | ☐ |
+| M39 | _(pending — record per `media/README.md`)_ | Module 39 · Watch | ☐ |
 
 ## Interactive labs (Killercoda)
 
@@ -121,6 +131,11 @@ Status legend: ☐ not started · ◐ recorded, not published · ✅ live and em
 | M32 | `killercoda/module-32/` | https://killercoda.com/learning-os/course/killercoda/module-32 _(Sync Now to publish)_ | ◐ authored |
 | M33 | `killercoda/module-33/` | https://killercoda.com/learning-os/course/killercoda/module-33 _(Sync Now to publish)_ | ◐ authored |
 | M34 | `killercoda/module-34/` | https://killercoda.com/learning-os/course/killercoda/module-34 _(Sync Now to publish)_ | ◐ authored |
+| M35 | `killercoda/module-35/` | https://killercoda.com/learning-os/course/killercoda/module-35 _(Sync Now to publish)_ | ◐ authored |
+| M36 | `killercoda/module-36/` | https://killercoda.com/learning-os/course/killercoda/module-36 _(Sync Now to publish)_ | ◐ authored |
+| M37 | `killercoda/module-37/` | https://killercoda.com/learning-os/course/killercoda/module-37 _(Sync Now to publish)_ | ◐ authored |
+| M38 | `killercoda/module-38/` | https://killercoda.com/learning-os/course/killercoda/module-38 _(Sync Now to publish)_ | ◐ authored |
+| M39 | `killercoda/module-39/` | https://killercoda.com/learning-os/course/killercoda/module-39 _(Sync Now to publish)_ | ◐ authored |
 
 > Killercoda profile = `learning-os`; the top-level `killercoda/` folder became a "course", so the
 > scenario URL is `…/course/killercoda/module-01`. See `labs/README.md` and `../platform/RUNBOOK.md`.

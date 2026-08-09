@@ -1,0 +1,41 @@
+{
+  "title": "Module 38 — Natural Language Processing",
+  "description": "Turn text into vectors and train a real classifier: tokenize by hand, build a vocabulary, fit a TF-IDF model over a small inline labeled corpus, evaluate on held-out sentences, and read cosine similarity and the most informative words. CPU only, no downloads.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Set up the bench",
+        "text": "step1.md"
+      },
+      {
+        "title": "Tokenize by hand",
+        "text": "step2.md"
+      },
+      {
+        "title": "Build the vocabulary",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "TF-IDF, train, and evaluate",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Cosine similarity and informative words",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

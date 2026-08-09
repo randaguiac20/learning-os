@@ -109,8 +109,15 @@ live · ✅ dark-mode mermaid fix · ✅ M01 Killercoda lab published + URL wire
     M34 Big Data):** lessons + labs (API-free .claude config; numpy math; stdlib DS&A; sqlite3;
     DuckDB/Parquet), first-use terminology rule applied, `build --strict` EXIT=0, buttons validated,
     committed. (M33 sqlite3 lab logic proven via Python sqlite3 since the CLI wasn't local.)
-  - ◐ **Batch 8 — final: Stage 13 (M35 SWE Practice, M36 Backend/API, M37 Cloud, M38 NLP, M39 CV).**
-    NOTE: M35 & M36 are in stage-12 (Data & Software Engineering); M37–M39 in stage-13.
+  - ✅ **Batch 8 — final (M35 SWE Practice, M36 Backend/API [stage-12]; M37 Cloud/IaC, M38 NLP,
+    M39 Computer Vision [stage-13]):** lessons + labs (TDD/pytest, FastAPI CRUD+auth tested via
+    TestClient, OpenTofu plan/apply/state, TF-IDF classifier, numpy Sobel convolution), committed.
+  - ✅ **ALL 39 MODULES COMPLETE.** Pre-push sweep green: 39 lesson pages, 39 nav entries, 39
+    Killercoda labs (json valid + verify scripts parse); site-wide every page has 4 working
+    `lo-btn` anchors + 0 literal braces; 0 stray tool-call tags; 0 forbidden diagram styling;
+    `mkdocs build --strict` EXIT=0. (`$$` in M05/M17/M23 confirmed as shell PID, not MathJax.)
+  - **Still LOCAL only — not pushed/deployed.** Awaiting user go for: `git push origin main` +
+    `mkdocs gh-deploy --force` + Killercoda **Sync Now** for M02–M39.
   - **Pre-push sweep TODO:** (1) site-wide button-render check; (2) first-use terminology-expansion
     pass across all lessons (rule added to ADDING-A-MODULE.md).
 - **Current:** Site is **live and public**; **M01** fully done (lesson + published lab);

@@ -149,3 +149,9 @@ nav:
   - "Stage 12 — Data & Software Engineering":
       - "Module 33 — Databases & SQL": stage-12/module-33.md
       - "Module 34 — Big Data & Data Architecture": stage-12/module-34.md
+      - "Module 35 — Software Engineering Practice": stage-12/module-35.md
+      - "Module 36 — Backend & API Engineering": stage-12/module-36.md
+  - "Stage 13 — Cloud & AI Domains":
+      - "Module 37 — Cloud Platforms & Certification": stage-13/module-37.md
+      - "Module 38 — Natural Language Processing": stage-13/module-38.md
+      - "Module 39 — Computer Vision": stage-13/module-39.md
