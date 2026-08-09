@@ -1,0 +1,41 @@
+{
+  "title": "Module 15 — Automation",
+  "description": "Prove a job idempotent with a run-twice diff, put a tested script on a cron schedule, then write an Ansible play that converges to changed=0. Everything runs inside a throwaway ~/automation-lab sandbox.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Set up the workshop",
+        "text": "step1.md"
+      },
+      {
+        "title": "Idempotence clinic — naive vs check-then-act",
+        "text": "step2.md"
+      },
+      {
+        "title": "Put a job on a schedule (cron)",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Converge with Ansible",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "The run-twice license, recapped",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

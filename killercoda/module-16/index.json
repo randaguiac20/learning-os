@@ -1,0 +1,41 @@
+{
+  "title": "Module 16 — Docker",
+  "description": "Run a container and prove it is just a process, then write a Dockerfile, docker build an image, run it with a published port and a named volume, and stand up a 2-service docker compose rig. Runs on a full Linux VM where Docker works.",
+  "difficulty": "intermediate",
+  "time": "30-45 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install Docker and run your first container",
+        "text": "step1.md"
+      },
+      {
+        "title": "A container is just a process",
+        "text": "step2.md"
+      },
+      {
+        "title": "Write a Dockerfile and build an image",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Run it — publish a port, add a volume",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Compose a 2-service rig",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

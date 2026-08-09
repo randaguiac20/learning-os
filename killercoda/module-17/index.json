@@ -1,0 +1,41 @@
+{
+  "title": "Module 17 — containerd & OCI",
+  "description": "Drive the runtime below Docker: install and start containerd, list its namespaces, pull a real OCI image straight into its store, run a container with ctr (no Docker), see a shim but no runc, and read an image manifest as raw JSON. Everything runs on a real Linux VM.",
+  "difficulty": "advanced",
+  "time": "30-40 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install containerd and meet the three pieces",
+        "text": "step1.md"
+      },
+      {
+        "title": "containerd's own namespaces",
+        "text": "step2.md"
+      },
+      {
+        "title": "Pull an OCI image into the store",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Run a container with ctr, not Docker",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Read the manifest as raw JSON",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

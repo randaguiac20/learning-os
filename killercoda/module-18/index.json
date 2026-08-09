@@ -1,0 +1,41 @@
+{
+  "title": "Module 18 — devcontainers",
+  "description": "Author a development environment as code: hand-write a Dockerfile and a valid devcontainer.json, then — since the VM has Docker — build the image the spec references and run its setup by hand to prove the bench materializes. No editor needed; this is the spec, dissected.",
+  "difficulty": "advanced",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "A repo that sets itself up",
+        "text": "step1.md"
+      },
+      {
+        "title": "Write the Dockerfile — non-root",
+        "text": "step2.md"
+      },
+      {
+        "title": "Write devcontainer.json — the contract",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Materialize it — build and run the setup",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Hooks, recreate, and the secrets boundary",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

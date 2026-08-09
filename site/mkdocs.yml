@@ -121,3 +121,8 @@ nav:
       - "Module 12 — Programming Fundamentals": stage-04/module-12.md
       - "Module 13 — Python for Engineers": stage-04/module-13.md
       - "Module 14 — Networking": stage-04/module-14.md
+  - "Stage 5 — Production Practices":
+      - "Module 15 — Automation": stage-05/module-15.md
+      - "Module 16 — Docker": stage-05/module-16.md
+      - "Module 17 — containerd & OCI": stage-05/module-17.md
+      - "Module 18 — devcontainers": stage-05/module-18.md

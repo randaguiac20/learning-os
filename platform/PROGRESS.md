@@ -91,7 +91,10 @@ live · ✅ dark-mode mermaid fix · ✅ M01 Killercoda lab published + URL wire
     `.lo-btn` class INSIDE the link label (rendered as literal text, no styling); moved to post-paren
     attr_list; validated in built HTML (4 `<a class=lo-btn>`/page, 0 literal braces site-wide);
     playbook hardened. M12+ authored correct from the start.
-  - ☐ Batches 4–8 → Stages 5–13 (M15–M39).
+  - ✅ **Batch 4 — Stage 5 Production Practices (M15 Automation, M16 Docker, M17 containerd & OCI,
+    M18 devcontainers):** lessons + Killercoda labs (Docker/containerd on full-VM images, Ansible
+    idempotence, devcontainer scaffold+build), `build --strict` EXIT=0, buttons validated, committed.
+  - ☐ Batches 5–8 → Stages 6–13 (M19–M39).
 - **Current:** Site is **live and public**; **M01** fully done (lesson + published lab);
   **M02–M05** authored (lessons + labs); **M02+** Killercoda labs pending user **Sync Now**.
 - **Next up:** finish Batch 2 → wire + strict-build + commit → continue Batch 3 (Stage 4).
