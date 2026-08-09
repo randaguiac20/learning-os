@@ -1,0 +1,41 @@
+{
+  "title": "Module 08 — Git",
+  "description": "Build a real repository from scratch: set your identity, make atomic commits, branch and fast-forward, resolve a merge conflict, recover a hard-reset via reflog, and push to your own local bare remote. All local — no network or account needed.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Identity, first repo, atomic commits",
+        "text": "step1.md"
+      },
+      {
+        "title": "Branch and fast-forward merge",
+        "text": "step2.md"
+      },
+      {
+        "title": "A real merge and a conflict",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Break history, then recover it",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Your own remote — no network needed",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

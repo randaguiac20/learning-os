@@ -110,3 +110,10 @@ nav:
       - "Module 03 — Linux Essentials": stage-02/module-03.md
       - "Module 04 — Linux Administration": stage-02/module-04.md
       - "Module 05 — Bash Scripting": stage-02/module-05.md
+  - "Stage 3 — Intermediate Skills":
+      - "Module 06 — Vim": stage-03/module-06.md
+      - "Module 07 — Tmux": stage-03/module-07.md
+      - "Module 08 — Git": stage-03/module-08.md
+      - "Module 09 — SSH": stage-03/module-09.md
+      - "Module 10 — Dotfiles & Toolchains": stage-03/module-10.md
+      - "Module 11 — Claude Code": stage-03/module-11.md

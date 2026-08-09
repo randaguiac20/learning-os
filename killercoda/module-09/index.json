@@ -1,0 +1,41 @@
+{
+  "title": "Module 09 — SSH",
+  "description": "Install a real SSH server, generate an Ed25519 key, log in password-free, name the host in ~/.ssh/config, and open a tunnel — all against localhost, no second machine needed.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Bring the server up, meet its identity",
+        "text": "step1.md"
+      },
+      {
+        "title": "Generate your Ed25519 identity",
+        "text": "step2.md"
+      },
+      {
+        "title": "Install the key, log in password-free",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Name the host in your config",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "A tunnel, and watch the door",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

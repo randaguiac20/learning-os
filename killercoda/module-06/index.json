@@ -1,0 +1,41 @@
+{
+  "title": "Module 06 — Vim",
+  "description": "Learn Vim as a language: modes, the verb + motion/object grammar, text objects, the dot command, macros, and Ex commands — editing real files in a throwaway ~/vim-lab sandbox and verifying the results.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Check your Vim and meet the modes",
+        "text": "step1.md"
+      },
+      {
+        "title": "Verbs, motions, and the dot command",
+        "text": "step2.md"
+      },
+      {
+        "title": "Text objects — change inside the quotes",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Ex power — :global and :substitute",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Your first vimrc, and leaving on purpose",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

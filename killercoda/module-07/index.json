@@ -1,0 +1,41 @@
+{
+  "title": "Module 07 — Tmux",
+  "description": "Terminals that survive and multiply. Prove persistence, run the session/window/pane lifecycle, script a layout headless with send-keys, and write an earned ~/.tmux.conf. Steps use scriptable tmux so state is verifiable.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install tmux and prove persistence",
+        "text": "step1.md"
+      },
+      {
+        "title": "Session, window, and pane lifecycle",
+        "text": "step2.md"
+      },
+      {
+        "title": "Build a layout headless with send-keys",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "An earned ~/.tmux.conf",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Observe, clean up, and hygiene",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

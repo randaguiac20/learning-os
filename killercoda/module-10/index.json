@@ -1,0 +1,41 @@
+{
+  "title": "Module 10 — Dotfiles & Toolchains",
+  "description": "Turn your environment into code: install chezmoi + mise, put a real dotfile under management, drill the edit-diff-apply loop, enforce a 600 mode with private_, and pin a project's runtime. Everything happens in a throwaway home.",
+  "difficulty": "intermediate",
+  "time": "25-35 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Install the managers",
+        "text": "step1.md"
+      },
+      {
+        "title": "Put a dotfile under management",
+        "text": "step2.md"
+      },
+      {
+        "title": "Drill the loop, then enforce a mode",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Pin a project's runtime with mise",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "The bootstrap idea and the two laws",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

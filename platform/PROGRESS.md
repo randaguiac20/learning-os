@@ -74,11 +74,21 @@ live · ✅ dark-mode mermaid fix · ✅ M01 Killercoda lab published + URL wire
 
 ## Current position / Next up
 
-- **Current:** Site is **live and public**; **Module 01** fully done (lesson + published lab);
-  **Module 02** authored (lesson + lab), pending its Killercoda **Sync Now** to publish.
-- **Next up:** (1) publish M02's lab (Killercoda → Sync Now → confirm it opens). (2) Author
-  **Module 03 — Linux Essentials** (`curriculum/stage-02-core-concepts/module-03-linux-essentials/`)
-  with the same 8-section template.
+- **Full build-out in progress (2026-08-09):** authoring all remaining modules M03–M39 in
+  dependency-order, one stage per batch, via parallel builders → wire nav + manifest → `build
+  --strict` → local commit. **Not pushed/deployed yet** (waiting on user go).
+  - ✅ **Batch 1 — Stage 2 Core Concepts (M03 Linux Essentials, M04 Linux Admin, M05 Bash):**
+    lessons + Killercoda labs authored, `build --strict` EXIT=0, committed locally.
+  - ✅ **Batch 2 — Stage 3 Intermediate Skills (M06 Vim, M07 Tmux, M08 Git, M09 SSH,
+    M10 Dotfiles/Toolchains, M11 Claude Code):** lessons + Killercoda labs authored (builders were
+    interrupted mid-run; orchestrator stripped leaked tags from 4 lessons and finished 10 partial
+    lab files by hand), `build --strict` EXIT=0, committed locally. M11 lab is API-free (scaffolds
+    CLAUDE.md/.claude config); M09 SSH uses localhost + own key; M08 Git uses a throwaway `~/git-lab`.
+  - ☐ Batches 3–8 → Stages 4–13 (M12–M39).
+- **Current:** Site is **live and public**; **M01** fully done (lesson + published lab);
+  **M02–M05** authored (lessons + labs); **M02+** Killercoda labs pending user **Sync Now**.
+- **Next up:** finish Batch 2 → wire + strict-build + commit → continue Batch 3 (Stage 4).
+  Then, when the user gives the word: `git push` + `gh-deploy --force` + Killercoda **Sync Now**.
 - **The one instruction to follow for every module:** `platform/ADDING-A-MODULE.md` — author lesson →
   author `killercoda/module-XX/` (depth 2) → nav + manifest → `build --strict` → commit + push →
   `gh-deploy --force` → Killercoda **Sync Now** → mark ✅ here.

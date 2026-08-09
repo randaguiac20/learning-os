@@ -1,0 +1,41 @@
+{
+  "title": "Module 11 — Claude Code",
+  "description": "Scaffold the configuration that directs an AI engineer: a pruned CLAUDE.md, a .claude/ project structure with a slash command and a skill, and a narrow permissions allowlist. No API key needed — you author and validate the files; live agent drills happen in your own terminal.",
+  "difficulty": "intermediate",
+  "time": "20-30 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "The model: you direct, you verify",
+        "text": "step1.md"
+      },
+      {
+        "title": "Write a pruned CLAUDE.md",
+        "text": "step2.md"
+      },
+      {
+        "title": "Scaffold .claude/ — a slash command and a skill",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Author a permissions allowlist",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Permission modes and the session workflow",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}
