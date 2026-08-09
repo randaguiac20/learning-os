@@ -4,6 +4,10 @@ This folder is the **entry point and single source of truth** for turning the Le
 into a public, video-first teaching platform. If you are a new or resumed session, read this file
 first, then `PROGRESS.md` to see exactly where things stand.
 
+> **Live site:** https://randaguiac20.github.io/learning-os/ · **Repo:** github.com/randaguiac20/learning-os
+> (monorepo on `main`; `curriculum/` is **local-only**, gitignored). Redeploy after edits:
+> `cd site && ../.venv/bin/mkdocs gh-deploy --force`.
+
 ## What is being built
 
 An **add-only publishing + video + labs layer** over the existing `../curriculum/` (450 Markdown
@@ -19,11 +23,12 @@ sibling folders. Two pillars:
 
 | Folder | What | Status |
 |---|---|---|
-| `curriculum/` | **FROZEN** source of truth — never edit | untouched |
-| `platform/` | this meta-layer: PLAN, PROGRESS, RUNBOOK | you are here |
-| `site/` | the MkDocs course site | pilot done |
-| `labs/` | runnable environments (Killercoda, later devcontainers) | M01 done |
-| `media/` | recording runbook + casts + YouTube manifest | M01 done |
+| `curriculum/` | **FROZEN** source of truth — never edit; **LOCAL ONLY** (gitignored, not on GitHub) | untouched |
+| `platform/` | this meta-layer: PLAN, PROGRESS, RUNBOOK, **ADDING-A-MODULE** | you are here |
+| `site/` | the MkDocs course site (→ live on GitHub Pages) | M01–M02 live |
+| `killercoda/` | interactive labs — **top-level, depth 2** (Killercoda requirement) | M01 published, M02 authored |
+| `labs/` | roles + how-to (`README.md`); `devcontainers/` later | — |
+| `media/` | recording runbook + casts + YouTube manifest | M01 sample cast |
 | `homelab/` | 3-tier IaC + showcase (own public repo later) | T1 seed done |
 
 ## Resume in 60 seconds
@@ -38,6 +43,9 @@ cd site && ../.venv/bin/mkdocs serve      # http://127.0.0.1:8000
 
 # 3. Everything else (deploy, record, publish labs, homelab apply):
 cat platform/RUNBOOK.md
+
+# 4. To add another module end-to-end (lesson + lab + nav + deploy + Killercoda):
+cat platform/ADDING-A-MODULE.md
 ```
 
 ## The lesson template (what "done" means for a module)
@@ -61,3 +69,4 @@ The full section-to-file mapping is in `PLAN.md`. Module 01 is the reference imp
 - **`PLAN.md`** — the full approved plan (portable; no dependency on `~/.claude/plans`).
 - **`PROGRESS.md`** — live tracker + Current position / Next up. Update at the end of every session.
 - **`RUNBOOK.md`** — exact commands (automatable vs manual/needs-account) for build, deploy, record, publish, apply.
+- **`ADDING-A-MODULE.md`** — the repeatable per-module playbook (author lesson + lab → nav → build → deploy → Killercoda sync), with the session's gotchas.

@@ -39,7 +39,7 @@
 | 4 | Site **deployed** → https://randaguiac20.github.io/learning-os/ (Pages, `gh-pages`) | ✅ |
 | 5 | Moved M01 scenario to top-level `killercoda/module-01/` (depth 2) so Killercoda discovers it | ✅ |
 | 6 | **Published** M01 Killercoda lab; wired real URL `…/course/killercoda/module-01` into the lesson button | ✅ |
-| 7 | Authored **Module 02** (lesson + lab) — see Artifact status | ◐ |
+| 7 | Authored + **deployed Module 02** lesson (live); lab authored (Killercoda sync pending) | ✅ |
 | 8 | Wrote `platform/ADDING-A-MODULE.md` (per-module playbook) + updated RUNBOOK/labs README with all learnings | ✅ |
 
 ## Artifact status
@@ -51,7 +51,7 @@
 | Landing | `site/docs/index.md` | ✅ |
 | Method page | `site/docs/learn-how-to-learn.md` | ✅ cited |
 | **Pilot lesson (M01)** | `site/docs/stage-01/module-01.md` | ✅ 8 sections, reference implementation |
-| Module 02 lesson | `site/docs/stage-01/module-02.md` | ◐ authoring (First Contact with the Terminal) |
+| Module 02 lesson | `site/docs/stage-01/module-02.md` | ✅ live (First Contact with the Terminal) |
 | Killercoda lab M01 | `killercoda/module-01/` | ✅ **published** → `…/course/killercoda/module-01` |
 | Killercoda lab M02 | `killercoda/module-02/` | ◐ authoring (sync to publish) |
 | Live site | https://randaguiac20.github.io/learning-os/ | ✅ deployed (gh-pages) |
