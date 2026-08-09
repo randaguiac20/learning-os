@@ -1,0 +1,41 @@
+{
+  "title": "Module 01 — Computer & OS Fundamentals",
+  "description": "Inspect a real Linux machine: CPU, memory, storage, processes. Build your first script. Read-only and safe.",
+  "difficulty": "beginner",
+  "time": "20-30 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Meet your machine",
+        "text": "step1.md"
+      },
+      {
+        "title": "CPU, memory, storage",
+        "text": "step2.md"
+      },
+      {
+        "title": "A process, from birth to death",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Your first script",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Solo challenges",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

@@ -1,0 +1,28 @@
+# Local / generated / huge — never commit.
+# (Comments MUST be on their own line — gitignore treats inline # as literal.)
+
+# 217 MB project Python env — rebuilt from site/requirements.txt
+.venv/
+
+# downloaded provider binaries (~100 MB) — restored by `tofu init`
+.terraform/
+
+# OpenTofu/Terraform state — machine-specific, may hold secrets
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# generated static site — produced by `mkdocs build`
+site_build/
+
+# Python / OS noise
+__pycache__/
+*.pyc
+.cache/
+.DS_Store
+
+# Third-party document on a PUBLIC repo — excluded on purpose (see chat note)
+BSAIE.pdf
+
+# curriculum/ is the source of truth — kept LOCAL only, intentionally NOT in this repo
+curriculum/

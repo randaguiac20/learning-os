@@ -1,0 +1,85 @@
+/* Learning OS — web theme tokens, ported from curriculum/_assets/pdf-style.css.
+   Same four-accent design system as the PDFs so print and web feel like one product:
+     ink #1a1f2e · navy #2b4c7e · teal #1f7a68 · amber #a9722c · rose #8f3f4f      */
+
+:root {
+  --lo-ink:   #1a1f2e;
+  --lo-navy:  #2b4c7e;
+  --lo-teal:  #1f7a68;
+  --lo-amber: #a9722c;
+  --lo-rose:  #8f3f4f;
+  --lo-soft:  #f4f6f9;
+  --lo-muted: #6b7280;
+  --lo-hairline: #d7dce3;
+
+  /* Bend Material's primary/accent onto the curriculum navy + teal. */
+  --md-primary-fg-color:        var(--lo-navy);
+  --md-primary-fg-color--light: #3a5f97;
+  --md-primary-fg-color--dark:  #22406b;
+  --md-accent-fg-color:         var(--lo-teal);
+}
+
+/* Heading roles mirror the PDF: navy h1/h2, teal h3, amber h4. */
+.md-typeset h1 { color: var(--lo-navy); font-weight: 700; }
+.md-typeset h2 { color: var(--lo-navy); border-bottom: 2px solid var(--lo-navy); padding-bottom: .2rem; }
+.md-typeset h3 { color: var(--lo-teal); }
+.md-typeset h4 { color: var(--lo-amber); }
+
+/* Inline code in rose, on the soft neutral (matches PDF). */
+.md-typeset code { color: var(--lo-rose); background: var(--lo-soft); }
+[data-md-color-scheme="slate"] .md-typeset code { background: rgba(255,255,255,.06); }
+
+/* ---- Lesson building blocks (used by every lesson page) ---- */
+
+/* "Watch once" video placeholder card — replaced by a real YouTube embed once recorded. */
+.lo-video-embed {
+  position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+  border-radius: 8px; margin: 1rem 0;
+}
+.lo-video-embed iframe,
+.lo-video-embed object,
+.lo-video-embed embed {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+}
+.lo-video-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: .4rem; min-height: 220px; padding: 1.5rem;
+  border: 2px dashed var(--lo-navy); border-radius: 8px;
+  background: var(--lo-soft); color: var(--lo-ink); margin: 1rem 0;
+}
+[data-md-color-scheme="slate"] .lo-video-placeholder { background: rgba(255,255,255,.04); color: inherit; }
+.lo-video-placeholder .lo-play { font-size: 2.2rem; color: var(--lo-navy); line-height: 1; }
+.lo-video-placeholder small { color: var(--lo-muted); }
+
+/* "Open interactive lab" button row. */
+.lo-lab-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin: .8rem 0 1.2rem; }
+.lo-btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .5rem .9rem; border-radius: 6px; font-weight: 600; text-decoration: none;
+  border: 1px solid var(--lo-navy); color: #fff; background: var(--lo-navy);
+}
+.lo-btn:hover { background: #22406b; }
+.lo-btn--ghost { background: transparent; color: var(--lo-navy); }
+[data-md-color-scheme="slate"] .lo-btn--ghost { color: #9db8e8; border-color: #9db8e8; }
+
+/* "Must remember" callout at the end of Key Notes. */
+.lo-remember {
+  border-left: 4px solid var(--lo-amber); background: var(--lo-soft);
+  padding: .8rem 1rem; border-radius: 0 6px 6px 0; margin: 1rem 0;
+}
+[data-md-color-scheme="slate"] .lo-remember { background: rgba(169,114,44,.12); }
+
+/* asciinema player sizing. */
+.asciinema-player-wrapper { margin: 1rem 0; }
+
+/* Mermaid: the "hardware, kernel, you" diagram uses fixed light node fills, so in
+   dark mode Material's light label colour makes the text unreadable. Force dark
+   label text on just those four semantic classes (scoped — the page's other,
+   natively-themed diagrams are untouched, and light mode is unaffected). */
+.mermaid g.user  .nodeLabel, .mermaid g.user  .nodeLabel p,
+.mermaid g.door  .nodeLabel, .mermaid g.door  .nodeLabel p,
+.mermaid g.kern  .nodeLabel, .mermaid g.kern  .nodeLabel p,
+.mermaid g.metal .nodeLabel, .mermaid g.metal .nodeLabel p {
+  color: #1a1f2e !important;
+  fill:  #1a1f2e !important;
+}

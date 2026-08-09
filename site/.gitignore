@@ -1,0 +1,3 @@
+# Generated static site (produced by `mkdocs build`) — never commit.
+site_build/
+.cache/
