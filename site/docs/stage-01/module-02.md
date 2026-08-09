@@ -175,10 +175,10 @@ what you can't explain — *especially* with `sudo`.
 throwaway `~/terminal-lab/` sandbox you build first — nothing outside it is ever touched.*
 
 <div class="lo-lab-actions" markdown="1">
-[▶ Open interactive lab{ .lo-btn }](https://killercoda.com/learning-os/course/killercoda/module-02){ target=_blank }
-[⧉ Open in Codespaces{ .lo-btn }](https://codespaces.new/randaguiac20/learning-os){ target=_blank }
-[⌨ Run locally{ .lo-btn .lo-btn--ghost }](#run-locally)
-[View lab source{ .lo-btn .lo-btn--ghost }](https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-02){ target=_blank }
+[▶ Open interactive lab](https://killercoda.com/learning-os/course/killercoda/module-02){ .lo-btn target=_blank }
+[⧉ Open in Codespaces](https://codespaces.new/randaguiac20/learning-os){ .lo-btn target=_blank }
+[⌨ Run locally](#run-locally){ .lo-btn .lo-btn--ghost }
+[View lab source](https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-02){ .lo-btn .lo-btn--ghost target=_blank }
 </div>
 
 <span id="run-locally"></span>

@@ -220,10 +220,10 @@ and nothing outside your home is touched. tmux-by-default starts now: every term
 starts or attaches a session.*
 
 <div class="lo-lab-actions" markdown="1">
-[▶ Open interactive lab{ .lo-btn }](https://killercoda.com/learning-os/course/killercoda/module-07){ target=_blank }
-[⧉ Open in Codespaces{ .lo-btn }](https://codespaces.new/randaguiac20/learning-os){ target=_blank }
-[⌨ Run locally{ .lo-btn .lo-btn--ghost }](#run-locally)
-[View lab source{ .lo-btn .lo-btn--ghost }](https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-07){ target=_blank }
+[▶ Open interactive lab](https://killercoda.com/learning-os/course/killercoda/module-07){ .lo-btn target=_blank }
+[⧉ Open in Codespaces](https://codespaces.new/randaguiac20/learning-os){ .lo-btn target=_blank }
+[⌨ Run locally](#run-locally){ .lo-btn .lo-btn--ghost }
+[View lab source](https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-07){ .lo-btn .lo-btn--ghost target=_blank }
 </div>
 
 <span id="run-locally"></span>

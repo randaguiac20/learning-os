@@ -31,14 +31,23 @@ that module's 11 files in `curriculum/stage-XX/module-NN-.../`:
 | 8. Review footer | `06-review-plan.md` + `09-knowledge-connections.md` |
 
 **Lab buttons** — copy the 4-button row + the `#run-locally` anchor and "Three ways to run" tip from
-Module 01 (gives learners Killercoda / Codespaces / local — this is what makes labs scale past
-Killercoda's free-tier session limits). Use the module number:
+Module 01/02 (gives learners Killercoda / Codespaces / local — this is what makes labs scale past
+Killercoda's free-tier session limits). The **exact** markup (attr_list class placement is critical):
 ```
-▶ Open interactive lab → https://killercoda.com/learning-os/course/killercoda/module-NN
-⧉ Open in Codespaces   → https://codespaces.new/randaguiac20/learning-os
-⌨ Run locally          → #run-locally   (anchors to the tip; local one-liner: docker run -it ubuntu bash)
-View lab source        → https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-NN
+<div class="lo-lab-actions" markdown="1">
+[▶ Open interactive lab](https://killercoda.com/learning-os/course/killercoda/module-NN){ .lo-btn target=_blank }
+[⧉ Open in Codespaces](https://codespaces.new/randaguiac20/learning-os){ .lo-btn target=_blank }
+[⌨ Run locally](#run-locally){ .lo-btn .lo-btn--ghost }
+[View lab source](https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-NN){ .lo-btn .lo-btn--ghost target=_blank }
+</div>
 ```
+
+> ⚠️ **attr_list goes AFTER the closing `)` — never inside the `[label]`.** `[text](url){ .lo-btn }`
+> binds the class to the `<a>`; `[text{ .lo-btn }](url)` renders `{ .lo-btn }` as **literal text** and the
+> button styling never applies. (This bug shipped once across all early modules — the `target=_blank`
+> worked because it *was* post-`)`, which masked the stranded class.) Validate after building:
+> `grep -oE '<a class="lo-btn' site_build/<stage>/<module>/index.html | wc -l` must equal the button count,
+> and `grep '{ \.lo-btn' site_build/**/index.html` must return **nothing**.
 
 ### Diagram rules (so every diagram renders cleanly in dark mode — non-negotiable)
 1. **Native theming only.** Plain ```` ```mermaid ```` + `flowchart` — **never** add `classDef fill:`/`color:`.
