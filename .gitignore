@@ -26,3 +26,10 @@ BSAIE.pdf
 
 # curriculum/ is the source of truth — kept LOCAL only, intentionally NOT in this repo
 curriculum/
+
+# Internal authoring artifacts (the prompts that generated the curriculum) —
+# the "kitchen", not the "meal". Kept LOCAL, intentionally NOT on the public repo.
+goal_examples
+learn_os_prompt
+learn_os_prompt_example_options
+learn_prompt
