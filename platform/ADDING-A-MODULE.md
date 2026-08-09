@@ -30,13 +30,29 @@ that module's 11 files in `curriculum/stage-XX/module-NN-.../`:
 | 7. Mastery checklist | `11-mastery-checklist.md` (a `- [ ]` task-list) |
 | 8. Review footer | `06-review-plan.md` + `09-knowledge-connections.md` |
 
-Lab buttons (use the module number):
+**Lab buttons** — copy the 4-button row + the `#run-locally` anchor and "Three ways to run" tip from
+Module 01 (gives learners Killercoda / Codespaces / local — this is what makes labs scale past
+Killercoda's free-tier session limits). Use the module number:
 ```
-Open interactive lab → https://killercoda.com/learning-os/course/killercoda/module-NN
-View lab source      → https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-NN
+▶ Open interactive lab → https://killercoda.com/learning-os/course/killercoda/module-NN
+⧉ Open in Codespaces   → https://codespaces.new/randaguiac20/learning-os
+⌨ Run locally          → #run-locally   (anchors to the tip; local one-liner: docker run -it ubuntu bash)
+View lab source        → https://github.com/randaguiac20/learning-os/tree/main/killercoda/module-NN
 ```
-**Mermaid:** use default theming (plain `flowchart`); do **not** add custom `classDef` fill colors —
-they render unreadable in dark mode (Module 01 needed a CSS patch for that; don't repeat it).
+
+### Diagram rules (so every diagram renders cleanly in dark mode — non-negotiable)
+1. **Native theming only.** Plain ```` ```mermaid ```` + `flowchart` — **never** add `classDef fill:`/`color:`.
+   Custom fills go unreadable on dark backgrounds (M01 hit this twice; a scoped CSS override did *not*
+   reliably fix it — the working answer is **no custom colors**).
+2. **Group with subgraphs, not colors.** Show layers/zones (e.g. "user space" / "kernel space") as
+   `subgraph` blocks — Material themes those correctly in both light and dark.
+3. **Default to `flowchart TB` (vertical).** Use `LR` only for **≤ 4 nodes**; longer `LR` flows shrink to
+   unreadable tiny text (M02 hit this). More than ~4 steps → `TB`.
+4. **Short labels**, `<br/>` for line breaks, quote any label containing special characters.
+5. **No ASCII-art "diagrams" for relationships.** For structured breakdowns (e.g. command anatomy) use a
+   **table**; use a real `mermaid` diagram for flows. (A literal directory tree in a code block is fine.)
+6. **Preview with internet** (mermaid loads from a CDN at runtime), or check the deployed site — offline
+   shows the diagram as raw code, not a picture.
 
 ## 2. Author the Killercoda lab — [automatable]
 Create the scenario at **`killercoda/module-NN/`** — ⚠️ **top level, depth 2**. Killercoda only
