@@ -2,6 +2,12 @@
 
 Browser-based, zero-install environments so every lesson's labs actually run. Two backends:
 
+> **Two roles — don't confuse them.** The **creator (you)** publishes each scenario to Killercoda
+> **once** (the steps in this file). The **student** does **none** of that — they just click
+> **▶ Open interactive lab** on the lesson page and a free browser terminal opens. No account, no
+> GitHub, no setup on the student's side. You publish once; every student just clicks the link.
+
+
 | Backend | For | Location |
 |---|---|---|
 | **Killercoda** | Linux / Docker / Kubernetes labs (a real VM in the browser) | repo-root **`killercoda/module-YY/`** (see note) |

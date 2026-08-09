@@ -4,6 +4,9 @@ Reproducible commands to build, preview, deploy, record, and publish the platfor
 **[automatable]** (runs from code, $0, local) or **[manual/needs-account]**. All Python installs go
 into the project venv (`/home/randagui/data/learning/.venv`) — **never system-wide**.
 
+> To add a whole new module end-to-end, follow **`platform/ADDING-A-MODULE.md`** (the step-by-step
+> playbook). This file is the command reference it draws on.
+
 ## 0. One-time setup — **[automatable]**
 
 ```bash
@@ -37,14 +40,18 @@ future "MkDocs 2.0"; that is informational, not an error — a clean build ends 
 
 ## 3. Publish to GitHub Pages — **[manual/needs-account]**
 
+**Already set up:** repo = `github.com/randaguiac20/learning-os` (a **monorepo** rooted at the project
+folder — `site/` is a subfolder; `curriculum/` is gitignored / local-only). Live site:
+**https://randaguiac20.github.io/learning-os/** (Pages serves branch `gh-pages`, root).
+
+Recurring publish — source to `main`, then built site to `gh-pages`:
 ```bash
-cd /home/randagui/data/learning/site
-git init && git add -A && git commit -m "Learning OS site"     # if not already a repo
-git remote add origin git@github.com:<you>/learning-os.git
-git push -u origin main
-../.venv/bin/mkdocs gh-deploy --force   # builds + pushes to the gh-pages branch
-# Then enable Pages (branch: gh-pages) in the GitHub repo settings.
-# Optionally set `site_url:` in mkdocs.yml to the published URL.
+cd /home/randagui/data/learning
+git add -A && git commit -m "…"
+git push origin main
+cd site && ../.venv/bin/mkdocs gh-deploy --force   # --force REQUIRED: local gh-pages diverged after the repo was re-rooted
+# wait ~1 min for Pages to rebuild, then verify:
+curl -s -o /dev/null -w "%{http_code}\n" https://randaguiac20.github.io/learning-os/   # expect 200
 ```
 
 ## 4. Record media
@@ -68,12 +75,21 @@ Full gear + settings + script guidance: `media/README.md`. After upload, replace
 
 ## 5. Publish interactive labs (Killercoda) — **[manual/needs-account]**
 
+> **You publish once; every student just clicks the lesson button** — students need no Killercoda
+> account or setup (see the "two roles" note in `labs/README.md`).
+
+Scenarios live at **`killercoda/module-XX/`** (top level — Killercoda only discovers scenarios
+**≤ 2 folders deep**; deeper is silently ignored). Validate, then publish:
 ```bash
-python3 -m json.tool labs/killercoda/module-XX/index.json   # validate first (automatable)
+python3 -m json.tool killercoda/module-XX/index.json   # validate (automatable)
 ```
-Then connect the GitHub repo as a Killercoda creator source (`labs/README.md`). Scenario goes live at
-`https://killercoda.com/<namespace>/scenario/module-XX`; put that URL in the lesson's "Open
-interactive lab" button and in `media/youtube-manifest.md`.
+1. Push to `main` (step 4 above).
+2. Killercoda → **Login with GitHub** → **Creator → Repository**: Repo Name **`randaguiac20/learning-os`**
+   (owner/repo, case-sensitive — NOT the `github.io` URL), Branch **`main`** → Save → **Sync Now**.
+3. **My Scenarios** lists it at `https://killercoda.com/learning-os/course/killercoda/module-XX`
+   (profile = `learning-os`; the top-level `killercoda/` folder is treated as a "course").
+4. If the lesson button used the step-1 URL pattern it already points there — confirm it opens, then
+   mark it ✅ in `media/youtube-manifest.md`.
 
 ## 6. Homelab (Pillar 2)
 
@@ -100,11 +116,12 @@ find /home/randagui/data/learning/curriculum -newer /home/randagui/data/learning
 
 ```
 learning/
-├── curriculum/   FROZEN source of truth (do not edit)
-├── platform/     README · PLAN · PROGRESS · RUNBOOK (this file)
-├── site/         MkDocs site  → mkdocs serve / build / gh-deploy
-├── labs/         killercoda/module-XX  (+ devcontainers later)
+├── curriculum/   FROZEN source of truth — LOCAL ONLY (gitignored, not on GitHub)
+├── platform/     README · PLAN · PROGRESS · RUNBOOK (this file) · ADDING-A-MODULE (per-module playbook)
+├── site/         MkDocs site  → mkdocs serve / build / gh-deploy --force
+├── killercoda/   module-XX/   interactive labs — TOP-LEVEL, depth 2 (required by Killercoda)
+├── labs/         README (roles + how-to) + devcontainers/ (coding labs, later)
 ├── media/        casts/ + README (recording) + youtube-manifest.md
 ├── homelab/      tofu/t1-single-node (seed) + README + RUNBOOK
-└── .venv/        project venv — all pip installs land here
+└── .venv/        project venv — all pip installs land here (gitignored)
 ```

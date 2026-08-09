@@ -10,18 +10,21 @@ Status legend: ☐ not started · ◐ recorded, not published · ✅ live and em
 | Module | Title | YouTube ID | Status |
 |---|---|---|---|
 | M01 | Computer & OS Fundamentals | _(pending)_ | ☐ |
+| M02 | First Contact with the Terminal | _(pending)_ | ☐ |
 
 ## Terminal casts (asciinema `.cast`, shipped with the site)
 
 | Module | Cast file | Embedded on page | Status |
 |---|---|---|---|
 | M01 | `casts/module-01-demo.cast` → `site/docs/casts/module-01-demo.cast` | Module 01 · Watch | ✅ sample authored |
+| M02 | _(pending — record per `media/README.md`)_ | Module 02 · Watch | ☐ |
 
 ## Interactive labs (Killercoda)
 
 | Module | Scenario source | Live URL | Status |
 |---|---|---|---|
 | M01 | `killercoda/module-01/` | https://killercoda.com/learning-os/course/killercoda/module-01 | ✅ published |
+| M02 | `killercoda/module-02/` | https://killercoda.com/learning-os/course/killercoda/module-02 _(Sync Now to publish)_ | ◐ authored |
 
 > Killercoda profile = `learning-os`; the top-level `killercoda/` folder became a "course", so the
 > scenario URL is `…/course/killercoda/module-01`. See `labs/README.md` and `../platform/RUNBOOK.md`.

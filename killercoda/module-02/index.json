@@ -1,0 +1,41 @@
+{
+  "title": "Module 02 — First Contact with the Terminal",
+  "description": "Navigate a real Linux shell, build a sandbox tree, copy/move/delete safely, and read a man page. Destructive steps are scoped to a throwaway practice directory.",
+  "difficulty": "beginner",
+  "time": "20-30 minutes",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Read the prompt, get your bearings",
+        "text": "step1.md"
+      },
+      {
+        "title": "Navigate the filesystem",
+        "text": "step2.md"
+      },
+      {
+        "title": "Build a sandbox and a tree",
+        "text": "step3.md",
+        "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Copy, move, and delete safely",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
+      },
+      {
+        "title": "Look inside files and get help",
+        "text": "step5.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  }
+}

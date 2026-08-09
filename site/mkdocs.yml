@@ -105,3 +105,4 @@ nav:
   - How to learn: learn-how-to-learn.md
   - "Stage 1 — Foundations":
       - "Module 01 — Computer & OS Fundamentals": stage-01/module-01.md
+      - "Module 02 — First Contact with the Terminal": stage-01/module-02.md
